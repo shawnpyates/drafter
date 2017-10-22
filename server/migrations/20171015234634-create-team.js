@@ -11,6 +11,15 @@ module.exports = {
       name: {
         type: Sequelize.STRING
       },
+      draftId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Drafts',
+          key: 'id'
+        },
+        onUpdate: 'cascade',
+        onDelete: 'cascade'
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

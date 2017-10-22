@@ -6,8 +6,7 @@ const bodyParser = require('body-parser');
 const dotenv = require('dotenv').config()
 
 const index = require('./server/routes/index');
-const users = require('./server/routes/users')
-// const users = require('./routes/users');
+
 
 
 const app = express();
@@ -21,8 +20,10 @@ app.use(express.static(path.join(__dirname, 'client/public')));
 // app.set('views', path.join(__dirname, 'views'));
 // app.set('view engine', 'jade');
 
-// const app = express()
 
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'))
+})
 
 require('./server/routes')(app)
 
@@ -44,9 +45,6 @@ app.get('*', (req, res) => {
 
 // app.set('view engine', 'jade');
 
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'))
-})
 
 // app.get('*', (req, res) => res.status(200).send({
 //   message: 'File not found.',

@@ -9,9 +9,9 @@ module.exports = (sequelize, DataTypes) => {
   })
 
   Draft.associate = models => {
-    Draft.hasMany(models.User, {
-      foreignKey: 'draftId',
-      as: 'users'
+    Draft.belongsToMany(models.User, {
+      through: 'userDraft',
+      foreignKey: 'draftId'
     })
     Draft.hasMany(models.Team, {
       foreignKey: 'draftId',

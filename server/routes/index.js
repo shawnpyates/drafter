@@ -1,17 +1,42 @@
-const user = require('../controllers').users
-const team = require('../controllers').teams
-const todoItemsController = require('../controllers').todoItems
+const users = require('../controllers').users
+const teams = require('../controllers').teams
+const drafts = require('../controllers').drafts
+const userTeams = require('../controllers').userTeams
+const userDrafts = require('../controllers').userDrafts
 
 module.exports = app => {
   app.get('/api', (req, res) => {
-    console.log('req', req)
-    res.status(200).send({ message: "Welcome to the Draft API." })
+    res.status(200).send({ message: "Welcome to the Drafter API." })
   })
-  app.post('/api/users', user.create)
-  app.post('/api/teams/:draftId', team.create)
-  // app.get('/api/todos', todosController.list),
-  // app.post('/api/todos/:todoId/items', todoItemsController.create),
-  // app.get('/api/todos/:todoId', todosController.retrieve),
-  // app.put('/api/todos/:todoId', todosController.update),
-  // app.delete('/api/todos/:todoId', todosController.destroy)
+
+  // users
+  app.get('/api/users/:id', users.retrieveOne)
+  app.post('/api/users', users.create)
+  app.put('/api/users/:id', users.update)
+  app.delete('/api/users/:id', users.destroy)
+
+  // drafts
+  app.get('/api/drafts', drafts.retrieve),
+  app.get('/api/drafts/:id', drafts.retrieveOne)
+  app.post('/api/drafts', drafts.create)
+  app.put('/api/draft/:id', drafts.update)
+  app.delete('/api/drafts/:id', drafts.destroy)
+
+  // teams
+  app.get('/api/drafts/:draftId/teams', teams.retrieve)
+  app.get('/api/teams/:id', teams.retrieveOne)
+  app.post('/api/drafts/:draftId/teams', teams.create)
+  app.put('/api/teams:id', teams.update)
+  app.delete('/api/teams/:id', teams.destroy)
+
+  // user's association with draft
+  app.get('/api/drafts/:draftId/users', userDrafts.retrieveUsersByDraft)
+  app.post('/api/drafts/:draftId/users/:userId', userDrafts.create)
+  app.delete('/api/drafts/:draftId/users/:userId', userDrafts.destroy)
+
+  // user's association with team
+  app.get('/api/teams/:teamId/users', userTeams.retrieveUsersByTeam)
+  app.post('/api/teams/:teamId/users/:userId', userTeams.create)
+  app.delete('/api/teams/:teamId/users/:userId', userTeams.destroy)
+
 }

@@ -11,6 +11,24 @@ module.exports = {
       isAdmin: {
         type: Sequelize.BOOLEAN
       },
+      draftId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Drafts',
+          key: 'id'
+        },
+        onUpdate: 'cascade',
+        onDelete: 'cascade'
+      },
+      userId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Users',
+          key: 'id'
+        },
+        onUpdate: 'cascade',
+        onDelete: 'cascade'
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
