@@ -1,8 +1,26 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
-    name: DataTypes.STRING,
-    registeredAsPlayer: DataTypes.BOOLEAN,
+    firstName: { 
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    lastName: { 
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    registeredAsPlayer: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false
+    },
     position: DataTypes.STRING,
     teams: DataTypes.ARRAY(DataTypes.STRING),
     drafts: DataTypes.ARRAY(DataTypes.STRING)

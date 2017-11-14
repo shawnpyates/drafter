@@ -1,4 +1,7 @@
 const User = require('../models').User
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+const secret = process.env.JWT_SECRET
 
 module.exports = {
 
@@ -9,14 +12,46 @@ module.exports = {
   },
 
   create(req, res) {
-    return User.create({ 
-      name: req.body.name, 
-      registeredAsPlayer: req.body.registeredAsPlayer,
-      position: req.body.position,
-      teams: null
-     })
-    .then(user => res.status(201).send(user))
-    .catch(error => res.status(400).send(error))
+    bcrypt.genSalt(10, (err, salt) => {
+      bcrypt.hash(req.body.password, salt, (err, hash) => {
+        return User.create({ 
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+          email: req.body.email,
+          password: hash, 
+          registeredAsPlayer: req.body.registeredAsPlayer,
+          position: req.body.position,
+          teams: null,
+          drafts: null
+         })
+        .then(user => res.status(201).send(user))
+        .catch(error => res.status(400).send(error))
+      })
+    })
+  },
+
+  authenticate(req, res) {
+    // console.log("in auth with req: ", req)
+    User.findOne({ where: { email: req.body.email }})
+    .then(user => {
+      console.log("authenticating user pass: ", user)
+      bcrypt.compare(req.body.password, user.password, (err, response) => {
+        console.log("BODY PASS? ", req.body.password)
+        console.log("USER PASS? ", user.password)
+        if (err) res.status(400).send(err)
+        if (response) {
+          let claim = {userId: user.id}
+          let token = {token: jwt.sign(claim, secret)}
+          res.status(201).send({user: user, token: token})
+        } else {
+          res.status(400).send({failure: "Wrong password."})
+        }
+      })
+    })
+    .catch(error => {
+      console.log("error in auth: ", error)
+      res.status(400).send(error)
+    })
   },
 
   update(req, res) {
@@ -43,5 +78,5 @@ module.exports = {
     })
     .catch(error => res.status(400).send(error))
   }
-  
+
 }

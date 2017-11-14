@@ -1,0 +1,50 @@
+/* .App {
+  text-align: center;
+} */
+
+.siteHeader {
+  background-color: #11133F;
+  height: 80px;
+  padding: 20px;
+  color: white;
+}
+
+.siteHeader h2 {
+  width: 30%;
+  display: inline-block;
+  font-family: "La Belle Aurore", sans-serif;
+  font-size: 2.5em;
+}
+/* .navbar {
+  display: inline-block;
+} */
+.navbarOptions {
+  z-index: 10;
+}
+
+.navbarOptions a {
+  float: right;
+  overflow: hidden;
+  white-space: nowrap;
+  margin: auto 30px;
+  margin-top: 20px;
+  cursor: pointer;
+}
+
+.registrationContainer {
+  margin-top: 40px;
+  margin-left: 120px;
+}
+
+.registrationForm label {
+  display: block;
+  margin-top: 25px;
+}
+
+.registrationForm label input {
+  margin-left: 10px;
+}
+
+.submitRegistration {
+  margin-top: 30px;
+}

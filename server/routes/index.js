@@ -12,6 +12,7 @@ module.exports = app => {
   // users
   app.get('/api/users/:id', users.retrieveOne)
   app.post('/api/users', users.create)
+  app.post('/api/users/auth', users.authenticate)
   app.put('/api/users/:id', users.update)
   app.delete('/api/users/:id', users.destroy)
 
