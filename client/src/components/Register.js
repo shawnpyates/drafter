@@ -61,8 +61,8 @@ class Register extends Component {
 
   handleSubmit = () => {
     for (let key in this.state) {
-      if ((!this.state[key] && key !== "errorMessage") &&
-           !(this.state.registeredAsPlayer === "No" && !this.state.position)) {
+      if ((!this.state[key] && key !== "errorMessage") && 
+           !(key === "position" && this.state.registeredAsPlayer === "No")) {
         this.setState({errorMessage: "Please fill in all fields."})
         return
       }

@@ -42112,7 +42112,7 @@ var Register = (_dec = (0, _reactRedux.connect)(function (store) {
 
     _this.handleSubmit = function () {
       for (var key in _this.state) {
-        if (!_this.state[key] && key !== "errorMessage" && !(_this.state.registeredAsPlayer === "No" && !_this.state.position)) {
+        if (!_this.state[key] && key !== "errorMessage" && !(key === "position" && _this.state.registeredAsPlayer === "No")) {
           _this.setState({ errorMessage: "Please fill in all fields." });
           return;
         }
