@@ -31,14 +31,12 @@ module.exports = {
   },
 
   authenticate(req, res) {
-    // console.log("in auth with req: ", req)
     User.findOne({ where: { email: req.body.email }})
     .then(user => {
-      console.log("authenticating user pass: ", user)
       bcrypt.compare(req.body.password, user.password, (err, response) => {
-        console.log("BODY PASS? ", req.body.password)
-        console.log("USER PASS? ", user.password)
-        if (err) res.status(400).send(err)
+        if (err) {
+          res.status(400).send(err)
+        }
         if (response) {
           let claim = {userId: user.id}
           let token = {token: jwt.sign(claim, secret)}
@@ -49,7 +47,6 @@ module.exports = {
       })
     })
     .catch(error => {
-      console.log("error in auth: ", error)
       res.status(400).send(error)
     })
   },

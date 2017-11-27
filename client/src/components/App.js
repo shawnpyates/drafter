@@ -3,38 +3,42 @@ import '../../styles/App.css';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import Register from './Register.js';
-import { fetchDrafts } from '../actions/draftActions'
+import Welcome from './Welcome.js'
+import { fetchDrafts, fetchCurrentUser } from '../actions';
 
 
 @connect((store) => {
-  console.log("STORE: ", store)
   return {
-    drafts: store.draft.drafts
+    drafts: store.draft.drafts,
+    currentUser: store.user.currentUser,
+    fetchCurrentUserError: store.user.fetchCurrentUserError
   };
 })
 
 
 class App extends Component {
   
-  componentDidMount() {
-    // axios.get('/api/drafts')
-    //   .then(res => {
-    //     this.setState({drafts: res.data})
-    //   })
-    //   .catch(e => {
-    //     console.error(e)
-    //   })
-    this.props.dispatch(fetchDrafts())
+  componentWillMount() {
+    if (!this.props.currentUser && localStorage.getItem("drafterUserToken")) {
+      this.props.dispatch(fetchCurrentUser())
+    }
   }
 
   handleClick = ev => {
     console.log("PROPS: ", this.props)
-    console.log("STATE: ", this.state)
-    console.log(this.props.drafts)
   }
 
   render() {
-    console.log(this.props)
+    let componentToRender 
+    // = this.props.currentUser ? <Welcome currentUser={this.props.currentUser} /> : 
+    //                                                    <Register/>
+    if (!localStorage.getItem("drafterUserToken") || this.props.fetchCurrentUserError) {
+      componentToRender = <Register />
+    } else if (this.props.currentUser) {
+      componentToRender = <Welcome currentUser={this.props.currentUser} />
+    } else {
+      componentToRender = <div></div>
+    }
     const header =
       <header className='siteHeader'>
         <h2>drafter</h2>
@@ -46,7 +50,7 @@ class App extends Component {
     return (
       <div className="App">
         {header}
-        <Register />
+        {componentToRender}
       </div>
     )
     // if (this.props.drafts && this.props.drafts.length) {

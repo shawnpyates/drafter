@@ -1,11 +1,31 @@
 import axios from 'axios'
+const jwt = require('jsonwebtoken')
+const secret = process.env.JWT_SECRET
+
+
+export const fetchCurrentUser = () => {
+  const token = localStorage.getItem("drafterUserToken")
+  return dispatch => {
+    dispatch({type: "FETCH_CURRENT_USER_PENDING"})
+    jwt.verify(token, secret, (err, decoded) => {
+      if (err) {
+        dispatch({type: "FETCH_CURRENT_USER_REJECTED", payload: err})
+      } else {
+        const id = decoded.userId
+        axios.get(`http://localhost:3001/api/users/${id}`)
+          .then (response => {
+            dispatch({type: "FETCH_CURRENT_USER_FULFILLED", payload: response.data})
+          })
+          .catch(err => {
+            dispatch({type: "FETCH_CURRENT_USER_REJECTED", payload: err})
+          })
+      }
+    })
+  }
+}
 
 export const createUser = body => {
-  console.log("inside create")
-  return (dispatch) => {
-  // console.log("inside create user with body: ", body)
-  // return function(dispatch) {
-  //   console.log("inside dispatch")
+  return dispatch => {
     dispatch({type: "CREATE_USER_PENDING"});
     return axios.post("/api/users", {
         firstName: body.firstName,
@@ -16,21 +36,21 @@ export const createUser = body => {
         position: body.position
       })
       .then(response => {
-        console.log("SUCCESS: ", response)
         dispatch({type: "CREATE_USER_FULFILLED", payload: response.data})
+        dispatch({type: "AUTHENTICATE_USER_PENDING"})
         return axios.post("/api/users/auth", {
           email: body.email,
           password: body.password
         })
         .then(response => {
-          console.log("SUCCESS WITH AUTH: ", response)
+          localStorage.setItem('drafterUserToken', response.data.token.token)
+          dispatch({type: "AUTHENTICATE_USER_FULFILLED", payload: response.data})
         })
         .catch(err => {
-          console.log("ERROR WITH AUTH: ", err)
+          dispatch({type: "AUTHENTICATE_USER_REJECTED", payload: err})
         })
       })
       .catch(err => {
-        console.log("ERROR: ", error)
         dispatch({type: "CREATE_USER_REJECTED", payload: err})
       })
   }

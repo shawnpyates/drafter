@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { createUser } from '../actions';
+import { createUser, fetchCurrentUser } from '../actions';
+
 
 
 @connect((store) => {
-  console.log("STORE FROM REG: ", store)
   return {
-    user: store.user.user
+    authenticatedUser: store.user.authenticatedUser
   };
 })
 
@@ -27,7 +27,6 @@ class Register extends Component {
   }
 
   handleChange = ev => {
-    console.log("EV VAL: ", ev.target.value)
     switch (ev.target.name) {
       case "firstName": 
         this.setState({firstName: ev.target.value})
@@ -61,10 +60,9 @@ class Register extends Component {
   }
 
   handleSubmit = () => {
-    // let values = _.values(this.state)
-    // if (_.contains(values, "") && )
     for (let key in this.state) {
-      if (!this.state[key] && key !== "errorMessage") {
+      if ((!this.state[key] && key !== "errorMessage") &&
+           !(this.state.registeredAsPlayer === "No" && !this.state.position)) {
         this.setState({errorMessage: "Please fill in all fields."})
         return
       }
@@ -72,17 +70,15 @@ class Register extends Component {
     if (this.state.passwordFirstInsertion !== this.state.passwordSecondInsertion) {
       this.setState({errorMessage: "Your passwords did not match. Please try again."})
       return
+    }
+    if (this.state.passwordFirstInsertion.length < 8) {
+      this.setState({errorMessage: "Your password must contain at least 8 characters."})
+      return
     } 
     if (!this.validateEmail(this.state.email)) {
       this.setState({errorMessage: "Please enter a valid e-mail address."})
       return
     }
-    // const hashedPassword = bcrypt.genSalt(10, (err, salt) => {
-    //   bcrypt.hash(this.state.passwordFirstInsertion, salt, (err, hash) => {
-    //     return hash
-    //   })
-    // })
-    // console.log("HP: ", hashedPassword)
     const isRegistered = this.state.registeredAsPlayer === "Yes" ? true : false
     const position = this.state.position ? this.state.position : null
     const body = {
@@ -94,6 +90,12 @@ class Register extends Component {
       position: position
     }
     this.props.dispatch(createUser(body))
+  }
+
+  componentDidUpdate() {
+    if (this.props.authenticatedUser) {
+      this.props.dispatch(fetchCurrentUser());
+    }
   }
 
 

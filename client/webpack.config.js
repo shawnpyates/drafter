@@ -1,9 +1,12 @@
 var path = require('path')
 var webpack = require('webpack')
+const Dotenv = require('dotenv-webpack')
+
 module.exports = {
   devtool: 'source-map',
   entry: './src/index.js',
   output: { path: __dirname + '/public/dist', filename: 'bundle.js' },
+  plugins: [new Dotenv({path: './.env'})],
   module: {
     loaders: [
       {
