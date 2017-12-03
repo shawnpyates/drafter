@@ -1,26 +1,26 @@
 const initialState = {
   fetching: false,
   fetched: false,
-  drafts: [],
-  error: null
+  ownDrafts: [],
+  errorOnFetchOwnDrafts: null
 }
 
 const draftReducer = (state=initialState, action) => {
   switch(action.type) {
-    case "FETCH_DRAFTS_PENDING": {
+    case "FETCH_OWN_DRAFTS_PENDING": {
       return {...state, fetching: true}
       break;
     }
-    case "FETCH_DRAFTS_REJECTED": {
-      return {...state, fetching: false, error: action.payload};
+    case "FETCH_OWN_DRAFTS_REJECTED": {
+      return {...state, fetching: false, errorOnFetchOwnDrafts: action.payload};
       break;
     }
-    case "FETCH_DRAFTS_FULFILLED": {
+    case "FETCH_OWN_DRAFTS_FULFILLED": {
       return {
         ...state,
         fetching: false,
         fetched: true,
-        drafts: action.payload
+        ownDrafts: action.payload
       }
       break;
     }

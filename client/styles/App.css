@@ -20,18 +20,26 @@
 } */
 .navbarOptions {
   z-index: 10;
+  float: right;
+  margin-top: 8px;
 }
 
-.navbarOptions a {
-  float: right;
+.navbarOptions a, .navbarOptions p {
+  color: #FFF;
   overflow: hidden;
   white-space: nowrap;
-  margin: auto 30px;
-  margin-top: 20px;
   cursor: pointer;
+  text-decoration: none;
+  float: right;
+  margin-right: 15px;
 }
 
-.registrationContainer {
+.navbarOptions p {
+  cursor: auto;
+  color: #7ec0ee;
+}
+
+.registrationContainer, .welcomeContainer {
   margin-top: 40px;
   margin-left: 120px;
 }
@@ -47,4 +55,52 @@
 
 .submitRegistration {
   margin-top: 30px;
+}
+
+.landingToggleBtnGroup {
+  margin-left: 120px;
+  margin-top: 30px;
+}
+
+.registerToggleBtn, .loginToggleBtn {
+  margin-right: 15px;
+  border-radius: 10px !important;
+}
+
+.welcomeMsg {
+  display: inline-block;
+}
+
+.myProfileBtn {
+  float: right;
+  margin-top: 30px;
+  margin-right: 400px;
+}
+
+.myDrafts, .myTeams {
+  margin-top: 60px;
+}
+
+.myDrafts h3 {
+  display: inline;
+}
+
+.myTeams h3 {
+  display: inline;
+}
+
+.createDraftBtn, .createTeamBtn {
+  margin-left: 75px;
+}
+
+.listDrafts, .listTeams {
+  margin-top: 25px;
+}
+
+.listDrafts thead, .listTeams thead {
+  min-width: 20px;
+}
+
+.draftColHeader, .teamColHeader {
+  min-width: 300px;
 }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createUser, fetchCurrentUser } from '../actions';
+import { Button } from 'react-bootstrap';
 
 
 
@@ -51,7 +52,6 @@ class Register extends Component {
         this.setState({position: ev.target.value})
         break
     }
-    this.setState({key: ev.target.value})
   }
 
   validateEmail = email => {
@@ -155,7 +155,9 @@ class Register extends Component {
           </label>
         </form>
         <p style={{color: "red"}}>{this.state.errorMessage}</p>
-        <button className="submitRegistration" onClick={this.handleSubmit}>Register!</button>
+        <Button className="submitRegistration" onClick={this.handleSubmit}>
+          Register
+        </Button>
       </div>
     )
   }

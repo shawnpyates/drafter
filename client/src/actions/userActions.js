@@ -24,6 +24,24 @@ export const fetchCurrentUser = () => {
   }
 }
 
+export const authenticateUser = body => {
+  return dispatch => {
+    dispatch({type: "AUTHENTICATE USER PENDING"})
+    return axios.post("/api/users/auth", {
+      email: body.email,
+      password: body.password
+    })
+    .then(response => {
+      localStorage.setItem('drafterUserToken', response.data.token.token)
+      dispatch({type: "AUTHENTICATE_USER_FULFILLED", payload: response.data})
+    })
+    .catch(err => {
+      dispatch({type: "AUTHENTICATE_USER_REJECTED", payload: err})
+    })
+  }
+}
+
+
 export const createUser = body => {
   return dispatch => {
     dispatch({type: "CREATE_USER_PENDING"});

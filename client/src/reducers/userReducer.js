@@ -19,7 +19,7 @@ const userReducer = (state=initialState, action) => {
       return {...state, creating: true};
       break;
     case "CREATE_USER_REJECTED": 
-      return {...state, creating: false, createUserError: action.payload};
+      return {...state, creating: false, errorOnCreateUser: action.payload};
       break;
     case "CREATE_USER_FULFILLED":
       return {
@@ -32,7 +32,7 @@ const userReducer = (state=initialState, action) => {
       return {...state, authenticating: true};
       break;
     case "AUTHENTICATE_USER_REJECTED": 
-      return {...state, authenticating: false, authenticateUserError: action.payload};
+      return {...state, authenticating: false, errorOnAuthenticateUser: action.payload};
       break;
     case "AUTHENTICATE_USER_FULFILLED":
       return {
@@ -45,7 +45,7 @@ const userReducer = (state=initialState, action) => {
       return {...state, creating: true};
       break;
     case "FETCH_CURRENT_USER_REJECTED":
-      return {...state, creating: false, fetchCurrentUserError: action.payload}
+      return {...state, creating: false, errorOnFetchCurrentUser: action.payload}
       break;
     case "FETCH_CURRENT_USER_FULFILLED":
       return {

@@ -1,16 +1,35 @@
 const UserDraft = require('../models').UserDraft
 const User = require('../models').User
 const Draft = require('../models').Draft
+const Sequelize = require('sequelize');
+const {in: opIn} = Sequelize.Op
 
 module.exports = {
 
   retrieveUsersByDraft(req, res) {
-    UserDraft.find({ where: { draftId: req.params.draftId} })
-    .then(userDraft => {
-      return User.findById(userDraft.userId)
+    UserDraft.findAll({ where: { draftId: req.params.draftId} })
+    .then(userDrafts => {
+      const userIds = userDrafts.map(ud => ud.userId)
+      return User.findAll({where: {
+        id: { [opIn]: userIds }
+      }})
       .then(users => res.status(201).send(users))
       .catch(error => res.status(400).send(error))
     })
+    .catch(error => res.status(400).send(error))    
+  },
+
+  retrieveDraftsByUser(req, res) {
+    UserDraft.findAll({ where: { userId: req.params.userId} })
+    .then(userDrafts => {
+      const draftIds = userDrafts.map(ud => ud.draftId)
+      return Draft.findAll({where: {
+        id: { [opIn]: draftIds }
+      }})
+      .then(drafts => res.status(201).send(drafts))
+      .catch(error => res.status(400).send(error))
+    })
+    .catch(error => res.status(400).send(error))   
   },
 
   create(req, res) {

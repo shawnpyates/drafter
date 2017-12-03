@@ -1,7 +1,9 @@
 import { fetchCurrentUser } from './userActions'
 import { createUser } from './userActions'
-import { fetchDrafts } from './draftActions'
+import { authenticateUser } from './userActions'
+import { fetchDraftsByUser } from './draftActions'
 
 export { fetchCurrentUser }
 export { createUser }
-export { fetchDrafts }
+export { authenticateUser }
+export { fetchDraftsByUser }

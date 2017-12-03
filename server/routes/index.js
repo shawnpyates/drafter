@@ -20,7 +20,7 @@ module.exports = app => {
   app.get('/api/drafts', drafts.retrieve),
   app.get('/api/drafts/:id', drafts.retrieveOne)
   app.post('/api/drafts', drafts.create)
-  app.put('/api/draft/:id', drafts.update)
+  app.put('/api/drafts/:id', drafts.update)
   app.delete('/api/drafts/:id', drafts.destroy)
 
   // teams
@@ -32,6 +32,7 @@ module.exports = app => {
 
   // user's association with draft
   app.get('/api/drafts/:draftId/users', userDrafts.retrieveUsersByDraft)
+  app.get('/api/users/:userId/drafts', userDrafts.retrieveDraftsByUser)
   app.post('/api/drafts/:draftId/users/:userId', userDrafts.create)
   app.delete('/api/drafts/:draftId/users/:userId', userDrafts.destroy)
 

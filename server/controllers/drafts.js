@@ -24,7 +24,7 @@ module.exports = {
     return Draft.findById(req.params.id)
     .then(draft => {
       if (!draft) return res.status.send({message: "Draft not found."})
-      return Draft.update({
+      return draft.update({
         name: req.body.name || draft.name,
         timeScheduled: req.body.timeScheduled || draft.timeScheduled
       })

@@ -42,12 +42,12 @@ module.exports = {
           let token = {token: jwt.sign(claim, secret)}
           res.status(201).send({user: user, token: token})
         } else {
-          res.status(400).send({failure: "Wrong password."})
+          res.status(400).send({failure: "incorrectPassword"})
         }
       })
     })
     .catch(error => {
-      res.status(400).send(error)
+      res.status(400).send({failure: "cannotFindUser"})
     })
   },
 
