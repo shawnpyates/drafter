@@ -1,9 +1,10 @@
-import axios from 'axios'
+import axios from 'axios';
+const SERVER_URL = process.env.SERVER_URL;
 
 export const fetchDraftsByUser = userId => {
   return dispatch => {
     dispatch({type: "FETCH_OWN_DRAFTS_PENDING"});
-    axios.get(`http://localhost:3001/api/users/${userId}/drafts`)
+    axios.get(`${SERVER_URL}/api/users/${userId}/drafts`)
       .then(response => {
         dispatch({type: "FETCH_OWN_DRAFTS_FULFILLED", payload: response.data})
       })

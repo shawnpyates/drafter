@@ -6,7 +6,7 @@ module.exports = {
   devtool: 'source-map',
   entry: './src/index.js',
   output: { path: __dirname + '/public/dist', filename: 'bundle.js' },
-  plugins: [new Dotenv({path: './.env'})],
+  plugins: [new Dotenv({path: '../.env'})],
   module: {
     loaders: [
       {

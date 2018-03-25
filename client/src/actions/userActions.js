@@ -1,18 +1,19 @@
 import axios from 'axios'
 const jwt = require('jsonwebtoken')
-const secret = process.env.JWT_SECRET
+const SECRET = process.env.JWT_SECRET;
+const SERVER_URL = process.env.SERVER_URL;
 
 
 export const fetchCurrentUser = () => {
   const token = localStorage.getItem("drafterUserToken")
   return dispatch => {
     dispatch({type: "FETCH_CURRENT_USER_PENDING"})
-    jwt.verify(token, secret, (err, decoded) => {
+    jwt.verify(token, SECRET, (err, decoded) => {
       if (err) {
         dispatch({type: "FETCH_CURRENT_USER_REJECTED", payload: err})
       } else {
         const id = decoded.userId
-        axios.get(`http://localhost:3001/api/users/${id}`)
+        axios.get(`${SERVER_URL}/api/users/${id}`)
           .then (response => {
             dispatch({type: "FETCH_CURRENT_USER_FULFILLED", payload: response.data})
           })
