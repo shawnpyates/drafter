@@ -1,40 +1,39 @@
-'use strict';
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
-    firstName: { 
+    firstName: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
     },
-    lastName: { 
+    lastName: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
     },
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true
+      unique: true,
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
     },
     registeredAsPlayer: {
       type: DataTypes.BOOLEAN,
-      allowNull: false
+      allowNull: false,
     },
     position: DataTypes.STRING,
     teams: DataTypes.ARRAY(DataTypes.STRING),
-    drafts: DataTypes.ARRAY(DataTypes.STRING)
-  })
-  User.associate = models => {
+    drafts: DataTypes.ARRAY(DataTypes.STRING),
+  });
+  User.associate = (models) => {
     User.belongsToMany(models.Team, {
-      through: 'userTeam', 
-      foreignKey: 'userId'
-    })
+      through: 'userTeam',
+      foreignKey: 'userId',
+    });
     User.belongsToMany(models.Draft, {
-      through: 'userDraft', 
-      foreignKey: 'userId'
-    })
-  }
+      through: 'userDraft',
+      foreignKey: 'userId',
+    });
+  };
   return User;
 };

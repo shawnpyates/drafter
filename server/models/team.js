@@ -1,19 +1,18 @@
-'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Team = sequelize.define('Team', {
     name: {
       type: DataTypes.STRING,
-      allowNull: false
-    }
-  })
-  Team.associate = models => {
+      allowNull: false,
+    },
+  });
+  Team.associate = (models) => {
     Team.belongsTo(models.Draft, {
-      foreignKey: 'draftId'
-    })
+      foreignKey: 'draftId',
+    });
     Team.belongsToMany(models.User, {
       through: 'userTeam',
-      foreignKey: 'teamId'
-    })
-  }
+      foreignKey: 'teamId',
+    });
+  };
   return Team;
 };
