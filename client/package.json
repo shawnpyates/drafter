@@ -6,6 +6,8 @@
     "axios": "^0.17.0",
     "dateformat": "^3.0.2",
     "dotenv-webpack": "^1.5.4",
+    "jsonwebtoken": "^8.2.0",
+    "prop-types": "^15.6.1",
     "react": "^16.0.0",
     "react-bootstrap": "^0.31.5",
     "react-dom": "^16.0.0",
@@ -19,13 +21,17 @@
     "redux-promise": "^0.5.3",
     "redux-promise-middleware": "^4.4.1",
     "redux-thunk": "^2.2.0",
+    "styled-components": "^3.2.5",
+    "uuid": "^3.2.1",
     "webpack": "^3.7.1"
   },
   "scripts": {
-    "build": "webpack --config webpack.config.js --progress --colors --watch"
+    "build": "webpack --config webpack.config.js --progress --colors --watch",
+    "lint": "./node_modules/.bin/eslint"
   },
-  "proxy": "https://localhost:3001",
+  "proxy": "http://localhost:3001",
   "devDependencies": {
+    "babel-eslint": "^7.2.3",
     "babel-loader": "^7.1.2",
     "babel-plugin-react-transform": "^3.0.0",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
@@ -33,6 +39,11 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "css-loader": "^0.28.7",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.9.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.7.0",
     "file-loader": "^1.1.5",
     "node-sass": "^4.5.3",
     "react-transform-hmr": "^1.0.4",

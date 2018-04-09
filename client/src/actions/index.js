@@ -1,9 +1,13 @@
-import { fetchCurrentUser } from './userActions'
-import { createUser } from './userActions'
-import { authenticateUser } from './userActions'
-import { fetchDraftsByUser } from './draftActions'
+import {
+  fetchCurrentUser,
+  createUser,
+  authenticateUser,
+  fetchDraftsByUser,
+} from './userActions';
 
-export { fetchCurrentUser }
-export { createUser }
-export { authenticateUser }
-export { fetchDraftsByUser }
+export {
+  fetchCurrentUser,
+  createUser,
+  authenticateUser,
+  fetchDraftsByUser,
+};

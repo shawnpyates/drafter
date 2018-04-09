@@ -1,0 +1,44 @@
+{
+  "header": {
+    "title": "Draft Machine",
+    "logOut": "Log Out",
+    "notLoggedIn": "Not Logged In"
+  },
+
+  "forms": {
+    "register": {
+      "title": "Sign Up",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "passwordSet": "Create a Password",
+      "passwordConfirm": "Confirm Your Password",
+      "shouldRegisterAsPlayer": {
+        "question": "Would you like to register as a player?",
+        "pleaseSelect": "Please select:",
+        "yes": "Yes",
+        "no": "No"
+      },
+      "position": {
+        "requestPosition": "If so, please choose a position:",
+        "placeholder": "Please Select",
+        "forward": "Forward",
+        "defence": "Defence",
+        "goaltender": "Goaltender"
+      },
+      "submit": "Sign Up"
+    },
+
+    "login": {
+      "title": "Log In",
+      "email": "Email",
+      "password": "Password",
+      "errorMessages": {
+        "wrongFormat": "Please enter a valid email address.",
+        "incorrectPassword": "Password is incorrect.",
+        "userNotFound": "Could not find any user with that email address."
+      },
+      "submit": "Log In"
+    }
+  }
+}

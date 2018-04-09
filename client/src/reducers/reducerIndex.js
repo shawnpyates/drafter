@@ -8,7 +8,7 @@ const reducers = combineReducers({
   user: userReducer,
   draft: draftReducer,
   session: sessionReducer,
-  form: formReducer
-})
+  form: formReducer,
+});
 
 export default reducers;

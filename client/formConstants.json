@@ -1,0 +1,96 @@
+{
+  "register": {
+    "title": "Register",
+    "passwordMinimumLength": 8,
+    "inputs": [
+      {
+        "name": "firstName",
+        "text": "First Name",
+        "type": "text",
+        "enabled": true
+      },
+      {
+        "name": "lastName",
+        "text": "Last Name",
+        "type": "text",
+        "enabled": true
+      },
+      {
+        "name": "email",
+        "text": "E-mail",
+        "type": "text",
+        "enabled": true
+      },
+      {
+        "name": "passwordFirstInsertion",
+        "text": "Create a Password",
+        "type": "password",
+        "enabled": true
+      },
+      {
+        "name": "passwordSecondInsertion",
+        "text": "Confirm Your Password",
+        "type": "password",
+        "enabled": true
+      },
+      {
+        "name": "registeredAsPlayer",
+        "text": "Would you like to register as a player?",
+        "type": "select",
+        "enabled": true,
+        "placeholder": "Please Select",
+        "options": ["Yes", "No"]
+      },
+      {
+        "name": "position",
+        "text": "Please choose a position: ",
+        "type": "select",
+        "enabled": false,
+        "placeholder": "Please Select",
+        "options": ["Forward", "Defence", "Goaltender"]
+      },
+      {
+        "name": "submitButton",
+        "text": "Sign Up",
+        "type": "submit",
+        "enabled": false
+      }
+    ],
+    "errorMessages": {
+      "invalidEmail": "Please enter a valid e-mail address.",
+      "missingField": "Please fill in all fields",
+      "passwordsDidNotMatch": "Your passwords did not match. Please try again.",
+      "tooShort": "Your password must contain at least 8 characters.",
+      "unexpected": "An unexpected error occurred. Please try again."
+    }
+  },
+  "login": {
+    "title": "Log In",
+    "inputs": [
+      {
+        "name": "email",
+        "text": "E-mail",
+        "type": "text",
+        "enabled": true
+      },
+      {
+        "name": "password",
+        "text": "Password",
+        "type": "password",
+        "enabled": true
+      },
+      {
+        "name": "submitButton",
+        "text": "Log In",
+        "type": "submit",
+        "enabled": false
+      }
+    ],
+    "errorMessages": {
+      "cannotFindUser": "Could not find any user with that e-mail address.",
+      "incorrectPassword": "The password you have typed is incorrect.",
+      "invalidEmail": "Please enter a valid e-mail address.",
+      "unexpected": "An unexpected error occurred. Please try again."
+    }
+  }
+}

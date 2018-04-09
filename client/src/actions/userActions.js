@@ -1,77 +1,76 @@
-import axios from 'axios'
-const jwt = require('jsonwebtoken')
-const SECRET = process.env.JWT_SECRET;
-const SERVER_URL = process.env.SERVER_URL;
+import axios from 'axios';
+import jwt from 'jsonwebtoken';
 
+const JWT_SECRET = process.env.JWT_SECRET;
+const SERVER_URL = process.env.SERVER_URL;
+const { localStorage } = window;
 
 export const fetchCurrentUser = () => {
-  const token = localStorage.getItem("drafterUserToken")
-  return dispatch => {
-    dispatch({type: "FETCH_CURRENT_USER_PENDING"})
-    jwt.verify(token, SECRET, (err, decoded) => {
-      if (err) {
-        dispatch({type: "FETCH_CURRENT_USER_REJECTED", payload: err})
+  const token = localStorage.getItem('drafterUserToken');
+  return (dispatch) => {
+    dispatch({ type: 'FETCH_CURRENT_USER_PENDING' });
+    jwt.verify(token, JWT_SECRET, (jwtVerifyingError, decoded) => {
+      if (jwtVerifyingError) {
+        dispatch({ type: 'FETCH_CURRENT_USER_REJECTED', payload: jwtVerifyingError });
       } else {
-        const id = decoded.userId
-        axios.get(`${SERVER_URL}/api/users/${id}`)
-          .then (response => {
-            dispatch({type: "FETCH_CURRENT_USER_FULFILLED", payload: response.data})
+        const { userId } = decoded;
+        axios.get(`${SERVER_URL}/api/users/${userId}`)
+          .then((response) => {
+            dispatch({ type: 'FETCH_CURRENT_USER_FULFILLED', payload: response.data });
           })
-          .catch(err => {
-            dispatch({type: "FETCH_CURRENT_USER_REJECTED", payload: err})
-          })
+          .catch((dbFetchingError) => {
+            dispatch({ type: 'FETCH_CURRENT_USER_REJECTED', payload: dbFetchingError });
+          });
       }
-    })
-  }
-}
+    });
+  };
+};
 
-export const authenticateUser = body => {
-  return dispatch => {
-    dispatch({type: "AUTHENTICATE USER PENDING"})
-    return axios.post("/api/users/auth", {
-      email: body.email,
-      password: body.password
+export const authenticateUser = body => (dispatch) => {
+  dispatch({ type: 'AUTHENTICATE USER PENDING' });
+  const { email, password } = body;
+  return axios.post('/api/users/auth', { email, password })
+    .then((response) => {
+      localStorage.setItem('drafterUserToken', response.data.token.token);
+      dispatch({ type: 'AUTHENTICATE_USER_FULFILLED', payload: response.data });
     })
-    .then(response => {
-      localStorage.setItem('drafterUserToken', response.data.token.token)
-      dispatch({type: "AUTHENTICATE_USER_FULFILLED", payload: response.data})
-    })
-    .catch(err => {
-      dispatch({type: "AUTHENTICATE_USER_REJECTED", payload: err})
-    })
-  }
-}
+    .catch((err) => {
+      dispatch({ type: 'AUTHENTICATE_USER_REJECTED', payload: err });
+    });
+};
 
 
-export const createUser = body => {
-  return dispatch => {
-    dispatch({type: "CREATE_USER_PENDING"});
-    return axios.post("/api/users", {
-        firstName: body.firstName,
-        lastName: body.lastName,
-        email: body.email,
-        password: body.password,
-        registeredAsPlayer: body.registeredAsPlayer,
-        position: body.position
-      })
-      .then(response => {
-        dispatch({type: "CREATE_USER_FULFILLED", payload: response.data})
-        dispatch({type: "AUTHENTICATE_USER_PENDING"})
-        return axios.post("/api/users/auth", {
-          email: body.email,
-          password: body.password
+export const createUser = body => (dispatch) => {
+  dispatch({ type: 'CREATE_USER_PENDING' });
+  const {
+    firstName,
+    lastName,
+    email,
+    password,
+    registeredAsPlayer,
+    position,
+  } = body;
+  return axios.post('/api/users', {
+    firstName,
+    lastName,
+    email,
+    password,
+    registeredAsPlayer,
+    position,
+  })
+    .then((createUserResponse) => {
+      dispatch({ type: 'CREATE_USER_FULFILLED', payload: createUserResponse.data });
+      dispatch({ type: 'AUTHENTICATE_USER_PENDING' });
+      return axios.post('/api/users/auth', { email, password })
+        .then((authResponse) => {
+          localStorage.setItem('drafterUserToken', authResponse.data.token.token);
+          dispatch({ type: 'AUTHENTICATE_USER_FULFILLED', payload: authResponse.data });
         })
-        .then(response => {
-          localStorage.setItem('drafterUserToken', response.data.token.token)
-          dispatch({type: "AUTHENTICATE_USER_FULFILLED", payload: response.data})
-        })
-        .catch(err => {
-          dispatch({type: "AUTHENTICATE_USER_REJECTED", payload: err})
-        })
-      })
-      .catch(err => {
-        dispatch({type: "CREATE_USER_REJECTED", payload: err})
-      })
-  }
-  
-}
+        .catch((err) => {
+          dispatch({ type: 'AUTHENTICATE_USER_REJECTED', payload: err });
+        });
+    })
+    .catch((err) => {
+      dispatch({ type: 'CREATE_USER_REJECTED', payload: err });
+    });
+};

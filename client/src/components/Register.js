@@ -23,32 +23,32 @@ class Register extends Component {
       passwordSecondInsertion: "",
       registeredAsPlayer: "",
       position: "",
-      errorMessage: "" 
+      errorMessage: ""
     }
   }
 
   handleChange = ev => {
     switch (ev.target.name) {
-      case "firstName": 
+      case "firstName":
         this.setState({firstName: ev.target.value})
         break
-      case "lastName": 
+      case "lastName":
         this.setState({lastName: ev.target.value})
         break
-      case "email": 
+      case "email":
         this.setState({email: ev.target.value})
         break
-      case "passwordFirstInsertion": 
+      case "passwordFirstInsertion":
         this.setState({passwordFirstInsertion: ev.target.value})
         break
-      case "passwordSecondInsertion": 
+      case "passwordSecondInsertion":
         this.setState({passwordSecondInsertion: ev.target.value})
         break
-      case "registeredAsPlayer": 
+      case "registeredAsPlayer":
         if (ev.target.value === "No") this.setState({position: ""})
         this.setState({registeredAsPlayer: ev.target.value})
         break
-      case "position": 
+      case "position":
         this.setState({position: ev.target.value})
         break
     }
@@ -61,7 +61,7 @@ class Register extends Component {
 
   handleSubmit = () => {
     for (let key in this.state) {
-      if ((!this.state[key] && key !== "errorMessage") && 
+      if ((!this.state[key] && key !== "errorMessage") &&
            !(key === "position" && this.state.registeredAsPlayer === "No")) {
         this.setState({errorMessage: "Please fill in all fields."})
         return
@@ -74,7 +74,7 @@ class Register extends Component {
     if (this.state.passwordFirstInsertion.length < 8) {
       this.setState({errorMessage: "Your password must contain at least 8 characters."})
       return
-    } 
+    }
     if (!this.validateEmail(this.state.email)) {
       this.setState({errorMessage: "Please enter a valid e-mail address."})
       return
@@ -101,36 +101,36 @@ class Register extends Component {
 
   render() {
     let isPositionDisabled = this.state.registeredAsPlayer === "Yes" ? false : true
-    let positionPlaceholder = isPositionDisabled ? "" : "Please Select" 
+    let positionPlaceholder = isPositionDisabled ? "" : "Please Select"
     return (
       <div className="registrationContainer">
         <form className="registrationForm">
           <h2>Register</h2>
           <label>
-            First name: 
+            First name:
             <input type="text" name="firstName" value={this.state.firstName} onChange={this.handleChange} />
           </label>
           <label>
-            Last name: 
+            Last name:
             <input type="text" name="lastName" value={this.state.lastName} onChange={this.handleChange} />
           </label>
           <label>
-            Email: 
+            Email:
             <input type="text" name="email" value={this.state.email} onChange={this.handleChange} />
           </label>
           <label>
-            Password: 
+            Password:
             <input type="password" name="passwordFirstInsertion" value={this.state.passwordFirstInsertion} onChange={this.handleChange} />
           </label>
           <label>
-            Confirm password: 
+            Confirm password:
             <input type="password" name="passwordSecondInsertion" value={this.state.passwordSecondInsertion} onChange={this.handleChange} />
           </label>
           <label>
-            Would you like to register as a player? 
+            Would you like to register as a player?
             <select name="registeredAsPlayer"
-                    value={this.state.registeredAsPlayer} 
-                    onChange={this.handleChange} 
+                    value={this.state.registeredAsPlayer}
+                    onChange={this.handleChange}
                     style={{marginLeft: 10}}
             >
               <option value="" disabled>Please Select</option>
@@ -139,10 +139,10 @@ class Register extends Component {
             </select>
           </label>
           <label>
-            If so, please choose a position: 
+            If so, please choose a position:
             <select name="position"
-                    disabled={isPositionDisabled} 
-                    value={this.state.position} 
+                    disabled={isPositionDisabled}
+                    value={this.state.position}
                     style={{marginLeft: 10}}
                     onChange={this.handleChange}
             >

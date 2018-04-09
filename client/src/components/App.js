@@ -1,72 +1,79 @@
 import React, { Component } from 'react';
-import '../../styles/App.css';
-import axios from 'axios';
 import { connect } from 'react-redux';
-import Landing from './Landing.js';
-import Welcome from './Welcome.js'
-import { fetchDrafts, fetchCurrentUser } from '../actions';
+import PropTypes from 'prop-types';
+import Landing from './Landing';
+import Welcome from './Welcome';
+import '../../styles/App.css';
+import { fetchCurrentUser } from '../actions';
 
+const { localStorage, location } = window;
 
-@connect((store) => {
-  return {
-    drafts: store.draft.drafts,
-    currentUser: store.user.currentUser,
-    errorOnFetchCurrentUser: store.user.errorOnFetchCurrentUser
-  };
-})
+const mapStateToProps = (state) => {
+  const { currentUser, errorOnFetchCurrentUser } = state.user;
+  return { currentUser, errorOnFetchCurrentUser };
+};
 
+const handleClick = () => {
+  localStorage.removeItem('drafterUserToken');
+  location.reload();
+};
 
 class App extends Component {
-  
   componentWillMount() {
-    if (!this.props.currentUser && localStorage.getItem("drafterUserToken")) {
-      this.props.dispatch(fetchCurrentUser())
+    if (!this.props.currentUser && localStorage.getItem('drafterUserToken')) {
+      this.props.dispatch(fetchCurrentUser());
     }
-  }
-
-  handleClick = ev => {
-    localStorage.removeItem("drafterUserToken")
-    window.location.reload()
   }
 
   render() {
-    let componentToRender 
-    let emailDisplay
-    let myProfileAnchor
-    let logoutAnchor
-    if (!localStorage.getItem("drafterUserToken") || this.props.errorOnFetchCurrentUser) {
-      componentToRender = <Landing />
-      logoutAnchor = <a onClick={this.handleClick}>Not Logged In</a>      
+    let componentToRender;
+    let emailDisplay;
+    let myProfileAnchor;
+    let logoutAnchor;
+    if (!localStorage.getItem('drafterUserToken') || this.props.errorOnFetchCurrentUser) {
+      componentToRender = <Landing />;
+      logoutAnchor = <a onClick={handleClick}>Not Logged In</a>;
     } else if (this.props.currentUser) {
-      componentToRender = <Welcome currentUser={this.props.currentUser} />
-      emailDisplay = <p>{this.props.currentUser.email}</p>
-      myProfileAnchor = <a onClick={this.handleClick}>My Profile</a>      
-      logoutAnchor = <a onClick={this.handleClick}>Log Out</a>
+      componentToRender = <Welcome currentUser={this.props.currentUser} />;
+      emailDisplay = <p>{this.props.currentUser.email}</p>;
+      myProfileAnchor = <a onClick={handleClick}>My Profile</a>;
+      logoutAnchor = <a onClick={handleClick}>Log Out</a>;
     } else {
-      componentToRender = <div></div>
-      logoutAnchor = <a></a>
+      componentToRender = <div />;
+      logoutAnchor = <a />;
     }
-    let navbar = this.props.currentUser ?
-                 <span className='navbarOptions'>
-                   {logoutAnchor}{myProfileAnchor}{emailDisplay}
-                 </span>
-                 : 
-                 <span className='navbarOptions'>
-                   {logoutAnchor}
-                 </span>
+    const navbar = this.props.currentUser ?
+      (<span className="navbarOptions">
+        {logoutAnchor}{myProfileAnchor}{emailDisplay}
+       </span>)
+      :
+      (<span className="navbarOptions">
+        {logoutAnchor}
+       </span>);
     const header =
-      <header className='siteHeader'>
+      (<header className="siteHeader">
         <h2>drafter</h2>
         {navbar}
-      </header>
+       </header>);
     return (
       <div className="App">
         {header}
         {componentToRender}
       </div>
-    )
+    );
   }
 }
 
+App.defaultProps = {
+  currentUser: null,
+  errorOnFetchCurrentUser: null,
+};
 
-export default App;
+App.propTypes = {
+  currentUser: PropTypes.objectOf(PropTypes.any),
+  dispatch: PropTypes.func.isRequired,
+  errorOnFetchCurrentUser: PropTypes.string,
+};
+
+
+export default connect(mapStateToProps)(App);

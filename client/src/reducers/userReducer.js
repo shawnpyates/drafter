@@ -10,52 +10,48 @@ const initialState = {
   currentUser: null,
   errorOnCreateUser: null,
   errorOnAuthenticateUser: null,
-  errorOnFetchCurrentUser: null
-}
+  errorOnFetchCurrentUser: null,
+};
 
-const userReducer = (state=initialState, action) => {
-  switch(action.type) {
-    case "CREATE_USER_PENDING": 
-      return {...state, creating: true};
-      break;
-    case "CREATE_USER_REJECTED": 
-      return {...state, creating: false, errorOnCreateUser: action.payload};
-      break;
-    case "CREATE_USER_FULFILLED":
+const userReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case 'CREATE_USER_PENDING':
+      return { ...state, creating: true };
+    case 'CREATE_USER_REJECTED':
+      return { ...state, creating: false, errorOnCreateUser: action.payload };
+    case 'CREATE_USER_FULFILLED':
       return {
         ...state,
         creating: false,
         created: true,
-        createdUser: action.payload
-      }
-    case "AUTHENTICATE_USER_PENDING": 
-      return {...state, authenticating: true};
-      break;
-    case "AUTHENTICATE_USER_REJECTED": 
-      return {...state, authenticating: false, errorOnAuthenticateUser: action.payload};
-      break;
-    case "AUTHENTICATE_USER_FULFILLED":
+        createdUser: action.payload,
+      };
+    case 'AUTHENTICATE_USER_PENDING':
+      return { ...state, authenticating: true };
+    case 'AUTHENTICATE_USER_REJECTED':
+      return { ...state, authenticating: false, errorOnAuthenticateUser: action.payload };
+    case 'AUTHENTICATE_USER_FULFILLED':
       return {
         ...state,
         authenticating: false,
         authenticated: true,
-        authenticatedUser: action.payload
-      }
-    case "FETCH_CURRENT_USER_PENDING":
-      return {...state, creating: true};
-      break;
-    case "FETCH_CURRENT_USER_REJECTED":
-      return {...state, creating: false, errorOnFetchCurrentUser: action.payload}
-      break;
-    case "FETCH_CURRENT_USER_FULFILLED":
+        authenticatedUser: action.payload,
+      };
+    case 'FETCH_CURRENT_USER_PENDING':
+      return { ...state, creating: true };
+    case 'FETCH_CURRENT_USER_REJECTED':
+      return { ...state, creating: false, errorOnFetchCurrentUser: action.payload };
+    case 'FETCH_CURRENT_USER_FULFILLED':
       return {
         ...state,
         creating: false,
         created: true,
-        currentUser: action.payload
-      }
+        currentUser: action.payload,
+      };
+    default:
+      break;
   }
-  return state
-}
+  return state;
+};
 
 export default userReducer;
