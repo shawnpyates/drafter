@@ -1,8 +1,8 @@
 {
   "profileProperties": {
     "email": "E-mail",
-    "registeredAsPlayer": "registeredAsPlayer",
-    "position": "position"
+    "registeredAsPlayer": "Registered As Player",
+    "position": "Position"
   },
   "profileValues": {
     "registeredYes": "Yes",
