@@ -40,12 +40,17 @@ const Select = styled.select`
   padding: 15px;
   border: 1px solid #CCC;
   border-radius: 3px;
-  margin-bottom: 10px;
+  margin: 10px auto;
+  height: 35px;
   width: 100%;
   box-sizing: border-box;
   font-family: Arial;
   color: #2C3E50;
   font-size: 13px;
+`;
+
+const SelectTitle = styled.p`
+  margin-top: 15px;
 `;
 
 const SubmitButton = styled.input`
@@ -62,8 +67,13 @@ const SubmitButton = styled.input`
   cursor: pointer;
 `;
 
+const ErrorMessageContainer = styled.div`
+  height: 15px;
+`;
+
 const ErrorMessage = styled.p`
-  color: red;
+  color: #F00;
+  margin: 7px auto 0;
 `;
 
 const Form = ({
@@ -77,6 +87,7 @@ const Form = ({
     const { name, value } = ev.target;
     updateFieldValue(name, value);
   };
+
   const getInputs = inputs => (
     inputs.map((input) => {
       const {
@@ -85,7 +96,9 @@ const Form = ({
         placeholder,
         options,
         type,
+        enabled,
       } = input;
+      if (!enabled) return null;
       switch (type) {
         case 'text':
           return (
@@ -120,9 +133,9 @@ const Form = ({
         case 'select':
           return (
             <div key={name}>
-              <p>{text}</p>
-              <Select name={name} onChange={handleChange}>
-                <option value="" disabled selected hidden>{placeholder}</option>
+              <SelectTitle>{text}</SelectTitle>
+              <Select defaultValue={placeholder} name={name} onChange={handleChange}>
+                <option disabled>{placeholder}</option>
                 {options.map(op => <option key={op}>{op}</option>)}
               </Select>
             </div>
@@ -138,7 +151,9 @@ const Form = ({
       <FieldWrapper>
         <Title>{title}</Title>
         {getInputs(formInputs)}
-        <ErrorMessage>{errorMessage}</ErrorMessage>
+        <ErrorMessageContainer>
+          <ErrorMessage>{errorMessage}</ErrorMessage>
+        </ErrorMessageContainer>
       </FieldWrapper>
     </form>
   );

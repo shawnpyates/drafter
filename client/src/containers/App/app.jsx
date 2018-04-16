@@ -37,7 +37,7 @@ class App extends Component {
         {currentUser &&
           <MainMenu />
         }
-        {(this.state.isTokenMissing || errorOnFetchCurrentUser) &&
+        {((!currentUser && this.state.isTokenMissing) || errorOnFetchCurrentUser) &&
           <LoggedOutView />
         }
         {!currentUser && !this.state.isTokenMissing &&

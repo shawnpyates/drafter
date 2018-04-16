@@ -5,6 +5,8 @@ import Form from '../../components/Form/form.jsx';
 import { fetchCurrentUser, createUser } from '../../actions';
 import { register as registerForm } from '../../../formConstants.json';
 
+const positionField = registerForm.inputs.find(input => input.name === 'position');
+
 const {
   missingField,
   passwordsDidNotMatch,
@@ -49,6 +51,17 @@ class Register extends Component {
     }
   }
 
+  updatePositionFieldBasedOnRegisterState() {
+    const isRegistered = this.state.registeredAsPlayer === 'Yes';
+    if (isRegistered) {
+      positionField.enabled = true;
+    } else {
+      positionField.enabled = false;
+      this.setState({ position: null });
+    }
+    this.forceUpdate();
+  }
+
   handleSubmit = (ev) => {
     ev.preventDefault();
     if (this.doesFormHaveError()) return;
@@ -69,6 +82,7 @@ class Register extends Component {
       registeredAsPlayer: isRegistered,
       position,
     };
+    positionField.enabled = false;
     this.props.createUser(body);
   }
 
@@ -104,9 +118,13 @@ class Register extends Component {
   }
 
   updateFieldValue = (name, value) => {
-    const isRegisterNullified = (name === 'registeredAsPlayer' && value === 'No');
-    if (isRegisterNullified) this.setState({ position: null });
-    this.setState({ [name]: value });
+    this.setState({
+      [name]: value
+    }, () => {
+      if (name === 'registeredAsPlayer') {
+        this.updatePositionFieldBasedOnRegisterState();
+      }
+    });
   }
 
   render() {

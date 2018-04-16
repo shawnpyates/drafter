@@ -1,0 +1,12 @@
+{
+  "profileProperties": {
+    "email": "E-mail",
+    "registeredAsPlayer": "registeredAsPlayer",
+    "position": "position"
+  },
+  "profileValues": {
+    "registeredYes": "Yes",
+    "registeredNo": "No",
+    "positionNotApplicable": "N/A"
+  }
+}

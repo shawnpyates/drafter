@@ -26,8 +26,8 @@ const Title = styled.h2`
 
 const NavBar = styled.div`
   z-index: 10;
-  float: center;
   margin-top: 8px;
+  text-align: center;
 
   @media only screen and (min-width: 550px) {
     float: right;
@@ -35,12 +35,13 @@ const NavBar = styled.div`
 `;
 
 const NavBarItem = styled.p`
-  color: #FFF;
+  display: inline-block;
   overflow: hidden;
   white-space: nowrap;
   text-decoration: none;
   text-align: center;
-  margin-right: 15px;
+  margin: auto 15px;
+  color: #7EC0EE;
 
   @media only screen and (min-width: 550px) {
     text-align: right;
@@ -49,10 +50,7 @@ const NavBarItem = styled.p`
 
 const NavBarLogOut = styled(NavBarItem)`
   cursor: pointer;
-`;
-
-const NavBarNotLoggedIn = styled(NavBarItem)`
-  color: #7EC0EE;
+  color: #FFF;
 `;
 
 const Header = ({ currentUser }) => {
@@ -73,7 +71,7 @@ const Header = ({ currentUser }) => {
       }
       {!currentUser &&
         <NavBar>
-          <NavBarNotLoggedIn>{notLoggedIn}</NavBarNotLoggedIn>
+          <NavBarItem>{notLoggedIn}</NavBarItem>
         </NavBar>
       }
     </Container>

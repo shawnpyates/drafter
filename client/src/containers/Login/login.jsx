@@ -5,7 +5,7 @@ import Form from '../../components/Form/form.jsx';
 import { authenticateUser, fetchCurrentUser } from '../../actions';
 import { login as loginForm } from '../../../formConstants.json';
 
-const { errorMessage } = loginForm;
+const { errorMessages } = loginForm;
 
 const mapStateToProps = (state) => {
   const { authenticatedUser, errorOnAuthenticateUser } = state.user;

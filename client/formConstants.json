@@ -4,6 +4,12 @@
     "passwordMinimumLength": 8,
     "inputs": [
       {
+        "name": "email",
+        "text": "E-mail",
+        "type": "text",
+        "enabled": true
+      },
+      {
         "name": "firstName",
         "text": "First Name",
         "type": "text",
@@ -12,12 +18,6 @@
       {
         "name": "lastName",
         "text": "Last Name",
-        "type": "text",
-        "enabled": true
-      },
-      {
-        "name": "email",
-        "text": "E-mail",
         "type": "text",
         "enabled": true
       },
@@ -46,6 +46,7 @@
         "text": "Please choose a position: ",
         "type": "select",
         "enabled": false,
+        "enablementContingentOn": "registeredAsPlayer",
         "placeholder": "Please Select",
         "options": ["Forward", "Defence", "Goaltender"]
       },
@@ -53,12 +54,12 @@
         "name": "submitButton",
         "text": "Sign Up",
         "type": "submit",
-        "enabled": false
+        "enabled": true
       }
     ],
     "errorMessages": {
       "invalidEmail": "Please enter a valid e-mail address.",
-      "missingField": "Please fill in all fields",
+      "missingField": "Please fill in all fields.",
       "passwordsDidNotMatch": "Your passwords did not match. Please try again.",
       "tooShort": "Your password must contain at least 8 characters.",
       "unexpected": "An unexpected error occurred. Please try again."
@@ -83,7 +84,7 @@
         "name": "submitButton",
         "text": "Log In",
         "type": "submit",
-        "enabled": false
+        "enabled": true
       }
     ],
     "errorMessages": {
