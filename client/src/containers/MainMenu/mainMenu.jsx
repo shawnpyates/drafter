@@ -3,9 +3,10 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import ProfileCard from '../../components/ProfileCard/profileCard.jsx';
+import Drafts from '../Drafts/drafts.jsx';
 
 const WelcomeMessage = styled.h2`
-  margin-left: 25%;
+  margin-left: 27%;
   margin-top: 50px;
 `;
 
@@ -28,6 +29,7 @@ class MainMenu extends Component {
       <div>
         <WelcomeMessage>Welcome, {currentUser.firstName}!</WelcomeMessage>
         <ProfileCard user={currentUser} />
+        <Drafts userId={currentUser.id} />
       </div>
     );
   }

@@ -73,9 +73,7 @@ const ListItem = styled.li`
 const ProfileCard = ({ user }) => (
   <InfoWrapper>
     <InfoTitle>{`${user.firstName} ${user.lastName}`}</InfoTitle>
-    <EditButton
-      href="#"
-    >
+    <EditButton href="#">
       Edit
     </EditButton>
     <InfoDetails>

@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Header from '../../components/Header/header.jsx';
+import LoggedInView from '../LoggedInView/loggedInView.jsx';
 import LoggedOutView from '../LoggedOutView/loggedOutView.jsx';
-import MainMenu from '../MainMenu/mainMenu.jsx';
 import { fetchCurrentUser } from '../../actions';
 
 const { localStorage } = window;
@@ -35,7 +35,7 @@ class App extends Component {
       <div>
         <Header currentUser={currentUser} />
         {currentUser &&
-          <MainMenu />
+          <LoggedInView />
         }
         {((!currentUser && this.state.isTokenMissing) || errorOnFetchCurrentUser) &&
           <LoggedOutView />

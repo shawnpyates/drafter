@@ -1,7 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import uuidv4 from 'uuid/v4';
+import { SingleDatePicker } from 'react-dates';
+import TimePicker from 'rc-time-picker';
+import moment from 'moment';
+import 'react-dates/initialize';
+import 'react-dates/lib/css/_datepicker.css';
+import 'rc-time-picker/assets/index.css';
+
+const now = moment();
 
 const FieldWrapper = styled.div`
   background: white;
@@ -54,6 +61,7 @@ const SelectTitle = styled.p`
 `;
 
 const SubmitButton = styled.input`
+  display: block;
   padding: 15px;
   border: 1px solid #CCC;
   border-radius: 3px;
@@ -65,6 +73,17 @@ const SubmitButton = styled.input`
   font-size: 13px;
   float: center;
   cursor: pointer;
+`;
+
+const SchedulerContainer = styled.div`
+`;
+
+const Calendar = styled(SingleDatePicker)`
+  float: left;
+`;
+
+const TimeSelector = styled(TimePicker)`
+  z-index: 3000;
 `;
 
 const ErrorMessageContainer = styled.div`
@@ -82,12 +101,17 @@ const Form = ({
   title,
   formInputs,
   errorMessage,
+  calendarDate,
+  changeDate,
+  changeTime,
+  timeFormat,
+  isCalendarFocused,
+  toggleCalendarFocus,
 }) => {
   const handleChange = (ev) => {
     const { name, value } = ev.target;
     updateFieldValue(name, value);
   };
-
   const getInputs = inputs => (
     inputs.map((input) => {
       const {
@@ -139,6 +163,26 @@ const Form = ({
                 {options.map(op => <option key={op}>{op}</option>)}
               </Select>
             </div>
+          );
+        case 'scheduler':
+          return (
+            <SchedulerContainer key={name}>
+              <SelectTitle>{text}</SelectTitle>
+              <Calendar
+                date={calendarDate}
+                onDateChange={date => changeDate(date)}
+                focused={isCalendarFocused}
+                onFocusChange={({ focused }) => toggleCalendarFocus(focused)}
+              />
+              <TimePicker
+                showSecond={false}
+                defaultValue={now}
+                className="xxx"
+                onChange={changeTime}
+                format={timeFormat}
+                use12Hours
+              />
+            </SchedulerContainer>
           );
         default:
           return null;

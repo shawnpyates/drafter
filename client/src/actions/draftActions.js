@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-const { SERVER_URL } = process.env;
+const SERVER_URL = process.env.SERVER_URL;
 
-const fetchDraftsByUser = userId => (dispatch) => {
+export const fetchDraftsByUser = userId => (dispatch) => {
   dispatch({ type: 'FETCH_OWN_DRAFTS_PENDING' });
   axios.get(`${SERVER_URL}/api/users/${userId}/drafts`)
     .then((response) => {
@@ -13,4 +13,15 @@ const fetchDraftsByUser = userId => (dispatch) => {
     });
 };
 
-export default fetchDraftsByUser;
+export const createDraft = body => (dispatch) => {
+  dispatch({ type: 'CREATE_DRAFT_PENDING ' });
+  const { name, timeScheduled } = body;
+  return axios.post('/api/drafts', { name, timeScheduled })
+    .then((response) => {
+      dispatch({ type: 'CREATE_DRAFT_FULFILLED', payload: response.data });
+    })
+    .catch((err) => {
+      dispatch({ type: 'CREATE_DRAFT_REJECTED', payload: err });
+    });
+};
+

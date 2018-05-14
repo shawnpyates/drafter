@@ -93,5 +93,36 @@
       "invalidEmail": "Please enter a valid e-mail address.",
       "unexpected": "An unexpected error occurred. Please try again."
     }
+  },
+  "draft": {
+    "title": "Create a New Draft",
+    "inputs": [
+      {
+        "name": "name",
+        "text": "Name Your Draft",
+        "type": "text",
+        "enabled": true
+      },
+      {
+        "name": "shouldScheduleTime",
+        "text": "Would you like to schedule a time for your draft?",
+        "type": "select",
+        "enabled": true,
+        "placeholder": "Please Select",
+        "options": ["Yes", "No"]
+      },
+      {
+        "name": "scheduledTime",
+        "text": "Please select a date and time.",
+        "type": "scheduler",
+        "enabled": false
+      },
+      {
+        "name": "submitButton",
+        "text": "Create",
+        "type": "submit",
+        "enabled": true
+      }
+    ]
   }
 }
