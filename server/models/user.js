@@ -22,8 +22,14 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     position: DataTypes.STRING,
-    teams: DataTypes.ARRAY(DataTypes.STRING),
-    drafts: DataTypes.ARRAY(DataTypes.STRING),
+    teams: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      allowNull: false,
+    },
+    drafts: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      allowNull: false,
+    },
   });
   User.associate = (models) => {
     User.belongsToMany(models.Team, {

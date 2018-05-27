@@ -1,10 +1,8 @@
 import axios from 'axios';
 
-const SERVER_URL = process.env.SERVER_URL;
-
 export const fetchDraftsByUser = userId => (dispatch) => {
   dispatch({ type: 'FETCH_OWN_DRAFTS_PENDING' });
-  axios.get(`${SERVER_URL}/api/users/${userId}/drafts`)
+  axios.get(`${process.env.SERVER_URL}/api/users/${userId}/drafts`)
     .then((response) => {
       dispatch({ type: 'FETCH_OWN_DRAFTS_FULFILLED', payload: response.data });
     })
@@ -15,13 +13,25 @@ export const fetchDraftsByUser = userId => (dispatch) => {
 
 export const createDraft = body => (dispatch) => {
   dispatch({ type: 'CREATE_DRAFT_PENDING ' });
-  const { name, timeScheduled } = body;
+  const { name, timeScheduled, creator } = body;
   return axios.post('/api/drafts', { name, timeScheduled })
-    .then((response) => {
-      dispatch({ type: 'CREATE_DRAFT_FULFILLED', payload: response.data });
+    .then((createDraftResponse) => {
+      dispatch({ type: 'CREATE_DRAFT_FULFILLED', payload: createDraftResponse.data });
+      dispatch({ type: 'ASSOCIATE_DRAFT_WITH_USER_PENDING ' });
+      axios.post(
+        `/api/drafts/${createDraftResponse.data.id}/users/${creator.id}`,
+        { isAdmin: true },
+      ).then((associateDraftResponse) => {
+        dispatch({
+          type: 'ASSOCIATE_DRAFT_WITH_USER_FULFILLED',
+          payload: associateDraftResponse.data,
+        });
+      }).catch((associateErr) => {
+        dispatch({ type: 'CREATE_DRAFT_REJECTED', payload: associateErr });
+      });
     })
-    .catch((err) => {
-      dispatch({ type: 'CREATE_DRAFT_REJECTED', payload: err });
+    .catch((createDraftErr) => {
+      dispatch({ type: 'CREATE_DRAFT_REJECTED', payload: createDraftErr });
     });
 };
 

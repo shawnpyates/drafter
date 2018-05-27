@@ -30,8 +30,8 @@ module.exports = {
           password: hash,
           registeredAsPlayer,
           position,
-          teams: null,
-          drafts: null,
+          teams: [],
+          drafts: [],
         })
           .then(user => res.status(201).send(user))
           .catch(error => res.status(400).send(error))

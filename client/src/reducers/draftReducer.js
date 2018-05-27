@@ -3,9 +3,12 @@ const initialState = {
   created: false,
   fetching: false,
   fetched: false,
+  associating: false,
+  associated: false,
   ownDrafts: [],
   errorOnCreateDraft: null,
   errorOnFetchOwnDrafts: null,
+  errorOnAssociating: null,
 };
 
 const draftReducer = (state = initialState, action) => {
@@ -33,6 +36,20 @@ const draftReducer = (state = initialState, action) => {
         fetching: false,
         fetched: true,
         ownDrafts: action.payload,
+      };
+    }
+    case 'ASSOCIATE_DRAFT_WITH_USER_PENDING': {
+      return { ...state, associating: true };
+    }
+    case 'ASSOCIATE_DRAFT_WITH_USER_REJECTED': {
+      return { ...state, associating: false, errorOnAssociating: action.payload };
+    }
+    case 'ASSOCIATE_DRAFT_WITH_USER_FULFILLED': {
+      return {
+        ...state,
+        associating: false,
+        associated: true,
+        userDraft: action.payload,
       };
     }
     default:

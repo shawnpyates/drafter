@@ -55589,12 +55589,10 @@ var _axios2 = _interopRequireDefault(_axios);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var SERVER_URL = "http://localhost:3001";
-
 var fetchDraftsByUser = exports.fetchDraftsByUser = function fetchDraftsByUser(userId) {
   return function (dispatch) {
     dispatch({ type: 'FETCH_OWN_DRAFTS_PENDING' });
-    _axios2.default.get(SERVER_URL + '/api/users/' + userId + '/drafts').then(function (response) {
+    _axios2.default.get("http://localhost:3001" + '/api/users/' + userId + '/drafts').then(function (response) {
       dispatch({ type: 'FETCH_OWN_DRAFTS_FULFILLED', payload: response.data });
     }).catch(function (err) {
       dispatch({ type: 'FETCH_OWN_DRAFTS_REJECTED', payload: err });
@@ -55606,12 +55604,22 @@ var createDraft = exports.createDraft = function createDraft(body) {
   return function (dispatch) {
     dispatch({ type: 'CREATE_DRAFT_PENDING ' });
     var name = body.name,
-        timeScheduled = body.timeScheduled;
+        timeScheduled = body.timeScheduled,
+        creator = body.creator;
 
-    return _axios2.default.post('/api/drafts', { name: name, timeScheduled: timeScheduled }).then(function (response) {
-      dispatch({ type: 'CREATE_DRAFT_FULFILLED', payload: response.data });
-    }).catch(function (err) {
-      dispatch({ type: 'CREATE_DRAFT_REJECTED', payload: err });
+    return _axios2.default.post('/api/drafts', { name: name, timeScheduled: timeScheduled }).then(function (createDraftResponse) {
+      dispatch({ type: 'CREATE_DRAFT_FULFILLED', payload: createDraftResponse.data });
+      dispatch({ type: 'ASSOCIATE_DRAFT_WITH_USER_PENDING ' });
+      _axios2.default.post('/api/drafts/' + createDraftResponse.data.id + '/users/' + creator.id, { isAdmin: true }).then(function (associateDraftResponse) {
+        dispatch({
+          type: 'ASSOCIATE_DRAFT_WITH_USER_FULFILLED',
+          payload: associateDraftResponse.data
+        });
+      }).catch(function (associateErr) {
+        dispatch({ type: 'CREATE_DRAFT_REJECTED', payload: associateErr });
+      });
+    }).catch(function (createDraftErr) {
+      dispatch({ type: 'CREATE_DRAFT_REJECTED', payload: createDraftErr });
     });
   };
 };
@@ -56725,9 +56733,12 @@ var initialState = {
   created: false,
   fetching: false,
   fetched: false,
+  associating: false,
+  associated: false,
   ownDrafts: [],
   errorOnCreateDraft: null,
-  errorOnFetchOwnDrafts: null
+  errorOnFetchOwnDrafts: null,
+  errorOnAssociating: null
 };
 
 var draftReducer = function draftReducer() {
@@ -56759,6 +56770,22 @@ var draftReducer = function draftReducer() {
           fetching: false,
           fetched: true,
           ownDrafts: action.payload
+        });
+      }
+    case 'ASSOCIATE_DRAFT_WITH_USER_PENDING':
+      {
+        return _extends({}, state, { associating: true });
+      }
+    case 'ASSOCIATE_DRAFT_WITH_USER_REJECTED':
+      {
+        return _extends({}, state, { associating: false, errorOnAssociating: action.payload });
+      }
+    case 'ASSOCIATE_DRAFT_WITH_USER_FULFILLED':
+      {
+        return _extends({}, state, {
+          associating: false,
+          associated: true,
+          userDraft: action.payload
         });
       }
     default:
@@ -101872,6 +101899,12 @@ var scheduledTime = _formConstants.draft.inputs.find(function (input) {
 
 var timeFormat = 'hh:mm a';
 
+var mapStateToProps = function mapStateToProps(state) {
+  var currentUser = state.user.currentUser;
+
+  return { currentUser: currentUser };
+};
+
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   return {
     createDraft: function createDraft(body) {
@@ -101943,10 +101976,6 @@ var CreateDraft = function (_Component) {
 
     _this.handleSubmit = function (ev) {
       ev.preventDefault();
-      // if (!validateEmail(this.state.email)) {
-      //   this.setState({ errorMessage: errorMessages.invalidEmail });
-      //   return;
-      // }
       var _this$state = _this.state,
           name = _this$state.name,
           calendarDate = _this$state.calendarDate,
@@ -101960,7 +101989,8 @@ var CreateDraft = function (_Component) {
       }
       var body = {
         name: name,
-        timeScheduled: finalTimeStamp
+        timeScheduled: finalTimeStamp,
+        creator: _this.props.currentUser
       };
       _this.props.createDraft(body);
     };
@@ -102030,7 +102060,7 @@ CreateDraft.propTypes = {
   updateView: _propTypes2.default.func.isRequired
 };
 
-exports.default = (0, _reactRedux.connect)(null, mapDispatchToProps)(CreateDraft);
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(CreateDraft);
 
 /***/ })
 /******/ ]);

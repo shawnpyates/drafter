@@ -10,6 +10,11 @@ const scheduledTime = draftForm.inputs.find(input => input.name === 'scheduledTi
 
 const timeFormat = 'hh:mm a';
 
+const mapStateToProps = (state) => {
+  const { currentUser } = state.user;
+  return { currentUser };
+};
+
 const mapDispatchToProps = dispatch => ({
   createDraft: body => dispatch(createDraft(body)),
   updateView: view => dispatch(updateView(view)),
@@ -94,10 +99,6 @@ class CreateDraft extends Component {
 
   handleSubmit = (ev) => {
     ev.preventDefault();
-    // if (!validateEmail(this.state.email)) {
-    //   this.setState({ errorMessage: errorMessages.invalidEmail });
-    //   return;
-    // }
     const { name, calendarDate, time } = this.state;
     let finalTimeStamp;
     if (calendarDate) {
@@ -108,6 +109,7 @@ class CreateDraft extends Component {
     const body = {
       name,
       timeScheduled: finalTimeStamp,
+      creator: this.props.currentUser,
     };
     this.props.createDraft(body);
   }
@@ -146,4 +148,4 @@ CreateDraft.propTypes = {
   updateView: PropTypes.func.isRequired,
 };
 
-export default connect(null, mapDispatchToProps)(CreateDraft);
+export default connect(mapStateToProps, mapDispatchToProps)(CreateDraft);
