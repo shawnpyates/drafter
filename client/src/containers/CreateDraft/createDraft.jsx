@@ -109,7 +109,7 @@ class CreateDraft extends Component {
     const body = {
       name,
       timeScheduled: finalTimeStamp,
-      creator: this.props.currentUser,
+      creatorId: this.props.currentUser.id,
     };
     this.props.createDraft(body);
   }
@@ -144,7 +144,7 @@ class CreateDraft extends Component {
 
 CreateDraft.propTypes = {
   createDraft: PropTypes.func.isRequired,
-  userId: PropTypes.number.isRequired,
+  currentUser: PropTypes.objectOf(PropTypes.any).isRequired,
   updateView: PropTypes.func.isRequired,
 };
 

@@ -1,4 +1,5 @@
 import { Draft } from '../models';
+import { create as createUserDraft } from './userDrafts';
 
 module.exports = {
 
@@ -15,9 +16,21 @@ module.exports = {
   },
 
   create(req, res) {
-    const { name, timeScheduled } = req.body;
+    const { name, timeScheduled, creatorId } = req.body;
     return Draft.create({ name, timeScheduled })
-      .then(draft => res.status(201).send(draft))
+      .then((draft) => {
+        res.status(201).send(draft);
+        const mockReqObj = {
+          body: {
+            isAdmin: true,
+          },
+          params: {
+            draftId: draft.id,
+            userId: creatorId,
+          },
+        };
+        createUserDraft(mockReqObj);
+      })
       .catch(error => res.status(400).send(error));
   },
 

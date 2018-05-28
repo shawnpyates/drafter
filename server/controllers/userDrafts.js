@@ -47,7 +47,7 @@ module.exports = {
               .then((draft) => {
                 user.drafts.push(draft.name);
                 user.save().then(() => {
-                  res.status(201).send(userDraft);
+                  if (res) res.status(201).send(userDraft);
                 })
                   .catch(error => res.status(400).send(error));
               });
