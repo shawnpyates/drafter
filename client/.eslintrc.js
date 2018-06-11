@@ -3,5 +3,11 @@ module.exports = {
   "globals": {
     "window": true,
     "document": true,
-  }
+  },
+  "rules": {
+    "jsx-a11y/anchor-is-valid": [ "error", {
+      "components": [ "Link" ],
+      "specialLink": [ "to" ],
+    }],
+  },
 };

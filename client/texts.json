@@ -6,8 +6,10 @@
   },
 
   "draftsTable": {
+    "type": "Drafts",
     "title": "My Drafts",
     "noneScheduled": "You do not currently have any drafts scheduled.",
+    "unscheduled": "(Unscheduled)",
     "columnHeaders": ["Name", "Scheduled For"]
   }
 }

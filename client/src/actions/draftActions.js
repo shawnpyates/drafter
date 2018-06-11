@@ -12,7 +12,6 @@ export const fetchDraftsByUser = userId => (dispatch) => {
 };
 
 export const createDraft = body => (dispatch) => {
-  console.log("BAWDY: ", body);
   dispatch({ type: 'CREATE_DRAFT_PENDING ' });
   const { name, timeScheduled, creatorId } = body;
   return axios.post('/api/drafts', { name, timeScheduled, creatorId })

@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import { Redirect } from 'react-router-dom';
 import Form from '../../components/Form/form.jsx';
-import { createDraft, updateView } from '../../actions';
+import { createDraft } from '../../actions';
 import { draft as draftForm } from '../../../formConstants.json';
 
 const scheduledTime = draftForm.inputs.find(input => input.name === 'scheduledTime');
@@ -17,15 +18,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => ({
   createDraft: body => dispatch(createDraft(body)),
-  updateView: view => dispatch(updateView(view)),
 });
-
-const extractDataForTable = drafts => (
-  drafts.map((draft) => {
-    const { name, timeScheduled } = draft;
-    return { name, timeScheduled };
-  })
-);
 
 const get24HourTime = (timeString) => {
   if (timeString[timeString.length - 2] === 'a') {
@@ -48,15 +41,12 @@ class CreateDraft extends Component {
       calendarDate: null,
       time: null,
       isCalendarFocused: false,
+      isSubmitComplete: false,
     };
   }
 
   componentDidMount() {
     this.setState({ calendarDate: moment() });
-  }
-
-  returnToMainMenu = () => {
-    this.props.updateView('mainMenu');
   }
 
   updateFieldValue = (name, value) => {
@@ -111,7 +101,7 @@ class CreateDraft extends Component {
       timeScheduled: finalTimeStamp,
       creatorId: this.props.currentUser.id,
     };
-    this.props.createDraft(body);
+    this.props.createDraft(body).then(() => this.setState({ isSubmitComplete: true }));
   }
 
 
@@ -121,22 +111,28 @@ class CreateDraft extends Component {
       errorMessage,
       calendarDate,
       isCalendarFocused,
+      isSubmitComplete,
     } = this.state;
     return (
       <div>
-        <Form
-          updateFieldValue={this.updateFieldValue}
-          handleSubmit={this.handleSubmit}
-          title={draftForm.title}
-          formInputs={draftForm.inputs}
-          errorMessage={errorMessage}
-          calendarDate={calendarDate}
-          changeDate={this.changeDate}
-          changeTime={this.changeTime}
-          timeFormat={timeFormat}
-          isCalendarFocused={isCalendarFocused}
-          toggleCalendarFocus={this.toggleCalendarFocus}
-        />
+        {!isSubmitComplete &&
+          <Form
+            updateFieldValue={this.updateFieldValue}
+            handleSubmit={this.handleSubmit}
+            title={draftForm.title}
+            formInputs={draftForm.inputs}
+            errorMessage={errorMessage}
+            calendarDate={calendarDate}
+            changeDate={this.changeDate}
+            changeTime={this.changeTime}
+            timeFormat={timeFormat}
+            isCalendarFocused={isCalendarFocused}
+            toggleCalendarFocus={this.toggleCalendarFocus}
+          />
+        }
+        {isSubmitComplete &&
+          <Redirect to="/" />
+        }
       </div>
     );
   }
@@ -145,7 +141,6 @@ class CreateDraft extends Component {
 CreateDraft.propTypes = {
   createDraft: PropTypes.func.isRequired,
   currentUser: PropTypes.objectOf(PropTypes.any).isRequired,
-  updateView: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateDraft);
