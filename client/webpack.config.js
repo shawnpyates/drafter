@@ -1,30 +1,49 @@
 const Dotenv = require('dotenv-webpack');
+const path = require('path');
 
 module.exports = {
-  devtool: 'source-map',
-  entry: './src/index.jsx',
-  output: { filename: './public/dist/bundle.js' },
+  mode: 'development',
+  devtool: 'eval-source-map',
+  entry: './src/index.js',
+  output: {
+    path: path.resolve(__dirname, 'public/dist'),
+    filename: 'bundle.js'
+  },
   plugins: [new Dotenv({ path: '../.env' })],
   module: {
-    loaders: [
+    rules: [
       {
-        test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
+        test: /\.jsx?$/i,
+        include: [
+          path.resolve(__dirname, 'src'),
+        ],
         loader: 'babel-loader',
+        query: {
+          babelrc: false,
+          presets: ['es2015', 'stage-0', 'react'],
+        },
       },
       {
         test: /\.(png|jpg|gif)$/,
         use: [
           {
             loader: 'file-loader',
-            options: {},
+            options: {
+              name: '[path][name].[ext]',
+            },
           },
         ],
       },
       {
         test: /\.css$/,
-        loaders: ['style-loader', 'css-loader'],
+        use: [
+          { loader: 'style-loader' },
+          { loader: 'css-loader' },
+        ],
       },
     ],
+  },
+  resolve: {
+    extensions: ['.js', '.jsx'],
   },
 };
