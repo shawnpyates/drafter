@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import _ from 'underscore';
 import Form from '../../components/Form/form.jsx';
 import { createUser } from '../../actions';
 import { register as registerForm } from '../../../formConstants.json';
