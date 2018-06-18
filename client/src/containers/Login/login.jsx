@@ -2,19 +2,18 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Form from '../../components/Form/form.jsx';
-import { authenticateUser, fetchCurrentUser } from '../../actions';
+import { authenticateUser } from '../../actions';
 import { login as loginForm } from '../../../formConstants.json';
 
 const { errorMessages } = loginForm;
 
 const mapStateToProps = (state) => {
-  const { authenticatedUser, errorOnAuthenticateUser } = state.user;
-  return { authenticatedUser, errorOnAuthenticateUser };
+  const { currentUser, errorOnAuthenticateUser } = state.user;
+  return { currentUser, errorOnAuthenticateUser };
 };
 
 const mapDispatchToProps = dispatch => ({
   authenticateUser: credentials => dispatch(authenticateUser(credentials)),
-  fetchCurrentUser: () => dispatch(fetchCurrentUser()),
 })
 
 const validateEmail = email => (/\S+@\S+\.\S+/).test(email);
@@ -30,10 +29,6 @@ class LogIn extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.authenticatedUser) {
-      this.props.fetchCurrentUser();
-      return;
-    }
     if (nextProps.errorOnAuthenticateUser) {
       const { failure } = nextProps.errorOnAuthenticateUser.response.data;
       if (failure) {
@@ -74,15 +69,14 @@ class LogIn extends Component {
 }
 
 LogIn.defaultProps = {
-  authenticatedUser: null,
+  currentUser: null,
   errorOnAuthenticateUser: null,
 };
 
 LogIn.propTypes = {
-  authenticatedUser: PropTypes.objectOf(PropTypes.any),
+  currentUser: PropTypes.objectOf(PropTypes.any),
   errorOnAuthenticateUser: PropTypes.objectOf(PropTypes.any),
   authenticateUser: PropTypes.func.isRequired,
-  fetchCurrentUser: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LogIn);

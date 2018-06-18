@@ -32,7 +32,7 @@ export const authenticateUser = body => (dispatch) => {
   return axios.post('/api/users/auth', { email, password })
     .then((response) => {
       localStorage.setItem('drafterUserToken', response.data.token.token);
-      dispatch({ type: 'AUTHENTICATE_USER_FULFILLED', payload: response.data });
+      dispatch({ type: 'AUTHENTICATE_USER_FULFILLED', payload: response.data.user });
     })
     .catch((err) => {
       dispatch({ type: 'AUTHENTICATE_USER_REJECTED', payload: err });
@@ -60,17 +60,17 @@ export const createUser = body => (dispatch) => {
   })
     .then((createUserResponse) => {
       dispatch({ type: 'CREATE_USER_FULFILLED', payload: createUserResponse.data });
-      dispatch({ type: 'AUTHENTICATE_USER_PENDING' });
-      return axios.post('/api/users/auth', { email, password })
-        .then((authResponse) => {
-          localStorage.setItem('drafterUserToken', authResponse.data.token.token);
-          dispatch({ type: 'AUTHENTICATE_USER_FULFILLED', payload: authResponse.data });
-        })
-        .catch((err) => {
-          dispatch({ type: 'AUTHENTICATE_USER_REJECTED', payload: err });
-        });
+      authenticateUser({ email, password });
     })
     .catch((err) => {
       dispatch({ type: 'CREATE_USER_REJECTED', payload: err });
     });
+};
+
+export const updateUser = body => (dispatch) => {
+  dispatch({ type: 'UPDATE_USER_PENDING' });
+  const { id, registeredAsPlayer, position } = body;
+  return axios.post(`/api/users/${id}`, { registeredAsPlayer, position })
+    .then(response => dispatch({ type: 'UPDATE_USER_FULFILLED', payload: response.data }))
+    .catch(err => dispatch({ type: 'UPDATE_USER_REJECTED', payload: err }));
 };

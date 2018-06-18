@@ -5,12 +5,13 @@ const initialState = {
   authenticated: false,
   fetching: false,
   fetched: false,
-  createdUser: null,
-  authenticatedUser: null,
+  updating: false,
+  updated: false,
   currentUser: null,
   errorOnCreateUser: null,
   errorOnAuthenticateUser: null,
   errorOnFetchCurrentUser: null,
+  errorOnUpdateCurrentUser: null,
 };
 
 const userReducer = (state = initialState, action) => {
@@ -24,7 +25,7 @@ const userReducer = (state = initialState, action) => {
         ...state,
         creating: false,
         created: true,
-        createdUser: action.payload,
+        currentUser: action.payload,
       };
     case 'AUTHENTICATE_USER_PENDING':
       return { ...state, authenticating: true };
@@ -35,7 +36,7 @@ const userReducer = (state = initialState, action) => {
         ...state,
         authenticating: false,
         authenticated: true,
-        authenticatedUser: action.payload,
+        currentUser: action.payload,
       };
     case 'FETCH_CURRENT_USER_PENDING':
       return { ...state, creating: true };
@@ -46,6 +47,17 @@ const userReducer = (state = initialState, action) => {
         ...state,
         creating: false,
         created: true,
+        currentUser: action.payload,
+      };
+    case 'UPDATE_CURRENT_USER_PENDING':
+      return { ...state, updating: true };
+    case 'UPDATE_CURRENT_USER_REJECTED':
+      return { ...state, updating: false, errorOnUpdateCurrentUser: action.payload };
+    case 'UPDATE_CURRENT_USER_FULFILLED':
+      return {
+        ...state,
+        updating: false,
+        updated: true,
         currentUser: action.payload,
       };
     default:

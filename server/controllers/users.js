@@ -62,11 +62,22 @@ module.exports = {
   },
 
   update(req, res) {
-    const { registeredAsPlayer, position } = req.body;
+    const {
+      firstName,
+      lastName,
+      email,
+      password,
+      registeredAsPlayer,
+      position,
+    } = req.body;
     return User.findById(req.params.id)
       .then((user) => {
-        if (!user) return res.status.send({ message: 'User not found.' });
+        if (!user) return res.status(400).send({ message: 'User not found.' });
         return user.update({
+          firstName: firstName || user.firstName,
+          lastName: lastName || user.lastName,
+          email: email || user.email,
+          password: password || user.password,
           registeredAsPlayer: registeredAsPlayer || user.registeredAsPlayer,
           position: position || user.position,
         })

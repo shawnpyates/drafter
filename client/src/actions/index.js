@@ -2,6 +2,7 @@ import {
   fetchCurrentUser,
   createUser,
   authenticateUser,
+  updateUser,
 } from './userActions';
 
 import {

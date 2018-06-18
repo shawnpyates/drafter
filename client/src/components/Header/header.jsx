@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { header as headerTexts } from '../../../texts.json';
 
 import {
@@ -21,7 +22,9 @@ const Header = ({ currentUser }) => {
 
   return (
     <Container>
-      <Title>{title}</Title>
+      <Link to="/">
+        <Title>{title}</Title>
+      </Link>
       {currentUser &&
         <NavBar>
           <NavBarItem>{currentUser.email}</NavBarItem>

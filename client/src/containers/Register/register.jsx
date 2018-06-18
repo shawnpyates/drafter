@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import _ from 'underscore';
 import Form from '../../components/Form/form.jsx';
-import { fetchCurrentUser, createUser } from '../../actions';
+import { createUser } from '../../actions';
 import { register as registerForm } from '../../../formConstants.json';
-
-const positionField = registerForm.inputs.find(input => input.name === 'position');
+const { inputs: formInputs } = registerForm;
 
 const {
   missingField,
@@ -16,16 +16,17 @@ const {
 } = registerForm.errorMessages;
 
 const mapStateToProps = (state) => {
-  const { authenticatedUser, errorOnAuthenticateUser } = state.user;
-  return { authenticatedUser, errorOnAuthenticateUser };
+  const { errorOnCreateUser, errorOnAuthenticateUser } = state.user;
+  return { errorOnCreateUser, errorOnAuthenticateUser };
 };
 
 const mapDipatchToProps = dispatch => ({
-  fetchCurrentUser: () => dispatch(fetchCurrentUser()),
   createUser: body => dispatch(createUser(body)),
 });
 
 const validateEmail = email => (/\S+@\S+\.\S+/).test(email);
+
+const getFieldByName = (inputs, name) => inputs.find(input => input.name === name);
 
 class Register extends Component {
   constructor() {
@@ -39,27 +40,27 @@ class Register extends Component {
       passwordSecondInsertion: null,
       registeredAsPlayer: null,
       position: null,
+      formInputs: [...formInputs],
     };
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.authenticatedUser) {
-      this.props.fetchCurrentUser();
-    }
     if (nextProps.errorOnAuthenticateUser) {
       this.setState({ errorMessage: unexpected });
     }
   }
 
+  updateObjectInInputs = (inputs, shouldBeEnabled) => {
+    const positionField = getFieldByName(formInputs, 'position');
+    const updatedPosition = { ...positionField, enabled: shouldBeEnabled };
+    return inputs.map(input => input.name === 'position' ? updatedPosition : input)
+  };
+
   updatePositionFieldBasedOnRegisterState() {
     const isRegistered = this.state.registeredAsPlayer === 'Yes';
-    if (isRegistered) {
-      positionField.enabled = true;
-    } else {
-      positionField.enabled = false;
-      this.setState({ position: null });
-    }
-    this.forceUpdate();
+    const { formInputs } = this.state;
+    this.setState({ formInputs: this.updateObjectInInputs(formInputs, isRegistered) });
+    if (!isRegistered) this.setState({ position: null });
   }
 
   handleSubmit = (ev) => {
@@ -128,27 +129,27 @@ class Register extends Component {
   }
 
   render() {
+    const { formInputs, errorMessage } = this.state;
     return (
       <Form
         updateFieldValue={this.updateFieldValue}
         handleSubmit={this.handleSubmit}
         title={registerForm.title}
-        formInputs={registerForm.inputs}
-        errorMessage={this.state.errorMessage}
+        formInputs={formInputs}
+        errorMessage={errorMessage}
       />
     );
   }
 }
 
 Register.defaultProps = {
-  authenticatedUser: null,
+  errorOnCreateUser: null,
   errorOnAuthenticateUser: null,
 };
 
 Register.propTypes = {
-  authenticatedUser: PropTypes.objectOf(PropTypes.any),
+  errorOnCreateUser: PropTypes.objectOf(PropTypes.any),
   errorOnAuthenticateUser: PropTypes.objectOf(PropTypes.any),
-  fetchCurrentUser: PropTypes.func.isRequired,
   createUser: PropTypes.func.isRequired,
 };
 

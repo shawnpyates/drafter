@@ -4,7 +4,6 @@ const Container = styled.header`
   background-color: #11133F;
   height: 130px;
   padding: 20px;
-  color: #FFF;
 
   @media only screen and (min-width: 550px) {
     height: 80px;
@@ -16,6 +15,7 @@ const Title = styled.h2`
   font-family: 'La Belle Aurore', sans-serif;
   font-size: 2.5em;
   white-space: no-wrap;
+  color: #FFF;
 `;
 
 const NavBar = styled.div`
