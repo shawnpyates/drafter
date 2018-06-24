@@ -124,5 +124,44 @@
         "enabled": true
       }
     ]
+  },
+  "updateUser": {
+    "title": "Update Your Info",
+    "inputs": [
+      {
+        "name": "email",
+        "text": "E-mail",
+        "type": "text",
+        "enabled": true
+      },
+      {
+        "name": "registeredAsPlayer",
+        "text": "Would you like to be registered as a player?",
+        "type": "select",
+        "enabled": true,
+        "placeholder": "Please Select",
+        "options": ["Yes", "No"]
+      },
+      {
+        "name": "position",
+        "text": "Please choose a position: ",
+        "type": "select",
+        "enabled": false,
+        "enablementContingentOn": "registeredAsPlayer",
+        "placeholder": "Please Select",
+        "options": ["Forward", "Defence", "Goaltender"]
+      },
+      {
+        "name": "submitButton",
+        "text": "Submit Updates",
+        "type": "submit",
+        "enabled": true
+      }
+    ],
+    "errorMessages": {
+      "invalidEmail": "Please enter a valid e-mail address.",
+      "missingField": "Please fill in all fields.",
+      "unexpected": "An unexpected error occurred. Please try again."
+    }
   }
 }

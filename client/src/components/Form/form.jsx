@@ -45,12 +45,14 @@ const Form = ({
         options,
         type,
         enabled,
+        defaultValue
       } = input;
       if (!enabled) return null;
       switch (type) {
         case 'text':
           return (
             <TextField
+              defaultValue={defaultValue || ''}
               name={name}
               key={name}
               type="text"
@@ -82,7 +84,11 @@ const Form = ({
           return (
             <div key={name}>
               <SelectTitle>{text}</SelectTitle>
-              <Select defaultValue={placeholder} name={name} onChange={handleChange}>
+              <Select
+                defaultValue={defaultValue || placeholder}
+                name={name}
+                onChange={handleChange}
+              >
                 <option disabled>{placeholder}</option>
                 {options.map(op => <option key={op}>{op}</option>)}
               </Select>

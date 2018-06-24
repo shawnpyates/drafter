@@ -1,46 +1,46 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { Redirect } from 'react-router-dom';
 import Form from '../../components/Form/form.jsx';
-import { createUser } from '../../actions';
-import { register as registerForm } from '../../../formConstants.json';
-const { inputs: formInputs } = registerForm;
+import { updateUser } from '../../actions';
+import { updateUser as updateUserForm } from '../../../formConstants.json';
+const { inputs: formInputs } = updateUserForm;
 
 const {
   missingField,
-  passwordsDidNotMatch,
-  tooShort,
   invalidEmail,
   unexpected,
-} = registerForm.errorMessages;
+} = updateUserForm.errorMessages;
 
 const mapStateToProps = (state) => {
-  const { errorOnCreateUser, errorOnAuthenticateUser } = state.user;
-  return { errorOnCreateUser, errorOnAuthenticateUser };
+  const { currentUser } = state.user;
+  return { currentUser };
 };
 
 const mapDispatchToProps = dispatch => ({
-  createUser: body => dispatch(createUser(body)),
+  updateUser: body => dispatch(updateUser(body)),
 });
 
 const validateEmail = email => (/\S+@\S+\.\S+/).test(email);
 
 const getFieldByName = (inputs, name) => inputs.find(input => input.name === name);
 
-class Register extends Component {
+class UpdateUser extends Component {
   constructor() {
     super();
     this.state = {
       errorMessage: null,
-      firstName: null,
-      lastName: null,
       email: null,
-      passwordFirstInsertion: null,
-      passwordSecondInsertion: null,
       registeredAsPlayer: null,
       position: null,
-      formInputs: [...formInputs],
+      inputs: null,
+      isSubmitComplete: false,
     };
+  }
+
+  componentDidMount() {
+    this.createInputsAndSetStateWithDefaultValues();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -49,16 +49,28 @@ class Register extends Component {
     }
   }
 
+  createInputsAndSetStateWithDefaultValues = () => {
+    const { currentUser } = this.props;
+    const registeredAsPlayer = currentUser.registeredAsPlayer ? 'Yes' : 'No';
+    this.setState({
+      inputs: formInputs.map(input => (
+        {...input, defaultValue: currentUser[input.name]}
+      )),
+      email: currentUser.email,
+      position: currentUser.position,
+    }, () => this.updateFieldValue('registeredAsPlayer', registeredAsPlayer));
+  }
+
   updateObjectInInputs = (inputs, shouldBeEnabled) => {
-    const positionField = getFieldByName(formInputs, 'position');
+    const positionField = getFieldByName(inputs, 'position');
     const updatedPosition = { ...positionField, enabled: shouldBeEnabled };
     return inputs.map(input => input.name === 'position' ? updatedPosition : input)
-  };
+  }
 
   updatePositionFieldBasedOnRegisterState() {
     const isRegistered = this.state.registeredAsPlayer === 'Yes';
-    const { formInputs } = this.state;
-    this.setState({ formInputs: this.updateObjectInInputs(formInputs, isRegistered) });
+    const { inputs } = this.state;
+    this.setState({ inputs: this.updateObjectInInputs(inputs, isRegistered) });
     if (!isRegistered) this.setState({ position: null });
   }
 
@@ -66,23 +78,18 @@ class Register extends Component {
     ev.preventDefault();
     if (this.doesFormHaveError()) return;
     const {
-      firstName,
-      lastName,
       email,
-      passwordFirstInsertion,
       registeredAsPlayer,
       position,
     } = this.state;
     const isRegistered = registeredAsPlayer === 'Yes';
     const body = {
-      firstName,
-      lastName,
+      id: this.props.currentUser.id,
       email,
-      password: passwordFirstInsertion,
       registeredAsPlayer: isRegistered,
       position,
     };
-    this.props.createUser(body);
+    this.props.updateUser(body).then(() => this.setState({ isSubmitComplete: true }));
   }
 
   doesFormHaveError() {
@@ -90,24 +97,14 @@ class Register extends Component {
     const values = Object.values(this.state);
     const {
       registeredAsPlayer,
-      passwordFirstInsertion,
-      passwordSecondInsertion,
       email,
     } = this.state;
     for (let i = 0; i < keys.length; i += 1) {
-      if ((!values[i] && keys[i] !== 'errorMessage') &&
+      if ((!values[i] && keys[i] !== 'errorMessage' && keys[i] !== 'isSubmitComplete') &&
           !(keys[i] === 'position' && registeredAsPlayer === 'No')) {
         this.setState({ errorMessage: missingField });
         return true;
       }
-    }
-    if (passwordFirstInsertion !== passwordSecondInsertion) {
-      this.setState({ errorMessage: passwordsDidNotMatch });
-      return true;
-    }
-    if (passwordFirstInsertion.length < registerForm.passwordMinimumLength) {
-      this.setState({ errorMessage: tooShort });
-      return true;
     }
     if (!validateEmail(email)) {
       this.setState({ errorMessage: invalidEmail });
@@ -127,28 +124,30 @@ class Register extends Component {
   }
 
   render() {
-    const { formInputs, errorMessage } = this.state;
+    const { errorMessage, inputs, isSubmitComplete } = this.state;
     return (
-      <Form
-        updateFieldValue={this.updateFieldValue}
-        handleSubmit={this.handleSubmit}
-        title={registerForm.title}
-        formInputs={formInputs}
-        errorMessage={errorMessage}
-      />
+      <div>
+        {(!isSubmitComplete && inputs) &&
+          <Form
+            updateFieldValue={this.updateFieldValue}
+            handleSubmit={this.handleSubmit}
+            title={updateUserForm.title}
+            formInputs={inputs}
+            errorMessage={errorMessage}
+          />
+        }
+        {isSubmitComplete &&
+          <Redirect to="/" />
+        }
+      </div>
     );
   }
 }
 
-Register.defaultProps = {
-  errorOnCreateUser: null,
-  errorOnAuthenticateUser: null,
+UpdateUser.propTypes = {
+  updateUser: PropTypes.func.isRequired,
+  currentUser: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
-Register.propTypes = {
-  errorOnCreateUser: PropTypes.objectOf(PropTypes.any),
-  errorOnAuthenticateUser: PropTypes.objectOf(PropTypes.any),
-  createUser: PropTypes.func.isRequired,
-};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Register);
+export default connect(mapStateToProps, mapDispatchToProps)(UpdateUser);

@@ -28,7 +28,9 @@ const Header = ({ currentUser }) => {
       {currentUser &&
         <NavBar>
           <NavBarItem>{currentUser.email}</NavBarItem>
-          <NavBarLogOut onClick={handleLogOut}>{logOut}</NavBarLogOut>
+          <Link to="/">
+            <NavBarLogOut onClick={handleLogOut}>{logOut}</NavBarLogOut>
+          </Link>
         </NavBar>
       }
       {!currentUser &&

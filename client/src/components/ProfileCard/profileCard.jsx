@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { profileProperties, profileValues } from './profileCardConstants.json';
 
 import {
@@ -15,9 +16,11 @@ import {
 const ProfileCard = ({ user }) => (
   <InfoWrapper>
     <InfoTitle>{`${user.firstName} ${user.lastName}`}</InfoTitle>
-    <EditButton href="#">
-      Edit
-    </EditButton>
+    <Link to="/updateUser">
+      <EditButton>
+        Edit
+      </EditButton>
+    </Link>
     <InfoDetails>
       <InfoProperties>
         <ListItem>{profileProperties.email}</ListItem>

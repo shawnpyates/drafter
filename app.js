@@ -3,11 +3,7 @@ const path = require('path');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-require('dotenv').config()
-
-// const index = require('./server/routes/index');
-
-
+require('dotenv').config();
 
 const app = express();
 
@@ -18,15 +14,13 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'client/public')));
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'))
+  res.sendFile(path.join(__dirname, 'index.html'));
 })
 
-require('./server/routes')(app)
+require('./server/routes')(app);
 
 app.get('*', (req, res) => {
-  res.status(200).send({ message: "Welcome to nothing!" })
+  res.redirect('/');
 })
-
-
 
 module.exports = app;

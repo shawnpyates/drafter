@@ -78,8 +78,10 @@ module.exports = {
           lastName: lastName || user.lastName,
           email: email || user.email,
           password: password || user.password,
-          registeredAsPlayer: registeredAsPlayer || user.registeredAsPlayer,
-          position: position || user.position,
+          registeredAsPlayer: (
+            typeof registeredAsPlayer === 'boolean' ? registeredAsPlayer : user.registeredAsPlayer
+          ),
+          position: registeredAsPlayer ? (position || user.position) : null,
         })
           .then(() => res.status(200).send(user))
           .catch(error => res.status(400).send(error));

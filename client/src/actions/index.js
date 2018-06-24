@@ -14,6 +14,7 @@ export {
   fetchCurrentUser,
   createUser,
   authenticateUser,
+  updateUser,
   fetchDraftsByUser,
   createDraft,
 };

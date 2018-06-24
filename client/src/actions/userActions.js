@@ -68,9 +68,13 @@ export const createUser = body => (dispatch) => {
 };
 
 export const updateUser = body => (dispatch) => {
-  dispatch({ type: 'UPDATE_USER_PENDING' });
-  const { id, registeredAsPlayer, position } = body;
-  return axios.post(`/api/users/${id}`, { registeredAsPlayer, position })
-    .then(response => dispatch({ type: 'UPDATE_USER_FULFILLED', payload: response.data }))
-    .catch(err => dispatch({ type: 'UPDATE_USER_REJECTED', payload: err }));
+  dispatch({ type: 'UPDATE_CURRENT_USER_PENDING' });
+  const { id, email, registeredAsPlayer, position } = body;
+  return axios.put(`/api/users/${id}`, { email, registeredAsPlayer, position })
+    .then((response) => {
+      dispatch({ type: 'UPDATE_CURRENT_USER_FULFILLED', payload: response.data })
+     })
+    .catch((err) => {
+      dispatch({ type: 'UPDATE_CURRENT_USER_REJECTED', payload: err })
+    });
 };
