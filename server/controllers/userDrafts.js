@@ -9,6 +9,10 @@ module.exports = {
   retrieveUsersByDraft(req, res) {
     UserDraft.findAll({ where: { draftId: req.params.draftId } })
       .then((userDrafts) => {
+        if (!userDrafts.length) {
+          res.status(201).send([]);
+          return;
+        }
         const userIds = userDrafts.map(ud => ud.userId);
         return User.findAll({
           where: {
@@ -40,8 +44,12 @@ module.exports = {
     const { isOwner, isAdmin } = req.body;
     const { draftId, userId } = req.params;
     return UserDraft.create({ isOwner, isAdmin, draftId, userId })
-      .then(userDraft => if (res) res.status(201).send(userDraft))
-      .catch(error => if (res) res.status(400).send(error))
+      .then((userDraft) => {
+        if (res) res.status(201).send(userDraft)
+      })
+      .catch((error) => {
+        if (res) res.status(400).send(error)
+      });
   },
 
   destroy(req, res) {

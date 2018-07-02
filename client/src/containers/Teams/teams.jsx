@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { fetchTeamsByUser } from '../../actions';
 import Table from '../../components/Table/table.jsx';
-import { teamTable as teamTableTexts } from '../../../texts.json';
+import { teamsTable as teamsTableTexts } from '../../../texts.json';
 
 const mapStateToProps = (state) => {
   const { ownTeams } = state.team;
@@ -13,6 +13,13 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => ({
   fetchTeamsByUser: id => dispatch(fetchTeamsByUser(id)),
 });
+
+const extractDataForTable = teams => (
+  teams.map((team) => {
+    const { name, ownerName } = team;
+    return { name, ownerName };
+  })
+);
 
 class Teams extends Component {
   componentDidMount() {
@@ -26,7 +33,7 @@ class Teams extends Component {
       title,
       noTeams,
       columnHeaders,
-    } = draftsTableTexts;
+    } = teamsTableTexts;
     return (
       <div>
         {ownTeams &&
@@ -34,7 +41,7 @@ class Teams extends Component {
             type={type}
             title={title}
             columnHeaders={columnHeaders}
-            data={ownTeams}
+            data={extractDataForTable(ownTeams)}
             emptyDataMessage={noTeams}
           />
         }

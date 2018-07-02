@@ -125,6 +125,23 @@
       }
     ]
   },
+  "team": {
+    "title": "Create a New Team",
+    "inputs": [
+      {
+        "name": "name",
+        "text": "Name Your Team",
+        "type": "text",
+        "enabled": true
+      },
+      {
+        "name": "submitButton",
+        "text": "Create",
+        "type": "submit",
+        "enabled": true
+      }
+    ]
+  },
   "updateUser": {
     "title": "Update Your Info",
     "inputs": [

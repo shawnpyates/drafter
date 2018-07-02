@@ -28,8 +28,8 @@ module.exports = (app) => {
   // teams
   app.get('/api/drafts/:draftId/teams', teams.retrieve);
   app.get('/api/teams/:id', teams.retrieveOne);
-  app.post('/api/drafts/:draftId/teams', teams.create);
-  app.put('/api/teams:id', teams.update);
+  app.post('/api/teams', teams.create);
+  app.put('/api/teams/:id', teams.update);
   app.delete('/api/teams/:id', teams.destroy);
 
   // user's association with draft
@@ -40,6 +40,7 @@ module.exports = (app) => {
 
   // user's association with team
   app.get('/api/teams/:teamId/users', userTeams.retrieveUsersByTeam);
+  app.get('/api/users/:userId/teams', userTeams.retrieveTeamsByUser);
   app.post('/api/teams/:teamId/users/:userId', userTeams.create);
   app.delete('/api/teams/:teamId/users/:userId', userTeams.destroy);
 };

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ProfileCard from '../../components/ProfileCard/profileCard.jsx';
 import Drafts from '../Drafts/drafts.jsx';
+import Teams from '../Teams/teams.jsx';
 
 import { WelcomeMessage } from './styledComponents';
 
@@ -16,6 +17,7 @@ const MainMenu = ({ currentUser }) => (
     <WelcomeMessage>Welcome, {currentUser.firstName}!</WelcomeMessage>
     <ProfileCard user={currentUser} />
     <Drafts userId={currentUser.id} />
+    <Teams userId={currentUser.id} />
   </div>
 );
 

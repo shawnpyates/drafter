@@ -42,6 +42,7 @@ class CreateDraft extends Component {
       time: null,
       isCalendarFocused: false,
       isSubmitComplete: false,
+      errorMessage: null,
     };
   }
 

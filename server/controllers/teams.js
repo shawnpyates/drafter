@@ -1,4 +1,5 @@
 import { Team } from '../models';
+import { create as createUserTeam } from './userTeams';
 
 module.exports = {
 
@@ -16,10 +17,22 @@ module.exports = {
   },
 
   create(req, res) {
-    const { name } = req.body;
-    const { draftId } = req.params;
-    return Team.create({ name, draftId })
-      .then(team => res.status(201).send(team))
+    const { name, ownerUserId } = req.body;
+    return Team.create({ name, ownerUserId })
+      .then((team) => {
+        const mockReqObj = {
+          body: {
+            isOwner: true,
+            isAdmin: true,
+          },
+          params: {
+            teamId: team.id,
+            userId: ownerUserId,
+          },
+        };
+        createUserTeam(mockReqObj);
+        res.status(201).send(team);
+      })
       .catch(error => res.status(400).send(error));
   },
 

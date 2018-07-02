@@ -17,6 +17,6 @@
     "type": "Teams",
     "title": "My Teams",
     "noTeams": "You do not currently belong to any teams.",
-    "columnHeaders": ["Name", "Manager"]
+    "columnHeaders": ["Name", "Owner"]
   }
 }

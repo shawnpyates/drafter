@@ -10,6 +10,11 @@ import {
   createDraft,
 } from './draftActions';
 
+import {
+  fetchTeamsByUser,
+  createTeam,
+} from './teamActions';
+
 export {
   fetchCurrentUser,
   createUser,
@@ -17,4 +22,6 @@ export {
   updateUser,
   fetchDraftsByUser,
   createDraft,
+  fetchTeamsByUser,
+  createTeam,
 };
