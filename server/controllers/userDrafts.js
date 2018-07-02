@@ -37,23 +37,11 @@ module.exports = {
   },
 
   create(req, res) {
-    const { isAdmin } = req.body;
+    const { isOwner, isAdmin } = req.body;
     const { draftId, userId } = req.params;
-    return UserDraft.create({ isAdmin, draftId, userId })
-      .then((userDraft) => {
-        User.findById(userDraft.userId)
-          .then((user) => {
-            Draft.findById(userDraft.draftId)
-              .then((draft) => {
-                user.drafts.push(draft.name);
-                user.save().then(() => {
-                  if (res) res.status(201).send(userDraft);
-                })
-                  .catch(error => res.status(400).send(error));
-              });
-          });
-      })
-      .catch(error => res.status(400).send(error));
+    return UserDraft.create({ isOwner, isAdmin, draftId, userId })
+      .then(userDraft => if (res) res.status(201).send(userDraft))
+      .catch(error => if (res) res.status(400).send(error))
   },
 
   destroy(req, res) {

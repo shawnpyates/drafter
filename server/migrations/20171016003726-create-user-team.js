@@ -8,6 +8,9 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      isOwner: {
+        type: Sequelize.BOOLEAN
+      },
       isAdmin: {
         type: Sequelize.BOOLEAN
       },

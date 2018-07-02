@@ -1,5 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
   const UserDraft = sequelize.define('UserDraft', {
+    isOwner: DataTypes.BOOLEAN,
     isAdmin: DataTypes.BOOLEAN,
   });
   UserDraft.associate = (models) => {

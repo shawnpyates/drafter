@@ -11,5 +11,12 @@
     "noneScheduled": "You do not currently have any drafts scheduled.",
     "unscheduled": "(Unscheduled)",
     "columnHeaders": ["Name", "Scheduled For"]
+  },
+
+  "teamsTable": {
+    "type": "Teams",
+    "title": "My Teams",
+    "noTeams": "You do not currently belong to any teams.",
+    "columnHeaders": ["Name", "Manager"]
   }
 }

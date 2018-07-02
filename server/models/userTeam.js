@@ -1,5 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
   const UserTeam = sequelize.define('UserTeam', {
+    isOwner: DataTypes.BOOLEAN,
     isAdmin: DataTypes.BOOLEAN,
   });
   UserTeam.associate = (models) => {

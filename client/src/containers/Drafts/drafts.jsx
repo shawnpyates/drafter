@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { fetchDraftsByUser, createDraft } from '../../actions';
+import { fetchDraftsByUser } from '../../actions';
 import Table from '../../components/Table/table.jsx';
 import { draftsTable as draftsTableTexts } from '../../../texts.json';
 

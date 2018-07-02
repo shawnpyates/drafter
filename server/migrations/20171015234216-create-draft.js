@@ -32,12 +32,6 @@ module.exports = {
       position: {
         type: Sequelize.STRING
       },
-      teams: {
-        type: Sequelize.ARRAY(Sequelize.STRING)
-      },
-      drafts: {
-        type: Sequelize.ARRAY(Sequelize.STRING)
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

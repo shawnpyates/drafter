@@ -11,10 +11,11 @@ module.exports = {
       name: {
         type: Sequelize.STRING
       },
-      draftId: {
+      ownerUserId: {
+        allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: 'Drafts',
+          model: 'Users',
           key: 'id'
         },
         onUpdate: 'cascade',

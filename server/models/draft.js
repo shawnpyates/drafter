@@ -8,13 +8,16 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Draft.associate = (models) => {
+    Draft.belongsTo(models.User, {
+      foreignKey: 'ownerUserId',
+    });
     Draft.belongsToMany(models.User, {
       through: 'userDraft',
       foreignKey: 'draftId',
     });
-    Draft.hasMany(models.Team, {
+    Draft.belongsToMany(models.Team, {
+      through: 'draftTeam',
       foreignKey: 'draftId',
-      as: 'teams',
     });
   };
   return Draft;

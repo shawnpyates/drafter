@@ -13,8 +13,8 @@ export const fetchDraftsByUser = userId => (dispatch) => {
 
 export const createDraft = body => (dispatch) => {
   dispatch({ type: 'CREATE_DRAFT_PENDING ' });
-  const { name, timeScheduled, creatorId } = body;
-  return axios.post('/api/drafts', { name, timeScheduled, creatorId })
+  const { name, timeScheduled, ownerUserId } = body;
+  return axios.post('/api/drafts', { name, timeScheduled, ownerUserId })
     .then((response) => {
       dispatch({ type: 'CREATE_DRAFT_FULFILLED', payload: response.data });
     })

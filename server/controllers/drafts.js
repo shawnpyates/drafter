@@ -16,20 +16,21 @@ module.exports = {
   },
 
   create(req, res) {
-    const { name, timeScheduled, creatorId } = req.body;
-    return Draft.create({ name, timeScheduled })
+    const { name, timeScheduled, ownerUserId } = req.body;
+    return Draft.create({ name, timeScheduled, ownerUserId })
       .then((draft) => {
-        res.status(201).send(draft);
         const mockReqObj = {
           body: {
+            isOwner: true,
             isAdmin: true,
           },
           params: {
             draftId: draft.id,
-            userId: creatorId,
+            userId: ownerUserId,
           },
         };
         createUserDraft(mockReqObj);
+        res.status(201).send(draft);
       })
       .catch(error => res.status(400).send(error));
   },

@@ -6,11 +6,15 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
   Team.associate = (models) => {
-    Team.belongsTo(models.Draft, {
-      foreignKey: 'draftId',
+    Team.belongsTo(models.User, {
+      foreignKey: 'ownerUserId',
     });
     Team.belongsToMany(models.User, {
       through: 'userTeam',
+      foreignKey: 'teamId',
+    });
+    Team.belongsToMany(models.Draft, {
+      through: 'draftTeam',
       foreignKey: 'teamId',
     });
   };
