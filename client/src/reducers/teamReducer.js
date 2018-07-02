@@ -9,7 +9,6 @@ const initialState = {
 };
 
 const teamReducer = (state = initialState, action) => {
-  console.log('payload!!! ', action.payload);
   switch (action.type) {
     case 'CREATE_TEAM_PENDING':
       return { ...state, creating: true };

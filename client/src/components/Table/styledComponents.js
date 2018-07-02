@@ -55,7 +55,6 @@ const DataRow = styled.tr`
 `;
 
 const ColumnHeader = styled.th`
-  width: 50%;
 `;
 
 module.exports = {

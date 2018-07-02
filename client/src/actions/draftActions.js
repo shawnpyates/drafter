@@ -4,7 +4,13 @@ export const fetchDraftsByUser = userId => (dispatch) => {
   dispatch({ type: 'FETCH_OWN_DRAFTS_PENDING' });
   axios.get(`${process.env.SERVER_URL}/api/users/${userId}/drafts`)
     .then((response) => {
-      dispatch({ type: 'FETCH_OWN_DRAFTS_FULFILLED', payload: response.data });
+      const { data } = response;
+      const updatedDrafts = data.drafts.map((draft) => {
+        const owner = data.owners.find(o => o.id === draft.ownerUserId);
+        const { name } = owner;
+        return { ...draft, ownerName: name };
+      });
+      dispatch({ type: 'FETCH_OWN_DRAFTS_FULFILLED', payload: updatedDrafts });
     })
     .catch((err) => {
       dispatch({ type: 'FETCH_OWN_DRAFTS_REJECTED', payload: err });

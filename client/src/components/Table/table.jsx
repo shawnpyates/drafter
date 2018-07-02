@@ -47,7 +47,11 @@ const Table = ({
           {Boolean(data.length) &&
             <DataFrame>
               <HeaderRow>
-                {columnHeaders.map(header => <ColumnHeader>{header}</ColumnHeader>)}
+                {columnHeaders.map(header => (
+                  <ColumnHeader style={{ width: `${100 / columnHeaders.length}%` }}>
+                    {header}
+                  </ColumnHeader>
+                ))}
               </HeaderRow>
               {data.map((entry, i) => (
                 <DataRow

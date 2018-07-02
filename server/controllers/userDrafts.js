@@ -25,16 +25,28 @@ module.exports = {
       .catch(error => res.status(400).send(error));
   },
 
-  retrieveDraftsByUser(req, res) {
-    UserDraft.findAll({ where: { userId: req.params.userId } })
+ retrieveDraftsByUser(req, res) {
+    UserDraft.findAll({ where: { userId: req.params.userId }, include: [Draft] })
       .then((userDrafts) => {
-        const draftIds = userDrafts.map(ud => ud.draftId);
-        return Draft.findAll({
+        if (!userDrafts.length) {
+          res.status(201).send([]);
+          return;
+        }
+        const drafts = userDrafts.map(ut => ut.Draft);
+        const ownerIds = drafts.map(draft => draft.ownerUserId);
+        return User.findAll({
           where: {
-            id: { [opIn]: draftIds },
-          },
+            id: { [opIn]: ownerIds }
+          }
         })
-          .then(drafts => res.status(201).send(drafts))
+          .then((users) => {
+            const owners = ownerIds.map((ownerId) => {
+              const owner = users.find(user => user.id === ownerId);
+              const ownerName = `${owner.firstName} ${owner.lastName}`;
+              return { id: ownerId, name: ownerName };
+            });
+            res.status(201).send({ drafts, owners });
+          })
           .catch(error => res.status(400).send(error));
       })
       .catch(error => res.status(400).send(error));

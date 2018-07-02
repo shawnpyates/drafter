@@ -17,11 +17,11 @@ const mapDispatchToProps = dispatch => ({
 
 const extractDataForTable = drafts => (
   drafts.map((draft) => {
-    const { name, timeScheduled } = draft;
+    const { name, timeScheduled, ownerName } = draft;
     const readableTime = timeScheduled ?
       moment(timeScheduled).format('MMM D YYYY, h:mm a') :
       draftsTableTexts.unscheduled;
-    return { name, readableTime };
+    return { name, readableTime, ownerName };
   })
 );
 
