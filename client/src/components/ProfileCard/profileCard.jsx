@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import uuidv4 from 'uuid';
 import { profileProperties, profileValues } from './profileCardConstants.json';
 
 import {
@@ -13,9 +14,9 @@ import {
   ListItem,
 } from './styledComponents';
 
-const ProfileCard = ({ user }) => (
+const ProfileCard = ({ title, data }) => (
   <InfoWrapper>
-    <InfoTitle>{`${user.firstName} ${user.lastName}`}</InfoTitle>
+    <InfoTitle>{title}</InfoTitle>
     <Link to="/updateUser">
       <EditButton>
         Edit
@@ -23,16 +24,10 @@ const ProfileCard = ({ user }) => (
     </Link>
     <InfoDetails>
       <InfoProperties>
-        <ListItem>{profileProperties.email}</ListItem>
-        <ListItem>{profileProperties.registeredAsPlayer}</ListItem>
-        <ListItem>{profileProperties.position}</ListItem>
+        {Object.keys(data).map(prop => <ListItem key={uuidv4()}>{prop}</ListItem>)}
       </InfoProperties>
       <InfoValues>
-        <ListItem>{user.email}</ListItem>
-        <ListItem>
-          {user.registeredAsPlayer ? profileValues.registeredYes : profileValues.registeredNo}
-        </ListItem>
-        <ListItem>{user.position || profileValues.positionNotApplicable}</ListItem>
+        {Object.values(data).map(val => <ListItem key={uuidv4()}>{val}</ListItem>)}
       </InfoValues>
     </InfoDetails>
   </InfoWrapper>

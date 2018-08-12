@@ -14,9 +14,10 @@ const mapDispatchToProps = dispatch => ({
   fetchTeamsByUser: id => dispatch(fetchTeamsByUser(id)),
 });
 
-const extractDataForTable = teams => (
+const extractDataForTable = (teams, userId) => (
   teams.map((team) => {
     const { name, ownerName } = team;
+    //TODO - if (userId === team.ownerUserId) isOwner = true
     return { name, ownerName };
   })
 );
