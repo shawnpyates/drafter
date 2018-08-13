@@ -2,17 +2,18 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { fetchDraftsByUser } from '../../actions';
+import { fetchDraftsByUser, fetchDraftsByTeam } from '../../actions';
 import Table from '../../components/Table/table.jsx';
 import { draftsTable as draftsTableTexts } from '../../../texts.json';
 
 const mapStateToProps = (state) => {
-  const { ownDrafts } = state.draft;
-  return { ownDrafts };
+  const { drafts } = state.draft;
+  return { drafts };
 };
 
 const mapDispatchToProps = dispatch => ({
   fetchDraftsByUser: id => dispatch(fetchDraftsByUser(id)),
+  fetchDraftsByTeam: id => dispatch(fetchDraftsByTeam(id))
 });
 
 const extractDataForTable = drafts => (
@@ -27,11 +28,12 @@ const extractDataForTable = drafts => (
 
 class Drafts extends Component {
   componentDidMount() {
-    this.props.fetchDraftsByUser(this.props.userId);
+    const { fetchBy, fetchDraftsByUser, fetchDraftsByTeam, userId, teamId } = this.props;
+    fetchBy === 'user' ? fetchDraftsByUser(userId) : fetchDraftsByTeam(teamId);
   }
 
   render() {
-    const { ownDrafts } = this.props;
+    const { drafts } = this.props;
     const {
       type,
       title,
@@ -40,12 +42,12 @@ class Drafts extends Component {
     } = draftsTableTexts;
     return (
       <div>
-        {ownDrafts &&
+        {drafts &&
           <Table
             type={type}
             title={title}
             columnHeaders={columnHeaders}
-            data={extractDataForTable(ownDrafts)}
+            data={extractDataForTable(drafts)}
             emptyDataMessage={noneScheduled}
           />
         }

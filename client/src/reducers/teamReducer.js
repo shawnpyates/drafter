@@ -1,11 +1,13 @@
 const initialState = {
   creating: false,
   created: false,
+  fetching: false,
   fetched: false,
   associated: false,
-  ownTeams: [],
+  teams: [],
   errorOnCreateTeam: null,
-  errorOnFetchOwnTeams: null,
+  errorOnFetchTeamsFromUser: null,
+  errorOnFetchTeamsFromDraft: null,
 };
 
 const teamReducer = (state = initialState, action) => {
@@ -21,18 +23,32 @@ const teamReducer = (state = initialState, action) => {
         created: true,
         createdTeam: action.payload,
       };
-    case 'FETCH_OWN_TEAMS_PENDING': {
+    case 'FETCH_TEAMS_FROM_USER_PENDING': {
       return { ...state, fetching: true };
     }
-    case 'FETCH_OWN_TEAMS_REJECTED': {
-      return { ...state, fetching: false, errorOnFetchOwnTeams: action.payload };
+    case 'FETCH_TEAMS_FROM_USER_REJECTED': {
+      return { ...state, fetching: false, errorOnFetchTeamsFromUser: action.payload };
     }
-    case 'FETCH_OWN_TEAMS_FULFILLED': {
+    case 'FETCH_TEAMS_FROM_USER_FULFILLED': {
       return {
         ...state,
         fetching: false,
         fetched: true,
-        ownTeams: action.payload,
+        teams: action.payload,
+      };
+    }
+    case 'FETCH_TEAMS_FROM_DRAFT_PENDING': {
+      return { ...state, fetching: true };
+    }
+    case 'FETCH_TEAMS_FROM_DRAFT_REJECTED': {
+      return { ...state, fetching: false, errorOnFetchTeamsFromDraft: action.payload };
+    }
+    case 'FETCH_TEAMS_FROM_DRAFT_FULFILLED': {
+      return {
+        ...state,
+        fetching: false,
+        fetched: true,
+        teams: action.payload,
       };
     }
     default:

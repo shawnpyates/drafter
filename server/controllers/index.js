@@ -3,6 +3,7 @@ import teams from './teams';
 import users from './users';
 import userDrafts from './userDrafts';
 import userTeams from './userTeams';
+import draftTeams from './draftTeams';
 
 module.exports = {
   drafts,
@@ -10,4 +11,5 @@ module.exports = {
   users,
   userDrafts,
   userTeams,
+  draftTeams,
 };

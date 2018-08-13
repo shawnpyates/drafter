@@ -34,8 +34,8 @@ const MainMenu = ({ currentUser }) => {
         data={profileCardData}
         linkForUpdating={profileCardLinkForUpdating}
       />
-      <Drafts userId={currentUser.id} />
-      <Teams userId={currentUser.id} />
+      <Drafts userId={currentUser.id} fetchBy='user' />
+      <Teams userId={currentUser.id} fetchBy='user' />
     </div>
   );
 };

@@ -1,19 +1,36 @@
 import axios from 'axios';
 
 export const fetchTeamsByUser = userId => (dispatch) => {
-  dispatch({ type: 'FETCH_OWN_TEAMS_PENDING' });
+  dispatch({ type: 'FETCH_TEAMS_FROM_USER_PENDING' });
   axios.get(`${process.env.SERVER_URL}/api/users/${userId}/teams`)
     .then((response) => {
-      const { data } = response;
-      const updatedTeams = data.teams.map((team) => {
-        const owner = data.owners.find(o => o.id === team.ownerUserId);
+      const { teams, owners } = response.data;
+      const updatedTeams = teams.map((team) => {
+        const owner = owners.find(o => o.id === team.ownerUserId);
         const { name } = owner;
         return { ...team, ownerName: name };
       });
-      dispatch({ type: 'FETCH_OWN_TEAMS_FULFILLED', payload: updatedTeams });
+      dispatch({ type: 'FETCH_TEAMS_FROM_USER_FULFILLED', payload: updatedTeams });
     })
     .catch((err) => {
-      dispatch({ type: 'FETCH_OWN_TEAMS_REJECTED', payload: err });
+      dispatch({ type: 'FETCH_TEAMS_FROM_USER_REJECTED', payload: err });
+    });
+};
+
+export const fetchTeamsByDraft = draftId => (dispatch) => {
+  dispatch({ type: 'FETCH_TEAMS_FROM_DRAFT_PENDING' });
+  axios.get(`${process.env.SERVER_URL}/api/users/${userId}/teams`)
+    .then((response) => {
+      const { teams, owners } = response.data;
+      const updatedTeams = teams.map((team) => {
+        const owner = owners.find(o => o.id === team.ownerUserId);
+        const { name } = owner;
+        return { ...team, ownerName: name };
+      });
+      dispatch({ type: 'FETCH_TEAMS_FROM_DRAFT_FULFILLED', payload: updatedTeams });
+    })
+    .catch((err) => {
+      dispatch({ type: 'FETCH_TEAMS_FROM_DRAFT_REJECTED', payload: err });
     });
 };
 

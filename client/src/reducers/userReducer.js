@@ -8,9 +8,12 @@ const initialState = {
   updating: false,
   updated: false,
   currentUser: null,
+  users: [],
   errorOnCreateUser: null,
   errorOnAuthenticateUser: null,
   errorOnFetchCurrentUser: null,
+  errorOnFetchUsersFromTeam: null,
+  errorOnFetchUsersFromDraft: null,
   errorOnUpdateCurrentUser: null,
 };
 
@@ -39,15 +42,37 @@ const userReducer = (state = initialState, action) => {
         currentUser: action.payload,
       };
     case 'FETCH_CURRENT_USER_PENDING':
-      return { ...state, creating: true };
+      return { ...state, fetching: true };
     case 'FETCH_CURRENT_USER_REJECTED':
-      return { ...state, creating: false, errorOnFetchCurrentUser: action.payload };
+      return { ...state, fetching: false, errorOnFetchCurrentUser: action.payload };
     case 'FETCH_CURRENT_USER_FULFILLED':
       return {
         ...state,
-        creating: false,
-        created: true,
+        fetching: false,
+        fetched: true,
         currentUser: action.payload,
+      };
+    case 'FETCH_USERS_FROM_TEAM_PENDING':
+      return { ...state, fetching: true };
+    case 'FETCH_USERS_FROM_TEAM_REJECTED':
+      return { ...state, fetching: false, errorOnFetchUsersFromTeam: action.payload };
+    case 'FETCH_USERS_FROM_TEAM_FULFILLED':
+      return {
+        ...state,
+        fetching: false,
+        fetched: true,
+        users: action.payload,
+      };
+    case 'FETCH_USERS_FROM_DRAFT_PENDING':
+      return { ...state, fetching: true };
+    case 'FETCH_USERS_FROM_DRAFT_REJECTED':
+      return { ...state, fetching: false, errorOnFetchUsersFromDraft: action.payload };
+    case 'FETCH_USERS_FROM_DRAFT_FULFILLED':
+      return {
+        ...state,
+        fetching: false,
+        fetched: true,
+        users: action.payload,
       };
     case 'UPDATE_CURRENT_USER_PENDING':
       return { ...state, updating: true };

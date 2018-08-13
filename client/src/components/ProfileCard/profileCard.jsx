@@ -14,10 +14,10 @@ import {
   ListItem,
 } from './styledComponents';
 
-const ProfileCard = ({ title, data }) => (
+const ProfileCard = ({ title, data, linkForUpdating }) => (
   <InfoWrapper>
     <InfoTitle>{title}</InfoTitle>
-    <Link to="/updateUser">
+    <Link to={linkForUpdating}>
       <EditButton>
         Edit
       </EditButton>
@@ -34,7 +34,9 @@ const ProfileCard = ({ title, data }) => (
 );
 
 ProfileCard.propTypes = {
-  user: PropTypes.objectOf(PropTypes.any).isRequired,
+  title: PropTypes.string.isRequired,
+  data: PropTypes.objectOf(PropTypes.any).isRequired,
+  linkForUpdating: PropTypes.string.isRequired,
 };
 
 export default ProfileCard;

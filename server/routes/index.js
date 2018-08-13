@@ -4,6 +4,7 @@ import {
   drafts,
   userTeams,
   userDrafts,
+  draftTeams,
 } from '../controllers';
 
 module.exports = (app) => {
@@ -43,4 +44,10 @@ module.exports = (app) => {
   app.get('/api/users/:userId/teams', userTeams.retrieveTeamsByUser);
   app.post('/api/teams/:teamId/users/:userId', userTeams.create);
   app.delete('/api/teams/:teamId/users/:userId', userTeams.destroy);
+
+  // draft's association with team
+  app.get('/api/teams/:teamId/drafts', draftTeams.retrieveDraftsByTeam);
+  app.get('/api/drafts/:draftId/teams', draftTeams.retrieveTeamsByDraft);
+  app.post('/api/drafts/:draftId/teams/:teamId', draftTeams.create);
+  app.delete('/api/drafts/:draftId/teams/:teamId', draftTeams.destroy);
 };

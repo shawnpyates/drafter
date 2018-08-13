@@ -27,7 +27,7 @@ export const fetchCurrentUser = () => {
 };
 
 export const authenticateUser = body => (dispatch) => {
-  dispatch({ type: 'AUTHENTICATE USER PENDING' });
+  dispatch({ type: 'AUTHENTICATE_USER_PENDING' });
   const { email, password } = body;
   return axios.post('/api/users/auth', { email, password })
     .then((response) => {
@@ -39,6 +39,29 @@ export const authenticateUser = body => (dispatch) => {
     });
 };
 
+export const fetchUsersByTeam = teamId => (dispatch) => {
+  dispatch({ type: 'FETCH_USERS_FROM_TEAM_PENDING '});
+  axios.get(`${SERVER_URL}/api/teams/${teamId}/users`)
+    .then((response) => {
+      const { users } = response.data;
+      dispatch({ type: 'FETCH_USERS_FROM_TEAM_FULFILLED', payload: users })
+    })
+    .catch((err) => {
+      dispatch({ type: 'FETCH_USERS_FROM_TEAM_REJECTED', payload: err});
+    });
+};
+
+export const fetchUsersByDraft = draftId => (dispatch) => {
+  dispatch({ type: 'FETCH_USERS_FROM_DRAFT_PENDING '});
+  axios.get(`${SERVER_URL}/api/drafts/${draftId}/users`)
+    .then((response) => {
+      const { users } = response.data;
+      dispatch({ type: 'FETCH_USERS_FROM_DRAFT_FULFILLED', payload: users })
+    })
+    .catch((err) => {
+      dispatch({ type: 'FETCH_USERS_FROM_DRAFT_REJECTED', payload: err});
+    });
+};
 
 export const createUser = body => (dispatch) => {
   dispatch({ type: 'CREATE_USER_PENDING' });
