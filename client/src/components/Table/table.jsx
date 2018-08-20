@@ -13,6 +13,7 @@ import {
   DataFrame,
   DataRow,
   ColumnHeader,
+  DataLink,
 } from './styledComponents';
 
 const WHITE_ROW_BACKGROUND = '#FFF';
@@ -26,7 +27,8 @@ const Table = ({
   emptyDataMessage,
 }) => {
   const getCellsForRow = (dataEntry) => {
-    const vals = Object.values(dataEntry);
+    const { id, ...dataEntryMinusId } = dataEntry;
+    const vals = Object.values(dataEntryMinusId);
     return vals.map(val => <td>{val}</td>);
   };
   const addNewLink = `/create${type}`;
@@ -54,14 +56,16 @@ const Table = ({
                 ))}
               </HeaderRow>
               {data.map((entry, i) => (
-                <DataRow
-                  key={uuidv4()}
-                  style={{
-                    backgroundColor: i % 2 === 0 ? SHADED_ROW_BACKGROUND : WHITE_ROW_BACKGROUND,
-                  }}
-                >
-                  {getCellsForRow(entry)}
-                </DataRow>
+                <DataLink to={`${type.toLowerCase()}/${entry.id}`}>
+                  <DataRow
+                    key={uuidv4()}
+                    style={{
+                      backgroundColor: i % 2 === 0 ? SHADED_ROW_BACKGROUND : WHITE_ROW_BACKGROUND,
+                    }}
+                  >
+                    {getCellsForRow(entry)}
+                  </DataRow>
+                </DataLink>
               ))}
             </DataFrame>
           }

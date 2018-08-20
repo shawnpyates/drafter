@@ -27,7 +27,7 @@ module.exports = (app) => {
   app.delete('/api/drafts/:id', drafts.destroy);
 
   // teams
-  app.get('/api/drafts/:draftId/teams', teams.retrieve);
+  app.get('/api/teams', teams.retrieve);
   app.get('/api/teams/:id', teams.retrieveOne);
   app.post('/api/teams', teams.create);
   app.put('/api/teams/:id', teams.update);

@@ -19,7 +19,7 @@ export const fetchTeamsByUser = userId => (dispatch) => {
 
 export const fetchTeamsByDraft = draftId => (dispatch) => {
   dispatch({ type: 'FETCH_TEAMS_FROM_DRAFT_PENDING' });
-  axios.get(`${process.env.SERVER_URL}/api/users/${userId}/teams`)
+  axios.get(`${process.env.SERVER_URL}/api/drafts/${draftId}/teams`)
     .then((response) => {
       const { teams, owners } = response.data;
       const updatedTeams = teams.map((team) => {

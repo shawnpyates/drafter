@@ -10,7 +10,7 @@ module.exports = {
     DraftTeam.findAll({ where: { teamId: req.params.teamId }, include: [Draft] })
       .then((draftTeams) => {
         if (!draftTeams.length) {
-          res.status(201).send([]);
+          res.status(201).send({ drafts: [], owners: [] });
           return;
         }
         const drafts = DraftTeams.map(dt => dt.Draft);
@@ -33,11 +33,11 @@ module.exports = {
       .catch(error => res.status(400).send(error));
   },
 
- retrieveTeamsByDraft(req, res) {
+  retrieveTeamsByDraft(req, res) {
     DraftTeam.findAll({ where: { draftId: req.params.draftId }, include: [Team] })
       .then((draftTeams) => {
         if (!draftTeams.length) {
-          res.status(201).send([]);
+          res.status(201).send({ teams: [], owners: [] });
           return;
         }
         const teams = DraftTeams.map(dt => dt.Team);

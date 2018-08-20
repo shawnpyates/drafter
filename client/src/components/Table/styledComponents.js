@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 const Container = styled.div`
   display: flex;
@@ -48,6 +49,7 @@ const DataFrame = styled.table`
 
 const DataRow = styled.tr`
   display: table-row;
+  cursor: pointer;
 
   &:hover {
     background: #7EC0EE !important;
@@ -55,6 +57,11 @@ const DataRow = styled.tr`
 `;
 
 const ColumnHeader = styled.th`
+`;
+
+const DataLink = styled(Link)`
+  display: contents;
+  text-decoration: none !important;
 `;
 
 module.exports = {
@@ -67,4 +74,5 @@ module.exports = {
   DataFrame,
   DataRow,
   ColumnHeader,
+  DataLink,
 };

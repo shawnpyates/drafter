@@ -17,8 +17,8 @@ const mapDispatchToProps = dispatch => ({
 
 const extractDataForTable = (teams, userId) => (
   teams.map((team) => {
-    const { name, ownerName } = team;
-    return { name, ownerName };
+    const { id, name, ownerName } = team;
+    return { id, name, ownerName };
   })
 );
 

@@ -1,12 +1,28 @@
 {
-  "profileProperties": {
-    "email": "E-mail",
-    "registeredAsPlayer": "Registered As Player",
-    "position": "Position"
+  "user": {
+    "properties": {
+      "email": "E-mail",
+      "registeredAsPlayer": "Registered As Player",
+      "position": "Position"
+    },
+    "values": {
+      "registeredYes": "Yes",
+      "registeredNo": "No",
+      "positionNotApplicable": "N/A"
+    }
   },
-  "profileValues": {
-    "registeredYes": "Yes",
-    "registeredNo": "No",
-    "positionNotApplicable": "N/A"
+  "draft": {
+    "properties": {
+      "scheduledFor": "Scheduled For",
+      "owner": "Owner"
+    },
+    "values": {
+      "unscheduled": "(Unscheduled)"
+    }
+  },
+  "team": {
+    "properties": {
+      "owner": "Owner"
+    }
   }
 }
