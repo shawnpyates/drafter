@@ -5,6 +5,7 @@ import ProfileCard from '../../components/ProfileCard/profileCard.jsx';
 import { draft as draftProfileData } from '../../components/ProfileCard/profileCardConstants.json';
 import { fetchTeamsByDraft, fetchUsersByDraft } from '../../actions';
 import Teams from '../Teams/teams.jsx';
+import Players from '../Players/players.jsx';
 
 const { properties: profileProperties, values: profileValues } = draftProfileData;
 
@@ -19,7 +20,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     fetchTeamsByDraft: body => dispatch(fetchTeamsByDraft(id)),
     fetchUsersByDraft: body => dispatch(fetchUsersByDraft(id)),
   };
-}
+};
 
 class DraftMenu extends Component {
 
@@ -43,6 +44,7 @@ class DraftMenu extends Component {
           linkForUpdating={profileCardLinkForUpdating}
         />
         <Teams draftId={currentDraft.id} fetchBy='draft' />
+        <Players draftId={currentDraft.id} fetchBy='draft' />
       </div>
     );
   }

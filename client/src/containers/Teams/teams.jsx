@@ -15,7 +15,7 @@ const mapDispatchToProps = dispatch => ({
   fetchTeamsByDraft: id => dispatch(fetchTeamsByDraft(id)),
 });
 
-const extractDataForTable = (teams, userId) => (
+const extractDataForTable = teams => (
   teams.map((team) => {
     const { id, name, ownerName } = team;
     return { id, name, ownerName };
@@ -29,11 +29,12 @@ class Teams extends Component {
   }
 
   render() {
-    const { teams } = this.props;
+    const { teams, fetchBy } = this.props;
     const {
       type,
       title,
-      noTeams,
+      belongToNoTeams,
+      noTeamsEntered,
       columnHeaders,
     } = teamsTableTexts;
     return (
@@ -44,7 +45,7 @@ class Teams extends Component {
             title={title}
             columnHeaders={columnHeaders}
             data={extractDataForTable(teams)}
-            emptyDataMessage={noTeams}
+            emptyDataMessage={fetchBy === 'user' ? belongToNoTeams : noTeamsEntered}
           />
         }
       </div>

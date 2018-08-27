@@ -8,12 +8,21 @@ module.exports = {
 
   retrieveUsersByTeam(req, res) {
     const { teamId } = req.params;
-    return UserTeam.find({ where: { teamId } })
-      .then(userTeam => (
-        User.findById(userTeam.userId)
+    return UserTeam.findAll({ where: { teamId } })
+      .then((userTeams) => {
+        if (!userTeams.length) {
+          res.status(201).send([]);
+          return;
+        }
+        const userIds = userTeams.map(ut => ut.userId);
+        return User.findAll({
+          where: {
+            id: { [opIn]: userIds },
+          },
+        })
           .then(users => res.status(201).send(users))
-          .catch(error => res.status(400).send(error))
-      ))
+          .catch(error => res.status(400).send(error));
+      })
       .catch(error => res.status(400).send(error));
   },
 

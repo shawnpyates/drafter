@@ -43,7 +43,7 @@ export const fetchUsersByTeam = teamId => (dispatch) => {
   dispatch({ type: 'FETCH_USERS_FROM_TEAM_PENDING '});
   axios.get(`${SERVER_URL}/api/teams/${teamId}/users`)
     .then((response) => {
-      const { users } = response.data;
+      const { data: users } = response;
       dispatch({ type: 'FETCH_USERS_FROM_TEAM_FULFILLED', payload: users })
     })
     .catch((err) => {
@@ -55,7 +55,7 @@ export const fetchUsersByDraft = draftId => (dispatch) => {
   dispatch({ type: 'FETCH_USERS_FROM_DRAFT_PENDING '});
   axios.get(`${SERVER_URL}/api/drafts/${draftId}/users`)
     .then((response) => {
-      const { users } = response.data;
+      const { data: users } = response;
       dispatch({ type: 'FETCH_USERS_FROM_DRAFT_FULFILLED', payload: users })
     })
     .catch((err) => {

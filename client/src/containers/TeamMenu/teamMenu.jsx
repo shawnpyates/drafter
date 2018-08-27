@@ -5,6 +5,7 @@ import ProfileCard from '../../components/ProfileCard/profileCard.jsx';
 import { team as teamProfileData } from '../../components/ProfileCard/profileCardConstants.json';
 import { fetchUsersByTeam, fetchDraftsByTeam } from '../../actions';
 import Drafts from '../Drafts/drafts.jsx';
+import Players from '../Players/players.jsx';
 
 const { properties: profileProperties, values: profileValues } = teamProfileData;
 
@@ -39,6 +40,7 @@ class TeamMenu extends Component {
           linkForUpdating={profileCardLinkForUpdating}
         />
         <Drafts teamId={currentTeam.id} fetchBy='team' />
+        <Players teamId={currentTeam.id} fetchBy='team' />
       </div>
     );
   }

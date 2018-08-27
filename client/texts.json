@@ -7,7 +7,7 @@
 
   "draftsTable": {
     "type": "Drafts",
-    "title": "My Drafts",
+    "title": "Drafts",
     "noneScheduled": "You do not currently have any drafts scheduled.",
     "unscheduled": "(Unscheduled)",
     "columnHeaders": ["Name", "Scheduled For", "Owner"]
@@ -15,8 +15,17 @@
 
   "teamsTable": {
     "type": "Teams",
-    "title": "My Teams",
-    "noTeams": "You do not currently belong to any teams.",
+    "title": "Teams",
+    "belongToNoTeams": "You do not currently belong to any teams.",
+    "noTeamsEntered": "There are currently no teams entered into this draft.",
     "columnHeaders": ["Name", "Owner"]
+  },
+
+  "playersTable": {
+    "type": "Users",
+    "title": "Players",
+    "noPlayersOnTeam": "There are currently no players on this team.",
+    "noPlayersInDraft": "There are currently no players entered into this draft.",
+    "columnHeaders": ["Name", "Position"]
   }
 }

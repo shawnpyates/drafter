@@ -24,6 +24,7 @@ export {
   createUser,
   authenticateUser,
   fetchUsersByTeam,
+  fetchUsersByDraft,
   fetchTeamsByDraft,
   updateUser,
   fetchDraftsByUser,
