@@ -3,60 +3,59 @@ import { create as createUserDraft } from './userDrafts';
 
 module.exports = {
 
-  retrieve(req, res) {
-    return Draft.findAll()
-      .then(drafts => res.status(201).send(drafts))
-      .error(error => res.status(400).send(error));
+  async fetchOne(req, res) {
+    try {
+      const draft = await Draft.findById(req.params.id);
+      return res.status(200).send({ draft });
+    } catch (e) {
+      return res.status(400).send({ e });
+    }
   },
 
-  retrieveOne(req, res) {
-    return Draft.findById(req.params.id)
-      .then(draft => res.status(201).send(draft))
-      .catch(error => res.status(400).send(error));
+  async create(req, res) {
+    try {
+      const { name, timeScheduled, ownerUserId } = req.body;
+      const draft = await Draft.create({ name, timeScheduled, ownerUserId });
+      const draftProperties = {
+        body: {
+          isOwner: true,
+          isAdmin: true,
+        },
+        params: {
+          draftId: draft.id,
+          userId: ownerUserId,
+        },
+      };
+      createUserDraft(draftProperties);
+      return res.status(201).send({ draft });
+    } catch (e) {
+      return res.status(400).send({ e });
+    }
   },
 
-  create(req, res) {
-    const { name, timeScheduled, ownerUserId } = req.body;
-    return Draft.create({ name, timeScheduled, ownerUserId })
-      .then((draft) => {
-        const mockReqObj = {
-          body: {
-            isOwner: true,
-            isAdmin: true,
-          },
-          params: {
-            draftId: draft.id,
-            userId: ownerUserId,
-          },
-        };
-        createUserDraft(mockReqObj);
-        res.status(201).send(draft);
-      })
-      .catch(error => res.status(400).send(error));
-  },
-
-  update(req, res) {
-    const { name, timeScheduled } = req.body;
-    return Draft.findById(req.params.id)
-      .then((draft) => {
-        if (!draft) return res.status.send({ message: 'Draft not found.' });
-        return draft.update({
-          name: name || draft.name,
-          timeScheduled: timeScheduled || draft.timeScheduled,
-        })
-          .then(() => res.status(200).send(draft))
-          .catch(error => res.status(400).send(error));
-      })
-      .catch(error => res.status(400).send(error));
-  },
-
-  destroy(req, res) {
-    return Draft.findById(req.params.id)
-      .then((draft) => {
-        if (!draft) return res.status.send({ message: 'Draft not found.' });
-        return Draft.destroy()
-          .then(() => res.status(204).send())
-          .catch(error => res.status(400).send(error));
+  async update(req, res) {
+    try {
+      const { name, timeScheduled } = req.body;
+      const draft = await Draft.findById(req.params.id);
+      if (!draft) return res.status(404).send({ e: 'Draft not found.' });
+      const updatedDraft = await draft.update({
+        name: name || draft.name,
+        timeScheduled: timeScheduled || draft.timeScheduled,
       });
+      return res.status(200).send({ draft: updatedDraft });
+    } catch (e) {
+      return res.status(400).send({ e });
+    }
+  },
+
+  async destroy(req, res) {
+    try {
+      const draft = await Draft.findById(req.params.id);
+      if (!draft) return res.status(404).send({ e: 'Draft not found.' });
+      await draft.destroy();
+      return res.status(204).send({});
+    } catch (e) {
+      return res.status(400).send({ e });
+    }
   },
 };

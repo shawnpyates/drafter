@@ -3,61 +3,55 @@ import { create as createUserTeam } from './userTeams';
 
 module.exports = {
 
-  retrieve(req, res) {
-    const { draftId } = req.params;
-    return Team.findAll({ where: { draftId } })
-      .then(teams => res.status(201).send(teams))
-      .catch(error => res.status(400).send(error));
+  async fetchOne(req, res) {
+    try {
+      const team = await Team.findById(req.params.id);
+      return res.status(200).send({ team });
+    } catch (e) {
+      return res.status(400).send({ e });
+    }
   },
 
-  retrieveOne(req, res) {
-    return Team.findById(req.params.id)
-      .then(team => res.status(201).send(team))
-      .catch(error => res.status(400).send(error));
+  async create(req, res) {
+    try {
+      const { name, ownerUserId } = req.body;
+      const team = await Team.create({ name, ownerUserId });
+      const teamProperties = {
+        body: {
+          isOwner: true,
+          isAdmin: true,
+        },
+        params: {
+          teamId: team.id,
+          userId: ownerUserId,
+        },
+      };
+      createUserTeam(teamProperties);
+      return res.status(201).send({ team });
+    } catch (e) {
+      return res.status(400).send({ e });
+    }
   },
 
-  create(req, res) {
-    const { name, ownerUserId } = req.body;
-    return Team.create({ name, ownerUserId })
-      .then((team) => {
-        const mockReqObj = {
-          body: {
-            isOwner: true,
-            isAdmin: true,
-          },
-          params: {
-            teamId: team.id,
-            userId: ownerUserId,
-          },
-        };
-        createUserTeam(mockReqObj);
-        res.status(201).send(team);
-      })
-      .catch(error => res.status(400).send(error));
+  async update(req, res) {
+    try {
+      const team = await Team.findById(req.params.id);
+      if (!team) return res.status(404).send({ e: 'Team not found.' });
+      const updatedTeam = await team.update({ name: req.body.name || team.name });
+      return res.status(200).send({ team: updatedTeam });
+    } catch (e) {
+      return res.status(400).send({ e });
+    }
   },
 
-  update(req, res) {
-    return Team.findById(req.params.id)
-      .then((team) => {
-        if (!team) return res.status.send({ message: 'Team not found.' });
-        return team.update({
-          name: req.body.name || team.name,
-        })
-          .then(() => res.status(200).send(team))
-          .catch(error => res.status(400).send(error));
-      })
-      .catch(error => res.status(400).send(error));
+  async destroy(req, res) {
+    try {
+      const team = await Team.findById(req.params.id);
+      if (!team) return res.status(404).send({ e: 'Team not found.' });
+      await team.destroy();
+      return res.status(204).send({});
+    } catch (e) {
+      return res.status(400).send({ e });
+    }
   },
-
-  destroy(req, res) {
-    return Team.findById(req.params.id)
-      .then((team) => {
-        if (!team) return res.status.send({ message: 'Team not found.' });
-        return team.destroy()
-          .then(() => res.status(204).send())
-          .catch(error => res.status(400).send(error));
-      })
-      .catch(error => res.status(400).send(error));
-  },
-
 };

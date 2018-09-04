@@ -1,80 +1,58 @@
-import Sequelize from 'sequelize';
-
 import { User, Team, UserTeam } from '../models';
-
-const { in: opIn } = Sequelize.Op;
+import { getOrgsWithOwnerName } from './commonUtils';
 
 module.exports = {
 
-  retrieveUsersByTeam(req, res) {
+  async fetchUsersByTeam(req, res) {
     const { teamId } = req.params;
-    return UserTeam.findAll({ where: { teamId } })
-      .then((userTeams) => {
-        if (!userTeams.length) {
-          res.status(201).send([]);
-          return;
-        }
-        const userIds = userTeams.map(ut => ut.userId);
-        return User.findAll({
-          where: {
-            id: { [opIn]: userIds },
-          },
-        })
-          .then(users => res.status(201).send(users))
-          .catch(error => res.status(400).send(error));
-      })
-      .catch(error => res.status(400).send(error));
+    try {
+      const userTeams = await UserTeam.findAll({ where: { teamId }, include: [User] });
+      const users = userTeams.map(ut => ut.User);
+      return res.status(200).send({ users });
+    } catch (e) {
+      return res.status(400).send({ e });
+    }
   },
 
-  retrieveTeamsByUser(req, res) {
-    UserTeam.findAll({ where: { userId: req.params.userId }, include: [Team] })
-      .then((userTeams) => {
-        if (!userTeams.length) {
-          res.status(201).send([]);
-          return;
-        }
-        const teams = userTeams.map(ut => ut.Team);
-        const ownerIds = teams.map(team => team.ownerUserId);
-        return User.findAll({
-          where: {
-            id: { [opIn]: ownerIds }
-          }
-        })
-          .then((users) => {
-            const owners = ownerIds.map((ownerId) => {
-              const owner = users.find(user => user.id === ownerId);
-              const ownerName = `${owner.firstName} ${owner.lastName}`;
-              return { id: ownerId, name: ownerName };
-            });
-            res.status(201).send({ teams, owners });
-          })
-          .catch(error => res.status(400).send(error));
-      })
-      .catch(error => res.status(400).send(error));
+  async fetchTeamsByUser(req, res) {
+    try {
+      const { userId } = req.params;
+      const userTeams = await UserTeam.findAll({ where: { userId }, include: [Team] });
+      if (!userTeams.length) return res.status(200).send({ teamsWithOwnerName: [] });
+      const teamsWithOwnerName = await getOrgsWithOwnerName(userTeams, 'Team');
+      return res.status(200).send({ teams: teamsWithOwnerName });
+    } catch (e) {
+      return res.status(400).send({ e });
+    }
   },
 
-  create(req, res) {
-    const { isOwner, isAdmin } = req.body;
-    const { teamId, userId } = req.params;
-    return UserTeam.create({ isOwner, isAdmin, teamId, userId })
-      .then((userTeam) => {
-        if (res) res.status(201).send(userTeam)
-      })
-      .catch((error) => {
-        if (res) res.status(400).send(error)
+  async create(req, res) {
+    try {
+      const { isOwner, isAdmin } = req.body;
+      const { teamId, userId } = req.params;
+      const userTeam = await UserTeam.create({
+        isOwner,
+        isAdmin,
+        teamId,
+        userId,
       });
+      // this function not always called as route handler, so validate that res exists
+      if (res) return res.status(201).send({ userTeam });
+    } catch (e) {
+      if (res) return res.status(400).send({ e });
+    }
+    return null;
   },
 
-  destroy(req, res) {
-    const { teamId, userId } = req.params;
-    return UserTeam.find({ where: { teamId, userId } })
-      .then((userTeam) => {
-        if (!userTeam) return res.status.send({ message: 'Relationship not found.' });
-        return userTeam.destroy()
-          .then(() => res.status.send())
-          .catch(error => res.status(400).send(error));
-      })
-      .catch(error => res.status(400).send(error));
+  async destroy(req, res) {
+    try {
+      const { teamId, userId } = req.params;
+      const userTeam = await UserTeam.find({ where: { teamId, userId } });
+      if (!userTeam) return res.status(404).send({ e: 'Relationship not found ' });
+      return res.status(204).send({});
+    } catch (e) {
+      if (res) return res.status(400).send({ e });
+    }
+    return null;
   },
-
 };

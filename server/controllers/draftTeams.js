@@ -1,86 +1,52 @@
-import Sequelize from 'sequelize';
-
-import { User, Draft, Team, DraftTeam } from '../models';
-
-const { in: opIn } = Sequelize.Op;
+import { Draft, Team, DraftTeam } from '../models';
+import { getOrgsWithOwnerName } from './commonUtils';
 
 module.exports = {
 
- retrieveDraftsByTeam(req, res) {
-    DraftTeam.findAll({ where: { teamId: req.params.teamId }, include: [Draft] })
-      .then((draftTeams) => {
-        if (!draftTeams.length) {
-          res.status(201).send({ drafts: [], owners: [] });
-          return;
-        }
-        const drafts = DraftTeams.map(dt => dt.Draft);
-        const ownerIds = drafts.map(draft => draft.ownerUserId);
-        return User.findAll({
-          where: {
-            id: { [opIn]: ownerIds }
-          }
-        })
-          .then((users) => {
-            const owners = ownerIds.map((ownerId) => {
-              const owner = users.find(user => user.id === ownerId);
-              const ownerName = `${owner.firstName} ${owner.lastName}`;
-              return { id: ownerId, name: ownerName };
-            });
-            res.status(201).send({ drafts, owners });
-          })
-          .catch(error => res.status(400).send(error));
-      })
-      .catch(error => res.status(400).send(error));
+  async fetchDraftsByTeam(req, res) {
+    try {
+      const { teamId } = req.params;
+      const draftTeams = await DraftTeam.findAll({ where: { teamId }, include: [Draft] });
+      if (!draftTeams.length) return res.status(200).send({ draftsWithOwnerName: [] });
+      const draftsWithOwnerName = await getOrgsWithOwnerName(draftTeams, 'Draft');
+      return res.status(200).send({ drafts: draftsWithOwnerName });
+    } catch (e) {
+      return res.status(400).send({ e });
+    }
   },
 
-  retrieveTeamsByDraft(req, res) {
-    DraftTeam.findAll({ where: { draftId: req.params.draftId }, include: [Team] })
-      .then((draftTeams) => {
-        if (!draftTeams.length) {
-          res.status(201).send({ teams: [], owners: [] });
-          return;
-        }
-        const teams = DraftTeams.map(dt => dt.Team);
-        const ownerIds = teams.map(team => team.ownerUserId);
-        return User.findAll({
-          where: {
-            id: { [opIn]: ownerIds }
-          }
-        })
-          .then((users) => {
-            const owners = ownerIds.map((ownerId) => {
-              const owner = users.find(user => user.id === ownerId);
-              const ownerName = `${owner.firstName} ${owner.lastName}`;
-              return { id: ownerId, name: ownerName };
-            });
-            res.status(201).send({ teams, owners });
-          })
-          .catch(error => res.status(400).send(error));
-      })
-      .catch(error => res.status(400).send(error));
+  async fetchTeamsByDraft(req, res) {
+    try {
+      const { draftId } = req.params;
+      const draftTeams = await DraftTeam.findAll({ where: { draftId }, include: [Team] });
+      if (!draftTeams.length) return res.status(200).send({ teamsWithOwnerName: [] });
+      const teamsWithOwnerName = await getOrgsWithOwnerName(draftTeams, 'Team');
+      return res.status(200).send({ teams: teamsWithOwnerName });
+    } catch (e) {
+      return res.status(400).send({ e });
+    }
   },
 
-  create(req, res) {
-    const { draftId, teamId } = req.params;
-    return DraftTeam.create({ draftId, teamId })
-      .then((draftTeam) => {
-        if (res) res.status(201).send(draftTeam)
-      })
-      .catch((error) => {
-        if (res) res.status(400).send(error)
-      });
+  async create(req, res) {
+    try {
+      const { draftId, teamId } = req.params;
+      const draftTeam = await DraftTeam.create({ draftId, teamId });
+      if (res) return res.status(201).send({ draftTeam });
+    } catch (e) {
+      if (res) return res.status(400).send({ e });
+    }
+    return null;
   },
 
-  destroy(req, res) {
-    const { draftId, teamId } = req.params;
-    return UserDraft.find({ where: { draftId, teamId } })
-      .then((userDraft) => {
-        if (!userDraft) return res.status.send({ message: 'Relationship not found.' });
-        return userDraft.destroy()
-          .then(() => res.status.send())
-          .catch(error => res.status(400).send(error));
-      })
-      .catch(error => res.status(400).send(error));
+  async destroy(req, res) {
+    try {
+      const { draftId, teamId } = req.params;
+      const userDraft = await DraftTeam.find({ where: { draftId, teamId } });
+      if (!userDraft) return res.status(404).send({ e: 'Relationship not found.' });
+      await userDraft.destroy();
+      return res.status(204).send({});
+    } catch (e) {
+      return res.status(400).send({ e });
+    }
   },
-
 };
