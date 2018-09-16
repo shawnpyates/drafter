@@ -1,9 +1,9 @@
-import drafts from './drafts';
-import teams from './teams';
-import users from './users';
-import userDrafts from './userDrafts';
-import userTeams from './userTeams';
-import draftTeams from './draftTeams';
+const drafts = require('./drafts');
+const teams = require('./teams');
+const users = require('./users');
+const userDrafts = require('./userDrafts');
+const userTeams = require('./userTeams');
+const draftTeams = require('./draftTeams');
 
 module.exports = {
   drafts,

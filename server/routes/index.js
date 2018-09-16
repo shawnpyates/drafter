@@ -1,11 +1,11 @@
-import {
+const {
   users,
   teams,
   drafts,
   userTeams,
   userDrafts,
   draftTeams,
-} from '../controllers';
+} = require('../controllers');
 
 module.exports = (app) => {
   app.get('/api', (req, res) => {

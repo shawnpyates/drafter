@@ -1,6 +1,6 @@
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import { User } from '../models';
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const { User } = require('../models');
 
 const SECRET = process.env.JWT_SECRET;
 
@@ -8,7 +8,7 @@ module.exports = {
 
   async fetchOne(req, res) {
     try {
-      const user = User.findById(req.params.id);
+      const user = await User.findById(req.params.id);
       return res.status(200).send({ user });
     } catch (e) {
       return res.status(400).send({ e });

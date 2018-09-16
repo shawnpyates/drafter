@@ -19,7 +19,7 @@ const mapStateToProps = (state) => {
 const MainMenu = ({ currentUser }) => {
   const profileCardTitle = `${currentUser.firstName} ${currentUser.lastName}`;
   const { email, registeredAsPlayer, position } = profileProperties;
-  const { registeredYes, registeredNo, positionNotApplicable} = profileValues;
+  const { registeredYes, registeredNo, positionNotApplicable } = profileValues;
   const profileCardData = {
     [email]: currentUser.email,
     [registeredAsPlayer]: currentUser.registeredAsPlayer ? registeredYes : registeredNo,

@@ -14,7 +14,7 @@ export const fetchCurrentUser = () => {
         const { userId } = decoded;
         axios.get(`/api/users/${userId}`)
           .then((response) => {
-            const { user } = response;
+            const { user } = response.data;
             dispatch({ type: 'FETCH_CURRENT_USER_FULFILLED', payload: user });
           })
           .catch((dbFetchingError) => {

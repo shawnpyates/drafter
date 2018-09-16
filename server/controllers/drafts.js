@@ -1,5 +1,5 @@
-import { Draft } from '../models';
-import { create as createUserDraft } from './userDrafts';
+const { Draft } = require('../models');
+const { create: createUserDraft } = require('./userDrafts');
 
 module.exports = {
 
@@ -26,7 +26,7 @@ module.exports = {
           userId: ownerUserId,
         },
       };
-      createUserDraft(draftProperties);
+      await createUserDraft(draftProperties);
       return res.status(201).send({ draft });
     } catch (e) {
       return res.status(400).send({ e });

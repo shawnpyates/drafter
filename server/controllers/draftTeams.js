@@ -1,5 +1,6 @@
-import { Draft, Team, DraftTeam } from '../models';
-import { getOrgsWithOwnerName } from './commonUtils';
+const { Draft, Team, DraftTeam } = require('../models');
+
+const { getOrgsWithOwnerName } = require('./commonUtils');
 
 module.exports = {
 

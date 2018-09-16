@@ -1,5 +1,5 @@
-import { Team } from '../models';
-import { create as createUserTeam } from './userTeams';
+const { Team } = require('../models');
+const { create: createUserTeam } = require('./userTeams');
 
 module.exports = {
 
@@ -26,7 +26,7 @@ module.exports = {
           userId: ownerUserId,
         },
       };
-      createUserTeam(teamProperties);
+      await createUserTeam(teamProperties);
       return res.status(201).send({ team });
     } catch (e) {
       return res.status(400).send({ e });

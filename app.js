@@ -15,12 +15,12 @@ app.use(express.static(path.join(__dirname, 'client/public')));
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
-})
+});
 
 require('./server/routes')(app);
 
 app.get('*', (req, res) => {
   res.redirect('/');
-})
+});
 
 module.exports = app;

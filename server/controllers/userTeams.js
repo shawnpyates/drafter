@@ -1,5 +1,5 @@
-import { User, Team, UserTeam } from '../models';
-import { getOrgsWithOwnerName } from './commonUtils';
+const { User, Team, UserTeam } = require('../models');
+const { getOrgsWithOwnerName } = require('./commonUtils');
 
 module.exports = {
 
@@ -18,7 +18,7 @@ module.exports = {
     try {
       const { userId } = req.params;
       const userTeams = await UserTeam.findAll({ where: { userId }, include: [Team] });
-      if (!userTeams.length) return res.status(200).send({ teamsWithOwnerName: [] });
+      if (!userTeams.length) return res.status(200).send({ teams: [] });
       const teamsWithOwnerName = await getOrgsWithOwnerName(userTeams, 'Team');
       return res.status(200).send({ teams: teamsWithOwnerName });
     } catch (e) {
