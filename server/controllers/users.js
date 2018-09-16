@@ -1,7 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { User } = require('../models');
-const { destroyUserAssociations } = require('./commonUtils');
 
 const SECRET = process.env.JWT_SECRET;
 
@@ -88,9 +87,6 @@ module.exports = {
         ),
         position: registeredAsPlayer ? (position || user.position) : null,
       });
-      if (registeredAsPlayer === false && oldRegistrationStatus) {
-        await destroyUserAssociations(updatedUser);
-      }
       return res.status(200).send({ user: updatedUser });
     } catch (e) {
       return res.status(400).send({ e });
