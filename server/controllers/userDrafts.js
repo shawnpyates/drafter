@@ -7,7 +7,7 @@ module.exports = {
     const { draftId } = req.params;
     try {
       const userDrafts = await UserDraft.findAll({ where: { draftId }, include: [User] });
-      const users = userDrafts.map(ud => ud.User);
+      const users = userDrafts.map(ud => ud.User).filter(user => user.registeredAsPlayer);
       return res.status(200).send({ users });
     } catch (e) {
       return res.status(400).send({ e });

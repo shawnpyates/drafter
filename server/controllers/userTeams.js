@@ -7,7 +7,7 @@ module.exports = {
     const { teamId } = req.params;
     try {
       const userTeams = await UserTeam.findAll({ where: { teamId }, include: [User] });
-      const users = userTeams.map(ut => ut.User);
+      const users = userTeams.map(ut => ut.User).filter(user => user.registeredAsPlayer);
       return res.status(200).send({ users });
     } catch (e) {
       return res.status(400).send({ e });

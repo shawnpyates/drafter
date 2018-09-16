@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { User } = require('../models');
+const { destroyUserAssociations } = require('./commonUtils');
 
 const SECRET = process.env.JWT_SECRET;
 
@@ -76,6 +77,7 @@ module.exports = {
       } = req.body;
       const user = await User.findById(req.params.id);
       if (!user) return res.status(404).send({ e: 'User not found.' });
+      const { registeredAsPlay: oldRegistrationStatus } = user;
       const updatedUser = await user.update({
         firstName: firstName || user.firstName,
         lastName: lastName || user.lastName,
@@ -86,6 +88,9 @@ module.exports = {
         ),
         position: registeredAsPlayer ? (position || user.position) : null,
       });
+      if (registeredAsPlayer === false && oldRegistrationStatus) {
+        await destroyUserAssociations(updatedUser);
+      }
       return res.status(200).send({ user: updatedUser });
     } catch (e) {
       return res.status(400).send({ e });
