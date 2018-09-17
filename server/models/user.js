@@ -17,29 +17,13 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    registeredAsPlayer: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-    },
-    position: DataTypes.STRING,
-    teams: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
-      allowNull: false,
-    },
-    drafts: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
-      allowNull: false,
-    },
   });
   User.associate = (models) => {
-    User.belongsToMany(models.Team, {
-      through: 'userTeam',
-      foreignKey: 'userId',
-    });
     User.belongsToMany(models.Draft, {
       through: 'userDraft',
       foreignKey: 'userId',
     });
+    User.hasMany(models.Team);
   };
   return User;
 };

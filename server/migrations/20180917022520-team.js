@@ -1,30 +1,26 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('DraftTeams', {
+    return queryInterface.createTable('Teams', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      draftId: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Drafts',
-          key: 'id'
-        },
-        onUpdate: 'cascade',
-        onDelete: 'cascade'
+      name: {
+        allowNull: false,
+        type: Sequelize.STRING,
       },
-      teamId: {
+      ownerUserId: {
+        allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: 'Teams',
+          model: 'Users',
           key: 'id'
         },
         onUpdate: 'cascade',
-        onDelete: 'cascade'
+        onDelete: 'cascade',
       },
       createdAt: {
         allowNull: false,
@@ -36,7 +32,7 @@ module.exports = {
       }
     });
   },
-  down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('DraftTeams');
+  down: (queryInterface) => {
+    return queryInterface.dropTable('Teams');
   }
 };
