@@ -34,23 +34,6 @@
         "enabled": true
       },
       {
-        "name": "registeredAsPlayer",
-        "text": "Would you like to register as a player?",
-        "type": "select",
-        "enabled": true,
-        "placeholder": "Please Select",
-        "options": ["Yes", "No"]
-      },
-      {
-        "name": "position",
-        "text": "Please choose a position: ",
-        "type": "select",
-        "enabled": false,
-        "enablementContingentOn": "registeredAsPlayer",
-        "placeholder": "Please Select",
-        "options": ["Forward", "Defence", "Goaltender"]
-      },
-      {
         "name": "submitButton",
         "text": "Sign Up",
         "type": "submit",
@@ -143,30 +126,13 @@
     ]
   },
   "updateUser": {
-    "title": "Update Your Info",
+    "title": "Update Your Email",
     "inputs": [
       {
         "name": "email",
         "text": "E-mail",
         "type": "text",
         "enabled": true
-      },
-      {
-        "name": "registeredAsPlayer",
-        "text": "Would you like to be registered as a player?",
-        "type": "select",
-        "enabled": true,
-        "placeholder": "Please Select",
-        "options": ["Yes", "No"]
-      },
-      {
-        "name": "position",
-        "text": "Please choose a position: ",
-        "type": "select",
-        "enabled": false,
-        "enablementContingentOn": "registeredAsPlayer",
-        "placeholder": "Please Select",
-        "options": ["Forward", "Defence", "Goaltender"]
       },
       {
         "name": "submitButton",

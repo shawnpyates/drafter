@@ -70,16 +70,12 @@ export const createUser = body => (dispatch) => {
     lastName,
     email,
     password,
-    registeredAsPlayer,
-    position,
   } = body;
   return axios.post('/api/users', {
     firstName,
     lastName,
     email,
     password,
-    registeredAsPlayer,
-    position,
   })
     .then((response) => {
       const { user } = response.data;
@@ -96,10 +92,8 @@ export const updateUser = body => (dispatch) => {
   const {
     id,
     email,
-    registeredAsPlayer,
-    position,
   } = body;
-  return axios.put(`/api/users/${id}`, { email, registeredAsPlayer, position })
+  return axios.put(`/api/users/${id}`, { email })
     .then((response) => {
       const { user } = response.data;
       dispatch({ type: 'UPDATE_CURRENT_USER_FULFILLED', payload: user });

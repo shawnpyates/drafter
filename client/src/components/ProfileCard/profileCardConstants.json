@@ -1,14 +1,7 @@
 {
   "user": {
     "properties": {
-      "email": "E-mail",
-      "registeredAsPlayer": "Registered As Player",
-      "position": "Position"
-    },
-    "values": {
-      "registeredYes": "Yes",
-      "registeredNo": "No",
-      "positionNotApplicable": "N/A"
+      "email": "E-mail"
     }
   },
   "draft": {

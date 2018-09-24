@@ -23,7 +23,7 @@ const mapDispatchToProps = dispatch => ({
   createUser: body => dispatch(createUser(body)),
 });
 
-const validateEmail = email => (/\S+@\S+\.\S+/).test(email);
+const isEmailValid = email => (/\S+@\S+\.\S+/).test(email);
 
 const getFieldByName = (inputs, name) => inputs.find(input => input.name === name);
 
@@ -37,9 +37,6 @@ class Register extends Component {
       email: null,
       passwordFirstInsertion: null,
       passwordSecondInsertion: null,
-      registeredAsPlayer: null,
-      position: null,
-      formInputs: [...formInputs],
     };
   }
 
@@ -49,85 +46,66 @@ class Register extends Component {
     }
   }
 
-  updateObjectInInputs = (inputs, shouldBeEnabled) => {
-    const positionField = getFieldByName(formInputs, 'position');
-    const updatedPosition = { ...positionField, enabled: shouldBeEnabled };
-    return inputs.map(input => input.name === 'position' ? updatedPosition : input)
-  };
-
-  updatePositionFieldBasedOnRegisterState() {
-    const isRegistered = this.state.registeredAsPlayer === 'Yes';
-    const { formInputs } = this.state;
-    this.setState({ formInputs: this.updateObjectInInputs(formInputs, isRegistered) });
-    if (!isRegistered) this.setState({ position: null });
-  }
-
   handleSubmit = (ev) => {
     ev.preventDefault();
-    if (this.doesFormHaveError()) return;
+    if (!this.isFormValid()) return;
     const {
       firstName,
       lastName,
       email,
       passwordFirstInsertion,
-      registeredAsPlayer,
-      position,
     } = this.state;
-    const isRegistered = registeredAsPlayer === 'Yes';
     const body = {
       firstName,
       lastName,
       email,
       password: passwordFirstInsertion,
-      registeredAsPlayer: isRegistered,
-      position,
     };
     this.props.createUser(body);
   }
 
-  doesFormHaveError() {
-    const keys = Object.keys(this.state);
-    const values = Object.values(this.state);
+  isFormValid() {
+    const { errorMessage, ...fieldState } = this.state;
     const {
-      registeredAsPlayer,
       passwordFirstInsertion,
       passwordSecondInsertion,
       email,
-    } = this.state;
-    for (let i = 0; i < keys.length; i += 1) {
-      if ((!values[i] && keys[i] !== 'errorMessage') &&
-          !(keys[i] === 'position' && registeredAsPlayer === 'No')) {
-        this.setState({ errorMessage: missingField });
-        return true;
-      }
+    } = fieldState;
+
+    const keys = Object.keys(fieldState);
+    const values = Object.values(fieldState);
+
+    const isEmpty = value => !value;
+
+    if (values.some(isEmpty)) {
+      this.setState({ errorMessage: missingField });
+      return false;
     }
+
     if (passwordFirstInsertion !== passwordSecondInsertion) {
       this.setState({ errorMessage: passwordsDidNotMatch });
-      return true;
+      return false;
     }
+
     if (passwordFirstInsertion.length < registerForm.passwordMinimumLength) {
       this.setState({ errorMessage: tooShort });
-      return true;
+      return false;
     }
-    if (!validateEmail(email)) {
+
+    if (!isEmailValid(email)) {
       this.setState({ errorMessage: invalidEmail });
-      return true;
+      return false;
     }
-    return false;
+
+    return true;
   }
 
   updateFieldValue = (name, value) => {
-    this.setState({
-      [name]: value
-    }, () => {
-      if (name === 'registeredAsPlayer') {
-        this.updatePositionFieldBasedOnRegisterState();
-      }
-    });
+    this.setState({ [name]: value });
   }
 
   render() {
-    const { formInputs, errorMessage } = this.state;
+    const { errorMessage } = this.state;
     return (
       <Form
         updateFieldValue={this.updateFieldValue}

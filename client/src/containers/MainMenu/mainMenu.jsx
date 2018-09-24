@@ -9,7 +9,7 @@ import Drafts from '../Drafts/drafts.jsx';
 import Teams from '../Teams/teams.jsx';
 import { WelcomeMessage } from './styledComponents';
 
-const { properties: profileProperties, values: profileValues } = userProfileConstants;
+const { properties: profileProperties } = userProfileConstants;
 
 const mapStateToProps = (state) => {
   const { currentUser } = state.user;
@@ -18,12 +18,9 @@ const mapStateToProps = (state) => {
 
 const MainMenu = ({ currentUser }) => {
   const profileCardTitle = `${currentUser.firstName} ${currentUser.lastName}`;
-  const { email, registeredAsPlayer, position } = profileProperties;
-  const { registeredYes, registeredNo, positionNotApplicable } = profileValues;
+  const { email } = profileProperties;
   const profileCardData = {
     [email]: currentUser.email,
-    [registeredAsPlayer]: currentUser.registeredAsPlayer ? registeredYes : registeredNo,
-    [position]: currentUser.position || positionNotApplicable,
   };
   const profileCardLinkForUpdating = '/updateUser';
   return (
@@ -34,8 +31,8 @@ const MainMenu = ({ currentUser }) => {
         data={profileCardData}
         linkForUpdating={profileCardLinkForUpdating}
       />
-      <Drafts userId={currentUser.id} fetchBy='user' />
-      <Teams userId={currentUser.id} fetchBy='user' />
+      <Drafts userId={currentUser.id} fetchBy="user" />
+      <Teams userId={currentUser.id} fetchBy="user" />
     </div>
   );
 };

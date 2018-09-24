@@ -1,5 +1,5 @@
 const { User, Draft, UserDraft } = require('../models');
-const { getOrgsWithOwnerName } = require('./commonUtils');
+const { getOrgsWithOwnerName } = require('./helpers');
 
 module.exports = {
 
