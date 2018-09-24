@@ -2,6 +2,7 @@ const {
   users,
   teams,
   drafts,
+  players,
   userTeams,
   userDrafts,
   draftTeams,
@@ -30,6 +31,13 @@ module.exports = (app) => {
   app.post('/api/teams', teams.create);
   app.put('/api/teams/:id', teams.update);
   app.delete('/api/teams/:id', teams.destroy);
+
+  // players
+  app.get('/api/players/:id', players.fetchOne);
+  app.post('/api/players', players.create);
+  app.put('/api/players/:id', players.update);
+  app.delete('/api/players/:id', players.destroy);
+  app.delete('/api/players/destroyMany', players.destroyMany);
 
   // user's association with draft
   app.get('/api/drafts/:draftId/users', userDrafts.fetchUsersByDraft);

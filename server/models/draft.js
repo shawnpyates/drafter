@@ -14,6 +14,8 @@ module.exports = (sequelize, DataTypes) => {
       through: 'userDraft',
       foreignKey: 'draftId',
     });
+    Draft.hasMany(models.Team);
+    Draft.hasMany(models.Player);
   };
   return Draft;
 };

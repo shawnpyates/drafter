@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
   Player.associate = (models) => {
     Player.belongsTo(models.Draft, {
       foreignKey: 'draftId',
+      allowNull: false,
     });
     Player.belongsTo(models.Team, {
       foreignKey: 'teamId',

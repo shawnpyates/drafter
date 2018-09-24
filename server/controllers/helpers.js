@@ -5,13 +5,12 @@ const { in: opIn } = Sequelize.Op;
 
 module.exports = {
 
-  async getOrgsWithOwnerName(jointItems, orgType) {
-    const orgs = jointItems.map(item => item[orgType]);
-    const ownerIds = orgs.map(org => org.ownerUserId);
+  async getTeamsWithOwnerName(teams) {
+    const ownerIds = teams.map(team => team.ownerUserId);
     const owners = await User.findAll({ where: { id: { [opIn]: ownerIds } } });
-    return orgs.map((org) => {
-      const { dataValues } = org;
-      const orgOwner = owners.find(owner => owner.id === org.ownerUserId);
+    return teams.map((team) => {
+      const { dataValues } = team;
+      const orgOwner = owners.find(owner => owner.id === team.ownerUserId);
       const { firstName, lastName } = orgOwner;
       const ownerName = `${firstName} ${lastName}`;
       return { ...dataValues, ownerName };
