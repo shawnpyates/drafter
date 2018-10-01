@@ -52,7 +52,7 @@ export const fetchUsersByTeam = teamId => (dispatch) => {
 };
 
 export const fetchUsersByDraft = draftId => (dispatch) => {
-  dispatch({ type: 'FETCH_USERS_FROM_DRAFT_PENDING '});
+  dispatch({ type: 'FETCH_USERS_FROM_DRAFT_PENDING' });
   axios.get(`/api/drafts/${draftId}/users`)
     .then((response) => {
       const { users } = response.data;

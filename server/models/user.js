@@ -23,7 +23,16 @@ module.exports = (sequelize, DataTypes) => {
       through: 'userDraft',
       foreignKey: 'userId',
     });
-    User.hasMany(models.Team);
+    User.belongsToMany(models.Team, {
+      through: 'userTeam',
+      foreignKey: 'userId',
+    });
+    User.hasMany(models.Draft, {
+      foreignKey: 'ownerUserId',
+    });
+    User.hasMany(models.Team, {
+      foreignKey: 'ownerUserId',
+    });
   };
   return User;
 };
