@@ -51,8 +51,7 @@ module.exports = {
       if (!userDraft) return res.status(404).send({ e: 'Relationship not found.' });
       return res.status(204).send({});
     } catch (e) {
-      if (res) return res.status(400).send({ e });
+      return res.status(400).send({ e });
     }
-    return null;
   },
 };

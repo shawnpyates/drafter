@@ -5,10 +5,11 @@ import { header as headerTexts } from '../../../texts.json';
 
 import {
   Container,
-  Title,
   NavBar,
   NavBarItem,
   NavBarLogOut,
+  Title,
+  TitleBox,
 } from './styledComponents';
 
 const { title, logOut, notLoggedIn } = headerTexts;
@@ -22,9 +23,11 @@ const Header = ({ currentUser }) => {
 
   return (
     <Container>
-      <Link to="/">
-        <Title>{title}</Title>
-      </Link>
+      <TitleBox>
+        <Link to="/">
+          <Title>{title}</Title>
+        </Link>
+      </TitleBox>
       {currentUser &&
         <NavBar>
           <NavBarItem>{currentUser.email}</NavBarItem>

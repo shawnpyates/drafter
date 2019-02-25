@@ -2,29 +2,51 @@ import styled from 'styled-components';
 
 const Container = styled.header`
   background-color: #11133F;
-  height: 130px;
-  padding: 20px;
+  height: 14rem;
+  font-size: 1.6rem;
+  position: relative;
 
-  @media only screen and (min-width: 550px) {
-    height: 80px;
+  @media only screen and (min-width: 600px) {
+    height: 10rem;
+  }
+`;
+
+const TitleBox = styled.div`
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  transform: translate(-50%, -40%);
+  min-width: 80%;
+  text-align: center;
+
+  @media only screen and (min-width: 600px) {
+    top: 50%;
+    left: 2rem;
+    transform: translate(0, -40%);
+    text-align: left;
   }
 `;
 
 const Title = styled.h2`
   display: inline-block;
   font-family: 'La Belle Aurore', sans-serif;
-  font-size: 2.5em;
-  white-space: no-wrap;
+  font-size: 3.5rem;
   color: #FFF;
 `;
 
 const NavBar = styled.div`
-  z-index: 10;
-  margin-top: 8px;
+  position: absolute;
+  bottom: 20%;
+  right: 50%;
+  transform: translate(50%, 50%);
+  min-width: 80%;
   text-align: center;
 
-  @media only screen and (min-width: 550px) {
-    float: right;
+  @media only screen and (min-width: 600px) {
+    bottom: 50%;
+    right: 2rem;
+    transform: translate(0, 50%);
+    text-align: right;
   }
 `;
 
@@ -36,10 +58,6 @@ const NavBarItem = styled.p`
   text-align: center;
   margin: auto 15px;
   color: #7EC0EE;
-
-  @media only screen and (min-width: 550px) {
-    text-align: right;
-  }
 `;
 
 const NavBarLogOut = styled(NavBarItem)`
@@ -49,9 +67,10 @@ const NavBarLogOut = styled(NavBarItem)`
 
 module.exports = {
   Container,
-  Title,
   NavBar,
   NavBarItem,
   NavBarLogOut,
+  Title,
+  TitleBox,
 };
 
