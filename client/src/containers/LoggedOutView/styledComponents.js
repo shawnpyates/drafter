@@ -35,7 +35,7 @@ const TabListAnchor = styled.a`
   cursor: pointer;
   &:hover {
     background: #7EC0EE;
-    color: #FFF:
+    color: #FFF;
   }
 `;
 
