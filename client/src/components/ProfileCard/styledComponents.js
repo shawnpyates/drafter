@@ -1,7 +1,13 @@
 import styled from 'styled-components';
 
+import {
+  DARK_BLUE,
+  SKY_BLUE,
+  WHITE,
+} from '../../../globalStyles';
+
 const InfoWrapper = styled.div`
-  background: #fff;
+  background: ${WHITE};
   width: 45%;
   min-width: 475px;
   margin: 2em auto;
@@ -21,7 +27,7 @@ const InfoTitle = styled.h4`
 `;
 
 const EditButton = styled.a`
-  background: #11133F;
+  background: ${DARK_BLUE};
   float: right;
   padding: .5em;
   height: 25px;
@@ -29,12 +35,12 @@ const EditButton = styled.a`
   border-radius: 20px;
   text-align: center;
   font-weight: 500;
-  color: #FFF;
+  color: ${WHITE};
   margin-right: 40px;
   line-height: 10px;
 
   &:hover {
-    color: #7EC0EE;
+    color: ${SKY_BLUE};
     text-decoration: none;
   }
 `;

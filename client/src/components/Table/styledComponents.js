@@ -1,6 +1,12 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
+import {
+  DARK_BLUE,
+  SKY_BLUE,
+  WHITE,
+} from '../../../globalStyles';
+
 const Container = styled.div`
   display: flex;
   justify-content: center;
@@ -8,19 +14,19 @@ const Container = styled.div`
 `;
 
 const AddNewButton = styled.a`
-  background: #11133F;
+  background: ${DARK_BLUE};
   float: right;
   height: 25px;
   width: 130px;
   border-radius: 20px;
   text-align: center;
   font-weight: 500;
-  color: #FFF !important;
+  color: ${WHITE} !important;
   cursor: pointer;
   margin-right: 40px;
 
   &:hover {
-    color: #7EC0EE !important;
+    color: ${SKY_BLUE} !important;
     text-decoration: none;
   }
 `;
@@ -52,7 +58,7 @@ const DataRow = styled.tr`
   cursor: pointer;
 
   &:hover {
-    background: #7EC0EE !important;
+  background: ${SKY_BLUE} !important;
   }
 `;
 

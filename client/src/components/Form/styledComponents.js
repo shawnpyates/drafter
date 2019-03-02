@@ -3,6 +3,8 @@ import { SingleDatePicker } from 'react-dates';
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
 
+import { DARK_BLUE } from '../../../globalStyles';
+
 const FieldWrapper = styled.div`
   background: white;
   border: 0 none;
@@ -19,7 +21,7 @@ const FieldWrapper = styled.div`
 const Title = styled.h2`
   font-size: 1.5em;
   text-transform: uppercase;
-  color: #11133F;
+  color: ${DARK_BLUE};
   text-align: center;
   margin-bottom: 20px;
 `;

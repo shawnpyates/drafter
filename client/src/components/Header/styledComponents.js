@@ -1,9 +1,20 @@
 import styled from 'styled-components';
 
+import {
+  DARK_BLUE,
+  DEFAULT_FONT,
+  NORMAL_FONT_SIZE,
+  SKY_BLUE,
+  WHITE,
+} from '../../../globalStyles';
+
 const Container = styled.header`
-  background-color: #11133F;
-  height: 130px;
-  padding: 20px;
+  background-color: ${DARK_BLUE};
+  height: 14rem;
+  font-size: ${NORMAL_FONT_SIZE};
+  font-family: ${DEFAULT_FONT};
+  position: relative;
+  width: 100%;
 
   @media only screen and (min-width: 550px) {
     height: 80px;
@@ -13,9 +24,8 @@ const Container = styled.header`
 const Title = styled.h2`
   display: inline-block;
   font-family: 'La Belle Aurore', sans-serif;
-  font-size: 2.5em;
-  white-space: no-wrap;
-  color: #FFF;
+  font-size: 3.5rem;
+  color: ${WHITE};
 `;
 
 const NavBar = styled.div`
@@ -35,7 +45,7 @@ const NavBarItem = styled.p`
   text-decoration: none;
   text-align: center;
   margin: auto 15px;
-  color: #7EC0EE;
+  color: ${SKY_BLUE};
 
   @media only screen and (min-width: 550px) {
     text-align: right;
@@ -44,7 +54,7 @@ const NavBarItem = styled.p`
 
 const NavBarLogOut = styled(NavBarItem)`
   cursor: pointer;
-  color: #FFF;
+  color: ${WHITE};
 `;
 
 module.exports = {
