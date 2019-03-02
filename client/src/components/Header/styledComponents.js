@@ -16,8 +16,24 @@ const Container = styled.header`
   position: relative;
   width: 100%;
 
-  @media only screen and (min-width: 550px) {
-    height: 80px;
+  @media only screen and (min-width: 600px) {
+    height: 10rem;
+  }
+`;
+
+const TitleBox = styled.div`
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  transform: translate(-50%, -40%);
+  min-width: 80%;
+  text-align: center;
+
+  @media only screen and (min-width: 600px) {
+    top: 50%;
+    left: 2rem;
+    transform: translate(0, -40%);
+    text-align: left;
   }
 `;
 
@@ -25,16 +41,22 @@ const Title = styled.h2`
   display: inline-block;
   font-family: 'La Belle Aurore', sans-serif;
   font-size: 3.5rem;
-  color: ${WHITE};
+  color: #FFF;
 `;
 
 const NavBar = styled.div`
-  z-index: 10;
-  margin-top: 8px;
+  position: absolute;
+  bottom: 20%;
+  right: 50%;
+  transform: translate(50%, 50%);
+  min-width: 80%;
   text-align: center;
 
-  @media only screen and (min-width: 550px) {
-    float: right;
+  @media only screen and (min-width: 600px) {
+    bottom: 50%;
+    right: 2rem;
+    transform: translate(0, 50%);
+    text-align: right;
   }
 `;
 
@@ -59,9 +81,10 @@ const NavBarLogOut = styled(NavBarItem)`
 
 module.exports = {
   Container,
-  Title,
   NavBar,
   NavBarItem,
   NavBarLogOut,
+  Title,
+  TitleBox,
 };
 
