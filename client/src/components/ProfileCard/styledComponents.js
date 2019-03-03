@@ -1,10 +1,13 @@
 import styled from 'styled-components';
 
-import {
+import { styleVars } from '../../styles';
+
+const {
   DARK_BLUE,
   SKY_BLUE,
   WHITE,
-} from '../../../globalStyles';
+  LARGE_FONT_SIZE,
+} = styleVars;
 
 const InfoWrapper = styled.div`
   background: ${WHITE};
@@ -18,7 +21,7 @@ const InfoWrapper = styled.div`
 
 const InfoTitle = styled.h4`
   text-align: center;
-  font-size: 20px;
+  font-size: ${LARGE_FONT_SIZE};
   color: #555;
   font-weight: bolder;
   margin-bottom: 25px;

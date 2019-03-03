@@ -3,7 +3,10 @@ import { SingleDatePicker } from 'react-dates';
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
 
-import { DARK_BLUE } from '../../../globalStyles';
+import { mixins, styleVars } from '../../styles';
+
+const { DARK_BLUE } = styleVars;
+const { P_TEXT_MIXIN, HEADING_TEXT_MIXIN } = mixins;
 
 const FieldWrapper = styled.div`
   background: white;
@@ -19,11 +22,11 @@ const FieldWrapper = styled.div`
 `;
 
 const Title = styled.h2`
-  font-size: 1.5em;
   text-transform: uppercase;
-  color: ${DARK_BLUE};
   text-align: center;
   margin-bottom: 20px;
+
+  ${HEADING_TEXT_MIXIN({ color: DARK_BLUE })}
 `;
 
 const TextField = styled.input`
@@ -33,9 +36,8 @@ const TextField = styled.input`
   margin-bottom: 10px;
   width: 100%;
   box-sizing: border-box;
-  font-family: Arial;
-  color: #2C3E50;
-  font-size: 13px;
+
+  ${P_TEXT_MIXIN({ color: DARK_BLUE })}
 `;
 
 const Select = styled.select`
@@ -46,13 +48,14 @@ const Select = styled.select`
   height: 35px;
   width: 100%;
   box-sizing: border-box;
-  font-family: Arial;
-  color: #2C3E50;
-  font-size: 13px;
+
+  ${P_TEXT_MIXIN({ color: DARK_BLUE })}
 `;
 
 const SelectTitle = styled.p`
   margin-top: 15px;
+
+  ${P_TEXT_MIXIN({ color: DARK_BLUE })}
 `;
 
 const SubmitButton = styled.input`
@@ -63,11 +66,10 @@ const SubmitButton = styled.input`
   margin: 15px auto 10px;
   width: 30%;
   box-sizing: border-box;
-  font-family: Arial;
-  color: #2C3E50;
-  font-size: 13px;
   float: center;
   cursor: pointer;
+
+  ${P_TEXT_MIXIN({ color: DARK_BLUE })}
 `;
 
 const SchedulerContainer = styled.div`

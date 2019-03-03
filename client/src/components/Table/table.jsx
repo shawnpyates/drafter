@@ -16,9 +16,6 @@ import {
   DataLink,
 } from './styledComponents';
 
-const WHITE_ROW_BACKGROUND = '#FFF';
-const SHADED_ROW_BACKGROUND = '#F2F3F4';
-
 const Table = ({
   type,
   title,
@@ -59,9 +56,7 @@ const Table = ({
                 <DataLink to={`${type.toLowerCase()}/${entry.id}`}>
                   <DataRow
                     key={uuidv4()}
-                    style={{
-                      backgroundColor: i % 2 === 0 ? SHADED_ROW_BACKGROUND : WHITE_ROW_BACKGROUND,
-                    }}
+                    isEvenNumber={i % 2 === 0}
                   >
                     {getCellsForRow(entry)}
                   </DataRow>

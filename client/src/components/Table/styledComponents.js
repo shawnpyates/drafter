@@ -1,11 +1,14 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
-import {
+import { styleVars } from '../../styles';
+
+const {
   DARK_BLUE,
+  LIGHT_GRAY,
   SKY_BLUE,
   WHITE,
-} from '../../../globalStyles';
+} = styleVars;
 
 const Container = styled.div`
   display: flex;
@@ -55,6 +58,7 @@ const DataFrame = styled.table`
 
 const DataRow = styled.tr`
   display: table-row;
+  background-color: ${props => (props.isEvenNumber ? LIGHT_GRAY : WHITE)};
   cursor: pointer;
 
   &:hover {

@@ -1,20 +1,17 @@
 import styled from 'styled-components';
 
-import {
-  DARK_BLUE,
-  DEFAULT_FONT,
-  NORMAL_FONT_SIZE,
-  SKY_BLUE,
-  WHITE,
-} from '../../../globalStyles';
+import { mixins, styleVars } from '../../styles';
+
+const { HEADING_TEXT_MIXIN } = mixins;
+const { DARK_BLUE, SKY_BLUE, WHITE } = styleVars;
 
 const Container = styled.header`
   background-color: ${DARK_BLUE};
   height: 14rem;
-  font-size: ${NORMAL_FONT_SIZE};
-  font-family: ${DEFAULT_FONT};
   position: relative;
   width: 100%;
+
+  ${HEADING_TEXT_MIXIN({ color: WHITE })}
 
   @media only screen and (min-width: 600px) {
     height: 10rem;

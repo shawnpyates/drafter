@@ -1,10 +1,13 @@
 import styled from 'styled-components';
 
-import {
+import { styleVars } from '../../styles';
+
+const {
   DARK_BLUE,
   SKY_BLUE,
   WHITE,
-} from '../../../globalStyles';
+  LARGE_FONT_SIZE,
+} = styleVars;
 
 const FormContainer = styled.div`
   background: ${DARK_BLUE};
@@ -32,7 +35,7 @@ const TabListAnchor = styled.a`
   transition: 0.5s ease;
   background: ${WHITE};
   color: #CCC;
-  font-size: 20px;
+  font-size: ${LARGE_FONT_SIZE};
   float: left;
   width: 50%;
   text-align: center;

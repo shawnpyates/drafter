@@ -1,9 +1,12 @@
 import styled from 'styled-components';
-import { DEFAULT_FONT, NORMAL_FONT_SIZE } from '../../../globalStyles';
+
+import { mixins, styleVars } from '../../styles';
+
+const { HEADING_TEXT_MIXIN } = mixins;
+const { DARK_BLUE } = styleVars;
 
 const MainMenuContainer = styled.div`
-  font-size: ${NORMAL_FONT_SIZE};
-  font-family: ${DEFAULT_FONT};
+  ${HEADING_TEXT_MIXIN(DARK_BLUE)}
 `;
 
 const WelcomeMessage = styled.h2`
