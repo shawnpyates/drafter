@@ -5,8 +5,18 @@ import 'react-dates/lib/css/_datepicker.css';
 
 import { mixins, styleVars } from '../../styles';
 
-const { DARK_BLUE, LIGHT_GRAY, WHITE } = styleVars;
-const { P_TEXT_MIXIN, HEADING_TEXT_MIXIN } = mixins;
+const {
+  DARK_BLUE,
+  LIGHT_GRAY,
+  WHITE,
+} = styleVars;
+
+const {
+  P_TEXT_MIXIN,
+  HEADING_TEXT_MIXIN,
+  PICKER_WRAPPER_MIXIN,
+  PICKER_INPUT_MIXIN,
+} = mixins;
 
 const FieldWrapper = styled.div`
   position: absolute;
@@ -59,7 +69,7 @@ const SubmitButton = styled.input`
   padding: 1.6rem;
   background-color: ${DARK_BLUE};
   border-radius: 3px;
-  margin: 1.6rem auto 1rem;
+  margin: 4rem auto 1rem;
   width: 30%;
   cursor: pointer;
 
@@ -71,15 +81,39 @@ const SchedulerContainer = styled.div`
 `;
 
 const CalendarWrapper = styled.div`
-  position: absolute;
-  left: 2rem;
+  ${PICKER_WRAPPER_MIXIN({ side: 'left' })}
+
+  height: 2.6rem;
+
+  .SingleDatePicker {
+    height: 2.6rem;
+  }
 
   .SingleDatePickerInput__withBorder {
+    border: 1px solid ${LIGHT_GRAY};
     border-radius: 3px;
   }
 
+  .DateInput {
+    width: inherit;
+  }
+
   .DateInput_input {
+    border-bottom: 0;
+
+    ${PICKER_INPUT_MIXIN}
+  }
+`;
+
+const TimePickerWrapper = styled.div`
+  ${PICKER_WRAPPER_MIXIN({ side: 'right' })}
+
+  .rc-time-picker-input {
     height: 2.6rem;
+    border-radius: 3px;
+    border: 1px solid ${LIGHT_GRAY};
+
+    ${PICKER_INPUT_MIXIN}
   }
 `;
 
@@ -105,6 +139,7 @@ module.exports = {
   SchedulerContainer,
   CalendarWrapper,
   Calendar,
+  TimePickerWrapper,
   ErrorMessageContainer,
   ErrorMessage,
 };

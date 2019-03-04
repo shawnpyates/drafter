@@ -14,6 +14,7 @@ import {
   SchedulerContainer,
   CalendarWrapper,
   Calendar,
+  TimePickerWrapper,
   ErrorMessageContainer,
   ErrorMessage,
 } from './styledComponents';
@@ -110,14 +111,16 @@ const Form = ({
                   openDirection="up"
                 />
               </CalendarWrapper>
-              <TimePicker
-                showSecond={false}
-                defaultValue={now}
-                className="xxx"
-                onChange={changeTime}
-                format={timeFormat}
-                use12Hours
-              />
+              <TimePickerWrapper>
+                <TimePicker
+                  showSecond={false}
+                  defaultValue={now}
+                  className="xxx"
+                  onChange={changeTime}
+                  format={timeFormat}
+                  use12Hours
+                />
+              </TimePickerWrapper>
             </SchedulerContainer>
           );
         default:
