@@ -7,7 +7,7 @@ import {
 } from '../../components/ProfileCard/profileCardConstants.json';
 import Drafts from '../Drafts/drafts.jsx';
 import Teams from '../Teams/teams.jsx';
-import { WelcomeMessage } from './styledComponents';
+import { MainMenuContainer, WelcomeMessage } from './styledComponents';
 
 const { properties: profileProperties } = userProfileConstants;
 
@@ -24,7 +24,7 @@ const MainMenu = ({ currentUser }) => {
   };
   const profileCardLinkForUpdating = '/updateUser';
   return (
-    <div>
+    <MainMenuContainer>
       <WelcomeMessage>Welcome, {currentUser.firstName}!</WelcomeMessage>
       <ProfileCard
         title={profileCardTitle}
@@ -33,7 +33,7 @@ const MainMenu = ({ currentUser }) => {
       />
       <Drafts userId={currentUser.id} fetchBy="user" />
       <Teams userId={currentUser.id} fetchBy="user" />
-    </div>
+    </MainMenuContainer>
   );
 };
 

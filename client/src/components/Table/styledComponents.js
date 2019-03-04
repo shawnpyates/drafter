@@ -1,6 +1,15 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
+import { styleVars } from '../../styles';
+
+const {
+  DARK_BLUE,
+  LIGHT_GRAY,
+  SKY_BLUE,
+  WHITE,
+} = styleVars;
+
 const Container = styled.div`
   display: flex;
   justify-content: center;
@@ -8,19 +17,19 @@ const Container = styled.div`
 `;
 
 const AddNewButton = styled.a`
-  background: #11133F;
+  background: ${DARK_BLUE};
   float: right;
   height: 25px;
   width: 130px;
   border-radius: 20px;
   text-align: center;
   font-weight: 500;
-  color: #FFF !important;
+  color: ${WHITE} !important;
   cursor: pointer;
   margin-right: 40px;
 
   &:hover {
-    color: #7EC0EE !important;
+    color: ${SKY_BLUE} !important;
     text-decoration: none;
   }
 `;
@@ -49,10 +58,11 @@ const DataFrame = styled.table`
 
 const DataRow = styled.tr`
   display: table-row;
+  background-color: ${props => (props.isEvenNumber ? LIGHT_GRAY : WHITE)};
   cursor: pointer;
 
   &:hover {
-    background: #7EC0EE !important;
+  background: ${SKY_BLUE} !important;
   }
 `;
 

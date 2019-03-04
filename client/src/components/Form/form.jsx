@@ -12,6 +12,7 @@ import {
   SelectTitle,
   SubmitButton,
   SchedulerContainer,
+  CalendarWrapper,
   Calendar,
   ErrorMessageContainer,
   ErrorMessage,
@@ -45,7 +46,7 @@ const Form = ({
         options,
         type,
         enabled,
-        defaultValue
+        defaultValue,
       } = input;
       if (!enabled) return null;
       switch (type) {
@@ -98,12 +99,17 @@ const Form = ({
           return (
             <SchedulerContainer key={name}>
               <SelectTitle>{text}</SelectTitle>
-              <Calendar
-                date={calendarDate}
-                onDateChange={date => changeDate(date)}
-                focused={isCalendarFocused}
-                onFocusChange={({ focused }) => toggleCalendarFocus(focused)}
-              />
+              <CalendarWrapper>
+                <Calendar
+                  date={calendarDate}
+                  onDateChange={date => changeDate(date)}
+                  focused={isCalendarFocused}
+                  onFocusChange={({ focused }) => toggleCalendarFocus(focused)}
+                  id={name}
+                  showCaret={false}
+                  openDirection="up"
+                />
+              </CalendarWrapper>
               <TimePicker
                 showSecond={false}
                 defaultValue={now}

@@ -1,10 +1,17 @@
 import styled from 'styled-components';
 
+import { mixins, styleVars } from '../../styles';
+
+const { HEADING_TEXT_MIXIN } = mixins;
+const { DARK_BLUE, SKY_BLUE, WHITE } = styleVars;
+
 const Container = styled.header`
-  background-color: #11133F;
+  background-color: ${DARK_BLUE};
   height: 14rem;
-  font-size: 1.6rem;
   position: relative;
+  width: 100%;
+
+  ${HEADING_TEXT_MIXIN({ color: WHITE })}
 
   @media only screen and (min-width: 600px) {
     height: 10rem;
@@ -57,12 +64,16 @@ const NavBarItem = styled.p`
   text-decoration: none;
   text-align: center;
   margin: auto 15px;
-  color: #7EC0EE;
+  color: ${SKY_BLUE};
+
+  @media only screen and (min-width: 550px) {
+    text-align: right;
+  }
 `;
 
 const NavBarLogOut = styled(NavBarItem)`
   cursor: pointer;
-  color: #FFF;
+  color: ${WHITE};
 `;
 
 module.exports = {

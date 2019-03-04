@@ -1,7 +1,16 @@
 import styled from 'styled-components';
 
+import { styleVars } from '../../styles';
+
+const {
+  DARK_BLUE,
+  SKY_BLUE,
+  WHITE,
+  LARGE_FONT_SIZE,
+} = styleVars;
+
 const FormContainer = styled.div`
-  background: #11133F;
+  background: ${DARK_BLUE};
   padding: 40px;
   max-width: 600px;
   margin: 40px auto;
@@ -24,18 +33,18 @@ const TabListAnchor = styled.a`
   text-decoration: none;
   color: #1AB188;
   transition: 0.5s ease;
-  background: #FFF;
+  background: ${WHITE};
   color: #CCC;
-  font-size: 20px;
+  font-size: ${LARGE_FONT_SIZE};
   float: left;
   width: 50%;
   text-align: center;
-  border: 1px solid #11133F;
+  border: 1px solid ${DARK_BLUE};
   text-transform: uppercase;
   cursor: pointer;
   &:hover {
-    background: #7EC0EE;
-    color: #FFF;
+    background: ${SKY_BLUE};
+    color: ${WHITE};
   }
 `;
 
