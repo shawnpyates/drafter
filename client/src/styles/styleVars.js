@@ -2,6 +2,7 @@ module.exports = {
 
   // colors
   DARK_BLUE: '#11133F',
+  DARK_GRAY: '#555',
   LIGHT_GRAY: '#F2F3F4',
   SKY_BLUE: '#7EC0EE',
   WHITE: '#FFF',

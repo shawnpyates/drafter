@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import uuidv4 from 'uuid';
-import { profileProperties, profileValues } from './profileCardConstants.json';
 
 import {
   InfoWrapper,

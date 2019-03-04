@@ -4,43 +4,41 @@ import { styleVars } from '../../styles';
 
 const {
   DARK_BLUE,
+  DARK_GRAY,
+  LIGHT_GRAY,
   SKY_BLUE,
   WHITE,
   LARGE_FONT_SIZE,
+  SMALL_FONT_SIZE,
 } = styleVars;
 
 const InfoWrapper = styled.div`
+  position: relative;
   background: ${WHITE};
-  width: 45%;
-  min-width: 475px;
-  margin: 2em auto;
-  padding-top: 1em;
+  margin: 2rem auto;
+  padding: 3.5rem;
   border-radius: 2px;
-  box-shadow: 0px 3px 13px 0px rgba(0, 0, 0, 0.24);
+  box-shadow: 0px 3px 13px 0px rgba(0, 0, 0, 0.25);
 `;
 
 const InfoTitle = styled.h4`
-  text-align: center;
   font-size: ${LARGE_FONT_SIZE};
-  color: #555;
-  font-weight: bolder;
-  margin-bottom: 25px;
-  margin-left: 35px;
+  color: ${DARK_GRAY};
+  margin-bottom: 2.5rem;
   display: inline-block;
 `;
 
-const EditButton = styled.a`
-  background: ${DARK_BLUE};
+const EditButton = styled.button`
   float: right;
-  padding: .5em;
-  height: 25px;
-  width: 80px;
-  border-radius: 20px;
+  background: ${DARK_BLUE};
+  height: 2.5rem;
+  width: 8rem;
+  border-radius: 2rem;
   text-align: center;
+  font-size: ${SMALL_FONT_SIZE};
   font-weight: 500;
   color: ${WHITE};
-  margin-right: 40px;
-  line-height: 10px;
+  cursor: pointer;
 
   &:hover {
     color: ${SKY_BLUE};
@@ -49,31 +47,29 @@ const EditButton = styled.a`
 `;
 
 const InfoDetails = styled.div`
-  width: 92%;
   font-weight: 300;
+  padding-bottom: 1rem;
 `;
 
 const InfoProperties = styled.ul`
   position: relative;
   float: left;
-  margin-left: 0;
-  text-align: left;
-  padding-bottom: 1em;
   list-style: none;
 `;
 
 const InfoValues = styled.ul`
   position: relative;
   text-align: right;
-  padding-bottom: 1em;
   list-style: none;
 `;
 
 const ListItem = styled.li`
-  color: #999;
-  margin-bottom: 8px;
-  padding: 1px 0px 8px 0px;
-  border-bottom: 1px solid #f1f1f1;
+  color: ${DARK_GRAY};
+
+  &:not(:last-child) {
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid ${LIGHT_GRAY};
+  }
 `;
 
 module.exports = {
