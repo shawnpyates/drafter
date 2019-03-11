@@ -42,7 +42,6 @@ const areFirstTwoCharsInvalid = (timeChars, inputChar) => (
   Number(`${timeChars[4]}${inputChar}`) > MAX_HOURS_COLUMN_VALUE && inputChar > 5
 );
 
-// TODO: validate that timeChars[0] === '_'
 const isFourthCharNotPermitted = timeChars => (
   Number(`${timeChars[1]}${timeChars[3]}`) > MAX_HOURS_COLUMN_VALUE
   || (timeChars[1] !== '-' && timeChars[4] !== '-' && timeChars[4] > 5)
