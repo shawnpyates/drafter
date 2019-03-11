@@ -6,8 +6,10 @@ import 'react-dates/lib/css/_datepicker.css';
 import { mixins, styleVars } from '../../styles';
 
 const {
+  DEFAULT_FONT,
   DARK_BLUE,
   LIGHT_GRAY,
+  SKY_BLUE,
   WHITE,
 } = styleVars;
 
@@ -103,18 +105,42 @@ const CalendarWrapper = styled.div`
 
     ${PICKER_INPUT_MIXIN}
   }
+
+  .CalendarDay__selected {
+    background-color: ${SKY_BLUE};
+  }
+
+  .CalendarMonth {
+    font-family: ${DEFAULT_FONT};
+
+    &_table {
+      margin-top: 1rem;
+    }
+  }
+
+  .DayPicker {
+
+    &_transitionContainer {
+      min-height: 310px;
+    }
+
+    &_weekHeader {
+      font-family: ${DEFAULT_FONT};
+    }
+
+  }
 `;
 
 const TimePickerWrapper = styled.div`
   ${PICKER_WRAPPER_MIXIN({ side: 'right' })}
+`;
 
-  .rc-time-picker-input {
-    height: 2.6rem;
-    border-radius: 3px;
-    border: 1px solid ${LIGHT_GRAY};
+const TimePicker = styled.input`
+  height: 2.6rem;
+  border-radius: 3px;
+  border: 1px solid ${LIGHT_GRAY};
 
-    ${PICKER_INPUT_MIXIN}
-  }
+  ${PICKER_INPUT_MIXIN}
 `;
 
 const Calendar = styled(SingleDatePicker)`
@@ -140,6 +166,7 @@ module.exports = {
   CalendarWrapper,
   Calendar,
   TimePickerWrapper,
+  TimePicker,
   ErrorMessageContainer,
   ErrorMessage,
 };

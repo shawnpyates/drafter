@@ -11,6 +11,12 @@ const scheduledTime = draftForm.inputs.find(input => input.name === 'scheduledTi
 
 const timeFormat = 'hh:mm a';
 
+const INITIAL_TIME_CHARS = ['-', '-', ':', '-', '-'];
+const MAX_HOURS_COLUMN_VALUE = 23;
+const DELETE_KEY_CODE = 8;
+
+const VALID_TIME_INPUT = /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
+
 const mapStateToProps = (state) => {
   const { currentUser } = state.user;
   return { currentUser };
@@ -31,6 +37,58 @@ const get24HourTime = (timeString) => {
 
 const createFinalTimestamp = (date, time) => date.replace('12:00:00', `${time}:00`);
 
+
+const areFirstTwoCharsInvalid = (timeChars, inputChar) => (
+  Number(`${timeChars[4]}${inputChar}`) > MAX_HOURS_COLUMN_VALUE && inputChar > 5
+);
+
+// TODO: validate that timeChars[0] === '_'
+const isFourthCharNotPermitted = timeChars => (
+  Number(`${timeChars[1]}${timeChars[3]}`) > MAX_HOURS_COLUMN_VALUE
+  || (timeChars[1] !== '-' && timeChars[4] !== '-' && timeChars[4] > 5)
+);
+
+const addTimeChar = (timeChars, inputChar) => {
+  timeChars.push(inputChar);
+  if (timeChars[3] !== '-') {
+    if (timeChars[1] !== '-') {
+      const tensDigit = timeChars[1];
+      timeChars[0] = tensDigit;
+    }
+    const onesDigit = timeChars[3];
+    timeChars[1] = onesDigit;
+  }
+  timeChars.splice(timeChars.indexOf(':'), 1);
+  timeChars[2] = ':';
+  return timeChars;
+};
+
+const deleteTimeChar = (timeChars) => {
+  timeChars.pop();
+  timeChars.unshift('-');
+  timeChars.splice(timeChars.indexOf(':'), 1);
+  timeChars.splice(2, 0, ':');
+  return timeChars;
+}
+
+const formatTimeChars = (timeChars) => (
+  timeChars[0] === '-' || timeChars[0] === '0'
+  ? timeChars.slice(1).join('')
+  : timeChars.join('')
+);
+
+const convertTo12HourFormat = timeString => {
+  const hourColumn = Number(timeString.split(':')[0]);
+  if (hourColumn === 0) {
+    return timeString.replace(hourColumn, 12);
+  }
+  if (hourColumn > 12) {
+    return timeString.replace(hourColumn, hourColumn - 12);
+  }
+  return timeString;
+}
+
+
 class CreateDraft extends Component {
   constructor() {
     super();
@@ -39,16 +97,72 @@ class CreateDraft extends Component {
       name: null,
       shouldScheduleTime: null,
       calendarDate: null,
-      time: null,
+      timeChars: null,
+      timeCharsAsString: null,
       isCalendarFocused: false,
       isSubmitComplete: false,
       errorMessage: null,
+      hasTimeInputError: false,
+      isTimePickerEnabled: false,
     };
   }
 
   componentDidMount() {
-    this.setState({ calendarDate: moment() });
+    this.setState({
+      calendarDate: moment(),
+      timeChars: INITIAL_TIME_CHARS,
+    });
   }
+
+  handleTimePickerKeyPress = (ev) => {
+    const { timeChars } = this.state;
+    if (ev.keyCode === DELETE_KEY_CODE && this.state.timeChars[4] !== '-') {
+      this.setState({ timeChars: deleteTimeChar([...this.state.timeChars]) });
+      return;
+    }
+    if (
+      isNaN(Number(ev.key))
+      || timeChars[0] !== '-'
+      || (timeChars[3] === '-' && areFirstTwoCharsInvalid(timeChars, ev.key))
+      || isFourthCharNotPermitted(timeChars)
+    ) {
+      return;
+    }
+    this.setState({ timeChars: addTimeChar([...this.state.timeChars], ev.key) });
+  }
+
+  enableTimePicker = () => {
+    const { timeChars, timeCharsAsString } = this.state;
+    let updatedTimeChars;
+    if (timeCharsAsString) {
+      const hourColumn = timeCharsAsString.split(':')[0];
+      const hourArray = hourColumn.length > 1 ? hourColumn.split('') : ['-', hourColumn];
+      updatedTimeChars = hourArray.concat(timeChars.slice(2))
+    }
+    this.setState({
+      isTimePickerEnabled: true,
+      timeChars: updatedTimeChars || timeChars,
+    });
+  }
+
+  handleBlur = () => {
+    const timeCharsAsString = formatTimeChars(this.state.timeChars);
+    if (!VALID_TIME_INPUT.test(timeCharsAsString)) {
+      this.setState({
+        hasTimeInputError: true,
+        isTimePickerEnabled: false,
+        timeChars: INITIAL_TIME_CHARS,
+        timeCharsAsString: null,
+      });
+      return;
+    }
+    this.setState({
+      hasTimeInputError: false,
+      isTimePickerEnabled: false,
+      timeCharsAsString: convertTo12HourFormat(timeCharsAsString),
+    });
+  }
+
 
   updateFieldValue = (name, value) => {
     this.setState({ [name]: value });
@@ -113,6 +227,9 @@ class CreateDraft extends Component {
       calendarDate,
       isCalendarFocused,
       isSubmitComplete,
+      timeChars,
+      timeCharsAsString,
+      isTimePickerEnabled,
     } = this.state;
     return (
       <div>
@@ -129,6 +246,12 @@ class CreateDraft extends Component {
             timeFormat={timeFormat}
             isCalendarFocused={isCalendarFocused}
             toggleCalendarFocus={this.toggleCalendarFocus}
+            timeChars={timeChars}
+            timeCharsAsString={timeCharsAsString}
+            handleTimePickerKeyPress={this.handleTimePickerKeyPress}
+            isTimePickerEnabled={isTimePickerEnabled}
+            enableTimePicker={this.enableTimePicker}
+            handleBlur={this.handleBlur}
           />
         }
         {isSubmitComplete &&
