@@ -1,5 +1,6 @@
 import {
   DARK_BLUE,
+  WHITE,
   SMALL_FONT_SIZE,
   NORMAL_FONT_SIZE,
   DEFAULT_FONT,
@@ -22,10 +23,18 @@ module.exports = {
     ${props.side}: 15%;
   `,
   PICKER_INPUT_MIXIN: `
-    color: ${DARK_BLUE};
+    color: ${WHITE};
+    background-color: ${DARK_BLUE};
     font-size: ${NORMAL_FONT_SIZE};
     text-align: center;
     font-weight: 400;
     padding: 0;
+    cursor: pointer;
+
+    &:focus {
+      color: transparent;
+      background-color: ${WHITE};
+      text-shadow: 0 0 0 ${DARK_BLUE};
+    }
   `,
 };

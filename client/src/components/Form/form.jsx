@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import TimePicker from 'rc-time-picker';
-import 'rc-time-picker/assets/index.css';
 
 import {
   FieldWrapper,
@@ -15,11 +13,10 @@ import {
   CalendarWrapper,
   Calendar,
   TimePickerWrapper,
+  TimePicker,
   ErrorMessageContainer,
   ErrorMessage,
 } from './styledComponents';
-
-const now = moment();
 
 const Form = ({
   updateFieldValue,
@@ -29,10 +26,14 @@ const Form = ({
   errorMessage,
   calendarDate,
   changeDate,
-  changeTime,
-  timeFormat,
   isCalendarFocused,
   toggleCalendarFocus,
+  timeChars,
+  timeCharsAsString,
+  handleTimePickerKeyPress,
+  isTimePickerEnabled,
+  enableTimePicker,
+  handleBlur,
 }) => {
   const handleChange = (ev) => {
     const { name, value } = ev.target;
@@ -109,16 +110,26 @@ const Form = ({
                   id={name}
                   showCaret={false}
                   openDirection="up"
+                  numberOfMonths={1}
+                  hideKeyboardShortcutsPanel
+                  daySize={35}
                 />
               </CalendarWrapper>
               <TimePickerWrapper>
                 <TimePicker
-                  showSecond={false}
-                  defaultValue={now}
-                  className="xxx"
-                  onChange={changeTime}
-                  format={timeFormat}
-                  use12Hours
+                  value={
+                    isTimePickerEnabled
+                    ? timeChars.join('')
+                    : (timeCharsAsString || 'Set Time')
+                  }
+                  name="timePicker"
+                  key={name}
+                  type="text"
+                  placeholder="Set time"
+                  onChange={handleChange}
+                  onKeyUp={handleTimePickerKeyPress}
+                  onFocus={enableTimePicker}
+                  onBlur={handleBlur}
                 />
               </TimePickerWrapper>
             </SchedulerContainer>
