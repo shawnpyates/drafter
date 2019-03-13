@@ -50,7 +50,7 @@ const TextField = styled.input`
 `;
 
 const SelectTitle = styled.p`
-  margin: 1.6rem auto;
+  margin: 3rem auto;
 
   ${P_TEXT_MIXIN({ color: DARK_BLUE })}
 `;
@@ -66,12 +66,24 @@ const Select = styled.select`
   ${P_TEXT_MIXIN({ color: DARK_BLUE })}
 `;
 
+const AmPmButton = styled.button`
+  margin: 1rem 3px;
+  background-color: ${props => (props.shouldBeHighlighted ? DARK_BLUE : LIGHT_GRAY)};
+  color: ${props => (props.shouldBeHighlighted ? WHITE : DARK_BLUE)};
+  border-radius: 3px;
+  height: 3rem;
+  width: 25%;
+  cursor: pointer;
+
+  ${P_TEXT_MIXIN({})}
+`;
+
 
 const SubmitButton = styled.input`
   padding: 1.6rem;
   background-color: ${DARK_BLUE};
   border-radius: 3px;
-  margin: 4rem auto 1rem;
+  margin: 10rem auto 1rem;
   width: 30%;
   cursor: pointer;
 
@@ -136,6 +148,7 @@ const TimePickerWrapper = styled.div`
 `;
 
 const TimePicker = styled.input`
+  width: 100%;
   height: 2.6rem;
   border-radius: 3px;
   border: 1px solid ${LIGHT_GRAY};
@@ -161,6 +174,7 @@ module.exports = {
   TextField,
   Select,
   SelectTitle,
+  AmPmButton,
   SubmitButton,
   SchedulerContainer,
   CalendarWrapper,
