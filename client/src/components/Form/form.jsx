@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 
 import {
   FieldWrapper,
@@ -8,6 +7,7 @@ import {
   TextField,
   Select,
   SelectTitle,
+  AmPmButton,
   SubmitButton,
   SchedulerContainer,
   CalendarWrapper,
@@ -30,9 +30,11 @@ const Form = ({
   toggleCalendarFocus,
   timeChars,
   timeCharsAsString,
-  handleTimePickerKeyPress,
+  handleTimePickerKeyUp,
   isTimePickerEnabled,
   enableTimePicker,
+  isPmSelected,
+  toggleAmPm,
   handleBlur,
 }) => {
   const handleChange = (ev) => {
@@ -127,10 +129,22 @@ const Form = ({
                   type="text"
                   placeholder="Set time"
                   onChange={handleChange}
-                  onKeyUp={handleTimePickerKeyPress}
+                  onKeyUp={handleTimePickerKeyUp}
                   onFocus={enableTimePicker}
                   onBlur={handleBlur}
                 />
+                <AmPmButton
+                  shouldBeHighlighted={!isPmSelected}
+                  onClick={() => toggleAmPm(false)}
+                >
+                  AM
+                </AmPmButton>
+                <AmPmButton
+                  shouldBeHighlighted={isPmSelected}
+                  onClick={() => toggleAmPm(true)}
+                >
+                  PM
+                </AmPmButton>
               </TimePickerWrapper>
             </SchedulerContainer>
           );

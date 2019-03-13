@@ -103,6 +103,7 @@ class CreateDraft extends Component {
       errorMessage: null,
       hasTimeInputError: false,
       isTimePickerEnabled: false,
+      isPmSelected: false,
     };
   }
 
@@ -113,7 +114,7 @@ class CreateDraft extends Component {
     });
   }
 
-  handleTimePickerKeyPress = (ev) => {
+  handleTimePickerKeyUp = (ev) => {
     const { timeChars } = this.state;
     if (ev.keyCode === DELETE_KEY_CODE && this.state.timeChars[4] !== '-') {
       this.setState({ timeChars: deleteTimeChar([...this.state.timeChars]) });
@@ -171,8 +172,8 @@ class CreateDraft extends Component {
     this.setState({ calendarDate })
   }
 
-  changeTime = (time) => {
-    this.setState({ time });
+  toggleAmPm = (isPmSelected) => {
+    this.setState({ isPmSelected })
   }
 
   toggleCalendarFocus = (isCalendarFocused) => {
@@ -220,7 +221,6 @@ class CreateDraft extends Component {
 
 
   render() {
-    const { ownDrafts } = this.props;
     const {
       errorMessage,
       calendarDate,
@@ -229,6 +229,7 @@ class CreateDraft extends Component {
       timeChars,
       timeCharsAsString,
       isTimePickerEnabled,
+      isPmSelected,
     } = this.state;
     return (
       <div>
@@ -241,15 +242,16 @@ class CreateDraft extends Component {
             errorMessage={errorMessage}
             calendarDate={calendarDate}
             changeDate={this.changeDate}
-            changeTime={this.changeTime}
             timeFormat={timeFormat}
             isCalendarFocused={isCalendarFocused}
             toggleCalendarFocus={this.toggleCalendarFocus}
             timeChars={timeChars}
             timeCharsAsString={timeCharsAsString}
-            handleTimePickerKeyPress={this.handleTimePickerKeyPress}
+            handleTimePickerKeyUp={this.handleTimePickerKeyUp}
             isTimePickerEnabled={isTimePickerEnabled}
             enableTimePicker={this.enableTimePicker}
+            isPmSelected={isPmSelected}
+            toggleAmPm={this.toggleAmPm}
             handleBlur={this.handleBlur}
           />
         }
