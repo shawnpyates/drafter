@@ -7,7 +7,7 @@ import {
   TextField,
   Select,
   SelectTitle,
-  AmPmButton,
+  FormButton,
   SubmitButton,
   SchedulerContainer,
   CalendarWrapper,
@@ -36,10 +36,14 @@ const Form = ({
   isPmSelected,
   toggleAmPm,
   handleBlur,
+  shouldScheduleTime,
+  buttonToHighlight,
 }) => {
-  const handleChange = (ev) => {
+  const handleChange = (ev, dataType) => {
+    ev.preventDefault();
     const { name, value } = ev.target;
-    updateFieldValue(name, value);
+    const valueToUpdate = dataType === 'boolean' ? (value === 'true') : value;
+    updateFieldValue(name, valueToUpdate);
   };
   const getInputs = inputs => (
     inputs.map((input) => {
@@ -48,9 +52,11 @@ const Form = ({
         text,
         placeholder,
         options,
+        buttons,
         type,
         enabled,
         defaultValue,
+        dataType,
       } = input;
       if (!enabled) return null;
       switch (type) {
@@ -99,8 +105,27 @@ const Form = ({
               </Select>
             </div>
           );
-        case 'scheduler':
+        case 'buttonGroup':
           return (
+            <div key={name}>
+              <SelectTitle>{text}</SelectTitle>
+              {buttons.map(btn => (
+                <FormButton
+                  name={name}
+                  key={btn.label}
+                  value={btn.value}
+                  dataType={btn.dataType}
+                  onClick={ev => handleChange(ev, dataType)}
+                  shouldBeHighlighted={buttonToHighlight === btn.value}
+                >
+                  {btn.label}
+                </FormButton>
+              ))}
+            </div>
+
+          );
+        case 'scheduler':
+          return shouldScheduleTime && (
             <SchedulerContainer key={name}>
               <SelectTitle>{text}</SelectTitle>
               <CalendarWrapper>
@@ -133,18 +158,18 @@ const Form = ({
                   onFocus={enableTimePicker}
                   onBlur={handleBlur}
                 />
-                <AmPmButton
+                <FormButton
                   shouldBeHighlighted={!isPmSelected}
-                  onClick={() => toggleAmPm(false)}
+                  onClick={ev => toggleAmPm(ev, false)}
                 >
                   AM
-                </AmPmButton>
-                <AmPmButton
+                </FormButton>
+                <FormButton
                   shouldBeHighlighted={isPmSelected}
-                  onClick={() => toggleAmPm(true)}
+                  onClick={ev => toggleAmPm(ev, true)}
                 >
                   PM
-                </AmPmButton>
+                </FormButton>
               </TimePickerWrapper>
             </SchedulerContainer>
           );

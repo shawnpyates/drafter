@@ -89,16 +89,25 @@
       {
         "name": "shouldScheduleTime",
         "text": "Would you like to schedule a time for your draft?",
-        "type": "select",
+        "type": "buttonGroup",
+        "dataType": "boolean",
         "enabled": true,
-        "placeholder": "Please Select",
-        "options": ["Yes", "No"]
+        "buttons": [
+          {
+            "label": "Yes",
+            "value": true
+          },
+          {
+            "label": "No",
+            "value": false
+          }
+        ]
       },
       {
         "name": "scheduledTime",
         "text": "Please select a date and time.",
         "type": "scheduler",
-        "enabled": false
+        "enabled": true
       },
       {
         "name": "submitButton",

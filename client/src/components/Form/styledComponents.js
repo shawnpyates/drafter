@@ -66,7 +66,7 @@ const Select = styled.select`
   ${P_TEXT_MIXIN({ color: DARK_BLUE })}
 `;
 
-const AmPmButton = styled.button`
+const FormButton = styled.button`
   margin: 1rem 3px;
   background-color: ${props => (props.shouldBeHighlighted ? DARK_BLUE : LIGHT_GRAY)};
   color: ${props => (props.shouldBeHighlighted ? WHITE : DARK_BLUE)};
@@ -174,7 +174,7 @@ module.exports = {
   TextField,
   Select,
   SelectTitle,
-  AmPmButton,
+  FormButton,
   SubmitButton,
   SchedulerContainer,
   CalendarWrapper,
