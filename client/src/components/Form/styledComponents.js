@@ -6,6 +6,8 @@ import 'react-dates/lib/css/_datepicker.css';
 import { mixins, styleVars } from '../../styles';
 
 const {
+  NARROW_BUTTON,
+  WIDE_BUTTON,
   DEFAULT_FONT,
   DARK_BLUE,
   LIGHT_GRAY,
@@ -71,8 +73,8 @@ const FormButton = styled.button`
   background-color: ${props => (props.shouldBeHighlighted ? DARK_BLUE : LIGHT_GRAY)};
   color: ${props => (props.shouldBeHighlighted ? WHITE : DARK_BLUE)};
   border-radius: 3px;
-  height: 3rem;
-  width: 25%;
+  padding: 1rem;
+  min-width: ${props => (props.isWide ? WIDE_BUTTON : NARROW_BUTTON)};
   cursor: pointer;
 
   ${P_TEXT_MIXIN({})}

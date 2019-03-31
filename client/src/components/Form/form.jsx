@@ -36,8 +36,7 @@ const Form = ({
   isPmSelected,
   toggleAmPm,
   handleBlur,
-  shouldScheduleTime,
-  buttonToHighlight,
+  buttonsToHighlight,
 }) => {
   const handleChange = (ev, dataType) => {
     ev.preventDefault();
@@ -45,6 +44,9 @@ const Form = ({
     const valueToUpdate = dataType === 'boolean' ? (value === 'true') : value;
     updateFieldValue(name, valueToUpdate);
   };
+  const shouldBeShown = (dependsOn, options) => (
+    options[dependsOn.name] === dependsOn.requiredOptionValue
+  );
   const getInputs = inputs => (
     inputs.map((input) => {
       const {
@@ -52,13 +54,14 @@ const Form = ({
         text,
         placeholder,
         options,
-        buttons,
         type,
         enabled,
         defaultValue,
         dataType,
+        dependsOn,
       } = input;
       if (!enabled) return null;
+      if (dependsOn && !shouldBeShown(dependsOn, buttonsToHighlight)) return null;
       switch (type) {
         case 'text':
           return (
@@ -109,23 +112,24 @@ const Form = ({
           return (
             <div key={name}>
               <SelectTitle>{text}</SelectTitle>
-              {buttons.map(btn => (
+              {options.map(op => (
                 <FormButton
                   name={name}
-                  key={btn.label}
-                  value={btn.value}
-                  dataType={btn.dataType}
+                  key={op.label}
+                  value={op.value}
+                  dataType={op.dataType}
                   onClick={ev => handleChange(ev, dataType)}
-                  shouldBeHighlighted={buttonToHighlight === btn.value}
+                  shouldBeHighlighted={buttonsToHighlight[name] === op.value}
+                  isWide={op.isWide}
                 >
-                  {btn.label}
+                  {op.label}
                 </FormButton>
               ))}
             </div>
 
           );
         case 'scheduler':
-          return shouldScheduleTime && (
+          return (
             <SchedulerContainer key={name}>
               <SelectTitle>{text}</SelectTitle>
               <CalendarWrapper>
@@ -194,6 +198,19 @@ const Form = ({
 
 Form.defaultProps = {
   errorMessage: null,
+  calendarDate: null,
+  timeChars: null,
+  changeDate: null,
+  timeCharsAsString: null,
+  isCalendarFocused: false,
+  isTimePickerEnabled: false,
+  toggleCalendarFocus: null,
+  handleTimePickerKeyUp: null,
+  enableTimePicker: null,
+  isPmSelected: false,
+  toggleAmPm: null,
+  handleBlur: null,
+  buttonsToHighlight: {},
 };
 
 Form.propTypes = {
@@ -202,6 +219,19 @@ Form.propTypes = {
   title: PropTypes.string.isRequired,
   formInputs: PropTypes.arrayOf(PropTypes.object).isRequired,
   errorMessage: PropTypes.string,
+  calendarDate: PropTypes.string,
+  changeDate: PropTypes.func,
+  isCalendarFocused: PropTypes.bool,
+  toggleCalendarFocus: PropTypes.func,
+  timeChars: PropTypes.arrayOf(PropTypes.string),
+  timeCharsAsString: PropTypes.string,
+  handleTimePickerKeyUp: PropTypes.func,
+  isTimePickerEnabled: PropTypes.bool,
+  enableTimePicker: PropTypes.func,
+  isPmSelected: PropTypes.bool,
+  toggleAmPm: PropTypes.func,
+  handleBlur: PropTypes.func,
+  buttonsToHighlight: PropTypes.objectOf(PropTypes.any),
 };
 
 export default Form;
