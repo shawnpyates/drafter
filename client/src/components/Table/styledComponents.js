@@ -36,7 +36,7 @@ const AddNewButton = styled.a`
 
 const TableFrame = styled.table`
   text-align: center;
-  min-width: 45%;
+  width: 100%;
 `;
 
 const TableTitleLine = styled.tr`

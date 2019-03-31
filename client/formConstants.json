@@ -92,14 +92,16 @@
         "type": "buttonGroup",
         "dataType": "boolean",
         "enabled": true,
-        "buttons": [
+        "options": [
           {
             "label": "Yes",
-            "value": true
+            "value": true,
+            "isWide": false
           },
           {
             "label": "No",
-            "value": false
+            "value": false,
+            "isWide": false
           }
         ]
       },
@@ -107,7 +109,11 @@
         "name": "scheduledTime",
         "text": "Please select a date and time.",
         "type": "scheduler",
-        "enabled": true
+        "enabled": true,
+        "dependsOn": {
+          "name": "shouldScheduleTime",
+          "requiredOptionValue": true
+        }
       },
       {
         "name": "submitButton",
@@ -125,6 +131,25 @@
         "text": "Name Your Team",
         "type": "text",
         "enabled": true
+      },
+      {
+        "name": "shouldFindOwnDraft",
+        "text": "A team must belong to a draft. Would you like to select from the drafts that you own, or would you like to request to join a different member's draft?",
+        "type": "buttonGroup",
+        "dataType": "boolean",
+        "enabled": true,
+        "options": [
+          {
+            "label": "Choose from my own drafts",
+            "value": true,
+            "isWide": true
+          },
+          {
+            "label": "Request to join another member's draft",
+            "value": false,
+            "isWide": true
+          }
+        ]
       },
       {
         "name": "submitButton",

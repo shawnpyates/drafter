@@ -46,7 +46,9 @@ class CreateDraft extends Component {
       errorMessage: null,
       isTimePickerEnabled: false,
       isPmSelected: false,
-      shouldScheduleTime: false,
+      buttonsToHighlight: {
+        shouldScheduleTime: false,
+      }
     };
   }
 
@@ -145,13 +147,21 @@ class CreateDraft extends Component {
   }
 
   updateFieldValue = (name, value) => {
-    this.setState({
-      [name]: value
-    }, () => {
-      if (name === 'shouldScheduleTime' && !value) {
-        this.resetTimeValues();
-      }
-    });
+    switch (name) {
+      case 'shouldScheduleTime':
+        const buttonsToHighlight = {
+          ...this.state.buttonsToHighlight,
+          shouldScheduleTime: value,
+        };
+        this.setState({ buttonsToHighlight }, () => {
+          if (!value) {
+            this.resetTimeValues();
+          }
+        });
+        break;
+      default:
+        this.setState({ [name]: value });
+    }
   }
 
 
@@ -162,8 +172,9 @@ class CreateDraft extends Component {
       calendarDate,
       timeCharsAsString,
       isPmSelected,
-      shouldScheduleTime,
+      buttonsToHighlight,
     } = this.state;
+    const { shouldScheduleTime } = buttonsToHighlight;
     if (!name || (shouldScheduleTime && !timeCharsAsString)) {
       this.setState({ errorMessage: 'Please complete all fields.' });
       return;
@@ -197,7 +208,8 @@ class CreateDraft extends Component {
       timeCharsAsString,
       isTimePickerEnabled,
       isPmSelected,
-      shouldScheduleTime,
+      // shouldScheduleTime,
+      buttonsToHighlight,
     } = this.state;
     return (
       <div>
@@ -220,8 +232,7 @@ class CreateDraft extends Component {
             isPmSelected={isPmSelected}
             toggleAmPm={this.toggleAmPm}
             handleBlur={this.handleBlur}
-            shouldScheduleTime={shouldScheduleTime}
-            buttonToHighlight={shouldScheduleTime}
+            buttonsToHighlight={buttonsToHighlight}
           />
         }
         {isSubmitComplete &&
