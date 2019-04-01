@@ -18,7 +18,7 @@
     "title": "Teams",
     "belongToNoTeams": "You do not currently belong to any teams.",
     "noTeamsEntered": "There are currently no teams entered into this draft.",
-    "columnHeaders": ["Name", "Owner"]
+    "columnHeaders": ["Name", "Draft", "Owner"]
   },
 
   "playersTable": {

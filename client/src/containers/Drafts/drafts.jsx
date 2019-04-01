@@ -13,23 +13,41 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => ({
   fetchDraftsByUser: id => dispatch(fetchDraftsByUser(id)),
-  fetchDraftsByTeam: id => dispatch(fetchDraftsByTeam(id))
+  fetchDraftsByTeam: id => dispatch(fetchDraftsByTeam(id)),
 });
 
 const extractDataForTable = drafts => (
   drafts.map((draft) => {
-    const { id, name, timeScheduled, ownerName } = draft;
+    const {
+      id,
+      name,
+      timeScheduled,
+      ownerName,
+    } = draft;
     const readableTime = timeScheduled ?
       moment(timeScheduled).format('MMM D YYYY, h:mm a') :
       draftsTableTexts.unscheduled;
-    return { id, name, readableTime, ownerName };
+    return {
+      id,
+      name,
+      readableTime,
+      ownerName,
+    };
   })
 );
 
 class Drafts extends Component {
   componentDidMount() {
-    const { fetchBy, fetchDraftsByUser, fetchDraftsByTeam, userId, teamId } = this.props;
-    fetchBy === 'user' ? fetchDraftsByUser(userId) : fetchDraftsByTeam(teamId);
+    const {
+      fetchBy,
+      userId,
+      teamId,
+    } = this.props;
+    if (fetchBy === 'user') {
+      this.props.fetchDraftsByUser(userId);
+    } else {
+      this.props.fetchDraftsByTeam(teamId);
+    }
   }
 
   render() {
@@ -57,12 +75,15 @@ class Drafts extends Component {
 }
 
 Drafts.defaultProps = {
-  ownDrafts: null,
+  drafts: null,
 };
 
 Drafts.propTypes = {
-  ownDrafts: PropTypes.arrayOf(PropTypes.object),
+  drafts: PropTypes.arrayOf(PropTypes.object),
+  fetchBy: PropTypes.string.isRequired,
+  fetchDraftsByTeam: PropTypes.func.isRequired,
   fetchDraftsByUser: PropTypes.func.isRequired,
+  teamId: PropTypes.number.isRequired,
   userId: PropTypes.number.isRequired,
 };
 

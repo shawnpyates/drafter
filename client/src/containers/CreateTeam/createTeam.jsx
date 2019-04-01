@@ -24,7 +24,7 @@ const getInputsWithDrafts = (inputs, drafts) => {
   const draftListInput = clonedInputs.find(input => input.name === 'draftList');
   const draftOptions = drafts.map(draft => ({
     label: draft.name,
-    value: draft.id,
+    value: draft.name,
     isWide: true,
   }));
   clonedInputs[clonedInputs.indexOf(draftListInput)] = {
@@ -45,26 +45,35 @@ class CreateTeam extends Component {
       shouldFindOwnDraft: false,
       buttonsToHighlight: {
         shouldFindOwnDraft: null,
+        draftList: null,
       },
+      draftId: null,
     };
   }
 
   componentDidUpdate() {
     const { buttonsToHighlight } = this.state;
-    const { fetchDraftsByOwner, currentUser, drafts } = this.props;
+    const { currentUser, drafts } = this.props;
     if (buttonsToHighlight.shouldFindOwnDraft && !drafts) {
-      fetchDraftsByOwner(currentUser.id);
+      this.props.fetchDraftsByOwner(currentUser.id);
     }
+  }
+
+  updateButtonToHighlight = (key, value) => {
+    const buttonsToHighlight = {
+      ...this.state.buttonsToHighlight,
+      [key]: value,
+    };
+    this.setState({ buttonsToHighlight });
   }
 
   updateFieldValue = (name, value) => {
     switch (name) {
       case 'shouldFindOwnDraft':
-        const buttonsToHighlight = {
-          ...this.state.buttonsToHighlight,
-          shouldFindOwnDraft: value,
-        };
-        this.setState({ buttonsToHighlight });
+        this.updateButtonToHighlight('shouldFindOwnDraft', value);
+        break;
+      case 'draftList':
+        this.updateButtonToHighlight('draftList', value);
         break;
       default:
         this.setState({ [name]: value });
@@ -73,10 +82,24 @@ class CreateTeam extends Component {
 
   handleSubmit = (ev) => {
     ev.preventDefault();
-    const { name } = this.state;
+    const {
+      name,
+      buttonsToHighlight: { shouldFindOwnDraft, draftList },
+      draftId,
+    } = this.state;
+    if (!name || (!draftList && !draftId)) {
+      this.setState({ errorMessage: 'Please complete all fields.' });
+      return;
+    }
+    const draftIdForBody = (
+      shouldFindOwnDraft
+      ? this.props.drafts.find(draft => draft.name === draftList).id
+      : Number(draftId)
+    );
     const body = {
       name,
       ownerUserId: this.props.currentUser.id,
+      draftId: draftIdForBody,
     };
     this.props.createTeam(body).then(() => this.setState({ isSubmitComplete: true }));
   }

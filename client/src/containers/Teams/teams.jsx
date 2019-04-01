@@ -7,7 +7,8 @@ import { teamsTable as teamsTableTexts } from '../../../texts.json';
 
 const mapStateToProps = (state) => {
   const { teams } = state.team;
-  return { teams };
+  const { drafts } = state.draft;
+  return { teams, drafts };
 };
 
 const mapDispatchToProps = dispatch => ({
@@ -15,21 +16,35 @@ const mapDispatchToProps = dispatch => ({
   fetchTeamsByDraft: id => dispatch(fetchTeamsByDraft(id)),
 });
 
-const extractDataForTable = teams => (
+const extractDataForTable = (teams, drafts) => (
   teams.map((team) => {
     const { id, name, ownerName } = team;
-    return { id, name, ownerName };
+    const draftName = drafts.find(draft => draft.id === team.draftId).name;
+    return {
+      id,
+      name,
+      draft: draftName,
+      ownerName,
+    };
   })
 );
 
 class Teams extends Component {
   componentDidMount() {
-    const { fetchBy, fetchTeamsByUser, fetchTeamsByDraft, userId, draftId } = this.props;
-    fetchBy === 'user' ? fetchTeamsByUser(userId) : fetchTeamsByDraft(draftId);
+    const {
+      fetchBy,
+      userId,
+      draftId,
+    } = this.props;
+    if (fetchBy === 'user') {
+      this.props.fetchTeamsByUser(userId);
+    } else {
+      this.props.fetchTeamsByDraft(draftId);
+    }
   }
 
   render() {
-    const { teams, fetchBy } = this.props;
+    const { teams, fetchBy, drafts } = this.props;
     const {
       type,
       title,
@@ -44,7 +59,7 @@ class Teams extends Component {
             type={type}
             title={title}
             columnHeaders={columnHeaders}
-            data={extractDataForTable(teams)}
+            data={extractDataForTable(teams, drafts)}
             emptyDataMessage={fetchBy === 'user' ? belongToNoTeams : noTeamsEntered}
           />
         }
@@ -54,17 +69,20 @@ class Teams extends Component {
 }
 
 Teams.defaultProps = {
+  draftId: null,
+  drafts: null,
   teams: null,
   userId: null,
-  draftId: null,
 };
 
 Teams.propTypes = {
-  teams: PropTypes.arrayOf(PropTypes.object),
-  fetchTeamsByUser: PropTypes.func.isRequired,
-  fetchTeamsByDraft: PropTypes.func.isRequired,
-  userId: PropTypes.number,
   draftId: PropTypes.number,
+  drafts: PropTypes.arrayOf(PropTypes.object),
+  fetchBy: PropTypes.string.isRequired,
+  fetchTeamsByDraft: PropTypes.func.isRequired,
+  fetchTeamsByUser: PropTypes.func.isRequired,
+  teams: PropTypes.arrayOf(PropTypes.object),
+  userId: PropTypes.number,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Teams);
