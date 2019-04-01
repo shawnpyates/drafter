@@ -14,8 +14,8 @@ module.exports = {
 
   async create(req, res) {
     try {
-      const { name, ownerUserId } = req.body;
-      const team = await Team.create({ name, ownerUserId });
+      const { name, ownerUserId, draftId } = req.body;
+      const team = await Team.create({ name, ownerUserId, draftId });
       const teamProperties = {
         body: {
           isOwner: true,

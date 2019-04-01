@@ -112,7 +112,7 @@ const Form = ({
           return (
             <div key={name}>
               <SelectTitle>{text}</SelectTitle>
-              {options.map(op => (
+              {options && options.map(op => (
                 <FormButton
                   name={name}
                   key={op.label}
