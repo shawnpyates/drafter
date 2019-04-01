@@ -21,6 +21,7 @@ module.exports = (app) => {
 
   // drafts
   app.get('/api/drafts/:id', drafts.fetchOne);
+  app.get('/api/owners/:id/drafts', drafts.fetchByOwner);
   app.post('/api/drafts', drafts.create);
   app.put('/api/drafts/:id', drafts.update);
   app.delete('/api/drafts/:id', drafts.destroy);

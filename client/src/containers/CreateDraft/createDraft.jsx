@@ -53,10 +53,8 @@ class CreateDraft extends Component {
   }
 
   componentDidMount() {
-    // const now = moment();
     this.setState({
       calendarDate: moment(),
-      // calendarDate: now.format('YYYY-MM-DD[T12:00:00]ZZ'),
       timeChars: INITIAL_TIME_CHARS,
     });
   }
@@ -208,7 +206,6 @@ class CreateDraft extends Component {
       timeCharsAsString,
       isTimePickerEnabled,
       isPmSelected,
-      // shouldScheduleTime,
       buttonsToHighlight,
     } = this.state;
     return (

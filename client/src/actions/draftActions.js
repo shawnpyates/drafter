@@ -24,6 +24,18 @@ export const fetchDraftsByTeam = teamId => (dispatch) => {
     });
 };
 
+export const fetchDraftsByOwner = ownerUserId => (dispatch) => {
+  dispatch({ type: 'FETCH_DRAFTS_FROM_OWNER_PENDING' });
+  axios.get(`/api/owners/${ownerUserId}/drafts`)
+    .then((response) => {
+      const { drafts } = response.data;
+      dispatch({ type: 'FETCH_DRAFTS_FROM_OWNER_FULFILLED', payload: drafts });
+    })
+    .catch((err) => {
+      dispatch({ type: 'FETCH_DRAFTS_FROM_OWNER_REJECTED', payload: err });
+    });
+};
+
 export const createDraft = body => (dispatch) => {
   dispatch({ type: 'CREATE_DRAFT_PENDING ' });
   const { name, timeScheduled, ownerUserId } = body;
