@@ -12,6 +12,17 @@ module.exports = {
     }
   },
 
+  async fetchByOwner(req, res) {
+    try {
+      const { ownerUserId } = req.params;
+      const drafts = await Draft.findAll({ ownerUserId });
+      if (!drafts.length) return res.status(200).send({ drafts: [] });
+      return res.status(200).send({ drafts });
+    } catch (e) {
+      return res.status(400).send({ e });
+    }
+  },
+
   async create(req, res) {
     try {
       const { name, timeScheduled, ownerUserId } = req.body;

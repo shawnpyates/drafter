@@ -25,14 +25,14 @@ export const fetchTeamsByDraft = draftId => (dispatch) => {
 };
 
 export const createTeam = body => (dispatch) => {
-  dispatch({ type: 'CREATE_DRAFT_PENDING ' });
-  const { name, ownerUserId } = body;
-  return axios.post('/api/teams', { name, ownerUserId })
+  dispatch({ type: 'CREATE_TEAM_PENDING ' });
+  const { name, ownerUserId, draftId } = body;
+  return axios.post('/api/teams', { name, ownerUserId, draftId })
     .then((response) => {
       const { team } = response.data;
-      dispatch({ type: 'CREATE_DRAFT_FULFILLED', payload: team });
+      dispatch({ type: 'CREATE_TEAM_FULFILLED', payload: team });
     })
     .catch((err) => {
-      dispatch({ type: 'CREATE_DRAFT_REJECTED', payload: err });
+      dispatch({ type: 'CREATE_TEAM_REJECTED', payload: err });
     });
 };

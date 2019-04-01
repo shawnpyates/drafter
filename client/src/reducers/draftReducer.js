@@ -7,6 +7,7 @@ const initialState = {
   errorOnCreateDraft: null,
   errorOnFetchDraftsFromUser: null,
   errorOnFetchDraftsFromTeam: null,
+  errorOnFetchDraftsFromOwner: null,
 };
 
 const draftReducer = (state = initialState, action) => {
@@ -50,6 +51,21 @@ const draftReducer = (state = initialState, action) => {
         drafts: action.payload,
       };
     }
+    case 'FETCH_DRAFTS_FROM_OWNER_PENDING': {
+      return { ...state, fetching: true };
+    }
+    case 'FETCH_DRAFTS_FROM_OWNER_REJECTED': {
+      return { ...state, fetching: false, errorOnFetchDraftsFromOwner: action.payload };
+    }
+    case 'FETCH_DRAFTS_FROM_OWNER_FULFILLED': {
+      return {
+        ...state,
+        fetching: false,
+        fetched: true,
+        drafts: action.payload,
+      };
+    }
+
     default:
       break;
   }
