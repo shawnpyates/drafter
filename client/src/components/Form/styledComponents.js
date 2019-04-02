@@ -8,6 +8,8 @@ import { mixins, styleVars } from '../../styles';
 const {
   NARROW_BUTTON,
   WIDE_BUTTON,
+  NARROW_TEXT_FIELD,
+  WIDE_TEXT_FIELD,
   DEFAULT_FONT,
   DARK_BLUE,
   LIGHT_GRAY,
@@ -41,12 +43,19 @@ const Title = styled.h2`
   ${HEADING_TEXT_MIXIN({ color: DARK_BLUE })}
 `;
 
+const TextFieldContainer = styled.div`
+  height: 5rem;
+`;
+
 const TextField = styled.input`
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   padding: 1.6rem;
   border: 1px solid ${LIGHT_GRAY};
   border-radius: 3px;
   margin-bottom: 1rem;
-  width: 100%;
+  width: ${props => (props.isWide ? WIDE_TEXT_FIELD : NARROW_TEXT_FIELD)};
 
   ${P_TEXT_MIXIN({ color: DARK_BLUE })}
 `;
@@ -173,6 +182,7 @@ const ErrorMessage = styled.p`
 module.exports = {
   FieldWrapper,
   Title,
+  TextFieldContainer,
   TextField,
   Select,
   SelectTitle,

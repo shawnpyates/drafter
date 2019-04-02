@@ -1,7 +1,6 @@
 module.exports = {
 
   // button widths
-
   NARROW_BUTTON: '25%',
   WIDE_BUTTON: '60%',
 
@@ -19,4 +18,8 @@ module.exports = {
   SMALL_FONT_SIZE: '1.4rem',
   NORMAL_FONT_SIZE: '1.6rem',
   LARGE_FONT_SIZE: '2.0rem',
+
+  // text field widths
+  NARROW_TEXT_FIELD: '25%',
+  WIDE_TEXT_FIELD: '60%',
 };

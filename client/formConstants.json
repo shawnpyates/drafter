@@ -7,18 +7,21 @@
         "name": "email",
         "text": "E-mail",
         "type": "text",
+        "isWide": true,
         "enabled": true
       },
       {
         "name": "firstName",
         "text": "First Name",
         "type": "text",
+        "isWide": true,
         "enabled": true
       },
       {
         "name": "lastName",
         "text": "Last Name",
         "type": "text",
+        "isWide": true,
         "enabled": true
       },
       {
@@ -55,6 +58,7 @@
         "name": "email",
         "text": "E-mail",
         "type": "text",
+        "isWide": true,
         "enabled": true
       },
       {
@@ -84,6 +88,7 @@
         "name": "name",
         "text": "Name Your Draft",
         "type": "text",
+        "isWide": true,
         "enabled": true
       },
       {
@@ -130,6 +135,7 @@
         "name": "name",
         "text": "Name Your Team",
         "type": "text",
+        "isWide": true,
         "enabled": true
       },
       {
@@ -167,6 +173,7 @@
         "name": "draftId",
         "text": "Provide the ID of the draft that you would like to add your team to. The owner of the draft will be contacted with your request.",
         "type": "text",
+        "isWide": false,
         "enabled": true,
         "dependsOn": {
           "name": "shouldFindOwnDraft",
@@ -188,6 +195,7 @@
         "name": "email",
         "text": "E-mail",
         "type": "text",
+        "isWide": true,
         "enabled": true
       },
       {
