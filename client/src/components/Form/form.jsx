@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import {
   FieldWrapper,
   Title,
+  TextFieldContainer,
   TextField,
   Select,
   SelectTitle,
@@ -59,20 +60,24 @@ const Form = ({
         defaultValue,
         dataType,
         dependsOn,
+        isWide,
       } = input;
       if (!enabled) return null;
       if (dependsOn && !shouldBeShown(dependsOn, buttonsToHighlight)) return null;
       switch (type) {
         case 'text':
           return (
-            <TextField
-              defaultValue={defaultValue || ''}
-              name={name}
-              key={name}
-              type="text"
-              placeholder={text}
-              onChange={handleChange}
-            />
+            <TextFieldContainer>
+              <TextField
+                defaultValue={defaultValue || ''}
+                name={name}
+                key={name}
+                type="text"
+                placeholder={text}
+                onChange={handleChange}
+                isWide={isWide}
+              />
+            </TextFieldContainer>
           );
         case 'password':
           return (
