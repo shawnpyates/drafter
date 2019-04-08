@@ -58,6 +58,7 @@ class LogIn extends Component {
   render() {
     return (
       <Form
+        isFormWide={true}
         updateFieldValue={this.updateFieldValue}
         handleSubmit={this.handleSubmit}
         title={loginForm.title}

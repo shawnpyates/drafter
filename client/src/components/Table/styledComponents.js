@@ -35,6 +35,7 @@ const AddNewButton = styled.a`
 `;
 
 const TableFrame = styled.table`
+  margin: 5rem auto;
   text-align: center;
   width: 100%;
 `;

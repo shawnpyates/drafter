@@ -8,6 +8,8 @@ import { mixins, styleVars } from '../../styles';
 const {
   NARROW_BUTTON,
   WIDE_BUTTON,
+  NARROW_FORM,
+  WIDE_FORM,
   NARROW_TEXT_FIELD,
   WIDE_TEXT_FIELD,
   DEFAULT_FONT,
@@ -24,7 +26,7 @@ const {
   PICKER_INPUT_MIXIN,
 } = mixins;
 
-const FieldWrapper = styled.div`
+const FieldWrapper = styled.form`
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
@@ -32,7 +34,7 @@ const FieldWrapper = styled.div`
   border-radius: 3px;
   box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
   padding: 3rem;
-  width: 40%;
+  width: ${props => (props.isWide ? WIDE_FORM : NARROW_FORM)};
   text-align: center;
 `;
 
@@ -45,6 +47,12 @@ const Title = styled.h2`
 
 const TextFieldContainer = styled.div`
   height: 5rem;
+`;
+
+const FieldTitle = styled.p`
+  margin: 3rem auto;
+
+  ${P_TEXT_MIXIN({ color: DARK_BLUE })}
 `;
 
 const TextField = styled.input`
@@ -183,6 +191,7 @@ module.exports = {
   FieldWrapper,
   Title,
   TextFieldContainer,
+  FieldTitle,
   TextField,
   Select,
   SelectTitle,

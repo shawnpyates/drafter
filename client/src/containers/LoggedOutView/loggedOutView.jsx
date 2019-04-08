@@ -7,6 +7,8 @@ import {
   FormContainer,
   TabList,
   TabListAnchor,
+  TabListItem,
+  TabListContainer,
 } from './styledComponents';
 
 class LoggedOutView extends Component {
@@ -32,14 +34,20 @@ class LoggedOutView extends Component {
   render() {
     return (
       <FormContainer>
-        <TabList>
-          <li>
-            {this.getAnchor(registerForm.title, false)}
-          </li>
-          <li>
-            {this.getAnchor(loginForm.title, true)}
-          </li>
-        </TabList>
+        <TabListContainer>
+          <TabList>
+            <li>
+              <TabListItem isLeft>
+                {this.getAnchor(registerForm.title, false)}
+              </TabListItem>
+            </li>
+            <li>
+              <TabListItem isLeft={false}>
+                {this.getAnchor(loginForm.title, true)}
+              </TabListItem>
+            </li>
+          </TabList>
+        </TabListContainer>
         {this.state.isLoginActiveComponent &&
           <Login />
         }

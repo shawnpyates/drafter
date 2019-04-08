@@ -5,6 +5,7 @@ import {
   FieldWrapper,
   Title,
   TextFieldContainer,
+  FieldTitle,
   TextField,
   Select,
   SelectTitle,
@@ -38,6 +39,7 @@ const Form = ({
   toggleAmPm,
   handleBlur,
   buttonsToHighlight,
+  isFormWide,
 }) => {
   const handleChange = (ev, dataType) => {
     ev.preventDefault();
@@ -61,6 +63,7 @@ const Form = ({
         dataType,
         dependsOn,
         isWide,
+        fieldTitle,
       } = input;
       if (!enabled) return null;
       if (dependsOn && !shouldBeShown(dependsOn, buttonsToHighlight)) return null;
@@ -68,6 +71,7 @@ const Form = ({
         case 'text':
           return (
             <TextFieldContainer>
+              {fieldTitle && <FieldTitle>{fieldTitle}</FieldTitle>}
               <TextField
                 defaultValue={defaultValue || ''}
                 name={name}
@@ -189,15 +193,16 @@ const Form = ({
   );
 
   return (
-    <form onSubmit={handleSubmit}>
-      <FieldWrapper>
-        <Title>{title}</Title>
-        {getInputs(formInputs)}
-        <ErrorMessageContainer>
-          <ErrorMessage>{errorMessage}</ErrorMessage>
-        </ErrorMessageContainer>
-      </FieldWrapper>
-    </form>
+    <FieldWrapper
+      isWide={isFormWide}
+      onSubmit={handleSubmit}
+    >
+      <Title>{title}</Title>
+      {getInputs(formInputs)}
+      <ErrorMessageContainer>
+        <ErrorMessage>{errorMessage}</ErrorMessage>
+      </ErrorMessageContainer>
+    </FieldWrapper>
   );
 };
 
@@ -208,6 +213,7 @@ Form.defaultProps = {
   changeDate: null,
   timeCharsAsString: null,
   isCalendarFocused: false,
+  isFormWide: false,
   isTimePickerEnabled: false,
   toggleCalendarFocus: null,
   handleTimePickerKeyUp: null,
@@ -227,6 +233,7 @@ Form.propTypes = {
   calendarDate: PropTypes.string,
   changeDate: PropTypes.func,
   isCalendarFocused: PropTypes.bool,
+  isFormWide: PropTypes.bool,
   toggleCalendarFocus: PropTypes.func,
   timeChars: PropTypes.arrayOf(PropTypes.string),
   timeCharsAsString: PropTypes.string,

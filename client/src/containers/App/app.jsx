@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { BrowserRouter as Router } from 'react-router-dom';
+import styled from 'styled-components';
+
 import Header from '../../components/Header/header.jsx';
 import LoggedInView from '../LoggedInView/loggedInView.jsx';
 import LoggedOutView from '../LoggedOutView/loggedOutView.jsx';
@@ -17,6 +19,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => ({
   fetchCurrentUser: () => dispatch(fetchCurrentUser()),
 });
+
+const AppContainer = styled.div``;
 
 class App extends Component {
   constructor() {
@@ -38,18 +42,19 @@ class App extends Component {
     const { currentUser, errorOnFetchCurrentUser } = this.props;
     return (
       <Router>
-        <div>
+        <AppContainer>
           <Header currentUser={currentUser} />
           {currentUser &&
             <LoggedInView />
           }
-          {((!currentUser && this.state.isTokenMissing) || errorOnFetchCurrentUser) &&
+          {((false && this.state.isTokenMissing) || errorOnFetchCurrentUser) &&
             <LoggedOutView />
           }
           {!currentUser && !this.state.isTokenMissing &&
             <div>Loading...</div>
           }
-        </div>
+          <LoggedOutView />
+        </AppContainer>
       </Router>
     );
   }
