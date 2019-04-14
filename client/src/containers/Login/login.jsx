@@ -1,20 +1,23 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import Form from '../../components/Form/form.jsx';
+
+import Form from '../../components/Form/form';
+
 import { authenticateUser } from '../../actions';
+
 import { login as loginForm } from '../../../formConstants.json';
 
 const { errorMessages } = loginForm;
 
 const mapStateToProps = (state) => {
-  const { currentUser, errorOnAuthenticateUser } = state.user;
-  return { currentUser, errorOnAuthenticateUser };
+  const { errorOnAuthenticateUser } = state.user;
+  return { errorOnAuthenticateUser };
 };
 
 const mapDispatchToProps = dispatch => ({
   authenticateUser: credentials => dispatch(authenticateUser(credentials)),
-})
+});
 
 const validateEmail = email => (/\S+@\S+\.\S+/).test(email);
 
@@ -34,8 +37,8 @@ class LogIn extends Component {
       if (failure) {
         this.setState({ errorMessage: errorMessages[failure] });
       } else {
-        this.setState({ errorMessage: errorMessages.unexpected })
-      };
+        this.setState({ errorMessage: errorMessages.unexpected });
+      }
     }
   }
 
@@ -53,12 +56,10 @@ class LogIn extends Component {
     this.props.authenticateUser({ email, password });
   }
 
-
-
   render() {
     return (
       <Form
-        isFormWide={true}
+        isFormWide
         updateFieldValue={this.updateFieldValue}
         handleSubmit={this.handleSubmit}
         title={loginForm.title}
@@ -70,12 +71,10 @@ class LogIn extends Component {
 }
 
 LogIn.defaultProps = {
-  currentUser: null,
   errorOnAuthenticateUser: null,
 };
 
 LogIn.propTypes = {
-  currentUser: PropTypes.objectOf(PropTypes.any),
   errorOnAuthenticateUser: PropTypes.objectOf(PropTypes.any),
   authenticateUser: PropTypes.func.isRequired,
 };

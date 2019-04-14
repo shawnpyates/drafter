@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+
+import Table from '../../components/Table/table';
+
 import { fetchUsersByTeam, fetchUsersByDraft } from '../../actions';
-import Table from '../../components/Table/table.jsx';
+
 import { playersTable as playersTableTexts } from '../../../texts.json';
 
 const mapStateToProps = (state) => {
@@ -15,9 +18,14 @@ const mapDispatchToProps = dispatch => ({
   fetchUsersByDraft: id => dispatch(fetchUsersByDraft(id)),
 });
 
-const extractDataForTable = (players) => (
+const extractDataForTable = players => (
   players.map((player) => {
-    const { id, firstName, lastName, position } = player;
+    const {
+      id,
+      firstName,
+      lastName,
+      position,
+    } = player;
     const fullName = `${firstName} ${lastName}`;
     return { id, fullName, position };
   })
@@ -25,8 +33,18 @@ const extractDataForTable = (players) => (
 
 class Players extends Component {
   componentDidMount() {
-    const { fetchBy, fetchUsersByTeam, fetchUsersByDraft, teamId, draftId } = this.props;
-    fetchBy === 'team' ? fetchUsersByTeam(teamId) : fetchUsersByDraft(draftId);
+    const {
+      fetchBy,
+      fetchUsersByTeam: fetchByTeam,
+      fetchUsersByDraft: fetchByDraft,
+      teamId,
+      draftId,
+    } = this.props;
+    if (fetchBy === 'team') {
+      fetchByTeam(teamId);
+    } else {
+      fetchByDraft(draftId);
+    }
   }
 
   render() {
@@ -62,6 +80,7 @@ Players.defaultProps = {
 
 Players.propTypes = {
   players: PropTypes.arrayOf(PropTypes.object),
+  fetchBy: PropTypes.string.isRequired,
   fetchUsersByTeam: PropTypes.func.isRequired,
   fetchUsersByDraft: PropTypes.func.isRequired,
   teamId: PropTypes.number,

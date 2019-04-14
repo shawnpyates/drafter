@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+
+import Table from '../../components/Table/table';
+
 import { fetchTeamsByUser, fetchTeamsByDraft } from '../../actions';
-import Table from '../../components/Table/table.jsx';
+
 import { teamsTable as teamsTableTexts } from '../../../texts.json';
 
 const mapStateToProps = (state) => {

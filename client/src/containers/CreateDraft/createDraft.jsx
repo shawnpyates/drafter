@@ -4,8 +4,9 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Redirect } from 'react-router-dom';
 
-import Form from '../../components/Form/form.jsx';
+import Form from '../../components/Form/form';
 import { createDraft } from '../../actions';
+
 import { draft as draftForm } from '../../../formConstants.json';
 
 import {
@@ -35,7 +36,6 @@ const mapDispatchToProps = dispatch => ({
 class CreateDraft extends Component {
   constructor() {
     super();
-
     this.state = {
       name: null,
       calendarDate: null,
@@ -48,23 +48,27 @@ class CreateDraft extends Component {
       isPmSelected: false,
       buttonsToHighlight: {
         shouldScheduleTime: false,
-      }
+      },
     };
   }
 
   componentDidMount() {
-    this.setState({
-      calendarDate: moment(),
-      timeChars: INITIAL_TIME_CHARS,
-    });
+    this.initializeDateAndTime();
   }
 
   componentDidUpdate() {
     if (this.state.errorMessage) {
       setTimeout(() => {
-        this.setState({ errorMessage: null })
+        this.setState({ errorMessage: null });
       }, ERROR_MESSAGE_DURATION);
     }
+  }
+
+  initializeDateAndTime = () => {
+    this.setState({
+      calendarDate: moment(),
+      timeChars: INITIAL_TIME_CHARS,
+    });
   }
 
   handleTimePickerKeyUp = (ev) => {
@@ -85,7 +89,7 @@ class CreateDraft extends Component {
     if (timeCharsAsString) {
       const hourColumn = timeCharsAsString.split(':')[0];
       const hourArray = hourColumn.length > 1 ? hourColumn.split('') : ['-', hourColumn];
-      updatedTimeChars = hourArray.concat(timeChars.slice(2))
+      updatedTimeChars = hourArray.concat(timeChars.slice(2));
     }
     this.setState({
       isTimePickerEnabled: true,
@@ -124,16 +128,16 @@ class CreateDraft extends Component {
   }
 
   changeDate = (calendarDate) => {
-    this.setState({ calendarDate })
+    this.setState({ calendarDate });
   }
 
   toggleAmPm = (ev, isPmSelected) => {
     ev.preventDefault();
-    this.setState({ isPmSelected })
+    this.setState({ isPmSelected });
   }
 
   toggleCalendarFocus = (isCalendarFocused) => {
-    this.setState({ isCalendarFocused })
+    this.setState({ isCalendarFocused });
   }
 
   resetTimeValues() {
@@ -141,16 +145,16 @@ class CreateDraft extends Component {
       calendarDate: null,
       timeChars: INITIAL_TIME_CHARS,
       timeCharsAsString: null,
-    })
+    });
   }
 
   updateFieldValue = (name, value) => {
+    const buttonsToHighlight = {
+      ...this.state.buttonsToHighlight,
+      shouldScheduleTime: value,
+    };
     switch (name) {
       case 'shouldScheduleTime':
-        const buttonsToHighlight = {
-          ...this.state.buttonsToHighlight,
-          shouldScheduleTime: value,
-        };
         this.setState({ buttonsToHighlight }, () => {
           if (!value) {
             this.resetTimeValues();
