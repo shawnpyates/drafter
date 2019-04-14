@@ -85,13 +85,17 @@ const Form = ({
           );
         case 'password':
           return (
-            <TextField
-              name={name}
-              key={name}
-              type="password"
-              placeholder={text}
-              onChange={handleChange}
-            />
+            <TextFieldContainer>
+              {fieldTitle && <FieldTitle>{fieldTitle}</FieldTitle>}
+              <TextField
+                name={name}
+                key={name}
+                type="password"
+                placeholder={text}
+                onChange={handleChange}
+                isWide={isWide}
+              />
+            </TextFieldContainer>
           );
         case 'submit':
           return (

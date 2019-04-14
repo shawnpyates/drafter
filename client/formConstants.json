@@ -28,18 +28,21 @@
         "name": "passwordFirstInsertion",
         "text": "Create a Password",
         "type": "password",
+        "isWide": true,
         "enabled": true
       },
       {
         "name": "passwordSecondInsertion",
         "text": "Confirm Your Password",
         "type": "password",
+        "isWide": true,
         "enabled": true
       },
       {
         "name": "submitButton",
         "text": "Sign Up",
         "type": "submit",
+        "isWide": true,
         "enabled": true
       }
     ],
@@ -65,6 +68,7 @@
         "name": "password",
         "text": "Password",
         "type": "password",
+        "isWide": true,
         "enabled": true
       },
       {

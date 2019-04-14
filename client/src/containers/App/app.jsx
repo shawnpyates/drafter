@@ -32,6 +32,7 @@ class App extends Component {
 
   componentWillMount() {
     if (!this.props.currentUser && localStorage.getItem('drafterUserToken')) {
+      this.setState({ isTokenMissing: false });
       this.props.fetchCurrentUser();
     } else {
       this.setState({ isTokenMissing: true });
@@ -47,13 +48,12 @@ class App extends Component {
           {currentUser &&
             <LoggedInView />
           }
-          {((false && this.state.isTokenMissing) || errorOnFetchCurrentUser) &&
+          {(this.state.isTokenMissing || errorOnFetchCurrentUser) &&
             <LoggedOutView />
           }
           {!currentUser && !this.state.isTokenMissing &&
             <div>Loading...</div>
           }
-          <LoggedOutView />
         </AppContainer>
       </Router>
     );
