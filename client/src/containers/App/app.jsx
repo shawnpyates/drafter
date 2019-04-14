@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import { BrowserRouter as Router } from 'react-router-dom';
 import styled from 'styled-components';
 
-import Header from '../../components/Header/header.jsx';
-import LoggedInView from '../LoggedInView/loggedInView.jsx';
-import LoggedOutView from '../LoggedOutView/loggedOutView.jsx';
+import Header from '../../components/Header/header';
+import LoggedInView from '../LoggedInView/loggedInView';
+import LoggedOutView from '../LoggedOutView/loggedOutView';
 import { fetchCurrentUser } from '../../actions';
 
 const { localStorage } = window;

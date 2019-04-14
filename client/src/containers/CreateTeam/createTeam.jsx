@@ -2,8 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
-import Form from '../../components/Form/form.jsx';
+
+import Form from '../../components/Form/form';
+
 import { createTeam, fetchDraftsByOwner } from '../../actions';
+
 import { team as teamForm } from '../../../formConstants.json';
 
 const mapStateToProps = (state) => {
@@ -32,7 +35,7 @@ const getInputsWithDrafts = (inputs, drafts) => {
     options: draftOptions,
   };
   return clonedInputs;
-}
+};
 
 class CreateTeam extends Component {
   constructor() {
@@ -42,7 +45,6 @@ class CreateTeam extends Component {
       name: null,
       isSubmitComplete: false,
       errorMessage: null,
-      shouldFindOwnDraft: false,
       buttonsToHighlight: {
         shouldFindOwnDraft: null,
         draftList: null,
@@ -93,8 +95,8 @@ class CreateTeam extends Component {
     }
     const draftIdForBody = (
       shouldFindOwnDraft
-      ? this.props.drafts.find(draft => draft.name === draftList).id
-      : Number(draftId)
+        ? (this.props.drafts.find(draft => draft.name === draftList)).id
+        : Number(draftId)
     );
     const body = {
       name,
@@ -111,8 +113,8 @@ class CreateTeam extends Component {
     const { inputs, title } = teamForm;
     const inputsToRender = (
       drafts && drafts.length
-      ? getInputsWithDrafts(inputs, drafts)
-      : inputs
+        ? getInputsWithDrafts(inputs, drafts)
+        : inputs
     );
     return (
       <div>
@@ -137,6 +139,8 @@ class CreateTeam extends Component {
 CreateTeam.propTypes = {
   createTeam: PropTypes.func.isRequired,
   currentUser: PropTypes.objectOf(PropTypes.any).isRequired,
+  drafts: PropTypes.arrayOf(PropTypes.object).isRequired,
+  fetchDraftsByOwner: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateTeam);

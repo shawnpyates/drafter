@@ -2,9 +2,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
-import Form from '../../components/Form/form.jsx';
+
+import Form from '../../components/Form/form';
+
 import { updateUser } from '../../actions';
+
 import { updateUser as updateUserForm } from '../../../formConstants.json';
+
 const { inputs: formInputs } = updateUserForm;
 
 const {
@@ -54,7 +58,7 @@ class UpdateUser extends Component {
     const registeredAsPlayer = currentUser.registeredAsPlayer ? 'Yes' : 'No';
     this.setState({
       inputs: formInputs.map(input => (
-        {...input, defaultValue: currentUser[input.name]}
+        { ...input, defaultValue: currentUser[input.name] }
       )),
       email: currentUser.email,
       position: currentUser.position,
@@ -64,7 +68,7 @@ class UpdateUser extends Component {
   updateObjectInInputs = (inputs, shouldBeEnabled) => {
     const positionField = getFieldByName(inputs, 'position');
     const updatedPosition = { ...positionField, enabled: shouldBeEnabled };
-    return inputs.map(input => input.name === 'position' ? updatedPosition : input)
+    return inputs.map(input => (input.name === 'position' ? updatedPosition : input));
   }
 
   updatePositionFieldBasedOnRegisterState() {
@@ -115,7 +119,7 @@ class UpdateUser extends Component {
 
   updateFieldValue = (name, value) => {
     this.setState({
-      [name]: value
+      [name]: value,
     }, () => {
       if (name === 'registeredAsPlayer') {
         this.updatePositionFieldBasedOnRegisterState();
@@ -144,9 +148,14 @@ class UpdateUser extends Component {
   }
 }
 
+UpdateUser.defaultProps = {
+  errorOnAuthenticateUser: null,
+}
+
 UpdateUser.propTypes = {
-  updateUser: PropTypes.func.isRequired,
   currentUser: PropTypes.objectOf(PropTypes.any).isRequired,
+  errorOnAuthenticateUser: PropTypes.string,
+  updateUser: PropTypes.func.isRequired,
 };
 
 

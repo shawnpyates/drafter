@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import Login from '../Login/login.jsx';
-import Register from '../Register/register.jsx';
+
+import Login from '../Login/login';
+import Register from '../Register/register';
+
 import { register as registerForm, login as loginForm } from '../../../formConstants.json';
 
 import {

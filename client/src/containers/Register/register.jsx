@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import Form from '../../components/Form/form.jsx';
+
+import Form from '../../components/Form/form';
+
 import { createUser } from '../../actions';
+
 import { register as registerForm } from '../../../formConstants.json';
+
 const { inputs: formInputs } = registerForm;
 
 const {
@@ -25,8 +29,6 @@ const mapDispatchToProps = dispatch => ({
 
 const isEmailValid = email => (/\S+@\S+\.\S+/).test(email);
 
-const getFieldByName = (inputs, name) => inputs.find(input => input.name === name);
-
 class Register extends Component {
   constructor() {
     super();
@@ -41,7 +43,7 @@ class Register extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.errorOnAuthenticateUser) {
+    if (nextProps.errorOnAuthenticateUser || nextProps.errorOnCreateUser) {
       this.setState({ errorMessage: unexpected });
     }
   }
@@ -72,7 +74,6 @@ class Register extends Component {
       email,
     } = fieldState;
 
-    const keys = Object.keys(fieldState);
     const values = Object.values(fieldState);
 
     const isEmpty = value => !value;
@@ -108,7 +109,7 @@ class Register extends Component {
     const { errorMessage } = this.state;
     return (
       <Form
-        isFormWide={true}
+        isFormWide
         updateFieldValue={this.updateFieldValue}
         handleSubmit={this.handleSubmit}
         title={registerForm.title}
