@@ -14,7 +14,7 @@ const Container = styled.header`
   ${HEADING_TEXT_MIXIN({ color: WHITE })}
 
   @media only screen and (min-width: 600px) {
-    height: 10rem;
+    height: 12rem;
   }
 `;
 

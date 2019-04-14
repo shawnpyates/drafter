@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { BrowserRouter as Router } from 'react-router-dom';
+import styled from 'styled-components';
+
 import Header from '../../components/Header/header.jsx';
 import LoggedInView from '../LoggedInView/loggedInView.jsx';
 import LoggedOutView from '../LoggedOutView/loggedOutView.jsx';
@@ -18,6 +20,8 @@ const mapDispatchToProps = dispatch => ({
   fetchCurrentUser: () => dispatch(fetchCurrentUser()),
 });
 
+const AppContainer = styled.div``;
+
 class App extends Component {
   constructor() {
     super();
@@ -28,6 +32,7 @@ class App extends Component {
 
   componentWillMount() {
     if (!this.props.currentUser && localStorage.getItem('drafterUserToken')) {
+      this.setState({ isTokenMissing: false });
       this.props.fetchCurrentUser();
     } else {
       this.setState({ isTokenMissing: true });
@@ -38,18 +43,18 @@ class App extends Component {
     const { currentUser, errorOnFetchCurrentUser } = this.props;
     return (
       <Router>
-        <div>
+        <AppContainer>
           <Header currentUser={currentUser} />
           {currentUser &&
             <LoggedInView />
           }
-          {((!currentUser && this.state.isTokenMissing) || errorOnFetchCurrentUser) &&
+          {(this.state.isTokenMissing || errorOnFetchCurrentUser) &&
             <LoggedOutView />
           }
           {!currentUser && !this.state.isTokenMissing &&
             <div>Loading...</div>
           }
-        </div>
+        </AppContainer>
       </Router>
     );
   }

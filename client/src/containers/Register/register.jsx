@@ -108,6 +108,7 @@ class Register extends Component {
     const { errorMessage } = this.state;
     return (
       <Form
+        isFormWide={true}
         updateFieldValue={this.updateFieldValue}
         handleSubmit={this.handleSubmit}
         title={registerForm.title}

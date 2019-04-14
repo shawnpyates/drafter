@@ -1,10 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ProfileCard from '../../components/ProfileCard/profileCard.jsx';
-import {
-  user as userProfileConstants,
-} from '../../components/ProfileCard/profileCardConstants.json';
+import { user as userProfileConstants }
+  from '../../components/ProfileCard/profileCardConstants.json';
 import Drafts from '../Drafts/drafts.jsx';
 import Teams from '../Teams/teams.jsx';
 import { MainMenuContainer, WelcomeMessage } from './styledComponents';

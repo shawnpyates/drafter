@@ -7,7 +7,7 @@ const { DARK_BLUE } = styleVars;
 
 const MainMenuContainer = styled.div`
   position: absolute;
-  width: 50%;
+  width: 60%;
   left: 50%;
   transform: translateX(-50%);
 

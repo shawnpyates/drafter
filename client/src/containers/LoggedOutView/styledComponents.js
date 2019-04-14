@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 
-import { styleVars } from '../../styles';
+import { mixins, styleVars } from '../../styles';
 
+const { HEADING_TEXT_MIXIN } = mixins;
 const {
   DARK_BLUE,
   SKY_BLUE,
@@ -11,33 +12,35 @@ const {
 
 const FormContainer = styled.div`
   background: ${DARK_BLUE};
-  padding: 40px;
-  max-width: 600px;
-  margin: 40px auto;
+  padding: 4rem;
+  margin: 4rem auto;
   border-radius: 4px;
   box-shadow: 0 4px 10px 4px rgba(19, 35, 47, 0.3);
+  position: absolute;
+  height: 100%;
+  width: 40%;
+  left: 50%;
+  transform: translateX(-50%);
+
+  ${HEADING_TEXT_MIXIN({ color: DARK_BLUE })}
 `;
 
 const TabList = styled.ul`
   list-style: none;
+  margin-bottom: 5rem;
   padding: 0;
-  margin: 0 0 40px 0;
-  &:after {
-    content: "";
-    display: table;
-    clear: both;
-  }
 `;
 
-const TabListAnchor = styled.a`
+const TabListItem = styled.div`
+  position: absolute;
+  ${props => (props.isLeft ? 'left' : 'right')}: 25%;
   text-decoration: none;
   color: #1AB188;
   transition: 0.5s ease;
   background: ${WHITE};
   color: #CCC;
   font-size: ${LARGE_FONT_SIZE};
-  float: left;
-  width: 50%;
+  width: 25%;
   text-align: center;
   border: 1px solid ${DARK_BLUE};
   text-transform: uppercase;
@@ -48,8 +51,16 @@ const TabListAnchor = styled.a`
   }
 `;
 
+const TabListAnchor = styled.a``;
+
+const TabListContainer = styled.div`
+  height: 15%;
+`;
+
 module.exports = {
   FormContainer,
   TabList,
   TabListAnchor,
+  TabListItem,
+  TabListContainer,
 };

@@ -12,6 +12,8 @@ import {
   TitleBox,
 } from './styledComponents';
 
+const MAX_EMAIL_DISPLAY = 30;
+
 const { title, logOut, notLoggedIn } = headerTexts;
 const { localStorage, location } = window;
 
@@ -20,6 +22,12 @@ const Header = ({ currentUser }) => {
     localStorage.removeItem('drafterUserToken');
     location.reload();
   };
+
+  const trimEmail = email => (
+    `${email.slice(0, MAX_EMAIL_DISPLAY)}...`
+  );
+
+  const userEmail = currentUser && currentUser.email;
 
   return (
     <Container>
@@ -30,7 +38,9 @@ const Header = ({ currentUser }) => {
       </TitleBox>
       {currentUser &&
         <NavBar>
-          <NavBarItem>{currentUser.email}</NavBarItem>
+          <NavBarItem>
+            {userEmail.length > MAX_EMAIL_DISPLAY ? trimEmail(userEmail) : userEmail}
+          </NavBarItem>
           <Link to="/">
             <NavBarLogOut onClick={handleLogOut}>{logOut}</NavBarLogOut>
           </Link>

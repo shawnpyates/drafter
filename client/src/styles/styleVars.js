@@ -19,6 +19,10 @@ module.exports = {
   NORMAL_FONT_SIZE: '1.6rem',
   LARGE_FONT_SIZE: '2.0rem',
 
+  // form widths
+  NARROW_FORM: '40%',
+  WIDE_FORM: '70%',
+
   // text field widths
   NARROW_TEXT_FIELD: '25%',
   WIDE_TEXT_FIELD: '60%',
