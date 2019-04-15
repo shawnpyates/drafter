@@ -4,6 +4,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    uuid: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+    },
+    status: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     timeScheduled: DataTypes.DATE,
   });
   Draft.associate = (models) => {
