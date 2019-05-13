@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const { Player } = require('../models');
+const { Player, Draft, Team } = require('../models');
 
 const { in: opIn } = Sequelize.Op;
 
@@ -13,6 +13,28 @@ module.exports = {
       return res.status(400).send({ e });
     }
   },
+
+  async fetchByDraft(req, res) {
+    try {
+      const { id: draftId } = req.params;
+      const players = await Player.findAll({ where: { draftId } });
+      return res.status(200).send({ players });
+    } catch (e) {
+      return res.status(400).send({ e });
+    }
+  },
+
+  async fetchByTeam(req, res) {
+    try {
+      const { id: teamId } = req.params;
+      const players = await Player.findAll({ where: { teamId } });
+      return res.status(200).send({ players });
+    } catch (e) {
+      return res.status(400).send({ e });
+    }
+  },
+
+
 
   async create(req, res) {
     try {

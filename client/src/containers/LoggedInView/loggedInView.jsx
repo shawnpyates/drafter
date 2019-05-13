@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import MainMenu from '../MainMenu/mainMenu';
 import CreateDraft from '../CreateDraft/createDraft';
 import CreateTeam from '../CreateTeam/createTeam';
+import CreatePlayer from '../CreatePlayer/createPlayer';
 import UpdateUser from '../UpdateUser/updateUser';
 import DraftMenu from '../DraftMenu/draftMenu';
 import TeamMenu from '../TeamMenu/teamMenu';
@@ -21,6 +22,8 @@ const LoggedInView = () => (
     <Route path="/updateUser" component={UpdateUser} />
     <Route path="/drafts/:id" component={DraftMenu} />
     <Route path="/teams/:id" component={TeamMenu} />
+    <Route path="/teams/:id/createPlayers" component={CreatePlayer} />
+    <Route path="/drafts/:id/createPlayers" component={CreatePlayer} />
   </MainContainer>
 );
 

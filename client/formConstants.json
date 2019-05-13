@@ -132,6 +132,36 @@
       }
     ]
   },
+  "player": {
+    "title": "Create a New Player",
+    "inputs": [
+      {
+        "name": "name",
+        "text": "Player's Name",
+        "type": "text",
+        "isWide": true,
+        "enabled": true
+      },
+      {
+        "name": "position",
+        "text": "Player's Position",
+        "type": "select",
+        "enabled": true,
+        "options": [
+          "Goaltender",
+          "Defence",
+          "Left/Right Wing",
+          "Center"
+        ]
+      },
+      {
+        "name": "submitButton",
+        "text": "Create",
+        "type": "submit",
+        "enabled": true
+      }
+    ]
+  },
   "team": {
     "title": "Create a New Team",
     "inputs": [

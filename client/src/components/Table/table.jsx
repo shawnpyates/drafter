@@ -22,13 +22,14 @@ const Table = ({
   columnHeaders,
   data,
   emptyDataMessage,
+  addNewLink,
 }) => {
   const getCellsForRow = (dataEntry) => {
     const { id, ...dataEntryMinusId } = dataEntry;
     const vals = Object.values(dataEntryMinusId);
     return vals.map(val => <td>{val}</td>);
   };
-  const addNewLink = `/create${type}`;
+  const newLink = addNewLink || `/create${type}`;
   return (
     <Container>
       <TableFrame>
@@ -36,7 +37,7 @@ const Table = ({
           <TableTitleLine>
             <th>
               <TableTitle>{title}</TableTitle>
-              <Link to={addNewLink}>
+              <Link to={newLink}>
                 <AddNewButton>
                   Add New
                 </AddNewButton>
@@ -71,12 +72,17 @@ const Table = ({
   );
 };
 
+Table.defaultProps = {
+  addNewLink: null,
+};
+
 Table.propTypes = {
   type: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   columnHeaders: PropTypes.arrayOf(PropTypes.string).isRequired,
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
   emptyDataMessage: PropTypes.string.isRequired,
+  addNewLink: PropTypes.string,
 };
 
 export default Table;
