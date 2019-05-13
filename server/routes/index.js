@@ -34,6 +34,8 @@ module.exports = (app) => {
 
   // players
   app.get('/api/players/:id', players.fetchOne);
+  app.get('/api/drafts/:id/players', players.fetchByDraft);
+  app.get('/api/teams/:id/players', players.fetchByTeam);
   app.post('/api/players', players.create);
   app.put('/api/players/:id', players.update);
   app.delete('/api/players/:id', players.destroy);
