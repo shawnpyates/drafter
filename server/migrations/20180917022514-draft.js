@@ -11,6 +11,15 @@ module.exports = {
       },
       name: {
         type: Sequelize.STRING,
+        allowNull: false,
+      },
+      uuid: {
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
+      },
+      status: {
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       timeScheduled: {
         type: Sequelize.DATE,

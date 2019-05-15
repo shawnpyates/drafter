@@ -46,7 +46,12 @@ class Players extends Component {
   }
 
   render() {
-    const { players, fetchBy } = this.props;
+    const {
+      players,
+      fetchBy,
+      teamId,
+      draftId,
+    } = this.props;
     const {
       type,
       title,
@@ -54,6 +59,11 @@ class Players extends Component {
       noPlayersInDraft,
       columnHeaders,
     } = playersTableTexts;
+    const addNewLink = (
+      fetchBy === 'team'
+        ? `/teams/${teamId}/createPlayers`
+        : `/drafts/${draftId}/createPlayers`
+    );
     return (
       <div>
         {players &&
@@ -63,6 +73,7 @@ class Players extends Component {
             columnHeaders={columnHeaders}
             data={extractDataForTable(players)}
             emptyDataMessage={fetchBy === 'team' ? noPlayersOnTeam : noPlayersInDraft}
+            addNewLink={addNewLink}
           />
         }
       </div>

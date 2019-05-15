@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const { Player } = require('../models');
+const { Player, Draft, Team } = require('../models');
 
 const { in: opIn } = Sequelize.Op;
 

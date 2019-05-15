@@ -2,7 +2,6 @@ const { Team } = require('../models');
 const { create: createUserTeam } = require('./userTeams');
 
 module.exports = {
-
   async fetchOne(req, res) {
     try {
       const team = await Team.findById(req.params.id);

@@ -26,7 +26,12 @@ module.exports = {
   async create(req, res) {
     try {
       const { name, timeScheduled, ownerUserId } = req.body;
-      const draft = await Draft.create({ name, timeScheduled, ownerUserId });
+      const draft = await Draft.create({
+        name,
+        timeScheduled,
+        ownerUserId,
+        status: timeScheduled ? 'scheduled' : 'unscheduled',
+      });
       const draftProperties = {
         body: {
           isOwner: true,

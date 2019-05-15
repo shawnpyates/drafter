@@ -20,18 +20,27 @@ import {
   createTeam,
 } from './teamActions';
 
+import {
+  fetchPlayersByDraft,
+  fetchPlayersByTeam,
+  createPlayer,
+} from './playerActions';
+
 export {
   fetchCurrentUser,
   createUser,
   authenticateUser,
   fetchUsersByTeam,
   fetchUsersByDraft,
-  fetchTeamsByDraft,
   updateUser,
   fetchDraftsByUser,
   fetchDraftsByTeam,
   fetchDraftsByOwner,
   createDraft,
   fetchTeamsByUser,
+  fetchTeamsByDraft,
   createTeam,
+  fetchPlayersByDraft,
+  fetchPlayersByTeam,
+  createPlayer,
 };

@@ -10,7 +10,6 @@ module.exports = {
       },
       isOwner: Sequelize.BOOLEAN,
       isAdmin: Sequelize.BOOLEAN,
-      hasCreatePermissions: Sequelize.BOOLEAN,
       userId: {
         type: Sequelize.INTEGER,
         references: {
