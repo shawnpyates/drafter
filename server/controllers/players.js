@@ -14,6 +14,26 @@ module.exports = {
     }
   },
 
+  async fetchByDraft(req, res) {
+    try {
+      const { id: draftId } = req.params;
+      const players = await Player.findAll({ where: { draftId } });
+      return res.status(200).send({ players });
+    } catch (e) {
+      return res.status(400).send({ e });
+    }
+  },
+
+  async fetchByTeam(req, res) {
+    try {
+      const { id: teamId } = req.params;
+      const players = await Player.findAll({ where: { teamId } });
+      return res.status(200).send({ players });
+    } catch (e) {
+      return res.status(400).send({ e });
+    }
+  },
+
   async create(req, res) {
     try {
       const {
@@ -22,6 +42,7 @@ module.exports = {
         position,
         draftId,
         teamId,
+        creatorUserId,
       } = req.body;
 
       const player = await Player.create({
@@ -30,6 +51,7 @@ module.exports = {
         position,
         draftId,
         teamId,
+        creatorUserId,
       });
       return res.status(201).send({ player });
     } catch (e) {

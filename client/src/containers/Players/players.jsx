@@ -4,30 +4,28 @@ import PropTypes from 'prop-types';
 
 import Table from '../../components/Table/table';
 
-import { fetchUsersByTeam, fetchUsersByDraft } from '../../actions';
+import { fetchPlayersByTeam, fetchPlayersByDraft } from '../../actions';
 
 import { playersTable as playersTableTexts } from '../../../texts.json';
 
 const mapStateToProps = (state) => {
-  const { users: players } = state.user;
+  const { players } = state.player;
   return { players };
 };
 
 const mapDispatchToProps = dispatch => ({
-  fetchUsersByTeam: id => dispatch(fetchUsersByTeam(id)),
-  fetchUsersByDraft: id => dispatch(fetchUsersByDraft(id)),
+  fetchPlayersByTeam: id => dispatch(fetchPlayersByTeam(id)),
+  fetchPlayersByDraft: id => dispatch(fetchPlayersByDraft(id)),
 });
 
 const extractDataForTable = players => (
   players.map((player) => {
     const {
       id,
-      firstName,
-      lastName,
+      name,
       position,
     } = player;
-    const fullName = `${firstName} ${lastName}`;
-    return { id, fullName, position };
+    return { id, name, position };
   })
 );
 
@@ -35,8 +33,8 @@ class Players extends Component {
   componentDidMount() {
     const {
       fetchBy,
-      fetchUsersByTeam: fetchByTeam,
-      fetchUsersByDraft: fetchByDraft,
+      fetchPlayersByTeam: fetchByTeam,
+      fetchPlayersByDraft: fetchByDraft,
       teamId,
       draftId,
     } = this.props;
@@ -81,8 +79,8 @@ Players.defaultProps = {
 Players.propTypes = {
   players: PropTypes.arrayOf(PropTypes.object),
   fetchBy: PropTypes.string.isRequired,
-  fetchUsersByTeam: PropTypes.func.isRequired,
-  fetchUsersByDraft: PropTypes.func.isRequired,
+  fetchPlayersByTeam: PropTypes.func.isRequired,
+  fetchPlayersByDraft: PropTypes.func.isRequired,
   teamId: PropTypes.number,
   draftId: PropTypes.number,
 };
