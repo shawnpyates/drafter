@@ -34,8 +34,6 @@ module.exports = {
     }
   },
 
-
-
   async create(req, res) {
     try {
       const {
@@ -44,6 +42,7 @@ module.exports = {
         position,
         draftId,
         teamId,
+        creatorUserId,
       } = req.body;
 
       const player = await Player.create({
@@ -52,6 +51,7 @@ module.exports = {
         position,
         draftId,
         teamId,
+        creatorUserId,
       });
       return res.status(201).send({ player });
     } catch (e) {

@@ -16,7 +16,9 @@ module.exports = (sequelize, DataTypes) => {
     Team.belongsTo(models.Draft, {
       foreignKey: 'draftId',
     });
-    Team.hasMany(models.Player);
+    Team.hasMany(models.Player, {
+      foreignKey: 'teamId',
+    });
   };
   return Team;
 };

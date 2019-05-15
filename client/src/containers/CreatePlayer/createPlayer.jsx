@@ -47,9 +47,23 @@ class CreatePlayer extends Component {
       this.setState({ errorMessage: 'Please complete all fields.' });
       return;
     }
+    const {
+      match: {
+        url,
+        params: { id: orgId } = {},
+      } = {},
+      currentUser,
+    } = this.props;
+    const orgKey = (
+      url.split(orgId)[0] === '/teams/'
+        ? 'teamId'
+        : 'draftId'
+    );
     const body = {
       name,
       position,
+      creatorUserId: currentUser.id,
+      [orgKey]: Number(orgId),
     };
     this.props.createPlayer(body).then(() => this.setState({ isSubmitComplete: true }));
   }
@@ -77,8 +91,14 @@ class CreatePlayer extends Component {
   }
 }
 
+CreatePlayer.defaultProps = {
+  match: null,
+};
+
 CreatePlayer.propTypes = {
   createPlayer: PropTypes.func.isRequired,
+  currentUser: PropTypes.number.isRequired,
+  match: PropTypes.objectOf(PropTypes.any),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreatePlayer);

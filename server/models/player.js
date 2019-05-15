@@ -12,6 +12,10 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'draftId',
       allowNull: false,
     });
+    Player.belongsTo(models.User, {
+      foreignKey: 'creatorUserId',
+      allowNull: false,
+    });
     Player.belongsTo(models.Team, {
       foreignKey: 'teamId',
     });
