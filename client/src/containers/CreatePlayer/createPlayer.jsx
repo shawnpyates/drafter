@@ -9,6 +9,11 @@ import { createPlayer } from '../../actions';
 
 import { player as playerForm } from '../../../formConstants.json';
 
+const {
+  missingField,
+  invalidEmail,
+} = playerForm.errorMessages;
+
 const mapStateToProps = (state) => {
   const {
     user: { currentUser },
@@ -21,12 +26,15 @@ const mapDispatchToProps = dispatch => ({
   createPlayer: body => dispatch(createPlayer(body)),
 });
 
+const isEmailValid = email => (/\S+@\S+\.\S+/).test(email);
+
 class CreatePlayer extends Component {
   constructor() {
     super();
 
     this.state = {
       name: null,
+      email: null,
       position: null,
       isSubmitComplete: false,
       errorMessage: null,
@@ -41,10 +49,15 @@ class CreatePlayer extends Component {
     ev.preventDefault();
     const {
       name,
+      email,
       position,
     } = this.state;
     if (!name || !position) {
-      this.setState({ errorMessage: 'Please complete all fields.' });
+      this.setState({ errorMessage: missingField });
+      return;
+    }
+    if (email && !isEmailValid(email)) {
+      this.setState({ errorMessage: invalidEmail });
       return;
     }
     const {
@@ -61,6 +74,7 @@ class CreatePlayer extends Component {
     );
     const body = {
       name,
+      email,
       position,
       creatorUserId: currentUser.id,
       [orgKey]: Number(orgId),

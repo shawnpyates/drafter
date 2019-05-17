@@ -26,6 +26,6 @@
     "title": "Players",
     "noPlayersOnTeam": "There are currently no players on this team.",
     "noPlayersInDraft": "There are currently no players entered into this draft.",
-    "columnHeaders": ["Name", "Position"]
+    "columnHeaders": ["Name", "Email", "Position"]
   }
 }

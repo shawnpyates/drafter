@@ -23,9 +23,15 @@ const extractDataForTable = players => (
     const {
       id,
       name,
+      email,
       position,
     } = player;
-    return { id, name, position };
+    return {
+      id,
+      name,
+      email: email || '(Unprovided)',
+      position,
+    };
   })
 );
 
