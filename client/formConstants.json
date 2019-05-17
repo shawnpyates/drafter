@@ -143,10 +143,18 @@
         "enabled": true
       },
       {
+        "name": "email",
+        "text": "Player's Email (optional)",
+        "type": "text",
+        "isWide": true,
+        "enabled": true
+      },
+      {
         "name": "position",
         "text": "Player's Position",
         "type": "select",
         "enabled": true,
+        "placeholder": "Please Select",
         "options": [
           "Goaltender",
           "Defence",
@@ -160,7 +168,11 @@
         "type": "submit",
         "enabled": true
       }
-    ]
+    ],
+    "errorMessages": {
+      "invalidEmail": "Please enter a valid e-mail address.",
+      "missingField": "Please fill in all fields."
+    }
   },
   "team": {
     "title": "Create a New Team",
