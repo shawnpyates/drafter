@@ -22,16 +22,20 @@ const mapDispatchToProps = dispatch => ({
   fetchDraftsByOwner: ownerUserId => dispatch(fetchDraftsByOwner(ownerUserId)),
 });
 
+const getInputsWithoutDraftSelection = inputs => (
+  inputs.filter(input => input.name !== 'shouldFindOwnDraft')
+);
+
 const getInputsWithDrafts = (inputs, drafts) => {
   const clonedInputs = [...inputs];
-  const draftListInput = clonedInputs.find(input => input.name === 'draftList');
+  const draftListSelectionInput = clonedInputs.find(input => input.name === 'draftListSelection');
   const draftOptions = drafts.map(draft => ({
     label: draft.name,
     value: draft.name,
     isWide: true,
   }));
-  clonedInputs[clonedInputs.indexOf(draftListInput)] = {
-    ...draftListInput,
+  clonedInputs[clonedInputs.indexOf(draftListSelectionInput)] = {
+    ...draftListSelectionInput,
     options: draftOptions,
   };
   return clonedInputs;
@@ -47,9 +51,9 @@ class CreateTeam extends Component {
       errorMessage: null,
       buttonsToHighlight: {
         shouldFindOwnDraft: null,
-        draftList: null,
+        draftListSelectionSelection: null,
       },
-      draftId: null,
+      draftIdFromTextField: null,
     };
   }
 
@@ -59,6 +63,15 @@ class CreateTeam extends Component {
     if (buttonsToHighlight.shouldFindOwnDraft && !drafts) {
       this.props.fetchDraftsByOwner(currentUser.id);
     }
+  }
+
+  getDraftIdParam() {
+    const {
+      match: {
+        params: { id } = {},
+      },
+    } = this.props;
+    return id;
   }
 
   updateButtonToHighlight = (key, value) => {
@@ -74,8 +87,8 @@ class CreateTeam extends Component {
       case 'shouldFindOwnDraft':
         this.updateButtonToHighlight('shouldFindOwnDraft', value);
         break;
-      case 'draftList':
-        this.updateButtonToHighlight('draftList', value);
+      case 'draftListSelection':
+        this.updateButtonToHighlight('draftListSelection', value);
         break;
       default:
         this.setState({ [name]: value });
@@ -86,18 +99,22 @@ class CreateTeam extends Component {
     ev.preventDefault();
     const {
       name,
-      buttonsToHighlight: { shouldFindOwnDraft, draftList },
-      draftId,
+      buttonsToHighlight: { draftListSelection },
+      draftIdFromTextField,
     } = this.state;
-    if (!name || (!draftList && !draftId)) {
+    const draftIdParam = this.getDraftIdParam();
+    const draftIdForBody = (
+      draftIdParam
+      || (
+        draftListSelection
+          ? (this.props.drafts.find(draft => draft.name === draftListSelection)).id
+          : Number(draftIdFromTextField)
+      )
+    );
+    if (!name || !draftIdForBody) {
       this.setState({ errorMessage: 'Please complete all fields.' });
       return;
     }
-    const draftIdForBody = (
-      shouldFindOwnDraft
-        ? (this.props.drafts.find(draft => draft.name === draftList)).id
-        : Number(draftId)
-    );
     const body = {
       name,
       ownerUserId: this.props.currentUser.id,
@@ -111,10 +128,20 @@ class CreateTeam extends Component {
     const { drafts } = this.props;
     const { errorMessage, isSubmitComplete, buttonsToHighlight } = this.state;
     const { inputs, title } = teamForm;
+    const draftIdParam = this.getDraftIdParam();
+    const inputsAfterFilter = draftIdParam && getInputsWithoutDraftSelection(inputs);
     const inputsToRender = (
-      drafts && drafts.length
-        ? getInputsWithDrafts(inputs, drafts)
-        : inputs
+      inputsAfterFilter
+      || (
+        drafts && drafts.length
+          ? getInputsWithDrafts(inputs, drafts)
+          : inputs
+      )
+    );
+    const redirectAfterSubmitUrl = (
+      draftIdParam
+        ? `/drafts/${draftIdParam}/show`
+        : '/'
     );
     return (
       <div>
@@ -129,18 +156,23 @@ class CreateTeam extends Component {
           />
         }
         {isSubmitComplete &&
-          <Redirect to="/" />
+          <Redirect to={redirectAfterSubmitUrl} />
         }
       </div>
     );
   }
 }
 
+CreateTeam.defaultProps = {
+  match: {},
+};
+
 CreateTeam.propTypes = {
   createTeam: PropTypes.func.isRequired,
   currentUser: PropTypes.objectOf(PropTypes.any).isRequired,
   drafts: PropTypes.arrayOf(PropTypes.object).isRequired,
   fetchDraftsByOwner: PropTypes.func.isRequired,
+  match: PropTypes.objectOf(PropTypes.any),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateTeam);

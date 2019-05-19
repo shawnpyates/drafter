@@ -43,7 +43,7 @@ const DraftMenu = ({ drafts, match }) => {
         data={profileCardData}
         linkForUpdating={profileCardLinkForUpdating}
       />
-      <Teams draftId={currentDraft.id} fetchBy="draft" />
+      <Teams draftId={currentDraft.id} fetchBy="draft" match={match} />
       <Players draftId={currentDraft.id} fetchBy="draft" />
     </div>
   );

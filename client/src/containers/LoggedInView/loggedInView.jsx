@@ -19,9 +19,10 @@ const LoggedInView = () => (
     <Route exact path="/" component={MainMenu} />
     <Route path="/createDrafts" component={CreateDraft} />
     <Route path="/createTeams" component={CreateTeam} />
+    <Route path="/drafts/:id/createTeams" component={CreateTeam} />
     <Route path="/updateUser" component={UpdateUser} />
-    <Route path="/drafts/:id" component={DraftMenu} />
-    <Route path="/teams/:id" component={TeamMenu} />
+    <Route path="/drafts/:id/show" component={DraftMenu} />
+    <Route path="/teams/:id/show" component={TeamMenu} />
     <Route path="/teams/:id/createPlayers" component={CreatePlayer} />
     <Route path="/drafts/:id/createPlayers" component={CreatePlayer} />
   </MainContainer>

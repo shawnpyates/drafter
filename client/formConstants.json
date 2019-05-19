@@ -204,7 +204,7 @@
         ]
       },
       {
-        "name": "draftList",
+        "name": "draftListSelection",
         "text": "Please select a draft to add this team to:",
         "type": "buttonGroup",
         "dataType": "string",
@@ -216,7 +216,7 @@
         }
       },
       {
-        "name": "draftId",
+        "name": "draftIdFromTextField",
         "fieldTitle": "Provide the ID of the draft that you would like to add your team to. The owner of the draft will be contacted with your request.",
         "text": "Type in Draft ID",
         "type": "text",

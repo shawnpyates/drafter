@@ -18,8 +18,9 @@ module.exports = {
     try {
       const { userId } = req.params;
       const userDrafts = await UserDraft.findAll({ where: { userId }, include: [Draft] });
-      if (!userDrafts.length) return res.status(200).send({ drafts: [] });
-      const draftsWithOwnerName = await getOrgsWithOwnerName(userDrafts, 'Draft');
+      const drafts = userDrafts.map(ud => ud.Draft);
+      if (!drafts.length) return res.status(200).send({ drafts: [] });
+      const draftsWithOwnerName = await getOrgsWithOwnerName(drafts);
       return res.status(200).send({ drafts: draftsWithOwnerName });
     } catch (e) {
       return res.status(400).send({ e });

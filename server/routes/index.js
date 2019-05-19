@@ -28,6 +28,7 @@ module.exports = (app) => {
 
   // teams
   app.get('/api/teams/:id', teams.fetchOne);
+  app.get('/api/drafts/:id/teams', teams.fetchTeamsByDraft);
   app.post('/api/teams', teams.create);
   app.put('/api/teams/:id', teams.update);
   app.delete('/api/teams/:id', teams.destroy);

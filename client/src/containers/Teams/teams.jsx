@@ -47,7 +47,12 @@ class Teams extends Component {
   }
 
   render() {
-    const { teams, fetchBy, drafts } = this.props;
+    const {
+      teams,
+      fetchBy,
+      drafts,
+      match,
+    } = this.props;
     const {
       type,
       title,
@@ -55,6 +60,10 @@ class Teams extends Component {
       noTeamsEntered,
       columnHeaders,
     } = teamsTableTexts;
+    const addNewLink = (
+      (match && match.url)
+      && `${match.url.replace('/show', '')}/createTeams`
+    );
     return (
       <div>
         {teams &&
@@ -64,6 +73,7 @@ class Teams extends Component {
             columnHeaders={columnHeaders}
             data={extractDataForTable(teams, drafts)}
             emptyDataMessage={fetchBy === 'user' ? belongToNoTeams : noTeamsEntered}
+            addNewLink={addNewLink}
           />
         }
       </div>
@@ -74,6 +84,7 @@ class Teams extends Component {
 Teams.defaultProps = {
   draftId: null,
   drafts: null,
+  match: null,
   teams: null,
   userId: null,
 };
@@ -84,6 +95,7 @@ Teams.propTypes = {
   fetchBy: PropTypes.string.isRequired,
   fetchTeamsByDraft: PropTypes.func.isRequired,
   fetchTeamsByUser: PropTypes.func.isRequired,
+  match: PropTypes.objectOf(PropTypes.any),
   teams: PropTypes.arrayOf(PropTypes.object),
   userId: PropTypes.number,
 };

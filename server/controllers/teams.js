@@ -1,11 +1,24 @@
 const { Team } = require('../models');
 const { create: createUserTeam } = require('./userTeams');
+const { getOrgsWithOwnerName } = require('./helpers');
 
 module.exports = {
   async fetchOne(req, res) {
     try {
       const team = await Team.findById(req.params.id);
       return res.status(200).send({ team });
+    } catch (e) {
+      return res.status(400).send({ e });
+    }
+  },
+
+  async fetchTeamsByDraft(req, res) {
+    const { id: draftId } = req.params;
+    try {
+      const teams = await Team.findAll({ where: { draftId } });
+      if (!teams.length) return res.status(200).send({ teams: [] });
+      const teamsWithOwnerName = await getOrgsWithOwnerName(teams, 'Team');
+      return res.status(200).send({ teams: teamsWithOwnerName });
     } catch (e) {
       return res.status(400).send({ e });
     }
