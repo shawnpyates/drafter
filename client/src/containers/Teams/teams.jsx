@@ -51,7 +51,7 @@ class Teams extends Component {
       teams,
       fetchBy,
       drafts,
-      match,
+      match: { url },
     } = this.props;
     const {
       type,
@@ -60,10 +60,7 @@ class Teams extends Component {
       noTeamsEntered,
       columnHeaders,
     } = teamsTableTexts;
-    const addNewLink = (
-      (match && match.url)
-      && `${match.url.replace('/show', '')}/createTeams`
-    );
+    const addNewLink = url && url.replace('/show', '/createTeams');
     return (
       <div>
         {teams &&
@@ -84,7 +81,7 @@ class Teams extends Component {
 Teams.defaultProps = {
   draftId: null,
   drafts: null,
-  match: null,
+  match: {},
   teams: null,
   userId: null,
 };

@@ -62,9 +62,9 @@ class CreatePlayer extends Component {
     }
     const {
       match: {
-        url,
+        url = '',
         params: { id: orgId } = {},
-      } = {},
+      },
       currentUser,
     } = this.props;
     const orgKey = (
@@ -106,7 +106,7 @@ class CreatePlayer extends Component {
 }
 
 CreatePlayer.defaultProps = {
-  match: null,
+  match: {},
 };
 
 CreatePlayer.propTypes = {
