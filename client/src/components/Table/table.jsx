@@ -54,7 +54,7 @@ const Table = ({
                 ))}
               </HeaderRow>
               {data.map((entry, i) => (
-                <DataLink to={`${type.toLowerCase()}/${entry.id}`}>
+                <DataLink to={`/${type.toLowerCase()}/${entry.id}/show`}>
                   <DataRow
                     key={uuidv4()}
                     isEvenNumber={i % 2 === 0}
