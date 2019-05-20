@@ -1,8 +1,12 @@
 module.exports = (sequelize, DataTypes) => {
   const Request = sequelize.define('Request', {
-    requestType: DataTypes.STRING,
-    initiatorType: DataTypes.ENUM('draft', 'team'),
-    playerId: DataTypes.INTEGER,
+    uuid: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
+    teamName: DataTypes.STRING,
+    expiresAt: DataTypes.DATE,
   });
   Request.associate = (models) => {
     Request.belongsTo(models.Draft, {
@@ -10,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     });
     Request.belongsTo(models.User, {
-      foreignKey: 'userId',
+      foreignKey: 'requestCreatorId',
       allowNull: false,
     });
   };

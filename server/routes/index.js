@@ -3,6 +3,7 @@ const {
   teams,
   drafts,
   players,
+  requests,
   userTeams,
   userDrafts,
 } = require('../controllers');
@@ -28,7 +29,7 @@ module.exports = (app) => {
 
   // teams
   app.get('/api/teams/:id', teams.fetchOne);
-  app.get('/api/drafts/:id/teams', teams.fetchTeamsByDraft);
+  app.get('/api/drafts/:id/teams', teams.fetchByDraft);
   app.post('/api/teams', teams.create);
   app.put('/api/teams/:id', teams.update);
   app.delete('/api/teams/:id', teams.destroy);
@@ -41,6 +42,12 @@ module.exports = (app) => {
   app.put('/api/players/:id', players.update);
   app.delete('/api/players/:id', players.destroy);
   app.delete('/api/players/destroyMany', players.destroyMany);
+
+  // requests
+  app.get('/api/requests/:id', requests.fetchOne);
+  app.get('/api/drafts/:id/requests', requests.fetchByDraft);
+  app.get('/api/users/:id/requests', requests.fetchByUser);
+  app.post('/api/requests', requests.create);
 
   // user's association with draft
   app.get('/api/drafts/:draftId/users', userDrafts.fetchUsersByDraft);
