@@ -5,11 +5,11 @@ const { SERVER_URL } = process.env;
 
 const VALID_DURATION = 60 * 60 * 24 * 7 * 1000; // one week
 
-const getHtmlForMailer =  (draftName, creatorName, teamName) => (
+const getHtmlForMailer = (draftName, creatorName, teamName) => (
   createEmailHtml(`
     ${creatorName} has made a request for their team ${teamName} to join your draft ${draftName}
     \n
-    Click <a href=${SERVER_URL}>here</a> to visit DraftMachine and accept or delice the request.
+    Click <a href=${SERVER_URL}>here</a> to visit DraftMachine and accept or decline the request.
   `)
 );
 
@@ -73,7 +73,7 @@ module.exports = {
         fromEmail: requestCreator.email,
         toEmail: draftOwnerEmail,
         html: htmlForMailer,
-      })
+      });
       return res.status(201).send({ request });
     } catch (e) {
       return res.status(400).send({ e });
