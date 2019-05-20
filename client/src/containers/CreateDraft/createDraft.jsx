@@ -194,7 +194,7 @@ class CreateDraft extends Component {
     const body = {
       name,
       timeScheduled: finalTimeStamp,
-      ownerUserId: this.props.currentUser.id,
+      ownerUserId: this.props.currentUser.uuid,
     };
     this.props.createDraft(body).then(() => this.setState({ isSubmitComplete: true }));
   }

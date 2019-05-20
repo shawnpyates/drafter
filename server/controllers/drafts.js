@@ -5,7 +5,7 @@ module.exports = {
 
   async fetchOne(req, res) {
     try {
-      const draft = await Draft.findById(req.params.id);
+      const draft = await Draft.find({ where: { uuid: req.params.id } });
       return res.status(200).send({ draft });
     } catch (e) {
       return res.status(400).send({ e });
@@ -38,7 +38,7 @@ module.exports = {
           isAdmin: true,
         },
         params: {
-          draftId: draft.id,
+          draftId: draft.uuid,
           userId: ownerUserId,
         },
       };
@@ -52,7 +52,7 @@ module.exports = {
   async update(req, res) {
     try {
       const { name, timeScheduled } = req.body;
-      const draft = await Draft.findById(req.params.id);
+      const draft = await Draft.find({ where: { uuid: req.params.id } });
       if (!draft) return res.status(404).send({ e: 'Draft not found.' });
       const updatedDraft = await draft.update({
         name: name || draft.name,
@@ -66,7 +66,7 @@ module.exports = {
 
   async destroy(req, res) {
     try {
-      const draft = await Draft.findById(req.params.id);
+      const draft = await Draft.find({ where: { uuid: req.params.id } });
       if (!draft) return res.status(404).send({ e: 'Draft not found.' });
       await draft.destroy();
       return res.status(204).send({});

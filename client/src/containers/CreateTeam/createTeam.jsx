@@ -61,7 +61,7 @@ class CreateTeam extends Component {
     const { buttonsToHighlight } = this.state;
     const { currentUser, drafts } = this.props;
     if (buttonsToHighlight.shouldFindOwnDraft && !drafts) {
-      this.props.fetchDraftsByOwner(currentUser.id);
+      this.props.fetchDraftsByOwner(currentUser.uuid);
     }
   }
 
@@ -107,7 +107,7 @@ class CreateTeam extends Component {
       draftIdParam
       || (
         draftListSelection
-          ? (this.props.drafts.find(draft => draft.name === draftListSelection)).id
+          ? (this.props.drafts.find(draft => draft.name === draftListSelection)).uuid
           : Number(draftIdFromTextField)
       )
     );
@@ -117,7 +117,7 @@ class CreateTeam extends Component {
     }
     const body = {
       name,
-      ownerUserId: this.props.currentUser.id,
+      ownerUserId: this.props.currentUser.uuid,
       draftId: draftIdForBody,
     };
     this.props.createTeam(body).then(() => this.setState({ isSubmitComplete: true }));

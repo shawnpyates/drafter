@@ -19,20 +19,20 @@ module.exports = {
       },
       draftId: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         references: {
           model: 'Drafts',
-          key: 'id'
+          key: 'uuid'
         },
         onUpdate: 'cascade',
         onDelete: 'cascade',
       },
       teamId: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         references: {
           model: 'Teams',
-          key: 'id'
+          key: 'uuid'
         },
         onUpdate: 'cascade',
         onDelete: 'cascade',

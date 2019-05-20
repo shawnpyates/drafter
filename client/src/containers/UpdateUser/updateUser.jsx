@@ -88,7 +88,7 @@ class UpdateUser extends Component {
     } = this.state;
     const isRegistered = registeredAsPlayer === 'Yes';
     const body = {
-      id: this.props.currentUser.id,
+      id: this.props.currentUser.uuid,
       email,
       registeredAsPlayer: isRegistered,
       position,

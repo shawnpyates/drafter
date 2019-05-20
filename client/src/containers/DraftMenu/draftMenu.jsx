@@ -26,7 +26,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 };
 
 const DraftMenu = ({ drafts, match }) => {
-  const currentDraft = drafts.find(draft => draft.id === Number(match.params.id));
+  const currentDraft = drafts.find(draft => draft.uuid === match.params.id);
   const profileCardTitle = currentDraft.name;
   const { scheduledFor, owner } = profileProperties;
   const { unscheduled } = profileValues;
@@ -43,8 +43,8 @@ const DraftMenu = ({ drafts, match }) => {
         data={profileCardData}
         linkForUpdating={profileCardLinkForUpdating}
       />
-      <Teams draftId={currentDraft.id} fetchBy="draft" match={match} />
-      <Players draftId={currentDraft.id} fetchBy="draft" />
+      <Teams draftId={currentDraft.uuid} fetchBy="draft" match={match} />
+      <Players draftId={currentDraft.uuid} fetchBy="draft" />
     </div>
   );
 };

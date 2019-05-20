@@ -22,7 +22,7 @@ const mapDispatchToProps = dispatch => ({
 const extractDataForTable = drafts => (
   drafts.map((draft) => {
     const {
-      id,
+      uuid,
       name,
       timeScheduled,
       ownerName,
@@ -31,7 +31,7 @@ const extractDataForTable = drafts => (
       moment(timeScheduled).format('MMM D YYYY, h:mm a') :
       draftsTableTexts.unscheduled;
     return {
-      id,
+      uuid,
       name,
       readableTime,
       ownerName,
@@ -79,6 +79,8 @@ class Drafts extends Component {
 
 Drafts.defaultProps = {
   drafts: null,
+  teamId: null,
+  userId: null,
 };
 
 Drafts.propTypes = {
@@ -86,8 +88,8 @@ Drafts.propTypes = {
   fetchBy: PropTypes.string.isRequired,
   fetchDraftsByTeam: PropTypes.func.isRequired,
   fetchDraftsByUser: PropTypes.func.isRequired,
-  teamId: PropTypes.number.isRequired,
-  userId: PropTypes.number.isRequired,
+  teamId: PropTypes.number,
+  userId: PropTypes.number,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Drafts);

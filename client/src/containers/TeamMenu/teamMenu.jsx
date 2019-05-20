@@ -30,7 +30,7 @@ const TeamMenu = ({
   match,
   teams,
 }) => {
-  const currentTeam = teams.find(team => team.id === Number(match.params.id));
+  const currentTeam = teams.find(team => team.uuid === match.params.id);
   const profileCardTitle = currentTeam.name;
   const { owner } = profileProperties;
   const { id, ownerName } = currentTeam;
@@ -43,8 +43,8 @@ const TeamMenu = ({
         data={profileCardData}
         linkForUpdating={profileCardLinkForUpdating}
       />
-      <Drafts teamId={currentTeam.id} fetchBy="team" />
-      <Players teamId={currentTeam.id} fetchBy="team" />
+      <Drafts teamId={currentTeam.uuid} fetchBy="team" />
+      <Players teamId={currentTeam.uuid} fetchBy="team" />
     </div>
   );
 };
