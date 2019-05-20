@@ -19,7 +19,7 @@ module.exports = {
       const { userId } = req.params;
       const userTeams = await UserTeam.findAll({ where: { userId }, include: [Team] });
       const teams = userTeams.map(ud => ud.Team);
-      if (!teams.length) return res.status(200).send({ Teams: [] });
+      if (!teams.length) return res.status(200).send({ teams: [] });
       const teamsWithOwnerName = await getOrgsWithOwnerName(teams);
       return res.status(200).send({ teams: teamsWithOwnerName });
     } catch (e) {

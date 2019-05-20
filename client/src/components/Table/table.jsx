@@ -25,7 +25,7 @@ const Table = ({
   addNewLink,
 }) => {
   const getCellsForRow = (dataEntry) => {
-    const { id, ...dataEntryMinusId } = dataEntry;
+    const { uuid, ...dataEntryMinusId } = dataEntry;
     const vals = Object.values(dataEntryMinusId);
     return vals.map(val => <td>{val}</td>);
   };
@@ -54,7 +54,7 @@ const Table = ({
                 ))}
               </HeaderRow>
               {data.map((entry, i) => (
-                <DataLink to={`/${type.toLowerCase()}/${entry.id}/show`}>
+                <DataLink to={`/${type.toLowerCase()}/${entry.uuid}/show`}>
                   <DataRow
                     key={uuidv4()}
                     isEvenNumber={i % 2 === 0}

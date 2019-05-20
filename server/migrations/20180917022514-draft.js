@@ -3,22 +3,18 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('Drafts', {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
+      uuid: {
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
-        type: Sequelize.INTEGER,
       },
       name: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      uuid: {
-        type: Sequelize.UUID,
-        defaultValue: Sequelize.UUIDV4,
-      },
       status: {
-        type: Sequelize.STRING,
+        type: Sequelize.ENUM,
+        values: ['unscheduled', 'scheduled', 'open', 'closed'],
         allowNull: false,
       },
       timeScheduled: {
@@ -26,10 +22,10 @@ module.exports = {
       },
       ownerUserId: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         references: {
           model: 'Users',
-          key: 'id',
+          key: 'uuid',
         },
       },
       createdAt: {

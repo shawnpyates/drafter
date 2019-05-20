@@ -2,36 +2,31 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('Teams', {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
+      uuid: {
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
-        type: Sequelize.INTEGER
       },
       name: {
         allowNull: false,
         type: Sequelize.STRING,
       },
-      uuid: {
-        type: Sequelize.UUID,
-        defaultValue: Sequelize.UUIDV4,
-      },
       ownerUserId: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         references: {
           model: 'Users',
-          key: 'id'
+          key: 'uuid'
         },
         onUpdate: 'cascade',
         onDelete: 'cascade',
       },
       draftId: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         references: {
           model: 'Drafts',
-          key: 'id'
+          key: 'uuid'
         },
         onUpdate: 'cascade',
         onDelete: 'cascade',

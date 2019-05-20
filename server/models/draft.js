@@ -1,15 +1,18 @@
 module.exports = (sequelize, DataTypes) => {
   const Draft = sequelize.define('Draft', {
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
     uuid: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
     },
     status: {
-      type: DataTypes.STRING,
+      type: DataTypes.ENUM,
+      values: ['unscheduled', 'scheduled', 'open', 'closed'],
       allowNull: false,
     },
     timeScheduled: DataTypes.DATE,

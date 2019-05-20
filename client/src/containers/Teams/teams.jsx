@@ -21,10 +21,10 @@ const mapDispatchToProps = dispatch => ({
 
 const extractDataForTable = (teams, drafts) => (
   teams.map((team) => {
-    const { id, name, ownerName } = team;
-    const draftName = drafts.find(draft => draft.id === team.draftId).name;
+    const { uuid, name, ownerName } = team;
+    const draftName = drafts.find(draft => draft.uuid === team.draftId).name;
     return {
-      id,
+      uuid,
       name,
       draft: draftName,
       ownerName,

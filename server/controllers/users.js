@@ -9,7 +9,7 @@ module.exports = {
 
   async fetchOne(req, res) {
     try {
-      const user = await User.findById(req.params.id);
+      const user = await User.find({ where: { uuid: req.params.id } });
       return res.status(200).send({ user });
     } catch (e) {
       return res.status(400).send({ e });
@@ -49,7 +49,7 @@ module.exports = {
       const isPasswordCorrect = await bcrypt.compare(password, user.password);
       if (!isPasswordCorrect) return res.status(401).send({ failure: 'incorrectPassword' });
 
-      const token = { token: jwt.sign({ userId: user.id }, SECRET) };
+      const token = { token: jwt.sign({ userId: user.uuid }, SECRET) };
       return res.status(201).send({ user, token });
     } catch (e) {
       return res.status(400).send({ failure: 'unexpected' });
@@ -65,7 +65,7 @@ module.exports = {
         password,
       } = req.body;
 
-      const user = await User.findById(req.params.id);
+      const user = await User.find({ where: { uuid: req.params.id } });
       if (!user) return res.status(404).send({ e: 'User not found.' });
 
       const updatedUser = await user.update({
@@ -82,7 +82,7 @@ module.exports = {
 
   async destroy(req, res) {
     try {
-      const user = await User.findById(req.params.id);
+      const user = await User.find({ where: { uuid: req.params.id } });
       if (!user) return res.status(404).send({ e: 'User not found.' });
       await user.destroy();
       return res.status(204).send({});

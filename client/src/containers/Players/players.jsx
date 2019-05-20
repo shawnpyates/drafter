@@ -21,13 +21,13 @@ const mapDispatchToProps = dispatch => ({
 const extractDataForTable = players => (
   players.map((player) => {
     const {
-      id,
+      uuid,
       name,
       email,
       position,
     } = player;
     return {
-      id,
+      uuid,
       name,
       email: email || '(Unprovided)',
       position,

@@ -11,19 +11,19 @@ module.exports = {
       isOwner: Sequelize.BOOLEAN,
       isAdmin: Sequelize.BOOLEAN,
       userId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         references: {
           model: 'Users',
-          key: 'id'
+          key: 'uuid'
         },
         onUpdate: 'cascade',
         onDelete: 'cascade'
       },
       draftId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         references: {
           model: 'Drafts',
-          key: 'id'
+          key: 'uuid'
         },
         onUpdate: 'cascade',
         onDelete: 'cascade'

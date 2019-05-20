@@ -2,11 +2,10 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('Players', {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
+      uuid: {
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
-        type: Sequelize.INTEGER,
       },
       name: {
         allowNull: false,
@@ -16,28 +15,28 @@ module.exports = {
       position: Sequelize.STRING,
       creatorUserId: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         references: {
           model: 'Users',
-          key: 'id',
+          key: 'uuid',
         },
         onUpdate: 'cascade',
         onDelete: 'cascade',
       },
       teamId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         references: {
           model: 'Teams',
-          key: 'id',
+          key: 'uuid',
         },
         onUpdate: 'cascade',
         onDelete: 'cascade',
       },
       draftId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         references: {
           model: 'Drafts',
-          key: 'id',
+          key: 'uuid',
         },
         onUpdate: 'cascade',
         onDelete: 'cascade',

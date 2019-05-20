@@ -41,6 +41,19 @@ class CreatePlayer extends Component {
     };
   }
 
+  getUrlNamespaces = () => {
+    const {
+      match: {
+        url = '',
+        params: { id } = {},
+      },
+    } = this.props;
+    return {
+      type: url.split(id)[0],
+      id,
+    };
+  }
+
   updateFieldValue = (name, value) => {
     this.setState({ [name]: value });
   }
@@ -60,30 +73,22 @@ class CreatePlayer extends Component {
       this.setState({ errorMessage: invalidEmail });
       return;
     }
-    const {
-      match: {
-        url = '',
-        params: { id: orgId } = {},
-      },
-      currentUser,
-    } = this.props;
-    const orgKey = (
-      url.split(orgId)[0] === '/teams/'
-        ? 'teamId'
-        : 'draftId'
-    );
+    const urlNamespace = this.getUrlNamespaces();
+    const orgKey = urlNamespace.type === '/teams/' ? 'teamId' : 'draftId';
+    const { currentUser } = this.props;
     const body = {
       name,
       email,
       position,
-      creatorUserId: currentUser.id,
-      [orgKey]: Number(orgId),
+      creatorUserId: currentUser.uuid,
+      [orgKey]: urlNamespace.id,
     };
     this.props.createPlayer(body).then(() => this.setState({ isSubmitComplete: true }));
   }
 
 
   render() {
+    const { url } = this.props.match;
     const { errorMessage, isSubmitComplete } = this.state;
     const { inputs, title } = playerForm;
     return (
@@ -98,7 +103,7 @@ class CreatePlayer extends Component {
           />
         }
         {isSubmitComplete &&
-          <Redirect to="/" />
+          <Redirect to={url.replace('/createPlayers', '/show')} />
         }
       </div>
     );
