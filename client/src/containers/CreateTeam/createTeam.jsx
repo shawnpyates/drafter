@@ -5,7 +5,7 @@ import { Redirect } from 'react-router-dom';
 
 import Form from '../../components/Form/form';
 
-import { createTeam, fetchDraftsByOwner } from '../../actions';
+import { createRequest, createTeam, fetchDraftsByOwner } from '../../actions';
 
 import { team as teamForm } from '../../../formConstants.json';
 
@@ -18,6 +18,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = dispatch => ({
+  createRequest: body => dispatch(createRequest(body)),
   createTeam: body => dispatch(createTeam(body)),
   fetchDraftsByOwner: ownerUserId => dispatch(fetchDraftsByOwner(ownerUserId)),
 });
@@ -53,7 +54,7 @@ class CreateTeam extends Component {
         shouldFindOwnDraft: null,
         draftListSelectionSelection: null,
       },
-      draftIdFromTextField: null,
+      draftNameFromTextField: null,
     };
   }
 
@@ -95,21 +96,11 @@ class CreateTeam extends Component {
     }
   }
 
-  handleSubmit = (ev) => {
-    ev.preventDefault();
-    const {
-      name,
-      buttonsToHighlight: { draftListSelection },
-      draftIdFromTextField,
-    } = this.state;
+  createTeamForDraft = (name, draftListSelection) => {
     const draftIdParam = this.getDraftIdParam();
     const draftIdForBody = (
       draftIdParam
-      || (
-        draftListSelection
-          ? (this.props.drafts.find(draft => draft.name === draftListSelection)).uuid
-          : Number(draftIdFromTextField)
-      )
+      || this.props.drafts.find(draft => draft.name === draftListSelection).uuid
     );
     if (!name || !draftIdForBody) {
       this.setState({ errorMessage: 'Please complete all fields.' });
@@ -121,6 +112,33 @@ class CreateTeam extends Component {
       draftId: draftIdForBody,
     };
     this.props.createTeam(body).then(() => this.setState({ isSubmitComplete: true }));
+  }
+
+  createRequestToJoinDraft = (teamName, draftName) => {
+    const body = {
+      teamName,
+      draftName,
+      requestCreatorId: this.props.currentUser.uuid,
+    };
+    if (!teamName || !draftName) {
+      this.setState({ errorMessage: 'Please complete all fields.' });
+      return;
+    }
+    this.props.createRequest(body).then(() => this.setState({ isSubmitComplete: true }));
+  }
+
+  handleSubmit = (ev) => {
+    ev.preventDefault();
+    const {
+      name: teamName,
+      buttonsToHighlight: { draftListSelection },
+      draftNameFromTextField,
+    } = this.state;
+    if (draftNameFromTextField) {
+      this.createRequestToJoinDraft(teamName, draftNameFromTextField);
+    } else {
+      this.createTeamForDraft(teamName, draftListSelection);
+    }
   }
 
 
@@ -168,6 +186,7 @@ CreateTeam.defaultProps = {
 };
 
 CreateTeam.propTypes = {
+  createRequest: PropTypes.func.isRequired,
   createTeam: PropTypes.func.isRequired,
   currentUser: PropTypes.objectOf(PropTypes.any).isRequired,
   drafts: PropTypes.arrayOf(PropTypes.object).isRequired,

@@ -26,6 +26,12 @@ import {
   createPlayer,
 } from './playerActions';
 
+import {
+  fetchRequestsByDraft,
+  fetchRequestsByUser,
+  createRequest,
+} from './requestActions';
+
 export {
   fetchCurrentUser,
   createUser,
@@ -43,4 +49,7 @@ export {
   fetchPlayersByDraft,
   fetchPlayersByTeam,
   createPlayer,
+  fetchRequestsByDraft,
+  fetchRequestsByUser,
+  createRequest,
 };

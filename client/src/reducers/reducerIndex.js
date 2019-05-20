@@ -1,16 +1,19 @@
 import { combineReducers } from 'redux';
-import userReducer from './userReducer';
+
 import draftReducer from './draftReducer';
-import teamReducer from './teamReducer';
 import playerReducer from './playerReducer';
+import requestReducer from './requestReducer';
 import sessionReducer from './sessionReducer';
+import teamReducer from './teamReducer';
+import userReducer from './userReducer';
 
 const reducers = combineReducers({
-  user: userReducer,
   draft: draftReducer,
-  team: teamReducer,
   player: playerReducer,
+  request: requestReducer,
   session: sessionReducer,
+  team: teamReducer,
+  user: userReducer,
 });
 
 export default reducers;

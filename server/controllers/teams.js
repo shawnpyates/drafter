@@ -12,7 +12,7 @@ module.exports = {
     }
   },
 
-  async fetchTeamsByDraft(req, res) {
+  async fetchByDraft(req, res) {
     const { id: draftId } = req.params;
     try {
       const teams = await Team.findAll({ where: { draftId } });
