@@ -1,15 +1,29 @@
-const { Request, User, UserDraft } = require('../models');
+const {
+  Request,
+  User,
+  Draft,
+  UserDraft,
+} = require('../models');
 const { createEmailHtml, transport } = require('../mailer');
 
 const { SERVER_URL } = process.env;
 
 const VALID_DURATION = 60 * 60 * 24 * 7 * 1000; // one week
 
-const getHtmlForMailer = (draftName, creatorName, teamName) => (
+const getHtmlForMailer = ({
+  draftOwnerFirstName,
+  requestCreatorFullName,
+  teamName,
+  draftName,
+}) => (
   createEmailHtml(`
-    ${creatorName} has made a request for their team ${teamName} to join your draft ${draftName}
-    \n
-    Click <a href=${SERVER_URL}>here</a> to visit DraftMachine and accept or decline the request.
+    <h2>Hello there, ${draftOwnerFirstName}!</h2>
+    <br>
+    <p>
+      <b>${requestCreatorFullName}</b> has made a request for their team <b>${teamName}</b> to join your draft <b>${draftName}</b>.
+      <br>
+      Click <a href=${SERVER_URL}>here</a> to visit DraftMachine and accept or decline the request.
+    </p>
   `)
 );
 
@@ -56,19 +70,36 @@ module.exports = {
 
   async create(req, res) {
     try {
-      const { teamName, draftId, requestCreatorId } = req.body;
-      const expiresAt = new Date() + VALID_DURATION;
+      const { teamName, draftName, requestCreatorId } = req.body;
+      const draft = await Draft.find({ where: { name: draftName } });
+      const requestCreator = await User.find({ where: { uuid: requestCreatorId } });
+      const draftWithOwner = await UserDraft.find({
+        where: { draftId: draft.uuid }, include: [User],
+      });
+      const {
+        firstName: draftOwnerFirstName,
+        email: draftOwnerEmail,
+        uuid: draftOwnerUserId,
+      } = draftWithOwner.User;
+      if (draftOwnerUserId === requestCreatorId) {
+        return res.status(400).send({
+          e: `You are the owner of ${draftName}. You cannot make a request to yourself.`,
+        });
+      }
+      const expiresAt = new Date(new Date().getTime() + VALID_DURATION);
       const request = await Request.create({
         teamName,
         expiresAt,
-        draftId,
+        draftId: draft.uuid,
         requestCreatorId,
       });
-      const requestCreator = User.find({ where: { uuid: requestCreatorId } });
-      const draftWithOwner = UserDraft.find({ where: { draftId }, include: [User] });
-      const { firstName, lastName, email: draftOwnerEmail } = draftWithOwner.User;
-      const draftOwnerName = `${firstName} ${lastName}`;
-      const htmlForMailer = getHtmlForMailer(draftOwnerName, requestCreator.name, teamName);
+      const requestCreatorFullName = `${requestCreator.firstName} ${requestCreator.lastName}`;
+      const htmlForMailer = getHtmlForMailer({
+        draftOwnerFirstName,
+        requestCreatorFullName,
+        teamName,
+        draftName,
+      });
       await sendMail({
         fromEmail: requestCreator.email,
         toEmail: draftOwnerEmail,

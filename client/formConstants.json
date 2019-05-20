@@ -216,9 +216,9 @@
         }
       },
       {
-        "name": "draftIdFromTextField",
-        "fieldTitle": "Provide the ID of the draft that you would like to add your team to. The owner of the draft will be contacted with your request.",
-        "text": "Type in Draft ID",
+        "name": "draftNameFromTextField",
+        "fieldTitle": "Provide the name of the draft that you would like to add your team to. The owner of the draft will be contacted with your request.",
+        "text": "Type in Draft Name",
         "type": "text",
         "isWide": false,
         "enabled": true,

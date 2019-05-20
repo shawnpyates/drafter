@@ -11,8 +11,7 @@ const createEmailHtml = text => `
       font-size: 20px;
     "
   >
-    <h2>Hello there!</h2>
-    <p>${text}</p>
+    ${text}
   </div>
 `;
 
