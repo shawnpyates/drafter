@@ -46,7 +46,8 @@ module.exports = (app) => {
   // requests
   app.get('/api/requests/:id', requests.fetchOne);
   app.get('/api/drafts/:id/requests', requests.fetchByDraft);
-  app.get('/api/users/:id/requests', requests.fetchByUser);
+  app.get('/api/users/:id/outgoingRequests', requests.fetchByRequester);
+  app.get('/api/users/:id/incomingRequests', requests.fetchByDraftOwner);
   app.post('/api/requests', requests.create);
 
   // user's association with draft

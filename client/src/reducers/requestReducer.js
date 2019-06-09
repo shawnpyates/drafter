@@ -3,10 +3,12 @@ const initialState = {
   created: false,
   fetching: false,
   fetched: false,
-  requests: [],
+  requestsForDraft: [],
+  outgoingRequests: [],
+  incomingRequests: [],
   errorOnCreateRequest: null,
   errorOnFetchRequestsFromDraft: null,
-  errorOnFetchRequestsFromUser: null,
+  errorOnFetchRequestsFromRequester: null,
 };
 
 const requestReducer = (state = initialState, action) => {
@@ -33,21 +35,35 @@ const requestReducer = (state = initialState, action) => {
         ...state,
         fetching: false,
         fetched: true,
-        requests: action.payload,
+        requestsFromDraft: action.payload,
       };
     }
-    case 'FETCH_REQUESTS_FROM_USER_PENDING': {
+    case 'FETCH_REQUESTS_FROM_REQUESTER_PENDING': {
       return { ...state, fetching: true };
     }
-    case 'FETCH_REQUESTS_FROM_USER_REJECTED': {
-      return { ...state, fetching: false, errorOnFetchRequestsFromUser: action.payload };
+    case 'FETCH_REQUESTS_FROM_REQUESTER_REJECTED': {
+      return { ...state, fetching: false, errorOnFetchRequestsFromRequester: action.payload };
     }
-    case 'FETCH_REQUESTS_FROM_USER_FULFILLED': {
+    case 'FETCH_REQUESTS_FROM_REQUESTER_FULFILLED': {
       return {
         ...state,
         fetching: false,
         fetched: true,
-        requests: action.payload,
+        outgoingRequests: action.payload,
+      };
+    }
+    case 'FETCH_REQUESTS_FROM_DRAFT_OWNER_PENDING': {
+      return { ...state, fetching: true };
+    }
+    case 'FETCH_REQUESTS_FROM_DRAFT_OWNER_REJECTED': {
+      return { ...state, fetching: false, errorOnFetchRequestsFromDraftOwner: action.payload };
+    }
+    case 'FETCH_REQUESTS_FROM_DRAFT_OWNER_FULFILLED': {
+      return {
+        ...state,
+        fetching: false,
+        fetched: true,
+        incomingRequests: action.payload,
       };
     }
 

@@ -28,7 +28,8 @@ import {
 
 import {
   fetchRequestsByDraft,
-  fetchRequestsByUser,
+  fetchRequestsByRequester,
+  fetchRequestsByDraftOwner,
   createRequest,
 } from './requestActions';
 
@@ -50,6 +51,7 @@ export {
   fetchPlayersByTeam,
   createPlayer,
   fetchRequestsByDraft,
-  fetchRequestsByUser,
+  fetchRequestsByRequester,
+  fetchRequestsByDraftOwner,
   createRequest,
 };

@@ -60,7 +60,11 @@ class Teams extends Component {
       noTeamsEntered,
       columnHeaders,
     } = teamsTableTexts;
-    const addNewLink = url && url.replace('/show', '/createTeams');
+    const addNewLink = (
+      (url && url.includes('/show'))
+        ? url.replace('/show', '/createTeams')
+        : '/createTeams'
+    );
     return (
       <div>
         {teams &&
