@@ -49,7 +49,11 @@ module.exports = {
   async fetchByDraft(req, res) {
     const { id: draftId } = req.params;
     try {
-      const requests = await Request.findAll({ where: { draftId } });
+      // needs user
+      const requests = await Request.findAll({
+        where: { draftId },
+        include: [User],
+      });
       if (!requests.length) return res.status(200).send({ requests: [] });
       return res.status(200).send({ requests });
     } catch (e) {
@@ -57,10 +61,33 @@ module.exports = {
     }
   },
 
-  async fetchByUser(req, res) {
+  async fetchByRequester(req, res) {
     const { id: userId } = req.params;
     try {
-      const requests = await Request.findAll({ where: { userId } });
+      // outgoing - needs draftName
+      const requests = await Request.findAll({
+        where: { requestCreatorId: userId },
+        include: [Draft],
+      });
+      if (!requests.length) return res.status(200).send({ requests: [] });
+      return res.status(200).send({ requests });
+    } catch (e) {
+      return res.status(400).send({ e });
+    }
+  },
+
+  async fetchByDraftOwner(req, res) {
+    const { id: userId } = req.params;
+    try {
+      const requests = await Request.findAll({
+        include: [
+          {
+            model: Draft,
+            where: { ownerUserId: userId },
+          },
+          User,
+        ],
+      });
       if (!requests.length) return res.status(200).send({ requests: [] });
       return res.status(200).send({ requests });
     } catch (e) {

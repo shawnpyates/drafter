@@ -12,18 +12,29 @@ export const fetchRequestsByDraft = draftId => (dispatch) => {
     });
 };
 
-export const fetchRequestsByUser = userId => (dispatch) => {
-  dispatch({ type: 'FETCH_REQUESTS_FROM_USER_PENDING' });
-  axios.get(`/api/teams/${userId}/requests`)
+export const fetchRequestsByRequester = userId => (dispatch) => {
+  dispatch({ type: 'FETCH_REQUESTS_FROM_REQUESTER_PENDING' });
+  axios.get(`/api/users/${userId}/outgoingRequests`)
     .then((response) => {
       const { requests } = response.data;
-      dispatch({ type: 'FETCH_REQUESTS_FROM_USER_FULFILLED', payload: requests });
+      dispatch({ type: 'FETCH_REQUESTS_FROM_REQUESTER_FULFILLED', payload: requests });
     })
     .catch((err) => {
-      dispatch({ type: 'FETCH_REQUESTS_FROM_USER_REJECTED', payload: err });
+      dispatch({ type: 'FETCH_REQUESTS_FROM_REQUESTER_REJECTED', payload: err });
     });
 };
 
+export const fetchRequestsByDraftOwner = userId => (dispatch) => {
+  dispatch({ type: 'FETCH_REQUESTS_FROM_DRAFT_OWNER_PENDING' });
+  axios.get(`/api/users/${userId}/incomingRequests`)
+    .then((response) => {
+      const { requests } = response.data;
+      dispatch({ type: 'FETCH_REQUESTS_FROM_DRAFT_OWNER_FULFILLED', payload: requests });
+    })
+    .catch((err) => {
+      dispatch({ type: 'FETCH_REQUESTS_FROM_DRAFT_OWNER_REJECTED', payload: err });
+    });
+};
 
 export const createRequest = body => (dispatch) => {
   dispatch({ type: 'CREATE_REQUEST_PENDING ' });

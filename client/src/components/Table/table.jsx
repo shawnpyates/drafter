@@ -29,7 +29,6 @@ const Table = ({
     const vals = Object.values(dataEntryMinusId);
     return vals.map(val => <td>{val}</td>);
   };
-  const newLink = addNewLink || `/create${type}`;
   return (
     <Container>
       <TableFrame>
@@ -37,11 +36,13 @@ const Table = ({
           <TableTitleLine>
             <th>
               <TableTitle>{title}</TableTitle>
-              <Link to={newLink}>
-                <AddNewButton>
-                  Add New
-                </AddNewButton>
-              </Link>
+              {addNewLink &&
+                <Link to={addNewLink}>
+                  <AddNewButton>
+                    Add New
+                  </AddNewButton>
+                </Link>
+              }
             </th>
           </TableTitleLine>
           {Boolean(data.length) &&

@@ -6,6 +6,7 @@ import ProfileCard from '../../components/ProfileCard/profileCard';
 
 import Drafts from '../Drafts/drafts';
 import Teams from '../Teams/teams';
+import Requests from '../Requests/requests';
 
 import { MainMenuContainer, WelcomeMessage } from './styledComponents';
 
@@ -36,6 +37,8 @@ const MainMenu = ({ currentUser }) => {
       />
       <Drafts userId={currentUser.uuid} fetchBy="user" />
       <Teams userId={currentUser.uuid} fetchBy="user" />
+      <Requests userId={currentUser.uuid} fetchBy="requester" />
+      <Requests userId={currentUser.uuid} fetchBy="draftOwner" />
     </MainMenuContainer>
   );
 };

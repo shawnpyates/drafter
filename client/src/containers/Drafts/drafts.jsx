@@ -70,6 +70,7 @@ class Drafts extends Component {
             columnHeaders={columnHeaders}
             data={extractDataForTable(drafts)}
             emptyDataMessage={noneScheduled}
+            addNewLink="/createDrafts"
           />
         }
       </div>

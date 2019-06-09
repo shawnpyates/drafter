@@ -13,6 +13,27 @@
     "columnHeaders": ["Name", "Scheduled For", "Owner"]
   },
 
+  "incomingRequestsTable": {
+    "type": "IncomingRequests",
+    "title": "Incoming Requests",
+    "nonePending": "There are no pending requests to join any of your drafts.",
+    "columnHeaders": ["Team", "Owner", "Draft Requested"]
+  },
+
+  "outgoingRequestsTable": {
+    "type": "OutgoingRequests",
+    "title": "Outgoing Requests",
+    "nonePending": "You have no pending requests to join any drafts.",
+    "columnHeaders": ["Team", "Draft", "Expires"]
+  },
+
+  "requestsForDraftTable": {
+    "type": "RequestsForDraft",
+    "title": "Requests To Join This Draft",
+    "nonePending": "There are no pending requests for this draft.",
+    "columnHeaders": ["Team", "Owner", "Owner Email"]
+  },
+
   "teamsTable": {
     "type": "Teams",
     "title": "Teams",
