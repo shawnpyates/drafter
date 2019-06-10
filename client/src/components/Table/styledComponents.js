@@ -68,6 +68,7 @@ const DataRow = styled.tr`
 `;
 
 const ColumnHeader = styled.th`
+  width: ${props => `${100 / props.columnHeadersLength}%`};
 `;
 
 const DataLink = styled(Link)`

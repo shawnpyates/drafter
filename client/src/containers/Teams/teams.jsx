@@ -98,7 +98,7 @@ Teams.propTypes = {
   fetchTeamsByUser: PropTypes.func.isRequired,
   match: PropTypes.objectOf(PropTypes.any),
   teams: PropTypes.arrayOf(PropTypes.object),
-  userId: PropTypes.number,
+  userId: PropTypes.string,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Teams);

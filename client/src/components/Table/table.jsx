@@ -27,7 +27,7 @@ const Table = ({
   const getCellsForRow = (dataEntry) => {
     const { uuid, ...dataEntryMinusId } = dataEntry;
     const vals = Object.values(dataEntryMinusId);
-    return vals.map(val => <td>{val}</td>);
+    return vals.map(val => <td key={uuidv4()}>{val}</td>);
   };
   return (
     <Container>
@@ -49,17 +49,20 @@ const Table = ({
             <DataFrame>
               <HeaderRow>
                 {columnHeaders.map(header => (
-                  <ColumnHeader style={{ width: `${100 / columnHeaders.length}%` }}>
+                  <ColumnHeader
+                    columnHeadersLength={columnHeaders.length}
+                    key={header}
+                  >
                     {header}
                   </ColumnHeader>
                 ))}
               </HeaderRow>
               {data.map((entry, i) => (
-                <DataLink to={`/${type.toLowerCase()}/${entry.uuid}/show`}>
-                  <DataRow
-                    key={uuidv4()}
-                    isEvenNumber={i % 2 === 0}
-                  >
+                <DataLink
+                  to={`/${type.toLowerCase()}/${entry.uuid}/show`}
+                  key={entry.uuid}
+                >
+                  <DataRow isEvenNumber={i % 2 === 0}>
                     {getCellsForRow(entry)}
                   </DataRow>
                 </DataLink>

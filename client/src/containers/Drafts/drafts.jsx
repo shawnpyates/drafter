@@ -27,9 +27,11 @@ const extractDataForTable = drafts => (
       timeScheduled,
       ownerName,
     } = draft;
-    const readableTime = timeScheduled ?
-      moment(timeScheduled).format('MMM D YYYY, h:mm a') :
-      draftsTableTexts.unscheduled;
+    const readableTime = (
+      timeScheduled
+        ? moment(timeScheduled).format('MMM D YYYY, h:mm a')
+        : draftsTableTexts.unscheduled
+    );
     return {
       uuid,
       name,
@@ -89,8 +91,8 @@ Drafts.propTypes = {
   fetchBy: PropTypes.string.isRequired,
   fetchDraftsByTeam: PropTypes.func.isRequired,
   fetchDraftsByUser: PropTypes.func.isRequired,
-  teamId: PropTypes.number,
-  userId: PropTypes.number,
+  teamId: PropTypes.string,
+  userId: PropTypes.string,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Drafts);
