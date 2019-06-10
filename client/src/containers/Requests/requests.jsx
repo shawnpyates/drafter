@@ -10,21 +10,15 @@ import {
   fetchRequestsByDraftOwner,
 } from '../../actions';
 
-import {
-  incomingRequestsTable as incomingRequestsTableTexts,
-  outgoingRequestsTable as outgoingRequestsTableTexts,
-  requestsForDraftTable as requestsForDraftTableTexts,
-} from '../../../texts.json';
+import requestsByFetchType from './requestsByFetchType';
 
 const mapStateToProps = (state) => {
   const {
     requestsForDraft,
-    ougtoingRequests,
+    outgoingRequests,
     incomingRequests,
   } = state.request;
-  return ({
-    requests: requestsForDraft || ougtoingRequests || incomingRequests,
-  });
+  return ({ requestsForDraft, outgoingRequests, incomingRequests });
 };
 
 const mapDispatchToProps = dispatch => ({
@@ -33,80 +27,32 @@ const mapDispatchToProps = dispatch => ({
   fetchByDraftOwner: id => dispatch(fetchRequestsByDraftOwner(id)),
 });
 
-const getTableTexts = (fetchBy) => {
-  switch (fetchBy) {
-    case 'draft':
-      return requestsForDraftTableTexts;
-    case 'requester':
-      return outgoingRequestsTableTexts;
-    case 'draftOwner':
-      return incomingRequestsTableTexts;
-    default:
-      return null;
-  }
-};
-
-const extractDataForTable = players => (
-  players.map((player) => {
-    const {
-      uuid,
-      name,
-      email,
-      position,
-    } = player;
-    return {
-      uuid,
-      name,
-      email: email || '(Unprovided)',
-      position,
-    };
-  })
-);
-
-class Players extends Component {
+class Requests extends Component {
   componentDidMount() {
-    const {
-      fetchBy,
-      userId,
-      draftId,
-      fetchByDraft,
-      fetchByRequester,
-      fetchByDraftOwner,
-    } = this.props;
-    switch (fetchBy) {
-      case 'draft':
-        fetchByDraft(draftId);
-        break;
-      case 'requester':
-        fetchByRequester(userId);
-        break;
-      case 'draftOwner':
-        fetchByDraftOwner(userId);
-        break;
-      default:
-        break;
-    }
+    const { fetchBy } = this.props;
+    const requestProperties = requestsByFetchType[fetchBy];
+    this.props[requestProperties.fetchFn](this.props[requestProperties.fetchFnArg]);
   }
 
   render() {
-    const {
-      requests,
-      fetchBy,
-    } = this.props;
+    const { fetchBy } = this.props;
+    const requestProperties = requestsByFetchType[fetchBy];
+    const { data, tableTexts, getDataForTable } = requestProperties;
+    const requestsToRender = this.props[data];
     const {
       type,
       title,
       nonePending,
       columnHeaders,
-    } = getTableTexts(fetchBy);
+    } = tableTexts;
     return (
       <div>
-        {requests &&
+        {requestsToRender &&
           <Table
             type={type}
             title={title}
             columnHeaders={columnHeaders}
-            data={extractDataForTable(requests)}
+            data={getDataForTable(requestsToRender)}
             emptyDataMessage={nonePending}
           />
         }
@@ -115,20 +61,8 @@ class Players extends Component {
   }
 }
 
-Players.defaultProps = {
-  requests: null,
-  userId: null,
-  draftId: null,
-};
-
-Players.propTypes = {
-  requests: PropTypes.arrayOf(PropTypes.object),
+Requests.propTypes = {
   fetchBy: PropTypes.string.isRequired,
-  fetchByDraft: PropTypes.func.isRequired,
-  fetchByRequester: PropTypes.func.isRequired,
-  fetchByDraftOwner: PropTypes.func.isRequired,
-  userId: PropTypes.string,
-  draftId: PropTypes.string,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Players);
+export default connect(mapStateToProps, mapDispatchToProps)(Requests);

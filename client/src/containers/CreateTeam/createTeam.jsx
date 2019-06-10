@@ -111,7 +111,8 @@ class CreateTeam extends Component {
       ownerUserId: this.props.currentUser.uuid,
       draftId: draftIdForBody,
     };
-    this.props.createTeam(body).then(() => this.setState({ isSubmitComplete: true }));
+    this.props.createTeam(body)
+      .then(() => this.setState({ isSubmitComplete: true }));
   }
 
   createRequestToJoinDraft = (teamName, draftName) => {
@@ -124,7 +125,8 @@ class CreateTeam extends Component {
       this.setState({ errorMessage: 'Please complete all fields.' });
       return;
     }
-    this.props.createRequest(body).then(() => this.setState({ isSubmitComplete: true }));
+    this.props.createRequest(body)
+      .then(() => this.setState({ isSubmitComplete: true }));
   }
 
   handleSubmit = (ev) => {
