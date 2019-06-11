@@ -35,7 +35,7 @@ const requestReducer = (state = initialState, action) => {
         ...state,
         fetching: false,
         fetched: true,
-        requestsFromDraft: action.payload,
+        requestsForDraft: action.payload,
       };
     }
     case 'FETCH_REQUESTS_FROM_REQUESTER_PENDING': {

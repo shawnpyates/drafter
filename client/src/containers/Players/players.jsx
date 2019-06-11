@@ -98,8 +98,8 @@ Players.propTypes = {
   fetchBy: PropTypes.string.isRequired,
   fetchPlayersByTeam: PropTypes.func.isRequired,
   fetchPlayersByDraft: PropTypes.func.isRequired,
-  teamId: PropTypes.number,
-  draftId: PropTypes.number,
+  teamId: PropTypes.string,
+  draftId: PropTypes.string,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Players);
