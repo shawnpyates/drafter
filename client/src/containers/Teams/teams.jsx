@@ -91,7 +91,7 @@ Teams.defaultProps = {
 };
 
 Teams.propTypes = {
-  draftId: PropTypes.number,
+  draftId: PropTypes.string,
   drafts: PropTypes.arrayOf(PropTypes.object),
   fetchBy: PropTypes.string.isRequired,
   fetchTeamsByDraft: PropTypes.func.isRequired,

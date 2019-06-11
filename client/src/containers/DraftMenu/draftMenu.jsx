@@ -7,6 +7,7 @@ import { draft as draftProfileData } from '../../components/ProfileCard/profileC
 
 import Players from '../Players/players';
 import Teams from '../Teams/teams';
+import Requests from '../Requests/requests';
 
 import { fetchTeamsByDraft, fetchUsersByDraft } from '../../actions';
 
@@ -27,10 +28,14 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
 const DraftMenu = ({ drafts, match }) => {
   const currentDraft = drafts.find(draft => draft.uuid === match.params.id);
-  const profileCardTitle = currentDraft.name;
+  const {
+    id,
+    timeScheduled,
+    ownerName,
+    name: profileCardTitle,
+  } = currentDraft;
   const { scheduledFor, owner } = profileProperties;
   const { unscheduled } = profileValues;
-  const { id, timeScheduled, ownerName } = currentDraft;
   const profileCardData = {
     [scheduledFor]: timeScheduled || unscheduled,
     [owner]: ownerName,
@@ -45,6 +50,7 @@ const DraftMenu = ({ drafts, match }) => {
       />
       <Teams draftId={currentDraft.uuid} fetchBy="draft" match={match} />
       <Players draftId={currentDraft.uuid} fetchBy="draft" />
+      <Requests draftId={currentDraft.uuid} fetchBy="draft" />
     </div>
   );
 };
