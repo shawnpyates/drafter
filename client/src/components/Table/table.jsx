@@ -14,7 +14,15 @@ import {
   DataRow,
   ColumnHeader,
   DataLink,
+  OptionsContainer,
+  Option,
 } from './styledComponents';
+
+const getCellsForRow = (dataEntry) => {
+  const { uuid, ...dataEntryMinusId } = dataEntry;
+  const vals = Object.values(dataEntryMinusId);
+  return vals.map(val => <td key={uuidv4()}>{val}</td>);
+};
 
 const Table = ({
   type,
@@ -23,12 +31,10 @@ const Table = ({
   data,
   emptyDataMessage,
   addNewLink,
+  options,
+  handleOptionClick,
 }) => {
-  const getCellsForRow = (dataEntry) => {
-    const { uuid, ...dataEntryMinusId } = dataEntry;
-    const vals = Object.values(dataEntryMinusId);
-    return vals.map(val => <td key={uuidv4()}>{val}</td>);
-  };
+  console.log(`is there options in ${type}? ${Boolean(options)}`);
   return (
     <Container>
       <TableFrame>
@@ -58,14 +64,30 @@ const Table = ({
                 ))}
               </HeaderRow>
               {data.map((entry, i) => (
-                <DataLink
-                  to={`/${type.toLowerCase()}/${entry.uuid}/show`}
+                <DataRow
+                  isEvenNumber={i % 2 === 0}
+                  optionsExists={Boolean(options)}
                   key={entry.uuid}
                 >
-                  <DataRow isEvenNumber={i % 2 === 0}>
+                  <DataLink to={!options && `/${type.toLowerCase()}/${entry.uuid}/show`}>
                     {getCellsForRow(entry)}
-                  </DataRow>
-                </DataLink>
+                  </DataLink>
+                  {options &&
+                    <OptionsContainer>
+                      {options.map(option => (
+                        <DataLink to="/">
+                          <Option
+                            key={option}
+                            value={entry.uuid}
+                            onClick={handleOptionClick}
+                          >
+                            {option}
+                          </Option>
+                        </DataLink>
+                      ))}
+                    </OptionsContainer>
+                  }
+                </DataRow>
               ))}
             </DataFrame>
           }
@@ -78,6 +100,8 @@ const Table = ({
 
 Table.defaultProps = {
   addNewLink: null,
+  options: null,
+  handleOptionClick: null,
 };
 
 Table.propTypes = {
@@ -87,6 +111,8 @@ Table.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
   emptyDataMessage: PropTypes.string.isRequired,
   addNewLink: PropTypes.string,
+  options: PropTypes.arrayOf(PropTypes.object),
+  handleOptionClick: PropTypes.func,
 };
 
 export default Table;

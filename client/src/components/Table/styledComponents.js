@@ -3,12 +3,20 @@ import { Link } from 'react-router-dom';
 
 import { styleVars } from '../../styles';
 
+
 const {
   DARK_BLUE,
   LIGHT_GRAY,
   SKY_BLUE,
   WHITE,
 } = styleVars;
+
+const getRowColorOnHover = (props) => {
+  if (props.optionsExists) {
+    return (props.isEvenNumber ? LIGHT_GRAY : WHITE);
+  }
+  return SKY_BLUE;
+};
 
 const Container = styled.div`
   display: flex;
@@ -60,10 +68,10 @@ const DataFrame = styled.table`
 const DataRow = styled.tr`
   display: table-row;
   background-color: ${props => (props.isEvenNumber ? LIGHT_GRAY : WHITE)};
-  cursor: pointer;
+  cursor: ${props => (props.optionsExists ? 'default' : 'pointer')};
 
   &:hover {
-  background: ${SKY_BLUE} !important;
+    background-color: ${props => getRowColorOnHover(props)};
   }
 `;
 
@@ -74,6 +82,19 @@ const ColumnHeader = styled.th`
 const DataLink = styled(Link)`
   display: contents;
   text-decoration: none !important;
+  cursor: inherit;
+`;
+
+const OptionsContainer = styled.td`
+
+`;
+
+const Option = styled.button`
+  border: none;
+  background: transparent;
+  margin: auto 2rem;
+  font-size: 0.5rem;
+  cursor: pointer;
 `;
 
 module.exports = {
@@ -87,4 +108,6 @@ module.exports = {
   DataRow,
   ColumnHeader,
   DataLink,
+  OptionsContainer,
+  Option,
 };
