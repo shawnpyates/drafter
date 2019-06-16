@@ -31,6 +31,7 @@ import {
   fetchRequestsByRequester,
   fetchRequestsByDraftOwner,
   createRequest,
+  destroyRequest,
 } from './requestActions';
 
 export {
@@ -54,4 +55,5 @@ export {
   fetchRequestsByRequester,
   fetchRequestsByDraftOwner,
   createRequest,
+  destroyRequest,
 };

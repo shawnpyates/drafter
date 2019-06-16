@@ -17,21 +17,24 @@
     "type": "IncomingRequests",
     "title": "Incoming Requests",
     "nonePending": "There are no pending requests to join any of your drafts.",
-    "columnHeaders": ["Team", "Owner", "Draft Requested"]
+    "columnHeaders": ["Team", "Owner", "Draft Requested", ""],
+    "options": ["Accept", "Reject"]
   },
 
   "outgoingRequestsTable": {
     "type": "OutgoingRequests",
     "title": "Outgoing Requests",
     "nonePending": "You have no pending requests to join any drafts.",
-    "columnHeaders": ["Team", "Draft Requested", "Expires"]
+    "columnHeaders": ["Team", "Draft Requested", "Expires", ""],
+    "options": ["Accept", "Reject"]
   },
 
   "requestsForDraftTable": {
     "type": "RequestsForDraft",
     "title": "Requests to Join this Draft",
     "nonePending": "There are no pending requests for this draft.",
-    "columnHeaders": ["Team", "Owner", "Owner Email"]
+    "columnHeaders": ["Team", "Owner", "Owner Email", ""],
+    "options": ["Accept", "Reject"]
   },
 
   "teamsTable": {

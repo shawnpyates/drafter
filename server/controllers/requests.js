@@ -151,10 +151,11 @@ module.exports = {
 
   async destroy(req, res) {
     try {
-      const request = await Request.find({ where: { uuid: req.params.id } });
+      const { id } = req.params;
+      const request = await Request.find({ where: { uuid: id } });
       if (!request) return res.status(404).send({ e: 'Request not found.' });
       await request.destroy();
-      return res.status(204).send({});
+      return res.status(204).send({ destroyedRequestId: id });
     } catch (e) {
       return res.status(400).send({ e });
     }
