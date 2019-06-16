@@ -33,70 +33,67 @@ const Table = ({
   addNewLink,
   options,
   handleOptionClick,
-}) => {
-  console.log(`is there options in ${type}? ${Boolean(options)}`);
-  return (
-    <Container>
-      <TableFrame>
-        <tbody>
-          <TableTitleLine>
-            <th>
-              <TableTitle>{title}</TableTitle>
-              {addNewLink &&
-                <Link to={addNewLink}>
-                  <AddNewButton>
-                    Add New
-                  </AddNewButton>
-                </Link>
-              }
-            </th>
-          </TableTitleLine>
-          {Boolean(data.length) &&
-            <DataFrame>
-              <HeaderRow>
-                {columnHeaders.map(header => (
-                  <ColumnHeader
-                    columnHeadersLength={columnHeaders.length}
-                    key={header}
-                  >
-                    {header}
-                  </ColumnHeader>
-                ))}
-              </HeaderRow>
-              {data.map((entry, i) => (
-                <DataRow
-                  isEvenNumber={i % 2 === 0}
-                  optionsExists={Boolean(options)}
-                  key={entry.uuid}
+}) => (
+  <Container>
+    <TableFrame>
+      <tbody>
+        <TableTitleLine>
+          <th>
+            <TableTitle>{title}</TableTitle>
+            {addNewLink &&
+              <Link to={addNewLink}>
+                <AddNewButton>
+                  Add New
+                </AddNewButton>
+              </Link>
+            }
+          </th>
+        </TableTitleLine>
+        {Boolean(data.length) &&
+          <DataFrame>
+            <HeaderRow>
+              {columnHeaders.map(header => (
+                <ColumnHeader
+                  columnHeadersLength={columnHeaders.length}
+                  key={header}
                 >
-                  <DataLink to={!options && `/${type.toLowerCase()}/${entry.uuid}/show`}>
-                    {getCellsForRow(entry)}
-                  </DataLink>
-                  {options &&
-                    <OptionsContainer>
-                      {options.map(option => (
-                        <DataLink to="/">
-                          <Option
-                            key={option}
-                            value={entry.uuid}
-                            onClick={handleOptionClick}
-                          >
-                            {option}
-                          </Option>
-                        </DataLink>
-                      ))}
-                    </OptionsContainer>
-                  }
-                </DataRow>
+                  {header}
+                </ColumnHeader>
               ))}
-            </DataFrame>
-          }
-          {!data.length && <DataFrame>{emptyDataMessage}</DataFrame>}
-        </tbody>
-      </TableFrame>
-    </Container>
-  );
-};
+            </HeaderRow>
+            {data.map((entry, i) => (
+              <DataRow
+                isEvenNumber={i % 2 === 0}
+                optionsExists={Boolean(options)}
+                key={entry.uuid}
+              >
+                <DataLink to={!options && `/${type.toLowerCase()}/${entry.uuid}/show`}>
+                  {getCellsForRow(entry)}
+                </DataLink>
+                {options &&
+                  <OptionsContainer>
+                    {options.map(option => (
+                      <DataLink to="/">
+                        <Option
+                          key={option}
+                          value={entry.uuid}
+                          onClick={handleOptionClick}
+                        >
+                          {option}
+                        </Option>
+                      </DataLink>
+                    ))}
+                  </OptionsContainer>
+                }
+              </DataRow>
+            ))}
+          </DataFrame>
+        }
+        {!data.length && <DataFrame>{emptyDataMessage}</DataFrame>}
+      </tbody>
+    </TableFrame>
+  </Container>
+);
 
 Table.defaultProps = {
   addNewLink: null,

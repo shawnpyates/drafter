@@ -1,12 +1,15 @@
 const initialState = {
   creating: false,
   created: false,
+  destroying: false,
+  destroyed: false,
   fetching: false,
   fetched: false,
   requestsForDraft: [],
   outgoingRequests: [],
   incomingRequests: [],
   errorOnCreateRequest: null,
+  errorOnDestroyingRequest: null,
   errorOnFetchRequestsFromDraft: null,
   errorOnFetchRequestsFromRequester: null,
 };
@@ -64,6 +67,18 @@ const requestReducer = (state = initialState, action) => {
         fetching: false,
         fetched: true,
         incomingRequests: action.payload,
+      };
+    }
+    case 'DESTROY_REQUEST_PENDING': {
+      return { ...state, destroying: true };
+    }
+    case 'DESTROY_REQUEST_REJECTED':
+      return { ...state, destroying: false, errorOnDestroyingRequest: action.payload };
+    case 'DESTROY_REQUEST_FULFILLED': {
+      return {
+        ...state,
+        destroying: false,
+        destroyed: true,
       };
     }
 
