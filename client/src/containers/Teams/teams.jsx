@@ -4,7 +4,11 @@ import PropTypes from 'prop-types';
 
 import Table from '../../components/Table/table';
 
-import { fetchTeamsByUser, fetchTeamsByDraft } from '../../actions';
+import {
+  fetchTeamsByUser,
+  fetchTeamsByDraft,
+  fetchDraftsByUser,
+} from '../../actions';
 
 import { teamsTable as teamsTableTexts } from '../../../texts.json';
 
@@ -17,12 +21,13 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => ({
   fetchTeamsByUser: id => dispatch(fetchTeamsByUser(id)),
   fetchTeamsByDraft: id => dispatch(fetchTeamsByDraft(id)),
+  fetchDraftsByUser: id => dispatch(fetchDraftsByUser(id)),
 });
 
 const extractDataForTable = (teams, drafts) => (
   teams.map((team) => {
     const { uuid, name, ownerName } = team;
-    const draftName = drafts.find(draft => draft.uuid === team.draftId).name;
+    const draftName = drafts.length && drafts.find(draft => draft.uuid === team.draftId).name;
     return {
       uuid,
       name,
@@ -41,6 +46,7 @@ class Teams extends Component {
     } = this.props;
     if (fetchBy === 'user') {
       this.props.fetchTeamsByUser(userId);
+      this.props.fetchDraftsByUser(userId);
     } else {
       this.props.fetchTeamsByDraft(draftId);
     }
@@ -96,6 +102,7 @@ Teams.propTypes = {
   fetchBy: PropTypes.string.isRequired,
   fetchTeamsByDraft: PropTypes.func.isRequired,
   fetchTeamsByUser: PropTypes.func.isRequired,
+  fetchDraftsByUser: PropTypes.func.isRequired,
   match: PropTypes.objectOf(PropTypes.any),
   teams: PropTypes.arrayOf(PropTypes.object),
   userId: PropTypes.string,
