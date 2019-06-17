@@ -49,10 +49,9 @@ module.exports = {
   async fetchByDraft(req, res) {
     const { id: draftId } = req.params;
     try {
-      // needs user
       const requests = await Request.findAll({
         where: { draftId },
-        include: [User],
+        include: [User, Draft],
       });
       if (!requests.length) return res.status(200).send({ requests: [] });
       return res.status(200).send({ requests });
