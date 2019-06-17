@@ -25,8 +25,7 @@
     "type": "OutgoingRequests",
     "title": "Outgoing Requests",
     "nonePending": "You have no pending requests to join any drafts.",
-    "columnHeaders": ["Team", "Draft Requested", "Expires", ""],
-    "options": ["Accept", "Reject"]
+    "columnHeaders": ["Team", "Draft Requested", "Expires"]
   },
 
   "requestsForDraftTable": {

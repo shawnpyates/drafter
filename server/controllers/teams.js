@@ -1,5 +1,6 @@
-const { Team } = require('../models');
+const { Team, Draft } = require('../models');
 const { create: createUserTeam } = require('./userTeams');
+const { create: createUserDraft } = require('./userDrafts');
 const { getOrgsWithOwnerName } = require('./helpers');
 
 module.exports = {
@@ -28,7 +29,9 @@ module.exports = {
     try {
       const { name, ownerUserId, draftId } = req.body;
       const team = await Team.create({ name, ownerUserId, draftId });
-      const teamProperties = {
+      const draft = await Draft.findOne({ where: { uuid: draftId } });
+      const isTeamOwnerAlsoDraftOwner = draft.ownerUserId === ownerUserId;
+      const userTeamProperties = {
         body: {
           isOwner: true,
           isAdmin: true,
@@ -38,7 +41,19 @@ module.exports = {
           userId: ownerUserId,
         },
       };
-      await createUserTeam(teamProperties);
+      const userDraftProperties = {
+        body: {
+          isOwner: isTeamOwnerAlsoDraftOwner,
+          isAdmin: isTeamOwnerAlsoDraftOwner,
+        },
+        params: {
+          draftId,
+          userId: ownerUserId,
+        },
+      };
+
+      await createUserTeam(userTeamProperties);
+      await createUserDraft(userDraftProperties);
       return res.status(201).send({ team });
     } catch (e) {
       return res.status(400).send({ e });

@@ -30,7 +30,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => ({
   createTeam: body => dispatch(createTeam(body)),
-  destroyRequest: id => dispatch(destroyRequest(id)),
+  destroyRequest: (id, requestType) => dispatch(destroyRequest(id, requestType)),
   fetchByDraft: id => dispatch(fetchRequestsByDraft(id)),
   fetchByRequester: id => dispatch(fetchRequestsByRequester(id)),
   fetchByDraftOwner: id => dispatch(fetchRequestsByDraftOwner(id)),
@@ -65,8 +65,7 @@ class Requests extends Component {
         draftId,
       });
     }
-    destroyRequestPropFn(uuid);
-    this.forceUpdate();
+    destroyRequestPropFn(uuid, requestsByFetchType[fetchBy].data);
   };
 
   render() {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -9,54 +9,77 @@ import Players from '../Players/players';
 import Teams from '../Teams/teams';
 import Requests from '../Requests/requests';
 
-import { fetchTeamsByDraft, fetchUsersByDraft } from '../../actions';
+import { fetchOneDraft, fetchCurrentUser } from '../../actions';
 
 const { properties: profileProperties, values: profileValues } = draftProfileData;
 
 const mapStateToProps = (state) => {
-  const { drafts, teams, users } = state.draft;
-  return { drafts, teams, users };
+  const { currentDraft } = state.draft;
+  const { currentUser } = state.user;
+  return { currentDraft, currentUser };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   const { id } = ownProps.match.params;
   return {
-    fetchTeamsByDraft: () => dispatch(fetchTeamsByDraft(id)),
-    fetchUsersByDraft: () => dispatch(fetchUsersByDraft(id)),
+    fetchOneDraftPropFn: () => dispatch(fetchOneDraft(id)),
+    fetchCurrentUserPropFn: () => dispatch(fetchCurrentUser()),
   };
 };
 
-const DraftMenu = ({ drafts, match }) => {
-  const currentDraft = drafts.find(draft => draft.uuid === match.params.id);
-  const {
-    id,
-    timeScheduled,
-    ownerName,
-    name: profileCardTitle,
-  } = currentDraft;
-  const { scheduledFor, owner } = profileProperties;
-  const { unscheduled } = profileValues;
-  const profileCardData = {
-    [scheduledFor]: timeScheduled || unscheduled,
-    [owner]: ownerName,
-  };
-  const profileCardLinkForUpdating = `/updateDraft/${id}`;
-  return (
-    <div>
-      <ProfileCard
-        title={profileCardTitle}
-        data={profileCardData}
-        linkForUpdating={profileCardLinkForUpdating}
-      />
-      <Teams draftId={currentDraft.uuid} fetchBy="draft" match={match} />
-      <Players draftId={currentDraft.uuid} fetchBy="draft" />
-      <Requests draftId={currentDraft.uuid} fetchBy="draft" />
-    </div>
-  );
+class DraftMenu extends Component {
+  componentDidMount() {
+    const {
+      fetchOneDraftPropFn,
+      fetchCurrentUserPropFn,
+      match: { params },
+    } = this.props;
+    fetchOneDraftPropFn(params.id);
+    fetchCurrentUserPropFn();
+  }
+  render() {
+    const { currentDraft, currentUser, match } = this.props;
+    const {
+      uuid,
+      timeScheduled,
+      ownerName,
+      name: profileCardTitle,
+    } = currentDraft || {};
+    const { scheduledFor, owner } = profileProperties;
+    const { unscheduled } = profileValues;
+    const profileCardData = {
+      [scheduledFor]: timeScheduled || unscheduled,
+      [owner]: ownerName,
+    };
+    const profileCardLinkForUpdating = `/updateDraft/${uuid}`;
+    return (
+      currentDraft &&
+        <div>
+          <ProfileCard
+            title={profileCardTitle}
+            data={profileCardData}
+            linkForUpdating={profileCardLinkForUpdating}
+          />
+          <Teams draftId={uuid} fetchBy="draft" match={match} />
+          <Players draftId={uuid} fetchBy="draft" />
+          {(currentDraft.ownerUserId === currentUser.uuid) &&
+            <Requests draftId={uuid} fetchBy="draft" />
+          }
+        </div>
+    );
+  }
+}
+
+DraftMenu.defaultProps = {
+  currentDraft: null,
+  currentUser: null,
 };
 
 DraftMenu.propTypes = {
-  drafts: PropTypes.arrayOf(PropTypes.object).isRequired,
+  currentDraft: PropTypes.objectOf(PropTypes.any),
+  currentUser: PropTypes.objectOf(PropTypes.any),
+  fetchCurrentUserPropFn: PropTypes.func.isRequired,
+  fetchOneDraftPropFn: PropTypes.func.isRequired,
   match: PropTypes.objectOf(PropTypes.string).isRequired,
 };
 
