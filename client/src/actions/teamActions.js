@@ -36,3 +36,15 @@ export const createTeam = body => (dispatch) => {
       dispatch({ type: 'CREATE_TEAM_REJECTED', payload: err });
     });
 };
+
+export const fetchOneTeam = id => (dispatch) => {
+  dispatch({ type: 'FETCH_ONE_TEAM_PENDING' });
+  axios.get(`/api/teams/${id}`)
+    .then((response) => {
+      const { team } = response.data;
+      dispatch({ type: 'FETCH_ONE_TEAM_FULFILLED', payload: team });
+    })
+    .catch((err) => {
+      dispatch({ type: 'FETCH_ONE_TEAM_REJECTED', payload: err });
+    });
+};
