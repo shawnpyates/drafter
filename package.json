@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "lint": "./node_modules/.bin/eslint",
     "start": "PORT=3001 nodemon ./bin/www",
-    "lint": "./node_modules/.bin/eslint"
+    "test": "jest"
   },
   "dependencies": {
     "bcrypt": "^1.0.3",
@@ -30,6 +31,7 @@
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^6.1.1",
     "eslint-plugin-react": "^7.11.1",
+    "jest": "^24.8.0",
     "nodemon": "^1.18.10"
   }
 }

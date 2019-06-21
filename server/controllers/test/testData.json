@@ -1,0 +1,66 @@
+{
+  "teams": [
+    {
+      "uuid": "100",
+      "name": "Canucks",
+      "createdAt": "2019-06-16T22:27:40.811Z",
+      "updatedAt": "2019-06-16T22:27:40.811Z",
+      "draftId": "200",
+      "ownerUserId": "300"
+    },
+    {
+      "uuid": "101",
+      "name": "Flames",
+      "createdAt": "2019-06-17T04:36:36.963Z",
+      "updatedAt": "2019-06-17T04:36:36.963Z",
+      "draftId": "201",
+      "ownerUserId": "301"
+    },
+    {
+      "uuid": "102",
+      "name": "Oilers",
+      "createdAt": "2019-06-16T22:27:40.811Z",
+      "updatedAt": "2019-06-16T22:27:40.811Z",
+      "draftId": "202",
+      "ownerUserId": "302"
+    },
+    {
+      "uuid": "103",
+      "name": "Jets",
+      "createdAt": "2019-06-17T04:36:36.963Z",
+      "updatedAt": "2019-06-17T04:36:36.963Z",
+      "draftId": "201",
+      "ownerUserId": "300"
+    }
+  ],
+  "owners": [
+    {
+      "uuid": "300",
+      "firstName": "Al",
+      "lastName": "Ali",
+      "email": "a@a.com",
+      "password": "$2a$10$X6KdBKAN.hktKL/iNPvvv.CcPadP2E6AzB7zXh4v9PHBT2IWGKcPO",
+      "createdAt": "2019-05-20T17:47:34.960Z",
+      "updatedAt": "2019-05-20T17:47:34.960Z"
+    },
+    {
+      "uuid": "301",
+      "firstName": "Bo",
+      "lastName": "Boxer",
+      "email": "b@b.com",
+      "password": "$2a$10$X6KdBKAN.hktKL/iNPvvv.CcPadP2E6AzB7zXh4v9PHBT2IWGKcPO",
+      "createdAt": "2019-05-20T17:47:34.960Z",
+      "updatedAt": "2019-05-20T17:47:34.960Z"
+    },
+    {
+      "uuid": "302",
+      "firstName": "Cal",
+      "lastName": "Calder",
+      "email": "c@c.com",
+      "password": "$2a$10$X6KdBKAN.hktKL/iNPvvv.CcPadP2E6AzB7zXh4v9PHBT2IWGKcPO",
+      "createdAt": "2019-05-20T17:47:34.960Z",
+      "updatedAt": "2019-05-20T17:47:34.960Z"
+    }
+  ]
+
+}
