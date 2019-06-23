@@ -1,11 +1,19 @@
 /* global describe, expect, test */
 
-const { teams, owners } = require('./testData');
+const {
+  teams,
+  owners,
+  expectedOutput,
+} = require('./testData');
 
-const { getOrgsWithOwnerName } = require('../helpers');
+const { mapOwnerNamesToOrgs } = require('../helpers').TEST_ONLY;
 
 
 describe('Helpers', () => {
-  describe('getOrgsWithOwnerName', () => {
+  describe('mapOwnerNamesToOrgs', () => {
+    test('returns teams with owner full name include as prop', () => {
+      const received = mapOwnerNamesToOrgs(teams, owners);
+      expect(received).toEqual(expectedOutput);
+    });
   });
 });
