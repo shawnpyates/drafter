@@ -14,7 +14,10 @@ const get24HourTime = (timeString, isPm) => {
 
 const createFinalTimestamp = (date, time) => date.replace('T12:00:00', ` ${time}:00`);
 
-// hours column cannot be greater than 23
+// allow 06-09 and 16-19 (valid hour values)
+// allow x1-x5 (e.g 95 if user wants 9:50)
+// do not allow x6-x9 where x > 1 (e.g. 29, 39, 49, etc.)
+// because both 29:00 and 2:90 are invalid times
 const areFirstTwoCharsInvalid = (inputChar, timeChars) => (
   Number(`${timeChars[4]}${inputChar}`) > MAX_HOURS_COLUMN_VALUE && inputChar > 5
 );
@@ -66,6 +69,7 @@ module.exports = {
   get24HourTime,
   createFinalTimestamp,
   areFirstTwoCharsInvalid,
+  isFourthCharNotPermitted,
   addTimeChar,
   deleteTimeChar,
   formatTimeChars,

@@ -29,6 +29,32 @@ const mapDispatchToProps = dispatch => ({
 
 const isEmailValid = email => (/\S+@\S+\.\S+/).test(email);
 
+const validateForm = (state) => {
+  const {
+    email,
+    passwordFirstInsertion,
+    passwordSecondInsertion,
+  } = state;
+
+  if (Object.values(state).some(value => !value)) {
+    return { errorMessage: missingField };
+  }
+
+  if (passwordFirstInsertion !== passwordSecondInsertion) {
+    return { errorMessage: passwordsDidNotMatch };
+  }
+
+  if (passwordFirstInsertion.length < registerForm.passwordMinimumLength) {
+    return { errorMessage: tooShort };
+  }
+
+  if (!isEmailValid(email)) {
+    return { errorMessage: invalidEmail };
+  }
+
+  return { success: true };
+};
+
 class Register extends Component {
   constructor() {
     super();
@@ -50,7 +76,11 @@ class Register extends Component {
 
   handleSubmit = (ev) => {
     ev.preventDefault();
-    if (!this.isFormValid()) return;
+    const { errorMessage } = validateForm(this.state);
+    if (errorMessage) {
+      this.setState({ errorMessage });
+      return;
+    }
     const {
       firstName,
       lastName,
@@ -64,41 +94,6 @@ class Register extends Component {
       password: passwordFirstInsertion,
     };
     this.props.createUser(body);
-  }
-
-  isFormValid() {
-    const { errorMessage, ...fieldState } = this.state;
-    const {
-      passwordFirstInsertion,
-      passwordSecondInsertion,
-      email,
-    } = fieldState;
-
-    const values = Object.values(fieldState);
-
-    const isEmpty = value => !value;
-
-    if (values.some(isEmpty)) {
-      this.setState({ errorMessage: missingField });
-      return false;
-    }
-
-    if (passwordFirstInsertion !== passwordSecondInsertion) {
-      this.setState({ errorMessage: passwordsDidNotMatch });
-      return false;
-    }
-
-    if (passwordFirstInsertion.length < registerForm.passwordMinimumLength) {
-      this.setState({ errorMessage: tooShort });
-      return false;
-    }
-
-    if (!isEmailValid(email)) {
-      this.setState({ errorMessage: invalidEmail });
-      return false;
-    }
-
-    return true;
   }
 
   updateFieldValue = (name, value) => {
@@ -132,3 +127,4 @@ Register.propTypes = {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Register);
+exports.validateForm = validateForm;
