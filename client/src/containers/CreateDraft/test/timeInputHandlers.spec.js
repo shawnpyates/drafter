@@ -3,10 +3,50 @@ import {
   addTimeChar,
   areFirstTwoCharsInvalid,
   deleteTimeChar,
+  formatTimeChars,
+  get24HourTime,
   isFourthCharNotPermitted,
+  isInvalidTimeInput,
 } from '../timeInputHandlers';
 
 describe('timeInputHandlers', () => {
+  describe('get24HourTime', () => {
+    test('prepends hour with zero if hour < 10', () => {
+      const timeString = '2:45';
+      const isPm = false;
+      const received = get24HourTime(timeString, isPm);
+      const expected = '02:45';
+      expect(received).toEqual(expected);
+    });
+    test('leaves hour in tact if hour is 10AM or 11AM', () => {
+      const timeString = '10:45';
+      const isPm = false;
+      const received = get24HourTime(timeString, isPm);
+      const expected = '10:45';
+      expect(received).toEqual(expected);
+    });
+    test('if hour is 12AM, change hour value to 00', () => {
+      const timeString = '12:45';
+      const isPm = false;
+      const received = get24HourTime(timeString, isPm);
+      const expected = '00:45';
+      expect(received).toEqual(expected);
+    });
+    test('if PM (but not 12 PM), add 12 to hour value', () => {
+      const timeString = '8:45';
+      const isPm = true;
+      const received = get24HourTime(timeString, isPm);
+      const expected = '20:45';
+      expect(received).toEqual(expected);
+    });
+    test('if 12 PM, leave value in tact', () => {
+      const timeString = '12:45';
+      const isPm = true;
+      const received = get24HourTime(timeString, isPm);
+      const expected = '12:45';
+      expect(received).toEqual(expected);
+    });
+  });
   describe('areFirstTwoCharsInvalid', () => {
     // allow 6-9 and 16-19 (valid hour values)
     test('allow inputChar >= 6 if timeChars[4] is <= 1', () => {
@@ -79,6 +119,34 @@ describe('timeInputHandlers', () => {
       const received = deleteTimeChar(timeChars);
       const expected = ['-', '-', ':', '-', '-'];
       expect(received).toEqual(expected);
+    });
+  });
+  describe('formatTimeChars', () => {
+    test('returns full values if hours column >= 10', () => {
+      const timeChars = ['1', '0', ':', '3', '0'];
+      const received = formatTimeChars(timeChars);
+      const expected = '10:30';
+      expect(received).toEqual(expected);
+    });
+    test('leaves all slots empty if only final slot has value', () => {
+      const timeChars = ['-', '9', ':', '3', '0'];
+      const received = formatTimeChars(timeChars);
+      const expected = '9:30';
+      expect(received).toEqual(expected);
+    });
+  });
+  describe('isInvalidTimeInput', () => {
+    test('rejects inputs that are not numbers', () => {
+      const key = 'a';
+      const timeChars = ['-', '-', ':', '-', '-'];
+      const received = isInvalidTimeInput(key, timeChars);
+      expect(received).toBe(true);
+    });
+    test('rejects input if all slots are full', () => {
+      const key = '1';
+      const timeChars = ['1', '0', ':', '3', '0'];
+      const received = isInvalidTimeInput(key, timeChars);
+      expect(received).toBe(true);
     });
   });
 });

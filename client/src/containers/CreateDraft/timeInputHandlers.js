@@ -3,9 +3,9 @@ const MAX_HOURS_COLUMN_VALUE = 23;
 const get24HourTime = (timeString, isPm) => {
   const hourColumn = timeString.split(':')[0];
   if (Number(hourColumn) === 12 && !isPm) {
-    return timeString.replace(String(hourColumn, '00'));
+    return timeString.replace(hourColumn, '00');
   }
-  if (isPm) {
+  if (Number(hourColumn) !== 12 && isPm) {
     return timeString.replace(hourColumn, String(Number(hourColumn) + 12));
   }
   const twoCharHourColumn = Number(hourColumn < 10) ? `0${hourColumn}` : hourColumn;
