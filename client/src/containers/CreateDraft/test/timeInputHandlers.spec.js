@@ -1,13 +1,17 @@
 /* global describe, expect, test */
 import {
   addTimeChar,
-  areFirstTwoCharsInvalid,
   deleteTimeChar,
   formatTimeChars,
   get24HourTime,
-  isFourthCharNotPermitted,
   isInvalidTimeInput,
+  TEST_ONLY as testOnlyFns,
 } from '../timeInputHandlers';
+
+const {
+  areFirstTwoCharsInvalid,
+  isFourthCharNotPermitted,
+} = testOnlyFns;
 
 describe('timeInputHandlers', () => {
   describe('get24HourTime', () => {

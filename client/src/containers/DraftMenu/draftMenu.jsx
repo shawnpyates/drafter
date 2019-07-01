@@ -80,7 +80,7 @@ DraftMenu.propTypes = {
   currentUser: PropTypes.objectOf(PropTypes.any),
   fetchCurrentUserPropFn: PropTypes.func.isRequired,
   fetchOneDraftPropFn: PropTypes.func.isRequired,
-  match: PropTypes.objectOf(PropTypes.string).isRequired,
+  match: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(DraftMenu);

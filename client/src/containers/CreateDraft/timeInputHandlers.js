@@ -1,4 +1,7 @@
+import moment from 'moment';
+
 const MAX_HOURS_COLUMN_VALUE = 23;
+const INITIAL_TIME_CHARS = ['-', '-', ':', '-', '-'];
 
 const get24HourTime = (timeString, isPm) => {
   const hourColumn = timeString.split(':')[0];
@@ -65,13 +68,28 @@ const isInvalidTimeInput = (key, timeChars) => (
   || isFourthCharNotPermitted(timeChars)
 );
 
+const resetTimeValues = () => ({
+  calendarDate: null,
+  timeChars: INITIAL_TIME_CHARS,
+  timeCharsAsString: null,
+});
+
+const initializeDateAndTime = () => ({
+  calendarDate: moment(),
+  timeChars: INITIAL_TIME_CHARS,
+});
+
 module.exports = {
-  get24HourTime,
-  createFinalTimestamp,
-  areFirstTwoCharsInvalid,
-  isFourthCharNotPermitted,
   addTimeChar,
+  createFinalTimestamp,
   deleteTimeChar,
   formatTimeChars,
+  get24HourTime,
+  initializeDateAndTime,
   isInvalidTimeInput,
+  resetTimeValues,
+  TEST_ONLY: {
+    areFirstTwoCharsInvalid,
+    isFourthCharNotPermitted,
+  },
 };

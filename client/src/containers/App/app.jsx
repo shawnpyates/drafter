@@ -21,6 +21,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const AppContainer = styled.div``;
+const Loading = styled.div``;
 
 class App extends Component {
   constructor() {
@@ -53,7 +54,7 @@ class App extends Component {
             <LoggedOutView />
           }
           {(!currentUser && !this.state.isTokenMissing) &&
-            <div>Loading...</div>
+            <Loading className="loading">Loading...</Loading>
           }
         </AppContainer>
       </Router>

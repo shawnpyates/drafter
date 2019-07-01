@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import { Redirect } from 'react-router-dom';
 
 import Form from '../../components/Form/form';
@@ -10,12 +9,14 @@ import { createDraft } from '../../actions';
 import { draft as draftForm } from '../../../formConstants.json';
 
 import {
-  get24HourTime,
-  createFinalTimestamp,
   addTimeChar,
+  createFinalTimestamp,
   deleteTimeChar,
   formatTimeChars,
+  get24HourTime,
+  initializeDateAndTime,
   isInvalidTimeInput,
+  resetTimeValues,
 } from './timeInputHandlers';
 
 const INITIAL_TIME_CHARS = ['-', '-', ':', '-', '-'];
@@ -65,10 +66,7 @@ class CreateDraft extends Component {
   }
 
   initializeDateAndTime = () => {
-    this.setState({
-      calendarDate: moment(),
-      timeChars: INITIAL_TIME_CHARS,
-    });
+    this.setState(initializeDateAndTime());
   }
 
   handleTimePickerKeyUp = (ev) => {
@@ -140,14 +138,6 @@ class CreateDraft extends Component {
     this.setState({ isCalendarFocused });
   }
 
-  resetTimeValues() {
-    this.setState({
-      calendarDate: null,
-      timeChars: INITIAL_TIME_CHARS,
-      timeCharsAsString: null,
-    });
-  }
-
   updateFieldValue = (name, value) => {
     const buttonsToHighlight = {
       ...this.state.buttonsToHighlight,
@@ -157,7 +147,7 @@ class CreateDraft extends Component {
       case 'shouldScheduleTime':
         this.setState({ buttonsToHighlight }, () => {
           if (!value) {
-            this.resetTimeValues();
+            this.setState(resetTimeValues());
           }
         });
         break;
@@ -165,7 +155,6 @@ class CreateDraft extends Component {
         this.setState({ [name]: value });
     }
   }
-
 
   handleSubmit = (ev) => {
     ev.preventDefault();
@@ -198,7 +187,6 @@ class CreateDraft extends Component {
     };
     this.props.createDraft(body).then(() => this.setState({ isSubmitComplete: true }));
   }
-
 
   render() {
     const {
