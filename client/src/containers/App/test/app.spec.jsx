@@ -3,7 +3,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import configureStore from 'redux-mock-store';
 
-import App, { Loading } from '../app';
+import App from '../app';
 import LoggedInView from '../../LoggedInView/loggedInView';
 import LoggedOutView from '../../LoggedOutView/loggedOutView';
 import Header from '../../../components/Header/header';

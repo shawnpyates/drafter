@@ -34,6 +34,31 @@ const mapDispatchToProps = dispatch => ({
   createDraft: body => dispatch(createDraft(body)),
 });
 
+const validateForm = (state) => {
+  const {
+    name,
+    calendarDate,
+    timeCharsAsString,
+    isPmSelected,
+    buttonsToHighlight,
+  } = state;
+  const { missingField, mustBeFutureTime } = draftForm.errorMessages;
+  const { shouldScheduleTime } = buttonsToHighlight;
+  if (!name || (shouldScheduleTime && !timeCharsAsString)) {
+    return { errorMessage: missingField };
+  }
+  let finalTimeStamp;
+  if (calendarDate) {
+    const formattedDate = calendarDate.format(CALENDAR_DATE_FORMAT);
+    const modifiedTime = get24HourTime(timeCharsAsString, isPmSelected);
+    finalTimeStamp = createFinalTimestamp(formattedDate, modifiedTime);
+  }
+  if (new Date() > new Date(finalTimeStamp)) {
+    return { errorMessage: mustBeFutureTime };
+  }
+  return { finalTimeStamp, name };
+};
+
 class CreateDraft extends Component {
   constructor() {
     super();
@@ -158,26 +183,9 @@ class CreateDraft extends Component {
 
   handleSubmit = (ev) => {
     ev.preventDefault();
-    const {
-      name,
-      calendarDate,
-      timeCharsAsString,
-      isPmSelected,
-      buttonsToHighlight,
-    } = this.state;
-    const { shouldScheduleTime } = buttonsToHighlight;
-    if (!name || (shouldScheduleTime && !timeCharsAsString)) {
-      this.setState({ errorMessage: 'Please complete all fields.' });
-      return;
-    }
-    let finalTimeStamp;
-    if (calendarDate) {
-      const formattedDate = calendarDate.format(CALENDAR_DATE_FORMAT);
-      const modifiedTime = get24HourTime(timeCharsAsString, isPmSelected);
-      finalTimeStamp = createFinalTimestamp(formattedDate, modifiedTime);
-    }
-    if (new Date() > new Date(finalTimeStamp)) {
-      this.setState({ errorMessage: 'Draft must occur at future time.' });
+    const { errorMessage, finalTimeStamp, name } = validateForm(this.state);
+    if (errorMessage) {
+      this.setState({ errorMessage });
       return;
     }
     const body = {
@@ -238,3 +246,4 @@ CreateDraft.propTypes = {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateDraft);
+exports.validateForm = validateForm;

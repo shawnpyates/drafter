@@ -130,7 +130,11 @@
         "type": "submit",
         "enabled": true
       }
-    ]
+    ],
+    "errorMessages": {
+      "missingField": "Please fill in all fields.",
+      "mustBeFutureTime": "Your draft can only be scheduled for a future time."
+    }
   },
   "player": {
     "title": "Create a New Player",

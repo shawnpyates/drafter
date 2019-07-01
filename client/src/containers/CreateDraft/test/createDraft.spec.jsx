@@ -3,9 +3,17 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
+import moment from 'moment';
 
-import CreateDraft from '../createDraft';
+import CreateDraft, { validateForm } from '../createDraft';
 import Form from '../../../components/Form/form';
+
+import { draft as draftForm } from '../../../../formConstants.json';
+
+const {
+  missingField,
+  mustBeFutureTime,
+} = draftForm.errorMessages;
 
 const mockStore = configureStore([thunk]);
 
@@ -15,24 +23,67 @@ const store = {
   },
 };
 
+const GET_THREE_DAYS_FROM_NOW_TIMESTAMP = () => {
+  const date = new Date();
+  return date.setDate(date.getDate() + 3);
+};
+
+const localState = {
+  name: 'Foo',
+  calendarDate: moment(GET_THREE_DAYS_FROM_NOW_TIMESTAMP()),
+  timeCharsAsString: '5:50',
+  isPmSelected: true,
+  buttonsToHighlight: {
+    shouldScheduleTime: true,
+  },
+};
+
 const wrapper = shallow(<CreateDraft store={mockStore(store)} />);
 
 describe('<CreateDraft />', () => {
-  test('should render a <CreateDraft /> component', () => {
-    const received = wrapper.text();
-    const expected = '<CreateDraft />';
-    expect(received).toEqual(expected);
+  describe('CreateDraft component', () => {
+    test('should render a <CreateDraft /> component', () => {
+      const received = wrapper.text();
+      const expected = '<CreateDraft />';
+      expect(received).toEqual(expected);
+    });
+    test('should render a <Form /> component as child if form not submitted yet', () => {
+      const deepWrapper = wrapper.dive();
+      deepWrapper.setState({ isSubmitComplete: false });
+      const formLength = deepWrapper.find(Form).length;
+      expect(formLength).toEqual(1);
+    });
+    test('should not render <Form /> component as child if form submitted', () => {
+      const deepWrapper = wrapper.dive();
+      deepWrapper.setState({ isSubmitComplete: true });
+      const formLength = deepWrapper.find(Form).length;
+      expect(formLength).toEqual(0);
+    });
   });
-  test('should render a <Form /> component as child if form not submitted yet', () => {
-    const deepWrapper = wrapper.dive();
-    deepWrapper.setState({ isSubmitComplete: false });
-    const formLength = deepWrapper.find(Form).length;
-    expect(formLength).toEqual(1);
-  });
-  test('should not render <Form /> component as child if form submitted', () => {
-    const deepWrapper = wrapper.dive();
-    deepWrapper.setState({ isSubmitComplete: true });
-    const formLength = deepWrapper.find(Form).length;
-    expect(formLength).toEqual(0);
+  describe('validateForm', () => {
+    test('returns finalTimeStamp and name if form valid', () => {
+      const threeDaysFromNow = new Date(GET_THREE_DAYS_FROM_NOW_TIMESTAMP());
+      const formattedDate = threeDaysFromNow.toISOString().split('T')[0];
+      const received = validateForm(localState);
+      expect(received.finalTimeStamp.split(' ')[0]).toEqual(formattedDate);
+      expect(received.name).toEqual(localState.name);
+    });
+    test('rejects if user has chosen to schedule time but time is not provided', () => {
+      const modifiedState = { ...localState, timeCharsAsString: null };
+      const received = validateForm(modifiedState);
+      const expected = { errorMessage: missingField };
+      expect(received).toEqual(expected);
+    });
+    test('rejects if user has chosen to schedule time in the past', () => {
+      const modifiedState = {
+        ...localState,
+        calendarDate: moment(),
+        timeCharsAsString: '12:00',
+        isPmSelected: false,
+      };
+      const received = validateForm(modifiedState);
+      const expected = { errorMessage: mustBeFutureTime };
+      expect(received).toEqual(expected);
+    });
   });
 });
