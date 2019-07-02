@@ -62,8 +62,8 @@ describe('<CreateDraft />', () => {
   });
   describe('validateForm', () => {
     test('returns finalTimeStamp and name if form valid', () => {
-      const threeDaysFromNow = new Date(GET_THREE_DAYS_FROM_NOW_TIMESTAMP());
-      const formattedDate = threeDaysFromNow.toISOString().split('T')[0];
+      const threeDaysFromNow = moment(GET_THREE_DAYS_FROM_NOW_TIMESTAMP());
+      const formattedDate = threeDaysFromNow.format('YYYY-MM-DD');
       const received = validateForm(localState);
       expect(received.finalTimeStamp.split(' ')[0]).toEqual(formattedDate);
       expect(received.name).toEqual(localState.name);

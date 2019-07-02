@@ -133,7 +133,7 @@
     ],
     "errorMessages": {
       "missingField": "Please fill in all fields.",
-      "mustBeFutureTime": "Your draft can only be scheduled for a future time."
+      "mustBeFutureTime": "Your draft must be scheduled for a future time."
     }
   },
   "player": {
