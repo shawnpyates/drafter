@@ -132,7 +132,7 @@ describe('timeInputHandlers', () => {
       const expected = '10:30';
       expect(received).toEqual(expected);
     });
-    test('leaves all slots empty if only final slot has value', () => {
+    test('disregards first slot if hours column < 10', () => {
       const timeChars = ['-', '9', ':', '3', '0'];
       const received = formatTimeChars(timeChars);
       const expected = '9:30';
