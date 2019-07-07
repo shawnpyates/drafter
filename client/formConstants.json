@@ -237,7 +237,10 @@
         "type": "submit",
         "enabled": true
       }
-    ]
+    ],
+    "errorMessages": {
+      "missingField": "Please fill in all fields."
+    }
   },
   "updateUser": {
     "title": "Update Your Email",
