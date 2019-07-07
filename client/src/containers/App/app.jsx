@@ -21,6 +21,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const AppContainer = styled.div``;
+const Loading = styled.div``;
 
 class App extends Component {
   constructor() {
@@ -31,10 +32,11 @@ class App extends Component {
   }
 
   componentWillMount() {
-    if (!this.props.currentUser && localStorage.getItem('drafterUserToken')) {
+    const userToken = localStorage.getItem('drafterUserToken');
+    if (!this.props.currentUser && userToken) {
       this.setState({ isTokenMissing: false });
       this.props.fetchCurrentUser();
-    } else {
+    } else if (!userToken) {
       this.setState({ isTokenMissing: true });
     }
   }
@@ -48,11 +50,11 @@ class App extends Component {
           {currentUser &&
             <LoggedInView />
           }
-          {(this.state.isTokenMissing || errorOnFetchCurrentUser) &&
+          {(!currentUser && (this.state.isTokenMissing || errorOnFetchCurrentUser)) &&
             <LoggedOutView />
           }
-          {!currentUser && !this.state.isTokenMissing &&
-            <div>Loading...</div>
+          {(!currentUser && !this.state.isTokenMissing) &&
+            <Loading className="loading">Loading...</Loading>
           }
         </AppContainer>
       </Router>

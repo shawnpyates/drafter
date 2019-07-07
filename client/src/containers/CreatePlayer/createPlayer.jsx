@@ -28,6 +28,16 @@ const mapDispatchToProps = dispatch => ({
 
 const isEmailValid = email => (/\S+@\S+\.\S+/).test(email);
 
+const validateForm = ({ name, email, position }) => {
+  if (!name || !position) {
+    return { errorMessage: missingField };
+  }
+  if (email && !isEmailValid(email)) {
+    return { errorMessage: invalidEmail };
+  }
+  return { success: true };
+};
+
 class CreatePlayer extends Component {
   constructor() {
     super();
@@ -65,14 +75,12 @@ class CreatePlayer extends Component {
       email,
       position,
     } = this.state;
-    if (!name || !position) {
-      this.setState({ errorMessage: missingField });
+    const { errorMessage } = validateForm({ name, email, position });
+    if (errorMessage) {
+      this.setState({ errorMessage });
       return;
     }
-    if (email && !isEmailValid(email)) {
-      this.setState({ errorMessage: invalidEmail });
-      return;
-    }
+
     const urlNamespace = this.getUrlNamespaces();
     const orgKey = urlNamespace.type === '/teams/' ? 'teamId' : 'draftId';
     const { currentUser } = this.props;
@@ -121,3 +129,4 @@ CreatePlayer.propTypes = {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreatePlayer);
+exports.validateForm = validateForm;

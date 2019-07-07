@@ -1,11 +1,14 @@
+import moment from 'moment';
+
 const MAX_HOURS_COLUMN_VALUE = 23;
+const INITIAL_TIME_CHARS = ['-', '-', ':', '-', '-'];
 
 const get24HourTime = (timeString, isPm) => {
   const hourColumn = timeString.split(':')[0];
   if (Number(hourColumn) === 12 && !isPm) {
-    return timeString.replace(String(hourColumn, '00'));
+    return timeString.replace(hourColumn, '00');
   }
-  if (isPm) {
+  if (Number(hourColumn) !== 12 && isPm) {
     return timeString.replace(hourColumn, String(Number(hourColumn) + 12));
   }
   const twoCharHourColumn = Number(hourColumn < 10) ? `0${hourColumn}` : hourColumn;
@@ -14,7 +17,10 @@ const get24HourTime = (timeString, isPm) => {
 
 const createFinalTimestamp = (date, time) => date.replace('T12:00:00', ` ${time}:00`);
 
-// hours column cannot be greater than 23
+// allow 06-09 and 16-19 (valid hour values)
+// allow x1-x5 (e.g 95 if user wants 9:50)
+// do not allow x6-x9 where x > 1 (e.g. 29, 39, 49, etc.)
+// because both 29:00 and 2:90 are invalid times
 const areFirstTwoCharsInvalid = (inputChar, timeChars) => (
   Number(`${timeChars[4]}${inputChar}`) > MAX_HOURS_COLUMN_VALUE && inputChar > 5
 );
@@ -62,12 +68,28 @@ const isInvalidTimeInput = (key, timeChars) => (
   || isFourthCharNotPermitted(timeChars)
 );
 
+const resetTimeValues = () => ({
+  calendarDate: null,
+  timeChars: INITIAL_TIME_CHARS,
+  timeCharsAsString: null,
+});
+
+const initializeDateAndTime = () => ({
+  calendarDate: moment(),
+  timeChars: INITIAL_TIME_CHARS,
+});
+
 module.exports = {
-  get24HourTime,
-  createFinalTimestamp,
-  areFirstTwoCharsInvalid,
   addTimeChar,
+  createFinalTimestamp,
   deleteTimeChar,
   formatTimeChars,
+  get24HourTime,
+  initializeDateAndTime,
   isInvalidTimeInput,
+  resetTimeValues,
+  TEST_ONLY: {
+    areFirstTwoCharsInvalid,
+    isFourthCharNotPermitted,
+  },
 };

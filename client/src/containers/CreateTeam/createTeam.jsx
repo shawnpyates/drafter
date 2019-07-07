@@ -9,6 +9,8 @@ import { createRequest, createTeam, fetchDraftsByOwner } from '../../actions';
 
 import { team as teamForm } from '../../../formConstants.json';
 
+const { missingField } = teamForm.errorMessages;
+
 const mapStateToProps = (state) => {
   const {
     user: { currentUser },
@@ -70,7 +72,7 @@ class CreateTeam extends Component {
     const {
       match: {
         params: { id } = {},
-      },
+      } = {},
     } = this.props;
     return id;
   }
@@ -98,12 +100,15 @@ class CreateTeam extends Component {
 
   createTeamForDraft = (name, draftListSelection) => {
     const draftIdParam = this.getDraftIdParam();
+    const { uuid: draftUuid } = (
+      this.props.drafts.find(draft => draft.name === draftListSelection) || {}
+    );
     const draftIdForBody = (
       draftIdParam
-      || this.props.drafts.find(draft => draft.name === draftListSelection).uuid
+      || draftUuid
     );
     if (!name || !draftIdForBody) {
-      this.setState({ errorMessage: 'Please complete all fields.' });
+      this.setState({ errorMessage: missingField });
       return;
     }
     const body = {
@@ -122,7 +127,7 @@ class CreateTeam extends Component {
       requestCreatorId: this.props.currentUser.uuid,
     };
     if (!teamName || !draftName) {
-      this.setState({ errorMessage: 'Please complete all fields.' });
+      this.setState({ errorMessage: missingField });
       return;
     }
     this.props.createRequest(body)

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import { Redirect } from 'react-router-dom';
 
 import Form from '../../components/Form/form';
@@ -10,12 +9,14 @@ import { createDraft } from '../../actions';
 import { draft as draftForm } from '../../../formConstants.json';
 
 import {
-  get24HourTime,
-  createFinalTimestamp,
   addTimeChar,
+  createFinalTimestamp,
   deleteTimeChar,
   formatTimeChars,
+  get24HourTime,
+  initializeDateAndTime,
   isInvalidTimeInput,
+  resetTimeValues,
 } from './timeInputHandlers';
 
 const INITIAL_TIME_CHARS = ['-', '-', ':', '-', '-'];
@@ -32,6 +33,31 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => ({
   createDraft: body => dispatch(createDraft(body)),
 });
+
+const validateForm = (state) => {
+  const {
+    name,
+    calendarDate,
+    timeCharsAsString,
+    isPmSelected,
+    buttonsToHighlight,
+  } = state;
+  const { missingField, mustBeFutureTime } = draftForm.errorMessages;
+  const { shouldScheduleTime } = buttonsToHighlight;
+  if (!name || (shouldScheduleTime && !timeCharsAsString)) {
+    return { errorMessage: missingField };
+  }
+  let finalTimeStamp;
+  if (calendarDate) {
+    const formattedDate = calendarDate.format(CALENDAR_DATE_FORMAT);
+    const modifiedTime = get24HourTime(timeCharsAsString, isPmSelected);
+    finalTimeStamp = createFinalTimestamp(formattedDate, modifiedTime);
+  }
+  if (new Date() > new Date(finalTimeStamp)) {
+    return { errorMessage: mustBeFutureTime };
+  }
+  return { finalTimeStamp, name };
+};
 
 class CreateDraft extends Component {
   constructor() {
@@ -65,10 +91,7 @@ class CreateDraft extends Component {
   }
 
   initializeDateAndTime = () => {
-    this.setState({
-      calendarDate: moment(),
-      timeChars: INITIAL_TIME_CHARS,
-    });
+    this.setState(initializeDateAndTime());
   }
 
   handleTimePickerKeyUp = (ev) => {
@@ -140,14 +163,6 @@ class CreateDraft extends Component {
     this.setState({ isCalendarFocused });
   }
 
-  resetTimeValues() {
-    this.setState({
-      calendarDate: null,
-      timeChars: INITIAL_TIME_CHARS,
-      timeCharsAsString: null,
-    });
-  }
-
   updateFieldValue = (name, value) => {
     const buttonsToHighlight = {
       ...this.state.buttonsToHighlight,
@@ -157,7 +172,7 @@ class CreateDraft extends Component {
       case 'shouldScheduleTime':
         this.setState({ buttonsToHighlight }, () => {
           if (!value) {
-            this.resetTimeValues();
+            this.setState(resetTimeValues());
           }
         });
         break;
@@ -166,29 +181,11 @@ class CreateDraft extends Component {
     }
   }
 
-
   handleSubmit = (ev) => {
     ev.preventDefault();
-    const {
-      name,
-      calendarDate,
-      timeCharsAsString,
-      isPmSelected,
-      buttonsToHighlight,
-    } = this.state;
-    const { shouldScheduleTime } = buttonsToHighlight;
-    if (!name || (shouldScheduleTime && !timeCharsAsString)) {
-      this.setState({ errorMessage: 'Please complete all fields.' });
-      return;
-    }
-    let finalTimeStamp;
-    if (calendarDate) {
-      const formattedDate = calendarDate.format(CALENDAR_DATE_FORMAT);
-      const modifiedTime = get24HourTime(timeCharsAsString, isPmSelected);
-      finalTimeStamp = createFinalTimestamp(formattedDate, modifiedTime);
-    }
-    if (new Date() > new Date(finalTimeStamp)) {
-      this.setState({ errorMessage: 'Draft must occur at future time.' });
+    const { errorMessage, finalTimeStamp, name } = validateForm(this.state);
+    if (errorMessage) {
+      this.setState({ errorMessage });
       return;
     }
     const body = {
@@ -198,7 +195,6 @@ class CreateDraft extends Component {
     };
     this.props.createDraft(body).then(() => this.setState({ isSubmitComplete: true }));
   }
-
 
   render() {
     const {
@@ -250,3 +246,4 @@ CreateDraft.propTypes = {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateDraft);
+exports.validateForm = validateForm;

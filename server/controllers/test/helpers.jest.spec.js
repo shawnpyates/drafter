@@ -4,7 +4,7 @@ const {
   teams,
   owners,
   expectedOutput,
-} = require('./testData');
+} = require('../../../testData');
 
 const { mapOwnerNamesToOrgs } = require('../helpers').TEST_ONLY;
 
