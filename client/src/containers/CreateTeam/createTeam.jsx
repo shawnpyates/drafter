@@ -130,7 +130,7 @@ class CreateTeam extends Component {
       this.setState({ errorMessage: missingField });
       return;
     }
-    this.props.createRequest(body)
+  this.props.createRequest(body)
       .then(() => this.setState({ isSubmitComplete: true }));
   }
 

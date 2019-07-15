@@ -20,6 +20,8 @@ import {
   ErrorMessage,
 } from './styledComponents';
 
+const DAYS_IN_FIVE_WEEKS = 35;
+
 const Form = ({
   updateFieldValue,
   handleSubmit,
@@ -65,8 +67,12 @@ const Form = ({
         isWide,
         fieldTitle,
       } = input;
-      if (!enabled) return null;
-      if (dependsOn && !shouldBeShown(dependsOn, buttonsToHighlight)) return null;
+      if (
+        !enabled
+        || (dependsOn && !shouldBeShown(dependsOn, buttonsToHighlight))
+      ) {
+        return null;
+      }
       switch (type) {
         case 'text':
           return (
@@ -156,7 +162,7 @@ const Form = ({
                   openDirection="up"
                   numberOfMonths={1}
                   hideKeyboardShortcutsPanel
-                  daySize={35}
+                  daySize={DAYS_IN_FIVE_WEEKS}
                 />
               </CalendarWrapper>
               <TimePickerWrapper>
