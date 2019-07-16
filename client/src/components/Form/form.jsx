@@ -42,6 +42,7 @@ const Form = ({
   handleBlur,
   buttonsToHighlight,
   isFormWide,
+  hasContainer,
 }) => {
   const handleChange = (ev, dataType) => {
     ev.preventDefault();
@@ -205,6 +206,7 @@ const Form = ({
   return (
     <FieldWrapper
       isWide={isFormWide}
+      hasContainer={hasContainer}
       onSubmit={handleSubmit}
     >
       <Title>{title}</Title>

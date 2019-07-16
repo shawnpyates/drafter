@@ -110,6 +110,7 @@ class Register extends Component {
         title={registerForm.title}
         formInputs={formInputs}
         errorMessage={errorMessage}
+        hasContainer
       />
     );
   }
