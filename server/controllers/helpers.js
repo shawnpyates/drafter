@@ -4,8 +4,8 @@ const { User } = require('../models');
 const { in: opIn } = Sequelize.Op;
 
 
-const mapOwnerNamesToOrgs = (orgs, owners) => (
-  orgs.map((org) => {
+const mapOwnerNamesToOrgs = (orgData, owners) => (
+  orgData.map((org) => {
     const orgOwner = owners.find(owner => owner.uuid === org.ownerUserId);
     const { firstName, lastName } = orgOwner;
     const ownerName = `${firstName} ${lastName}`;
@@ -14,9 +14,10 @@ const mapOwnerNamesToOrgs = (orgs, owners) => (
 );
 
 const getOrgsWithOwnerName = async (orgs) => {
-  const ownerIds = orgs.map(org => org.ownerUserId);
+  const orgData = orgs.map(org => org.dataValues);
+  const ownerIds = orgData.map(od => od.ownerUserId);
   const owners = await User.findAll({ where: { uuid: { [opIn]: ownerIds } } });
-  return mapOwnerNamesToOrgs(orgs, owners);
+  return mapOwnerNamesToOrgs(orgData, owners);
 };
 
 module.exports = {

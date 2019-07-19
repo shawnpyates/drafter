@@ -17,7 +17,7 @@ const FormContainer = styled.div`
   border-radius: 4px;
   box-shadow: 0 4px 10px 4px rgba(19, 35, 47, 0.3);
   position: absolute;
-  height: 60rem;
+  height: 65rem;
   width: 40%;
   left: 50%;
   transform: translateX(-50%);

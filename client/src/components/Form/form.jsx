@@ -234,6 +234,7 @@ Form.defaultProps = {
   toggleAmPm: null,
   handleBlur: null,
   buttonsToHighlight: {},
+  hasContainer: false,
 };
 
 Form.propTypes = {
@@ -256,6 +257,7 @@ Form.propTypes = {
   toggleAmPm: PropTypes.func,
   handleBlur: PropTypes.func,
   buttonsToHighlight: PropTypes.objectOf(PropTypes.any),
+  hasContainer: PropTypes.bool,
 };
 
 export default Form;
