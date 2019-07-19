@@ -29,6 +29,7 @@ const {
 const FieldWrapper = styled.form`
   position: absolute;
   left: 50%;
+  height: ${props => (props.hasContainer ? '70%' : 'inherit')};
   transform: translateX(-50%);
   background: ${WHITE};
   border-radius: 3px;
@@ -46,7 +47,7 @@ const Title = styled.h2`
 `;
 
 const TextFieldContainer = styled.div`
-  height: 5rem;
+  min-height: 5rem;
 `;
 
 const FieldTitle = styled.p`
@@ -102,7 +103,7 @@ const SubmitButton = styled.input`
   padding: 1.6rem;
   background-color: ${DARK_BLUE};
   border-radius: 3px;
-  margin: 10rem auto 1rem;
+  margin: 6rem auto 1rem;
   width: 30%;
   cursor: pointer;
 
@@ -111,6 +112,7 @@ const SubmitButton = styled.input`
 
 const SchedulerContainer = styled.div`
   position: relative;
+  height: 12rem;
 `;
 
 const CalendarWrapper = styled.div`

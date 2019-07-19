@@ -42,6 +42,7 @@ const Form = ({
   handleBlur,
   buttonsToHighlight,
   isFormWide,
+  hasContainer,
 }) => {
   const handleChange = (ev, dataType) => {
     ev.preventDefault();
@@ -205,6 +206,7 @@ const Form = ({
   return (
     <FieldWrapper
       isWide={isFormWide}
+      hasContainer={hasContainer}
       onSubmit={handleSubmit}
     >
       <Title>{title}</Title>
@@ -232,6 +234,7 @@ Form.defaultProps = {
   toggleAmPm: null,
   handleBlur: null,
   buttonsToHighlight: {},
+  hasContainer: false,
 };
 
 Form.propTypes = {
@@ -254,6 +257,7 @@ Form.propTypes = {
   toggleAmPm: PropTypes.func,
   handleBlur: PropTypes.func,
   buttonsToHighlight: PropTypes.objectOf(PropTypes.any),
+  hasContainer: PropTypes.bool,
 };
 
 export default Form;

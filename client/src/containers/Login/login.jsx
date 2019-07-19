@@ -65,6 +65,7 @@ class LogIn extends Component {
         title={loginForm.title}
         formInputs={loginForm.inputs}
         errorMessage={this.state.errorMessage}
+        hasContainer
       />
     );
   }
