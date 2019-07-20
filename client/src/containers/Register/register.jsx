@@ -68,10 +68,17 @@ class Register extends Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.errorOnAuthenticateUser || nextProps.errorOnCreateUser) {
-      this.setState({ errorMessage: unexpected });
+  componentDidUpdate(prevProps) {
+    if (
+      !(prevProps.errorOnAuthenticateUser || prevProps.errorOnCreateUser)
+      && (this.props.errorOnAuthenticateUser || this.props.errorOnCreateUser)
+    ) {
+      this.setErrorMessage(unexpected);
     }
+  }
+
+  setErrorMessage = (errorMessage) => {
+    this.setState({ errorMessage });
   }
 
   handleSubmit = (ev) => {

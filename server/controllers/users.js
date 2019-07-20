@@ -9,7 +9,7 @@ module.exports = {
 
   async fetchOne(req, res) {
     try {
-      const user = await User.find({ where: { uuid: req.params.id } });
+      const user = await User.findOne({ where: { uuid: req.params.id } });
       return res.status(200).send({ user });
     } catch (e) {
       return res.status(400).send({ e });

@@ -66,10 +66,14 @@ class UpdateUser extends Component {
     this.createInputsAndSetStateWithDefaultValues();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.errorOnAuthenticateUser) {
-      this.setState({ errorMessage: unexpected });
+  componentDidUpdate(prevProps) {
+    if (!prevProps.errorOnAuthenticateUser && this.props.errorOnAuthenticateUser) {
+      this.setErrorMessage(unexpected);
     }
+  }
+
+  setErrorMessage = (errorMessage) => {
+    this.setState({ errorMessage });
   }
 
   createInputsAndSetStateWithDefaultValues = () => {

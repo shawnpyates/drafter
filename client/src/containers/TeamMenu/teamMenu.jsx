@@ -50,7 +50,7 @@ const TeamMenu = ({
 };
 
 TeamMenu.propTypes = {
-  match: PropTypes.objectOf(PropTypes.string).isRequired,
+  match: PropTypes.objectOf(PropTypes.any).isRequired,
   teams: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
