@@ -31,15 +31,19 @@ class LogIn extends Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.errorOnAuthenticateUser) {
-      const { failure } = nextProps.errorOnAuthenticateUser.response.data;
+  componentDidUpdate(prevProps) {
+    if (!prevProps.errorOnAuthenticateUser && this.props.errorOnAuthenticateUser) {
+      const { failure } = this.props.errorOnAuthenticateUser.response.data;
       if (failure) {
-        this.setState({ errorMessage: errorMessages[failure] });
+        this.setErrorMessage(errorMessages[failure]);
       } else {
-        this.setState({ errorMessage: errorMessages.unexpected });
+        this.setErrorMessage(errorMessages.unexpected);
       }
     }
+  }
+
+  setErrorMessage = (errorMessage) => {
+    this.setState({ errorMessage });
   }
 
   updateFieldValue = (name, value) => {

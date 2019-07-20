@@ -38,10 +38,9 @@ export const fetchDraftsByTeam = teamId => (dispatch) => {
     });
 };
 
-// TODO - handle on backend with users namespace
 export const fetchDraftsByUser = userId => (dispatch) => {
   dispatch({ type: 'FETCH_DRAFTS_FROM_USER_PENDING' });
-  axios.get(`/api/owners/${userId}/drafts`)
+  axios.get(`/api/users/${userId}/drafts`)
     .then((response) => {
       const { drafts } = response.data;
       dispatch({ type: 'FETCH_DRAFTS_FROM_USER_FULFILLED', payload: drafts });

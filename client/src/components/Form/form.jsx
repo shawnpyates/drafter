@@ -77,12 +77,11 @@ const Form = ({
       switch (type) {
         case 'text':
           return (
-            <TextFieldContainer>
+            <TextFieldContainer key={name}>
               {fieldTitle && <FieldTitle>{fieldTitle}</FieldTitle>}
               <TextField
                 defaultValue={defaultValue || ''}
                 name={name}
-                key={name}
                 type="text"
                 placeholder={text}
                 onChange={handleChange}
@@ -92,11 +91,10 @@ const Form = ({
           );
         case 'password':
           return (
-            <TextFieldContainer>
+            <TextFieldContainer key={name}>
               {fieldTitle && <FieldTitle>{fieldTitle}</FieldTitle>}
               <TextField
                 name={name}
-                key={name}
                 type="password"
                 placeholder={text}
                 onChange={handleChange}
@@ -243,7 +241,7 @@ Form.propTypes = {
   title: PropTypes.string.isRequired,
   formInputs: PropTypes.arrayOf(PropTypes.object).isRequired,
   errorMessage: PropTypes.string,
-  calendarDate: PropTypes.string,
+  calendarDate: PropTypes.objectOf(PropTypes.any),
   changeDate: PropTypes.func,
   isCalendarFocused: PropTypes.bool,
   isFormWide: PropTypes.bool,

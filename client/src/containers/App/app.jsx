@@ -31,14 +31,19 @@ class App extends Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const userToken = localStorage.getItem('drafterUserToken');
+    const { isTokenMissing } = this.state;
     if (!this.props.currentUser && userToken) {
-      this.setState({ isTokenMissing: false });
+      this.setIsTokenMissing(false);
       this.props.fetchCurrentUser();
-    } else if (!userToken) {
-      this.setState({ isTokenMissing: true });
+    } else if (!isTokenMissing && !userToken) {
+      this.setIsTokenMissing(true);
     }
+  }
+
+  setIsTokenMissing = (isTokenMissing) => {
+    this.setState({ isTokenMissing });
   }
 
   render() {
