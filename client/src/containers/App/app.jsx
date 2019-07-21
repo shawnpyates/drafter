@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { createBrowserHistory } from 'history';
 import styled from 'styled-components';
 
 import Header from '../../components/Header/header';
@@ -20,8 +19,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => ({
   fetchCurrentUser: () => dispatch(fetchCurrentUser()),
 });
-
-const history = createBrowserHistory();
 
 const AppContainer = styled.div``;
 const Loading = styled.div``;
@@ -52,7 +49,7 @@ class App extends Component {
   render() {
     const { currentUser, errorOnFetchCurrentUser } = this.props;
     return (
-      <Router history={history}>
+      <Router>
         <AppContainer>
           <Header currentUser={currentUser} />
           {currentUser &&
