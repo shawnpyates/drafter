@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -9,49 +9,63 @@ import Drafts from '../Drafts/drafts';
 
 import { team as teamProfileData } from '../../components/ProfileCard/profileCardConstants.json';
 
-import { fetchUsersByTeam, fetchDraftsByTeam } from '../../actions';
+import { fetchOneTeam } from '../../actions';
 
 const { properties: profileProperties } = teamProfileData;
 
 const mapStateToProps = (state) => {
-  const { teams, users, drafts } = state.team;
-  return { teams, users, drafts };
+  const { currentTeam } = state.team;
+  return { currentTeam };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   const { id } = ownProps.match.params;
   return {
-    fetchUsersByTeam: () => dispatch(fetchUsersByTeam(id)),
-    fetchDraftsByTeam: () => dispatch(fetchDraftsByTeam(id)),
+    fetchOneTeamPropFn: () => dispatch(fetchOneTeam(id)),
   };
 };
 
-const TeamMenu = ({
-  match,
-  teams,
-}) => {
-  const currentTeam = teams.find(team => team.uuid === match.params.id);
-  const profileCardTitle = currentTeam.name;
-  const { owner } = profileProperties;
-  const { id, ownerName } = currentTeam;
-  const profileCardData = { [owner]: ownerName };
-  const profileCardLinkForUpdating = `/updateTeam/${id}`;
-  return (
-    <div>
-      <ProfileCard
-        title={profileCardTitle}
-        data={profileCardData}
-        linkForUpdating={profileCardLinkForUpdating}
-      />
-      <Drafts teamId={currentTeam.uuid} fetchBy="team" />
-      <Players teamId={currentTeam.uuid} fetchBy="team" />
-    </div>
-  );
+class TeamMenu extends Component {
+  componentDidMount() {
+    const {
+      fetchOneTeamPropFn,
+      match: { params },
+    } = this.props;
+    fetchOneTeamPropFn(params.id);
+  }
+  render() {
+    const { currentTeam } = this.props;
+    const { owner } = profileProperties;
+    const {
+      uuid,
+      ownerName,
+      name: profileCardTitle,
+    } = currentTeam || {};
+    const profileCardData = { [owner]: ownerName };
+    const profileCardLinkForUpdating = `/updateTeam/${uuid}`;
+    return (
+      currentTeam &&
+        <div>
+          <ProfileCard
+            title={profileCardTitle}
+            data={profileCardData}
+            linkForUpdating={profileCardLinkForUpdating}
+          />
+          <Drafts teamId={uuid} fetchBy="team" />
+          <Players teamId={uuid} fetchBy="team" />
+        </div>
+    );
+  }
+}
+
+TeamMenu.defaultProps = {
+  currentTeam: null,
 };
 
 TeamMenu.propTypes = {
-  match: PropTypes.objectOf(PropTypes.any).isRequired,
-  teams: PropTypes.arrayOf(PropTypes.object).isRequired,
+  currentTeam: PropTypes.objectOf(PropTypes.any),
+  fetchOneTeamPropFn: PropTypes.func.isRequired,
+  match: PropTypes.objectOf(PropTypes.string).isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TeamMenu);

@@ -1,6 +1,7 @@
 const initialState = {
   creating: false,
   created: false,
+  currentTeam: null,
   fetching: false,
   fetched: false,
   associated: false,
@@ -8,6 +9,7 @@ const initialState = {
   errorOnCreateTeam: null,
   errorOnFetchTeamsFromUser: null,
   errorOnFetchTeamsFromDraft: null,
+  errorOnFetchOneTeam: null,
 };
 
 const teamReducer = (state = initialState, action) => {
@@ -49,6 +51,21 @@ const teamReducer = (state = initialState, action) => {
         fetching: false,
         fetched: true,
         teams: action.payload,
+      };
+    }
+
+    case 'FETCH_ONE_TEAM_PENDING': {
+      return { ...state, fetching: true };
+    }
+    case 'FETCH_ONE_TEAM_REJECTED': {
+      return { ...state, fetching: false, errorOnFetchOneTeam: action.payload };
+    }
+    case 'FETCH_ONE_TEAM_FULFILLED': {
+      return {
+        ...state,
+        fetching: false,
+        fetched: true,
+        currentTeam: action.payload,
       };
     }
     default:
