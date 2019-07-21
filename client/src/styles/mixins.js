@@ -37,4 +37,9 @@ module.exports = {
       text-shadow: 0 0 0 ${DARK_BLUE};
     }
   `,
+  CENTER_ELEMENT_MIXIN: `
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  `,
 };

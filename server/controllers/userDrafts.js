@@ -48,7 +48,7 @@ module.exports = {
   async destroy(req, res) {
     try {
       const { draftId, userId } = req.params;
-      const userDraft = await UserDraft.find({ where: { draftId, userId } });
+      const userDraft = await UserDraft.findOne({ where: { draftId, userId } });
       if (!userDraft) return res.status(404).send({ e: 'Relationship not found.' });
       return res.status(204).send({});
     } catch (e) {

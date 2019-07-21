@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Redirect, Route } from 'react-router-dom';
 import styled from 'styled-components';
 
 import MainMenu from '../MainMenu/mainMenu';
@@ -14,17 +14,54 @@ const MainContainer = styled.div`
   position: relative;
 `;
 
+const componentRoutes = [
+  {
+    path: '/createDrafts',
+    component: CreateDraft,
+  },
+  {
+    path: '/createTeams',
+    component: CreateTeam,
+  },
+  {
+    path: '/drafts/:id/createTeams',
+    component: CreateTeam,
+  },
+  {
+    path: '/updateUser',
+    component: UpdateUser,
+  },
+  {
+    path: '/drafts/:id/show',
+    component: DraftMenu,
+  },
+  {
+    path: '/teams/:id/show',
+    component: TeamMenu,
+  },
+  {
+    path: '/teams/:id/createPlayers',
+    component: CreatePlayer,
+  },
+  {
+    path: '/drafts/:id/createPlayers',
+    component: CreatePlayer,
+  },
+];
+
+const renderBasedOnUrl = () => {
+  const { hash } = window.location;
+  return (
+    hash
+      ? <Redirect to={hash.split('#')[1]} />
+      : <MainMenu />
+  );
+};
+
 const LoggedInView = () => (
   <MainContainer>
-    <Route exact path="/" component={MainMenu} />
-    <Route path="/createDrafts" component={CreateDraft} />
-    <Route path="/createTeams" component={CreateTeam} />
-    <Route path="/drafts/:id/createTeams" component={CreateTeam} />
-    <Route path="/updateUser" component={UpdateUser} />
-    <Route path="/drafts/:id/show" component={DraftMenu} />
-    <Route path="/teams/:id/show" component={TeamMenu} />
-    <Route path="/teams/:id/createPlayers" component={CreatePlayer} />
-    <Route path="/drafts/:id/createPlayers" component={CreatePlayer} />
+    <Route exact path="/" render={() => renderBasedOnUrl()} />
+    {componentRoutes.map(route => <Route path={route.path} component={route.component} />)}
   </MainContainer>
 );
 

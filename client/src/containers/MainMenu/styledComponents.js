@@ -2,16 +2,14 @@ import styled from 'styled-components';
 
 import { mixins, styleVars } from '../../styles';
 
-const { HEADING_TEXT_MIXIN } = mixins;
+const { HEADING_TEXT_MIXIN, CENTER_ELEMENT_MIXIN } = mixins;
 const { DARK_BLUE } = styleVars;
 
 const MainMenuContainer = styled.div`
-  position: absolute;
   width: 60%;
-  left: 50%;
-  transform: translateX(-50%);
 
   ${HEADING_TEXT_MIXIN({ color: DARK_BLUE })}
+  ${CENTER_ELEMENT_MIXIN}
 `;
 
 const WelcomeMessage = styled.h2`

@@ -6,7 +6,7 @@ const { getOrgsWithOwnerName } = require('./helpers');
 module.exports = {
   async fetchOne(req, res) {
     try {
-      const team = await Team.find({ where: { uuid: req.params.id } });
+      const team = await Team.findOne({ where: { uuid: req.params.id } });
       return res.status(200).send({ team });
     } catch (e) {
       return res.status(400).send({ e });
@@ -62,7 +62,7 @@ module.exports = {
 
   async update(req, res) {
     try {
-      const team = await Team.find({ where: { uuid: req.params.id } });
+      const team = await Team.findOne({ where: { uuid: req.params.id } });
       if (!team) return res.status(404).send({ e: 'Team not found.' });
       const updatedTeam = await team.update({ name: req.body.name || team.name });
       return res.status(200).send({ team: updatedTeam });
@@ -73,7 +73,7 @@ module.exports = {
 
   async destroy(req, res) {
     try {
-      const team = await Team.find({ where: { uuid: req.params.id } });
+      const team = await Team.findOne({ where: { uuid: req.params.id } });
       if (!team) return res.status(404).send({ e: 'Team not found.' });
       await team.destroy();
       return res.status(204).send({});

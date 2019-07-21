@@ -7,7 +7,7 @@ module.exports = {
 
   async fetchOne(req, res) {
     try {
-      const player = await Player.find({ where: { uuid: req.params.id } });
+      const player = await Player.findOne({ where: { uuid: req.params.id } });
       return res.status(200).send({ player });
     } catch (e) {
       return res.status(400).send({ e });
@@ -69,7 +69,7 @@ module.exports = {
         teamId,
       } = req.body;
 
-      const player = await Player.find({ where: { uuid: req.params.id } });
+      const player = await Player.findOne({ where: { uuid: req.params.id } });
       if (!player) return res.status(404).send({ e: 'Player not found.' });
 
       const updatedPlayer = await player.update({
@@ -87,7 +87,7 @@ module.exports = {
 
   async destroy(req, res) {
     try {
-      const player = await Player.find({ where: { uuid: req.params.id } });
+      const player = await Player.findOne({ where: { uuid: req.params.id } });
       if (!player) return res.status(404).send({ e: 'Player not found.' });
       await player.destroy();
       return res.status(204).send({});

@@ -24,19 +24,19 @@ const {
   HEADING_TEXT_MIXIN,
   PICKER_WRAPPER_MIXIN,
   PICKER_INPUT_MIXIN,
+  CENTER_ELEMENT_MIXIN,
 } = mixins;
 
 const FieldWrapper = styled.form`
-  position: absolute;
-  left: 50%;
   height: ${props => (props.hasContainer ? '70%' : 'inherit')};
-  transform: translateX(-50%);
   background: ${WHITE};
   border-radius: 3px;
   box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
   padding: 3rem;
   width: ${props => (props.isWide ? WIDE_FORM : NARROW_FORM)};
   text-align: center;
+
+  ${CENTER_ELEMENT_MIXIN}
 `;
 
 const Title = styled.h2`
@@ -57,9 +57,6 @@ const FieldTitle = styled.p`
 `;
 
 const TextField = styled.input`
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
   padding: 1.6rem;
   border: 1px solid ${LIGHT_GRAY};
   border-radius: 3px;
@@ -67,6 +64,7 @@ const TextField = styled.input`
   width: ${props => (props.isWide ? WIDE_TEXT_FIELD : NARROW_TEXT_FIELD)};
 
   ${P_TEXT_MIXIN({ color: DARK_BLUE })}
+  ${CENTER_ELEMENT_MIXIN}
 `;
 
 const SelectTitle = styled.p`
