@@ -28,6 +28,25 @@ const mapDispatchToProps = dispatch => ({
 
 const validateEmail = email => (/\S+@\S+\.\S+/).test(email);
 
+const validateForm = (state) => {
+  const keys = Object.keys(state);
+  const values = Object.values(state);
+  const {
+    registeredAsPlayer,
+    email,
+  } = state;
+  for (let i = 0; i < keys.length; i += 1) {
+    if ((!values[i] && keys[i] !== 'errorMessage' && keys[i] !== 'isSubmitComplete') &&
+        !(keys[i] === 'position' && registeredAsPlayer === 'No')) {
+      return { errorMessage: missingField };
+    }
+  }
+  if (!validateEmail(email)) {
+    return { errorMessage: invalidEmail };
+  }
+  return { success: true };
+};
+
 const getFieldByName = (inputs, name) => inputs.find(input => input.name === name);
 
 class UpdateUser extends Component {
@@ -47,10 +66,14 @@ class UpdateUser extends Component {
     this.createInputsAndSetStateWithDefaultValues();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.errorOnAuthenticateUser) {
-      this.setState({ errorMessage: unexpected });
+  componentDidUpdate(prevProps) {
+    if (!prevProps.errorOnAuthenticateUser && this.props.errorOnAuthenticateUser) {
+      this.setErrorMessage(unexpected);
     }
+  }
+
+  setErrorMessage = (errorMessage) => {
+    this.setState({ errorMessage });
   }
 
   createInputsAndSetStateWithDefaultValues = () => {
@@ -80,7 +103,11 @@ class UpdateUser extends Component {
 
   handleSubmit = (ev) => {
     ev.preventDefault();
-    if (this.doesFormHaveError()) return;
+    const { errorMessage } = validateForm(this.state);
+    if (errorMessage) {
+      this.setState({ errorMessage });
+      return;
+    }
     const {
       email,
       registeredAsPlayer,
@@ -94,27 +121,6 @@ class UpdateUser extends Component {
       position,
     };
     this.props.updateUser(body).then(() => this.setState({ isSubmitComplete: true }));
-  }
-
-  doesFormHaveError() {
-    const keys = Object.keys(this.state);
-    const values = Object.values(this.state);
-    const {
-      registeredAsPlayer,
-      email,
-    } = this.state;
-    for (let i = 0; i < keys.length; i += 1) {
-      if ((!values[i] && keys[i] !== 'errorMessage' && keys[i] !== 'isSubmitComplete') &&
-          !(keys[i] === 'position' && registeredAsPlayer === 'No')) {
-        this.setState({ errorMessage: missingField });
-        return true;
-      }
-    }
-    if (!validateEmail(email)) {
-      this.setState({ errorMessage: invalidEmail });
-      return true;
-    }
-    return false;
   }
 
   updateFieldValue = (name, value) => {
@@ -150,7 +156,7 @@ class UpdateUser extends Component {
 
 UpdateUser.defaultProps = {
   errorOnAuthenticateUser: null,
-}
+};
 
 UpdateUser.propTypes = {
   currentUser: PropTypes.objectOf(PropTypes.any).isRequired,
@@ -160,3 +166,4 @@ UpdateUser.propTypes = {
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(UpdateUser);
+exports.validateForm = validateForm;

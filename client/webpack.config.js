@@ -4,10 +4,10 @@ const path = require('path');
 module.exports = {
   mode: 'development',
   devtool: 'eval-source-map',
-  entry: './src/index.js',
+  entry: './src/index.jsx',
   output: {
     path: path.resolve(__dirname, 'public/dist'),
-    filename: 'bundle.js'
+    filename: 'bundle.js',
   },
   plugins: [new Dotenv({ path: '../.env' })],
   module: {
@@ -18,10 +18,6 @@ module.exports = {
           path.resolve(__dirname, 'src'),
         ],
         loader: 'babel-loader',
-        query: {
-          babelrc: false,
-          presets: ['es2015', 'stage-0', 'react'],
-        },
       },
       {
         test: /\.(png|jpg|gif)$/,

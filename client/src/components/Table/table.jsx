@@ -108,7 +108,7 @@ Table.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
   emptyDataMessage: PropTypes.string.isRequired,
   addNewLink: PropTypes.string,
-  options: PropTypes.arrayOf(PropTypes.object),
+  options: PropTypes.arrayOf(PropTypes.string),
   handleOptionClick: PropTypes.func,
 };
 

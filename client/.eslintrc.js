@@ -6,6 +6,7 @@ module.exports = {
   },
   "parser": "babel-eslint",
   "rules": {
+    "import/no-extraneous-dependencies": ["error", {"devDependencies": true}],
     "jsx-a11y/anchor-is-valid": [ "error", {
       "components": [ "Link" ],
       "specialLink": [ "to" ],

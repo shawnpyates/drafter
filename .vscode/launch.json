@@ -6,10 +6,25 @@
   "configurations": [
     {
       "type": "node",
-      "protocol": "inspector",
       "request": "launch",
-      "name": "Launch node",
-      "program": "${workspaceRoot}/bin/www"
+      "name": "Launch Program",
+      "program": "${workspaceRoot}/bin/www",
+      "args": ["|", "bunyan"],
+      "console": "integratedTerminal",
+      "runtimeArgs": ["--preserve-symlinks"]
+    },
+    {
+      "name": "Debug Jest Tests",
+      "type": "node",
+      "request": "launch",
+      "runtimeArgs": [
+        "--inspect-brk",
+        "${workspaceRoot}/node_modules/.bin/jest",
+        "--runInBand"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "port": 9229
     }
   ]
 }

@@ -20,6 +20,8 @@ import {
   ErrorMessage,
 } from './styledComponents';
 
+const DAYS_IN_FIVE_WEEKS = 35;
+
 const Form = ({
   updateFieldValue,
   handleSubmit,
@@ -40,6 +42,7 @@ const Form = ({
   handleBlur,
   buttonsToHighlight,
   isFormWide,
+  hasContainer,
 }) => {
   const handleChange = (ev, dataType) => {
     ev.preventDefault();
@@ -65,17 +68,20 @@ const Form = ({
         isWide,
         fieldTitle,
       } = input;
-      if (!enabled) return null;
-      if (dependsOn && !shouldBeShown(dependsOn, buttonsToHighlight)) return null;
+      if (
+        !enabled
+        || (dependsOn && !shouldBeShown(dependsOn, buttonsToHighlight))
+      ) {
+        return null;
+      }
       switch (type) {
         case 'text':
           return (
-            <TextFieldContainer>
+            <TextFieldContainer key={name}>
               {fieldTitle && <FieldTitle>{fieldTitle}</FieldTitle>}
               <TextField
                 defaultValue={defaultValue || ''}
                 name={name}
-                key={name}
                 type="text"
                 placeholder={text}
                 onChange={handleChange}
@@ -85,11 +91,10 @@ const Form = ({
           );
         case 'password':
           return (
-            <TextFieldContainer>
+            <TextFieldContainer key={name}>
               {fieldTitle && <FieldTitle>{fieldTitle}</FieldTitle>}
               <TextField
                 name={name}
-                key={name}
                 type="password"
                 placeholder={text}
                 onChange={handleChange}
@@ -156,7 +161,7 @@ const Form = ({
                   openDirection="up"
                   numberOfMonths={1}
                   hideKeyboardShortcutsPanel
-                  daySize={35}
+                  daySize={DAYS_IN_FIVE_WEEKS}
                 />
               </CalendarWrapper>
               <TimePickerWrapper>
@@ -199,6 +204,7 @@ const Form = ({
   return (
     <FieldWrapper
       isWide={isFormWide}
+      hasContainer={hasContainer}
       onSubmit={handleSubmit}
     >
       <Title>{title}</Title>
@@ -226,6 +232,7 @@ Form.defaultProps = {
   toggleAmPm: null,
   handleBlur: null,
   buttonsToHighlight: {},
+  hasContainer: false,
 };
 
 Form.propTypes = {
@@ -234,7 +241,7 @@ Form.propTypes = {
   title: PropTypes.string.isRequired,
   formInputs: PropTypes.arrayOf(PropTypes.object).isRequired,
   errorMessage: PropTypes.string,
-  calendarDate: PropTypes.string,
+  calendarDate: PropTypes.objectOf(PropTypes.any),
   changeDate: PropTypes.func,
   isCalendarFocused: PropTypes.bool,
   isFormWide: PropTypes.bool,
@@ -248,6 +255,7 @@ Form.propTypes = {
   toggleAmPm: PropTypes.func,
   handleBlur: PropTypes.func,
   buttonsToHighlight: PropTypes.objectOf(PropTypes.any),
+  hasContainer: PropTypes.bool,
 };
 
 export default Form;

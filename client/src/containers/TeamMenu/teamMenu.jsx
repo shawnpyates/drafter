@@ -64,7 +64,6 @@ TeamMenu.defaultProps = {
 
 TeamMenu.propTypes = {
   currentTeam: PropTypes.objectOf(PropTypes.any),
-  fetchCurrentUserPropFn: PropTypes.func.isRequired,
   fetchOneTeamPropFn: PropTypes.func.isRequired,
   match: PropTypes.objectOf(PropTypes.string).isRequired,
 };
