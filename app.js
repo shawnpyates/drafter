@@ -20,7 +20,8 @@ app.get('/', (req, res) => {
 require('./server/routes')(app);
 
 app.get('*', (req, res) => {
-  res.redirect('/');
+  const params = Object.values(req.params).join('/');
+  res.redirect(`/#${params}`);
 });
 
 module.exports = app;

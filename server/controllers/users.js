@@ -65,7 +65,7 @@ module.exports = {
         password,
       } = req.body;
 
-      const user = await User.find({ where: { uuid: req.params.id } });
+      const user = await User.findOne({ where: { uuid: req.params.id } });
       if (!user) return res.status(404).send({ e: 'User not found.' });
 
       const updatedUser = await user.update({
@@ -82,7 +82,7 @@ module.exports = {
 
   async destroy(req, res) {
     try {
-      const user = await User.find({ where: { uuid: req.params.id } });
+      const user = await User.findOne({ where: { uuid: req.params.id } });
       if (!user) return res.status(404).send({ e: 'User not found.' });
       await user.destroy();
       return res.status(204).send({});

@@ -40,7 +40,7 @@ export const authenticateUser = body => (dispatch) => {
 };
 
 export const fetchUsersByTeam = teamId => (dispatch) => {
-  dispatch({ type: 'FETCH_USERS_FROM_TEAM_PENDING '});
+  dispatch({ type: 'FETCH_USERS_FROM_TEAM_PENDING ' });
   axios.get(`/api/teams/${teamId}/users`)
     .then((response) => {
       const { users } = response.data;

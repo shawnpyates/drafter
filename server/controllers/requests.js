@@ -39,7 +39,7 @@ const sendMail = async ({ fromEmail, toEmail, html }) => {
 module.exports = {
   async fetchOne(req, res) {
     try {
-      const request = await Request.find({ where: { uuid: req.params.id } });
+      const request = await Request.findOne({ where: { uuid: req.params.id } });
       return res.status(200).send({ request });
     } catch (e) {
       return res.status(400).send({ e });
@@ -97,11 +97,10 @@ module.exports = {
   async create(req, res) {
     try {
       const { teamName, draftName, requestCreatorId } = req.body;
-      const draft = await Draft.find({ where: { name: draftName } });
-      const requestCreator = await User.find({ where: { uuid: requestCreatorId } });
-      const draftWithOwner = await UserDraft.find({
-        where: { draftId: draft.uuid }, include: [User],
+      const draftWithOwner = await Draft.findOne({
+        where: { name: draftName }, include: [User],
       });
+      const requestCreator = await User.findOne({ where: { uuid: requestCreatorId } });
       const {
         firstName: draftOwnerFirstName,
         email: draftOwnerEmail,
@@ -139,7 +138,7 @@ module.exports = {
 
   async update(req, res) {
     try {
-      const request = await Request.find({ where: { uuid: req.params.id } });
+      const request = await Request.findOne({ where: { uuid: req.params.id } });
       if (!request) return res.status(404).send({ e: 'Request not found.' });
       const updatedRequest = await Request.update({ teamName: req.body.name || request.name });
       return res.status(200).send({ request: updatedRequest });
@@ -151,7 +150,7 @@ module.exports = {
   async destroy(req, res) {
     try {
       const { id } = req.params;
-      const request = await Request.find({ where: { uuid: id } });
+      const request = await Request.findOne({ where: { uuid: id } });
       if (!request) return res.status(404).send({ e: 'Request not found.' });
       await request.destroy();
       return res.status(200).send({ destroyedRequestId: id });

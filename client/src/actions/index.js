@@ -19,6 +19,7 @@ import {
   fetchTeamsByUser,
   fetchTeamsByDraft,
   createTeam,
+  fetchOneTeam,
 } from './teamActions';
 
 import {
@@ -50,6 +51,7 @@ export {
   fetchTeamsByUser,
   fetchTeamsByDraft,
   createTeam,
+  fetchOneTeam,
   fetchPlayersByDraft,
   fetchPlayersByTeam,
   createPlayer,
