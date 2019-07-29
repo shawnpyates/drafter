@@ -1,5 +1,9 @@
-const { User, Team, UserTeam } = require('../models');
-const { getOrgsWithOwnerName } = require('./helpers');
+const {
+  User,
+  Team,
+  UserTeam,
+  Draft,
+} = require('../models');
 
 module.exports = {
 
@@ -17,11 +21,16 @@ module.exports = {
   async fetchTeamsByUser(req, res) {
     try {
       const { userId } = req.params;
-      const userTeams = await UserTeam.findAll({ where: { userId }, include: [Team] });
+      const userTeams = await UserTeam.findAll({
+        where: { userId },
+        include: [{
+          model: Team,
+          include: [Draft, User],
+        }],
+      });
       const teams = userTeams.map(ud => ud.Team);
       if (!teams.length) return res.status(200).send({ teams: [] });
-      const teamsWithOwnerName = await getOrgsWithOwnerName(teams);
-      return res.status(200).send({ teams: teamsWithOwnerName });
+      return res.status(200).send({ teams });
     } catch (e) {
       return res.status(400).send({ e });
     }

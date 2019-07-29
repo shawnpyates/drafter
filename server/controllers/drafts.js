@@ -1,11 +1,14 @@
-const { Draft } = require('../models');
+const { Draft, User } = require('../models');
 const { create: createUserDraft } = require('./userDrafts');
 
 module.exports = {
 
   async fetchOne(req, res) {
     try {
-      const draft = await Draft.findOne({ where: { uuid: req.params.id } });
+      const draft = await Draft.findOne({
+        where: { uuid: req.params.id },
+        include: [User],
+      });
       return res.status(200).send({ draft });
     } catch (e) {
       return res.status(400).send({ e });
