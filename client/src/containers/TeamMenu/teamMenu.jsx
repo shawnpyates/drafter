@@ -35,13 +35,13 @@ class TeamMenu extends Component {
   }
   render() {
     const { currentTeam } = this.props;
-    const { owner } = profileProperties;
+    const { owner: ownerKey } = profileProperties;
     const {
       uuid,
-      ownerName,
       name: profileCardTitle,
+      User: owner,
     } = currentTeam || {};
-    const profileCardData = { [owner]: ownerName };
+    const profileCardData = { [ownerKey]: owner && `${owner.firstName} ${owner.lastName}` };
     const profileCardLinkForUpdating = `/updateTeam/${uuid}`;
     return (
       currentTeam &&

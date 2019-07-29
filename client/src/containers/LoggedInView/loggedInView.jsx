@@ -1,13 +1,8 @@
 import React from 'react';
-import { Redirect, Route } from 'react-router-dom';
-import styled from 'styled-components';
+import { Redirect, Route, Switch } from 'react-router-dom';
 
 import MainMenu from '../MainMenu/mainMenu';
 import componentRoutes from './componentRoutes';
-
-const MainContainer = styled.div`
-  position: relative;
-`;
 
 const checkForHashThenRender = () => {
   const { hash } = window.location;
@@ -18,11 +13,12 @@ const checkForHashThenRender = () => {
   );
 };
 
+
 const LoggedInView = () => (
-  <MainContainer>
+  <Switch>
     <Route exact path="/" render={() => checkForHashThenRender()} />
     {componentRoutes.map(route => <Route path={route.path} component={route.component} />)}
-  </MainContainer>
+  </Switch>
 );
 
 export default LoggedInView;

@@ -7,32 +7,33 @@ import Table from '../../components/Table/table';
 import {
   fetchTeamsByUser,
   fetchTeamsByDraft,
-  fetchDraftsByUser,
 } from '../../actions';
 
 import { teamsTable as teamsTableTexts } from '../../../texts.json';
 
 const mapStateToProps = (state) => {
   const { teams } = state.team;
-  const { drafts } = state.draft;
-  return { teams, drafts };
+  return { teams };
 };
 
 const mapDispatchToProps = dispatch => ({
   fetchTeamsByUser: id => dispatch(fetchTeamsByUser(id)),
   fetchTeamsByDraft: id => dispatch(fetchTeamsByDraft(id)),
-  fetchDraftsByUser: id => dispatch(fetchDraftsByUser(id)),
 });
 
-const extractDataForTable = (teams, drafts) => (
+const extractDataForTable = teams => (
   teams.map((team) => {
-    const { uuid, name, ownerName } = team;
-    const draftName = drafts.length && drafts.find(draft => draft.uuid === team.draftId).name;
+    const {
+      uuid,
+      name,
+      User: owner,
+      Draft: draft,
+    } = team;
     return {
       uuid,
       name,
-      draft: draftName,
-      ownerName,
+      draft: draft.name,
+      ownerName: `${owner.firstName} ${owner.lastName}`,
     };
   })
 );
@@ -46,7 +47,6 @@ class Teams extends Component {
     } = this.props;
     if (fetchBy === 'user') {
       this.props.fetchTeamsByUser(userId);
-      this.props.fetchDraftsByUser(userId);
     } else {
       this.props.fetchTeamsByDraft(draftId);
     }
@@ -56,7 +56,6 @@ class Teams extends Component {
     const {
       teams,
       fetchBy,
-      drafts,
       match: { url },
     } = this.props;
     const {
@@ -78,7 +77,7 @@ class Teams extends Component {
             type={type}
             title={title}
             columnHeaders={columnHeaders}
-            data={extractDataForTable(teams, drafts)}
+            data={extractDataForTable(teams)}
             emptyDataMessage={fetchBy === 'user' ? belongToNoTeams : noTeamsEntered}
             addNewLink={addNewLink}
           />
@@ -90,7 +89,6 @@ class Teams extends Component {
 
 Teams.defaultProps = {
   draftId: null,
-  drafts: null,
   match: {},
   teams: null,
   userId: null,
@@ -98,11 +96,9 @@ Teams.defaultProps = {
 
 Teams.propTypes = {
   draftId: PropTypes.string,
-  drafts: PropTypes.arrayOf(PropTypes.object),
   fetchBy: PropTypes.string.isRequired,
   fetchTeamsByDraft: PropTypes.func.isRequired,
   fetchTeamsByUser: PropTypes.func.isRequired,
-  fetchDraftsByUser: PropTypes.func.isRequired,
   match: PropTypes.objectOf(PropTypes.any),
   teams: PropTypes.arrayOf(PropTypes.object),
   userId: PropTypes.string,

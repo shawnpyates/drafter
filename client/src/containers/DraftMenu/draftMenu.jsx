@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 
 import ProfileCard from '../../components/ProfileCard/profileCard';
 import { draft as draftProfileData } from '../../components/ProfileCard/profileCardConstants.json';
@@ -42,14 +43,20 @@ class DraftMenu extends Component {
     const {
       uuid,
       timeScheduled,
-      ownerName,
       name: profileCardTitle,
+      User: owner,
     } = currentDraft || {};
-    const { scheduledFor, owner } = profileProperties;
+    const ownerName = owner && `${owner.firstName} ${owner.lastName}`;
+    const { scheduledFor, owner: ownerKey } = profileProperties;
     const { unscheduled } = profileValues;
+    const readableTime = (
+      timeScheduled
+        ? moment(timeScheduled).format('MMM D YYYY, h:mm a')
+        : unscheduled
+    );
     const profileCardData = {
-      [scheduledFor]: timeScheduled || unscheduled,
-      [owner]: ownerName,
+      [scheduledFor]: readableTime,
+      [ownerKey]: ownerName,
     };
     const profileCardLinkForUpdating = `/updateDraft/${uuid}`;
     return (

@@ -25,7 +25,7 @@ const extractDataForTable = drafts => (
       uuid,
       name,
       timeScheduled,
-      ownerName,
+      User: owner,
     } = draft;
     const readableTime = (
       timeScheduled
@@ -36,7 +36,7 @@ const extractDataForTable = drafts => (
       uuid,
       name,
       readableTime,
-      ownerName,
+      ownerName: `${owner.firstName} ${owner.lastName}`,
     };
   })
 );

@@ -1,12 +1,14 @@
-const { Team, Draft } = require('../models');
+const { Team, Draft, User } = require('../models');
 const { create: createUserTeam } = require('./userTeams');
 const { create: createUserDraft } = require('./userDrafts');
-const { getOrgsWithOwnerName } = require('./helpers');
 
 module.exports = {
   async fetchOne(req, res) {
     try {
-      const team = await Team.findOne({ where: { uuid: req.params.id } });
+      const team = await Team.findOne({
+        where: { uuid: req.params.id },
+        include: [User],
+      });
       return res.status(200).send({ team });
     } catch (e) {
       return res.status(400).send({ e });
@@ -16,10 +18,12 @@ module.exports = {
   async fetchByDraft(req, res) {
     const { id: draftId } = req.params;
     try {
-      const teams = await Team.findAll({ where: { draftId } });
+      const teams = await Team.findAll({
+        where: { draftId },
+        include: [Draft, User],
+      });
       if (!teams.length) return res.status(200).send({ teams: [] });
-      const teamsWithOwnerName = await getOrgsWithOwnerName(teams, 'Team');
-      return res.status(200).send({ teams: teamsWithOwnerName });
+      return res.status(200).send({ teams });
     } catch (e) {
       return res.status(400).send({ e });
     }

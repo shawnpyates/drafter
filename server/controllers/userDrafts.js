@@ -1,5 +1,4 @@
 const { User, Draft, UserDraft } = require('../models');
-const { getOrgsWithOwnerName } = require('./helpers');
 
 module.exports = {
 
@@ -17,11 +16,16 @@ module.exports = {
   async fetchDraftsByUser(req, res) {
     try {
       const { userId } = req.params;
-      const userDrafts = await UserDraft.findAll({ where: { userId }, include: [Draft] });
+      const userDrafts = await UserDraft.findAll({
+        where: { userId },
+        include: [{
+          model: Draft,
+          include: [User],
+        }],
+      });
       const drafts = userDrafts.map(ud => ud.Draft);
       if (!drafts.length) return res.status(200).send({ drafts: [] });
-      const draftsWithOwnerName = await getOrgsWithOwnerName(drafts);
-      return res.status(200).send({ drafts: draftsWithOwnerName });
+      return res.status(200).send({ drafts });
     } catch (e) {
       return res.status(400).send({ e });
     }
