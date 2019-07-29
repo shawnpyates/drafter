@@ -5,10 +5,10 @@ import { shallow } from 'enzyme';
 import LoggedInView from '../loggedInView';
 
 describe('<LoggedInView />', () => {
-  test('Renders a styled div component', () => {
+  test('Renders a react-router Switch component', () => {
     const wrapper = shallow(<LoggedInView />);
     const received = wrapper.text();
-    const expected = '<styled.div />';
+    const expected = '<Switch />';
     expect(received).toEqual(expected);
   });
 });

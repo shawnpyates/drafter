@@ -26,6 +26,7 @@ import {
   fetchPlayersByDraft,
   fetchPlayersByTeam,
   createPlayer,
+  fetchOnePlayer,
 } from './playerActions';
 
 import {
@@ -55,6 +56,7 @@ export {
   fetchPlayersByDraft,
   fetchPlayersByTeam,
   createPlayer,
+  fetchOnePlayer,
   fetchRequestsByDraft,
   fetchRequestsByRequester,
   fetchRequestsByDraftOwner,

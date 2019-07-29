@@ -14,7 +14,14 @@ const mockStore = configureStore([thunk]);
 const store = {
   team: {
     users: [],
-    teams: [{ uuid: 'abc123', name: 'Foo' }],
+    teams: [{
+      uuid: 'abc123',
+      name: 'Foo',
+      User: {
+        firstName: 'Bar',
+        lastName: 'Baz,',
+      },
+     }],
     drafts: [],
   },
 };

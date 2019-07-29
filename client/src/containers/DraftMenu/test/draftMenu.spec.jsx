@@ -14,7 +14,14 @@ const store = {
     currentUser: { uuid: 'abc123' },
   },
   draft: {
-    currentDraft: { uuid: 'def234', ownerUserId: 'abc123' },
+    currentDraft: {
+      uuid: 'def234',
+      ownerUserId: 'abc123',
+      User: {
+        firstName: 'Bar',
+        lastName: 'Baz',
+      },
+    },
   },
 };
 

@@ -36,3 +36,15 @@ export const createPlayer = body => (dispatch) => {
       dispatch({ type: 'CREATE_PLAYER_REJECTED', payload: err });
     });
 };
+
+export const fetchOnePlayer = id => (dispatch) => {
+  dispatch({ type: 'FETCH_ONE_PLAYER_PENDING' });
+  axios.get(`/api/players/${id}`)
+    .then((response) => {
+      const { player } = response.data;
+      dispatch({ type: 'FETCH_ONE_PLAYER_FULFILLED', payload: player });
+    })
+    .catch((err) => {
+      dispatch({ type: 'FETCH_ONE_PLAYER_REJECTED', payload: err });
+    });
+};

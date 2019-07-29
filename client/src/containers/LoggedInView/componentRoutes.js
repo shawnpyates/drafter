@@ -3,6 +3,7 @@ import CreateTeam from '../CreateTeam/createTeam';
 import CreatePlayer from '../CreatePlayer/createPlayer';
 import UpdateUser from '../UpdateUser/updateUser';
 import DraftMenu from '../DraftMenu/draftMenu';
+import PlayerMenu from '../PlayerMenu/playerMenu';
 import TeamMenu from '../TeamMenu/teamMenu';
 
 module.exports = [
@@ -25,6 +26,10 @@ module.exports = [
   {
     path: '/drafts/:id/show',
     component: DraftMenu,
+  },
+  {
+    path: '/players/:id/show',
+    component: PlayerMenu,
   },
   {
     path: '/teams/:id/show',
