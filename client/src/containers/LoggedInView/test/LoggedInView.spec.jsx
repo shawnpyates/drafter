@@ -8,7 +8,7 @@ describe('<LoggedInView />', () => {
   test('Renders a styled div component', () => {
     const wrapper = shallow(<LoggedInView />);
     const received = wrapper.text();
-    const expected = '<styled.div />';
+    const expected = '<Switch />';
     expect(received).toEqual(expected);
   });
 });

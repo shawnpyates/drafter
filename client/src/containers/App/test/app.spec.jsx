@@ -27,11 +27,11 @@ describe('<App />', () => {
     expect(received).toEqual(expected);
   });
   test('should render a <Header /> component as child', () => {
-    const headerLength = getWrapper(store).dive().find(Header).length;
+    const headerLength = getWrapper(store).dive().dive().find(Header).length;
     expect(headerLength).toEqual(1);
   });
   test('if user exists render LoggedInView as child but not LoggedOutView', () => {
-    const deepWrapper = getWrapper(store).dive();
+    const deepWrapper = getWrapper(store).dive().dive();
     const loggedInViewLength = deepWrapper.find(LoggedInView).length;
     const loggedOutViewLength = deepWrapper.find(LoggedOutView).length;
     const loadingDivLength = deepWrapper.find('.loading').length;
@@ -41,7 +41,7 @@ describe('<App />', () => {
   });
   test('if user does not exist and no token render LoggedOutView as child', () => {
     const modifiedStore = { user: { currentUser: null } };
-    const deepWrapper = getWrapper(modifiedStore).dive();
+    const deepWrapper = getWrapper(modifiedStore).dive().dive();
     deepWrapper.setState({ isTokenMissing: true });
     const loggedInViewLength = deepWrapper.find(LoggedInView).length;
     const loggedOutViewLength = deepWrapper.find(LoggedOutView).length;
@@ -52,7 +52,7 @@ describe('<App />', () => {
   });
   test('if user does not exist and token exists render LoggedOutView as child', () => {
     const modifiedStore = { user: { currentUser: null } };
-    const deepWrapper = getWrapper(modifiedStore).dive();
+    const deepWrapper = getWrapper(modifiedStore).dive().dive();
     deepWrapper.setState({ isTokenMissing: false });
     const loggedInViewLength = deepWrapper.find(LoggedInView).length;
     const loggedOutViewLength = deepWrapper.find(LoggedOutView).length;
@@ -62,7 +62,7 @@ describe('<App />', () => {
     expect(loadingDivLength).toEqual(1);
   });
   test('should map currentUser from state to props', () => {
-    const received = getWrapper(store).prop('currentUser');
+    const received = getWrapper(store).prop('children').props.currentUser;
     const expected = store.user.currentUser;
     expect(received).toEqual(expected);
   });

@@ -22,7 +22,7 @@ describe('<LogIn />', () => {
     expect(received).toEqual(expected);
   });
   test('should render a <Form /> component as child', () => {
-    const formLength = wrapper.dive().find(Form).length;
+    const formLength = wrapper.dive().dive().find(Form).length;
     expect(formLength).toEqual(1);
   });
 });

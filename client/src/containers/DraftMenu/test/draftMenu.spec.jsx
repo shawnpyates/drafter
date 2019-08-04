@@ -36,7 +36,7 @@ describe('<DraftMenu />', () => {
   test(
     'should render a <Requests /> component as child if ids from currentUser and currentDraft match',
     () => {
-      const requestsLength = wrapper.dive().find(Requests).length;
+      const requestsLength = wrapper.dive().dive().find(Requests).length;
       expect(requestsLength).toEqual(1);
     },
   );
@@ -46,7 +46,7 @@ describe('<DraftMenu />', () => {
       const clonedStore = { ...store };
       clonedStore.draft.currentDraft.ownerUserId = 'ghi789';
       const modifiedWrapper = shallow(<DraftMenu {...props} store={mockStore(clonedStore)} />);
-      const requestsLength = modifiedWrapper.dive().find(Requests).length;
+      const requestsLength = modifiedWrapper.dive().dive().find(Requests).length;
       expect(requestsLength).toEqual(0);
     },
   );
