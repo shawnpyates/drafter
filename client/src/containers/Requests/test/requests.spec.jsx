@@ -36,13 +36,13 @@ describe('<Requests />', () => {
     expect(received).toEqual(expected);
   });
   test('Renders table as child if drafts exist', () => {
-    const deepWrapper = getWrapper(store).dive();
+    const deepWrapper = getWrapper(store).dive().dive();
     const tableLength = deepWrapper.find(Table).length;
     expect(tableLength).toEqual(1);
   });
   test('Does not render table as child if no drafts exist', () => {
     const modifiedStore = { request: { requestsForDraft: null } };
-    const deepWrapper = getWrapper(modifiedStore).dive();
+    const deepWrapper = getWrapper(modifiedStore).dive().dive();
     const tableLength = deepWrapper.find(Table).length;
     expect(tableLength).toEqual(0);
   });

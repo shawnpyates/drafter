@@ -42,13 +42,13 @@ describe('<CreateTeam />', () => {
       expect(received).toEqual(expected);
     });
     test('should render a <Form /> component as child if form not submitted yet', () => {
-      const deepWrapper = wrapper.dive();
+      const deepWrapper = wrapper.dive().dive();
       deepWrapper.setState({ isSubmitComplete: false });
       const formLength = deepWrapper.find(Form).length;
       expect(formLength).toEqual(1);
     });
     test('should not render <Form /> component as child if form submitted', () => {
-      const deepWrapper = wrapper.dive();
+      const deepWrapper = wrapper.dive().dive();
       deepWrapper.setState({ isSubmitComplete: true });
       const formLength = deepWrapper.find(Form).length;
       expect(formLength).toEqual(0);
@@ -57,7 +57,7 @@ describe('<CreateTeam />', () => {
   describe('createTeamForDraft', () => {
     const createTeamMock = mockActionFn;
     test('calls createTeam action with page ID param if exists', () => {
-      const deepWrapper = wrapper.dive();
+      const deepWrapper = wrapper.dive().dive();
       const { createTeamForDraft } = deepWrapper.instance();
       deepWrapper.setProps({
         createTeam: createTeamMock,
@@ -71,7 +71,7 @@ describe('<CreateTeam />', () => {
       });
     });
     test('calls createTeam action with ID from selected button if no page ID param', () => {
-      const deepWrapper = wrapper.dive();
+      const deepWrapper = wrapper.dive().dive();
       const { createTeamForDraft } = deepWrapper.instance();
       deepWrapper.setProps({ createTeam: createTeamMock });
       createTeamForDraft('Sharks', 'FooDraft');
@@ -82,7 +82,7 @@ describe('<CreateTeam />', () => {
       });
     });
     test('cancels call and displays error if missing field', () => {
-      const deepWrapper = wrapper.dive();
+      const deepWrapper = wrapper.dive().dive();
       const { createTeamForDraft } = deepWrapper.instance();
       deepWrapper.setProps({ createTeam: createTeamMock });
       createTeamForDraft('Sharks', null);
@@ -93,7 +93,7 @@ describe('<CreateTeam />', () => {
   describe('createRequestToJoinDraft', () => {
     const createRequestMock = mockActionFn;
     test('calls createRequest action if payload is correct', () => {
-      const deepWrapper = wrapper.dive();
+      const deepWrapper = wrapper.dive().dive();
       const { createRequestToJoinDraft } = deepWrapper.instance();
       deepWrapper.setProps({ createRequest: createRequestMock });
       createRequestToJoinDraft('Sharks', 'FooDraft');
@@ -104,7 +104,7 @@ describe('<CreateTeam />', () => {
       });
     });
     test('cancels call and displays error if missing field', () => {
-      const deepWrapper = wrapper.dive();
+      const deepWrapper = wrapper.dive().dive();
       const { createRequestToJoinDraft } = deepWrapper.instance();
       deepWrapper.setProps({ createRequest: createRequestMock });
       createRequestToJoinDraft(null, 'FooDraft');

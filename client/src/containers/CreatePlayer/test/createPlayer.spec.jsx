@@ -50,13 +50,13 @@ describe('<CreatePlayer />', () => {
       expect(received).toEqual(expected);
     });
     test('should render a <Form /> component as child if form not submitted yet', () => {
-      const deepWrapper = wrapper.dive();
+      const deepWrapper = wrapper.dive().dive();
       deepWrapper.setState({ isSubmitComplete: false });
       const formLength = deepWrapper.find(Form).length;
       expect(formLength).toEqual(1);
     });
     test('should not render <Form /> component as child if form submitted', () => {
-      const deepWrapper = wrapper.dive();
+      const deepWrapper = wrapper.dive().dive();
       deepWrapper.setState({ isSubmitComplete: true });
       const formLength = deepWrapper.find(Form).length;
       expect(formLength).toEqual(0);

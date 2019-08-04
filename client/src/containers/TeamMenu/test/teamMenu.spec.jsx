@@ -13,9 +13,13 @@ const mockStore = configureStore([thunk]);
 
 const store = {
   team: {
-    users: [],
-    teams: [{ uuid: 'abc123', name: 'Foo' }],
-    drafts: [],
+    currentTeam: {
+      uuid: 'abc123',
+      name: 'Foo',
+      User: {
+        firstName: 'Al Ali',
+      },
+    },
   },
 };
 
@@ -35,11 +39,11 @@ describe('<TeamMenu />', () => {
     expect(received).toEqual(expected);
   });
   test('should render a <Drafts /> component as child', () => {
-    const draftsLength = wrapper.dive().find(Drafts).length;
+    const draftsLength = wrapper.dive().dive().find(Drafts).length;
     expect(draftsLength).toEqual(1);
   });
   test('should render a <Players /> component as child', () => {
-    const playersLength = wrapper.dive().find(Players).length;
+    const playersLength = wrapper.dive().dive().find(Players).length;
     expect(playersLength).toEqual(1);
   });
 });
