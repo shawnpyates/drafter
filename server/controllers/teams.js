@@ -1,4 +1,9 @@
-const { Team, Draft, User } = require('../models');
+const {
+  Team,
+  Draft,
+  Player,
+  User,
+} = require('../models');
 const { create: createUserTeam } = require('./userTeams');
 const { create: createUserDraft } = require('./userDrafts');
 
@@ -20,7 +25,7 @@ module.exports = {
     try {
       const teams = await Team.findAll({
         where: { draftId },
-        include: [Draft, User],
+        include: [Draft, User, Player],
       });
       if (!teams.length) return res.status(200).send({ teams: [] });
       return res.status(200).send({ teams });

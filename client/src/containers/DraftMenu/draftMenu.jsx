@@ -10,7 +10,7 @@ import Players from '../Players/players';
 import Teams from '../Teams/teams';
 import Requests from '../Requests/requests';
 
-import { fetchOneDraft, fetchCurrentUser } from '../../actions';
+import { fetchOneDraft, fetchCurrentUser, updateDraft } from '../../actions';
 
 const { properties: profileProperties, values: profileValues } = draftProfileData;
 
@@ -25,6 +25,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     fetchOneDraftPropFn: () => dispatch(fetchOneDraft(id)),
     fetchCurrentUserPropFn: () => dispatch(fetchCurrentUser()),
+    updateDraftPropFn: body => dispatch(updateDraft({ id, body })),
   };
 };
 
@@ -37,6 +38,17 @@ class DraftMenu extends Component {
     } = this.props;
     fetchOneDraftPropFn(params.id);
     fetchCurrentUserPropFn();
+  }
+  componentDidUpdate() {
+    const { currentDraft, updateDraftPropFn } = this.props;
+    const now = new Date().toISOString();
+    if (
+      currentDraft
+      && currentDraft.status === 'scheduled'
+      && currentDraft.timeScheduled < now
+    ) {
+      updateDraftPropFn({ status: 'open' });
+    }
   }
   render() {
     const { currentDraft, currentUser, match } = this.props;
@@ -67,10 +79,29 @@ class DraftMenu extends Component {
             data={profileCardData}
             linkForUpdating={profileCardLinkForUpdating}
           />
-          <Teams draftId={uuid} fetchBy="draft" match={match} />
-          <Players draftId={uuid} fetchBy="draft" />
-          {(currentDraft.ownerUserId === currentUser.uuid) &&
-            <Requests draftId={uuid} fetchBy="draft" />
+          {(currentDraft.status === 'scheduled' || currentDraft.status === 'open') &&
+            <div>
+              <Teams
+                draftId={uuid}
+                fetchBy="draft"
+                match={match}
+                displayType={currentDraft.status === 'scheduled' ? 'table' : 'selectionList'}
+              />
+              <Players
+                draftId={uuid}
+                fetchBy="draft"
+                displayType={currentDraft.status === 'scheduled' ? 'table' : 'selectionList'}
+              />
+              {
+                (
+                  currentDraft.ownerUserId === currentUser.uuid
+                  && currentDraft.status === 'scheduled'
+                ) && <Requests draftId={uuid} fetchBy="draft" />
+              }
+            </div>
+          }
+          {currentDraft.status === 'closed' &&
+            <div>Draft is now open!</div>
           }
         </div>
     );
@@ -88,6 +119,7 @@ DraftMenu.propTypes = {
   fetchCurrentUserPropFn: PropTypes.func.isRequired,
   fetchOneDraftPropFn: PropTypes.func.isRequired,
   match: PropTypes.objectOf(PropTypes.any).isRequired,
+  updateDraftPropFn: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(DraftMenu);
