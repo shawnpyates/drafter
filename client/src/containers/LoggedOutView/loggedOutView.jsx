@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
-import Login from '../Login/login';
-import Register from '../Register/register';
+import { Login, Register } from '..';
 
 import { register as registerForm, login as loginForm } from '../../../formConstants.json';
 

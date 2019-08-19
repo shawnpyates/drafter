@@ -2,7 +2,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import ProfileCard from '../profileCard';
+import ProfileCard from '../ProfileCard';
 
 /* eslint react/prop-types: [0] */
 jest.mock('react-router-dom', () => ({

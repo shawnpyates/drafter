@@ -50,5 +50,12 @@
     "noPlayersOnTeam": "There are currently no players on this team.",
     "noPlayersInDraft": "There are currently no players entered into this draft.",
     "columnHeaders": ["Name", "Email", "Position"]
+  },
+
+  "positions": {
+    "Goaltender": "G",
+    "Defence": "D",
+    "Left/Right Wing": "RW/LW",
+    "Center": "C"
   }
 }

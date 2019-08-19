@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 
-import Table from '../../components/Table/table';
+import { Table } from '../../components';
 
 import { fetchDraftsByUser, fetchDraftsByTeam } from '../../actions';
 
@@ -19,7 +19,7 @@ const mapDispatchToProps = dispatch => ({
   fetchDraftsByTeam: id => dispatch(fetchDraftsByTeam(id)),
 });
 
-const extractDataForTable = drafts => (
+const extractDataForDisplay = drafts => (
   drafts.map((draft) => {
     const {
       uuid,
@@ -70,7 +70,7 @@ class Drafts extends Component {
             type={type}
             title={title}
             columnHeaders={columnHeaders}
-            data={extractDataForTable(drafts)}
+            data={extractDataForDisplay(drafts)}
             emptyDataMessage={noneScheduled}
             addNewLink="/createDrafts"
           />

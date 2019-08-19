@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import Table from '../../components/Table/table';
+import { SelectionList, Table } from '../../components';
 
 import {
   fetchTeamsByUser,
@@ -21,19 +21,21 @@ const mapDispatchToProps = dispatch => ({
   fetchTeamsByDraft: id => dispatch(fetchTeamsByDraft(id)),
 });
 
-const extractDataForTable = teams => (
+const extractDataForDisplay = teams => (
   teams.map((team) => {
     const {
       uuid,
       name,
       User: owner,
       Draft: draft,
+      Players: players,
     } = team;
     return {
       uuid,
       name,
       draft: draft.name,
       ownerName: `${owner.firstName} ${owner.lastName}`,
+      players,
     };
   })
 );
@@ -57,6 +59,7 @@ class Teams extends Component {
       teams,
       fetchBy,
       match: { url },
+      displayType,
     } = this.props;
     const {
       type,
@@ -71,18 +74,27 @@ class Teams extends Component {
         : '/createTeams'
     );
     return (
-      <div>
-        {teams &&
-          <Table
-            type={type}
-            title={title}
-            columnHeaders={columnHeaders}
-            data={extractDataForTable(teams)}
-            emptyDataMessage={fetchBy === 'user' ? belongToNoTeams : noTeamsEntered}
-            addNewLink={addNewLink}
-          />
-        }
-      </div>
+      teams &&
+        <div>
+          {displayType === 'table' &&
+            <Table
+              type={type}
+              title={title}
+              columnHeaders={columnHeaders}
+              data={extractDataForDisplay(teams)}
+              emptyDataMessage={fetchBy === 'user' ? belongToNoTeams : noTeamsEntered}
+              addNewLink={addNewLink}
+            />
+          }
+          {displayType === 'selectionList' &&
+            <SelectionList
+              type={type}
+              title={title}
+              data={extractDataForDisplay(teams)}
+              emptyDataMessage={noTeamsEntered}
+            />
+          }
+        </div>
     );
   }
 }
@@ -96,6 +108,7 @@ Teams.defaultProps = {
 
 Teams.propTypes = {
   draftId: PropTypes.string,
+  displayType: PropTypes.string.isRequired,
   fetchBy: PropTypes.string.isRequired,
   fetchTeamsByDraft: PropTypes.func.isRequired,
   fetchTeamsByUser: PropTypes.func.isRequired,

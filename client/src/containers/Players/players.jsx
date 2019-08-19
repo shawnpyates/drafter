@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import Table from '../../components/Table/table';
+import { SelectionList, Table } from '../../components';
 
 import { fetchPlayersByTeam, fetchPlayersByDraft } from '../../actions';
 
-import { playersTable as playersTableTexts } from '../../../texts.json';
+import { playersTable as playersTableTexts, positions } from '../../../texts.json';
 
 const mapStateToProps = (state) => {
   const { players } = state.player;
@@ -18,7 +18,7 @@ const mapDispatchToProps = dispatch => ({
   fetchPlayersByDraft: id => dispatch(fetchPlayersByDraft(id)),
 });
 
-const extractDataForTable = players => (
+const extractDataForDisplay = players => (
   players.map((player) => {
     const {
       uuid,
@@ -57,6 +57,7 @@ class Players extends Component {
       fetchBy,
       teamId,
       draftId,
+      displayType,
     } = this.props;
     const {
       type,
@@ -71,18 +72,28 @@ class Players extends Component {
         : `/drafts/${draftId}/createPlayers`
     );
     return (
-      <div>
-        {players &&
-          <Table
-            type={type}
-            title={title}
-            columnHeaders={columnHeaders}
-            data={extractDataForTable(players)}
-            emptyDataMessage={fetchBy === 'team' ? noPlayersOnTeam : noPlayersInDraft}
-            addNewLink={addNewLink}
-          />
-        }
-      </div>
+      players &&
+        <div>
+          {displayType === 'table' &&
+            <Table
+              type={type}
+              title={title}
+              columnHeaders={columnHeaders}
+              data={extractDataForDisplay(players)}
+              emptyDataMessage={fetchBy === 'team' ? noPlayersOnTeam : noPlayersInDraft}
+              addNewLink={addNewLink}
+            />
+          }
+          {displayType === 'selectionList' &&
+            <SelectionList
+              type={type}
+              title={title}
+              data={extractDataForDisplay(players)}
+              emptyDataMessage={noPlayersInDraft}
+              positions={positions}
+            />
+          }
+        </div>
     );
   }
 }
@@ -95,6 +106,7 @@ Players.defaultProps = {
 
 Players.propTypes = {
   players: PropTypes.arrayOf(PropTypes.object),
+  displayType: PropTypes.string.isRequired,
   fetchBy: PropTypes.string.isRequired,
   fetchPlayersByTeam: PropTypes.func.isRequired,
   fetchPlayersByDraft: PropTypes.func.isRequired,

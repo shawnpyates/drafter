@@ -1,9 +1,11 @@
-import CreateDraft from '../CreateDraft/createDraft';
-import CreateTeam from '../CreateTeam/createTeam';
-import CreatePlayer from '../CreatePlayer/createPlayer';
-import UpdateUser from '../UpdateUser/updateUser';
-import DraftMenu from '../DraftMenu/draftMenu';
-import TeamMenu from '../TeamMenu/teamMenu';
+import {
+  CreateDraft,
+  CreateTeam,
+  CreatePlayer,
+  UpdateUser,
+  DraftMenu,
+  TeamMenu,
+} from '..';
 
 module.exports = [
   {

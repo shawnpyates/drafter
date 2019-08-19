@@ -1,4 +1,9 @@
-const { Team, Draft, User } = require('../models');
+const {
+  Team,
+  Draft,
+  Player,
+  User,
+} = require('../models');
 const { create: createUserTeam } = require('./userTeams');
 const { create: createUserDraft } = require('./userDrafts');
 
@@ -20,7 +25,7 @@ module.exports = {
     try {
       const teams = await Team.findAll({
         where: { draftId },
-        include: [Draft, User],
+        include: [Draft, User, Player],
       });
       if (!teams.length) return res.status(200).send({ teams: [] });
       return res.status(200).send({ teams });
@@ -33,7 +38,15 @@ module.exports = {
     try {
       const { name, ownerUserId, draftId } = req.body;
       const team = await Team.create({ name, ownerUserId, draftId });
-      const draft = await Draft.findOne({ where: { uuid: draftId } });
+      const draft = await Draft.findOne({
+        where: { uuid: draftId },
+        include: [
+          {
+            model: Team,
+            where: { ownerUserId },
+          },
+        ],
+      });
       const isTeamOwnerAlsoDraftOwner = draft.ownerUserId === ownerUserId;
       const userTeamProperties = {
         body: {
@@ -57,7 +70,11 @@ module.exports = {
       };
 
       await createUserTeam(userTeamProperties);
-      await createUserDraft(userDraftProperties);
+      // only create userDraft association if it doesn't already exist
+      const { Teams: otherTeamsInDraftWithSameOwner } = draft;
+      if (!otherTeamsInDraftWithSameOwner.length && !isTeamOwnerAlsoDraftOwner) {
+        await createUserDraft(userDraftProperties);
+      }
       return res.status(201).send({ team });
     } catch (e) {
       return res.status(400).send({ e });

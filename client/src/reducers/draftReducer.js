@@ -4,27 +4,33 @@ const initialState = {
   currentDraft: null,
   fetching: false,
   fetched: false,
+  updating: false,
+  updated: false,
   drafts: [],
   errorOnCreateDraft: null,
   errorOnFetchDraftsFromUser: null,
   errorOnFetchDraftsFromTeam: null,
   errorOnFetchDraftsFromOwner: null,
   errorOnFetchOneDraft: null,
+  errorOnUpdateDraft: null,
 };
 
 const draftReducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'CREATE_DRAFT_PENDING':
+    case 'CREATE_DRAFT_PENDING': {
       return { ...state, creating: true };
-    case 'CREATE_DRAFT_REJECTED':
+    }
+    case 'CREATE_DRAFT_REJECTED': {
       return { ...state, creating: false, errorOnCreateDraft: action.payload };
-    case 'CREATE_DRAFT_FULFILLED':
+    }
+    case 'CREATE_DRAFT_FULFILLED': {
       return {
         ...state,
         creating: false,
         created: true,
         createdDraft: action.payload,
       };
+    }
     case 'FETCH_DRAFTS_FROM_USER_PENDING': {
       return { ...state, fetching: true };
     }
@@ -79,6 +85,20 @@ const draftReducer = (state = initialState, action) => {
         ...state,
         fetching: false,
         fetched: true,
+        currentDraft: action.payload,
+      };
+    }
+    case 'UPDATE_DRAFT_PENDING': {
+      return { ...state, updating: true };
+    }
+    case 'UPDATE_DRAFT_REJECTED': {
+      return { ...state, updating: false, errorOnUpdateDraft: action.payload };
+    }
+    case 'UPDATE_DRAFT_FULFILLED': {
+      return {
+        ...state,
+        updating: false,
+        updated: true,
         currentDraft: action.payload,
       };
     }

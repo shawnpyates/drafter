@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import Form from '../../components/Form/form';
+import { Form } from '../../components';
 
 import { authenticateUser } from '../../actions';
 

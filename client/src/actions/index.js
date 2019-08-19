@@ -13,6 +13,7 @@ import {
   fetchDraftsByTeam,
   fetchDraftsByUser,
   fetchOneDraft,
+  updateDraft,
 } from './draftActions';
 
 import {
@@ -48,6 +49,7 @@ export {
   fetchDraftsByTeam,
   fetchDraftsByUser,
   fetchOneDraft,
+  updateDraft,
   fetchTeamsByUser,
   fetchTeamsByDraft,
   createTeam,

@@ -2,8 +2,7 @@ import axios from 'axios';
 
 export const createDraft = body => (dispatch) => {
   dispatch({ type: 'CREATE_DRAFT_PENDING ' });
-  const { name, timeScheduled, ownerUserId } = body;
-  return axios.post('/api/drafts', { name, timeScheduled, ownerUserId })
+  return axios.post('/api/drafts', body)
     .then((response) => {
       const { draft } = response.data;
       dispatch({ type: 'CREATE_DRAFT_FULFILLED', payload: draft });
@@ -59,5 +58,17 @@ export const fetchOneDraft = id => (dispatch) => {
     })
     .catch((err) => {
       dispatch({ type: 'FETCH_ONE_DRAFT_REJECTED', payload: err });
+    });
+};
+
+export const updateDraft = ({ id, body }) => (dispatch) => {
+  dispatch({ type: 'UPDATE_DRAFT_PENDING ' });
+  return axios.put(`/api/drafts/${id}`, body)
+    .then((response) => {
+      const { draft } = response.data;
+      dispatch({ type: 'UPDATE_DRAFT_FULFILLED', payload: draft });
+    })
+    .catch((err) => {
+      dispatch({ type: 'UPDATE_DRAFT_REJECTED', payload: err });
     });
 };

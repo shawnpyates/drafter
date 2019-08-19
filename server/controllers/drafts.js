@@ -54,11 +54,12 @@ module.exports = {
 
   async update(req, res) {
     try {
-      const { name, timeScheduled } = req.body;
+      const { name, status, timeScheduled } = req.body;
       const draft = await Draft.findOne({ where: { uuid: req.params.id } });
       if (!draft) return res.status(404).send({ e: 'Draft not found.' });
       const updatedDraft = await draft.update({
         name: name || draft.name,
+        status: status || draft.status,
         timeScheduled: timeScheduled || draft.timeScheduled,
       });
       return res.status(200).send({ draft: updatedDraft });

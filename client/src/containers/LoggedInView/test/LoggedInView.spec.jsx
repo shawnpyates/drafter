@@ -2,7 +2,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import LoggedInView from '../loggedInView';
+import LoggedInView from '../LoggedInView';
 
 describe('<LoggedInView />', () => {
   test('Renders a styled div component', () => {

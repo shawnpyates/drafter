@@ -4,8 +4,8 @@ import { shallow } from 'enzyme';
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
-import CreateTeam from '../createTeam';
-import Form from '../../../components/Form/form';
+import CreateTeam from '../CreateTeam';
+import { Form } from '../../../components';
 
 import { team as teamForm } from '../../../../formConstants.json';
 

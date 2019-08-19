@@ -3,7 +3,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import configureStore from 'redux-mock-store';
 
-import Register, { validateForm } from '../register';
+import Register, { validateForm } from '../Register';
 
 import { register as registerForm } from '../../../../formConstants.json';
 

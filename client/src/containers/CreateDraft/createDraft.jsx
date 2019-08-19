@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 
-import Form from '../../components/Form/form';
+import { Form } from '../../components';
 import { createDraft } from '../../actions';
 
 import { draft as draftForm } from '../../../formConstants.json';

@@ -2,11 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import ProfileCard from '../../components/ProfileCard/profileCard';
+import {
+  Drafts,
+  Teams,
+  Requests,
+} from '..';
 
-import Drafts from '../Drafts/drafts';
-import Teams from '../Teams/teams';
-import Requests from '../Requests/requests';
+import { ProfileCard } from '../../components';
 
 import { MainMenuContainer, WelcomeMessage } from './styledComponents';
 

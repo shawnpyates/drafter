@@ -4,8 +4,8 @@ import { shallow } from 'enzyme';
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
-import DraftMenu from '../draftMenu';
-import Requests from '../../Requests/requests';
+import DraftMenu from '../DraftMenu';
+import Requests from '../../Requests/Requests';
 
 const mockStore = configureStore([thunk]);
 
@@ -14,7 +14,7 @@ const store = {
     currentUser: { uuid: 'abc123' },
   },
   draft: {
-    currentDraft: { uuid: 'def234', ownerUserId: 'abc123' },
+    currentDraft: { uuid: 'def234', ownerUserId: 'abc123', status: 'scheduled' },
   },
 };
 
