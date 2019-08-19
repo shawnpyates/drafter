@@ -1,7 +1,7 @@
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 
-import MainMenu from '../MainMenu/mainMenu';
+import { MainMenu } from '..';
 import componentRoutes from './componentRoutes';
 
 const checkForHashThenRender = () => {

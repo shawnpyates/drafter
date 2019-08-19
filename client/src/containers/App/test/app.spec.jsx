@@ -3,10 +3,10 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import configureStore from 'redux-mock-store';
 
-import App from '../app';
-import LoggedInView from '../../LoggedInView/loggedInView';
-import LoggedOutView from '../../LoggedOutView/loggedOutView';
-import Header from '../../../components/Header/header';
+import App from '../App';
+
+import { LoggedInView, LoggedOutView } from '../..';
+import { Header } from '../../../components';
 
 const mockStore = configureStore();
 

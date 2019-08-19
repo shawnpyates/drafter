@@ -5,8 +5,8 @@ import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import moment from 'moment';
 
-import CreateDraft, { validateForm } from '../createDraft';
-import Form from '../../../components/Form/form';
+import CreateDraft, { validateForm } from '../CreateDraft';
+import { Form } from '../../../components';
 
 import { draft as draftForm } from '../../../../formConstants.json';
 

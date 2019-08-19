@@ -1,103 +1,28 @@
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
-
-import { styleVars } from '../../styles';
-
-
-const {
-  DARK_BLUE,
-  LIGHT_GRAY,
-  SKY_BLUE,
-  WHITE,
-} = styleVars;
 
 const Container = styled.div`
-  border: 1px solid black;
   position: absolute;
   ${props => (props.isLeft ? 'left' : 'right')}: 20%;
   width: 20%;
+  margin-top: 5rem;
 `;
 
-const AddNewButton = styled.a`
-  background: ${DARK_BLUE};
-  float: right;
-  height: 25px;
-  width: 130px;
-  border-radius: 20px;
+const ListTitle = styled.h1`
+  font-size: 2rem;
+  margin-bottom: 1rem;
+`;
+
+const ListItem = styled.div`
+  border: 1px solid #000;
+  margin: 2rem auto;
   text-align: center;
-  font-weight: 500;
-  color: ${WHITE} !important;
-  cursor: pointer;
-  margin-right: 40px;
-
-  &:hover {
-    color: ${SKY_BLUE} !important;
-    text-decoration: none;
-  }
-`;
-
-const TableFrame = styled.table`
-  margin: 5rem auto;
-  text-align: center;
-  width: 100%;
-`;
-
-const TableTitleLine = styled.tr`
-  text-align: left;
-`;
-
-const TableTitle = styled.h3`
-  display: inline;
-`;
-
-const HeaderRow = styled.tr`
-  display: table-row;
-`;
-
-const DataFrame = styled.table`
-  width: 100%;
-  margin-top: 20px;
-`;
-
-const DataRow = styled.tr`
-  display: table-row;
-  background-color: ${props => (props.isEvenNumber ? LIGHT_GRAY : WHITE)};
-  cursor: ${props => (props.optionsExists ? 'default' : 'pointer')};
-`;
-
-const ColumnHeader = styled.th`
-  width: ${props => `${100 / props.columnHeadersLength}%`};
-`;
-
-const DataLink = styled(Link)`
-  display: contents;
-  text-decoration: none !important;
-  cursor: inherit;
-`;
-
-const OptionsContainer = styled.td`
-
-`;
-
-const Option = styled.button`
-  border: none;
-  background: transparent;
-  margin: auto 2rem;
-  font-size: 0.5rem;
-  cursor: pointer;
+  font-size: 1.5rem;
+  padding: 1rem 0.5rem;
+  width: 60%;
 `;
 
 module.exports = {
   Container,
-  AddNewButton,
-  TableFrame,
-  TableTitleLine,
-  TableTitle,
-  HeaderRow,
-  DataFrame,
-  DataRow,
-  ColumnHeader,
-  DataLink,
-  OptionsContainer,
-  Option,
+  ListTitle,
+  ListItem,
 };

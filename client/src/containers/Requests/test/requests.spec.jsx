@@ -4,8 +4,8 @@ import { shallow } from 'enzyme';
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
-import Requests from '../requests';
-import Table from '../../../components/Table/table';
+import Requests from '../Requests';
+import { Table } from '../../../components';
 
 const mockStore = configureStore([thunk]);
 

@@ -3,8 +3,8 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import configureStore from 'redux-mock-store';
 
-import LogIn from '../login';
-import Form from '../../../components/Form/form';
+import LogIn from '../Login';
+import { Form } from '../../../components';
 
 const mockStore = configureStore();
 

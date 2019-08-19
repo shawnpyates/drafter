@@ -3,12 +3,16 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 
-import ProfileCard from '../../components/ProfileCard/profileCard';
+import ProfileCard from '../../components/ProfileCard/ProfileCard';
 import { draft as draftProfileData } from '../../components/ProfileCard/profileCardConstants.json';
 
-import Players from '../Players/players';
-import Teams from '../Teams/teams';
-import Requests from '../Requests/requests';
+import {
+  Players,
+  Requests,
+  Teams,
+} from '..';
+
+import { Timer } from '../../components';
 
 import { fetchOneDraft, fetchCurrentUser, updateDraft } from '../../actions';
 
@@ -50,12 +54,14 @@ class DraftMenu extends Component {
       updateDraftPropFn({ status: 'open' });
     }
   }
+
   render() {
     const { currentDraft, currentUser, match } = this.props;
     const {
       uuid,
       timeScheduled,
       name: profileCardTitle,
+      status,
       User: owner,
     } = currentDraft || {};
     const ownerName = owner && `${owner.firstName} ${owner.lastName}`;
@@ -79,28 +85,29 @@ class DraftMenu extends Component {
             data={profileCardData}
             linkForUpdating={profileCardLinkForUpdating}
           />
-          {(currentDraft.status === 'scheduled' || currentDraft.status === 'open') &&
+          {(status === 'scheduled' || status === 'open') &&
             <div>
+              {status === 'open' && <Timer />}
               <Teams
                 draftId={uuid}
                 fetchBy="draft"
                 match={match}
-                displayType={currentDraft.status === 'scheduled' ? 'table' : 'selectionList'}
+                displayType={status === 'scheduled' ? 'table' : 'selectionList'}
               />
               <Players
                 draftId={uuid}
                 fetchBy="draft"
-                displayType={currentDraft.status === 'scheduled' ? 'table' : 'selectionList'}
+                displayType={status === 'scheduled' ? 'table' : 'selectionList'}
               />
               {
                 (
                   currentDraft.ownerUserId === currentUser.uuid
-                  && currentDraft.status === 'scheduled'
+                  && status === 'scheduled'
                 ) && <Requests draftId={uuid} fetchBy="draft" />
               }
             </div>
           }
-          {currentDraft.status === 'closed' &&
+          {status === 'closed' &&
             <div>Draft is now open!</div>
           }
         </div>

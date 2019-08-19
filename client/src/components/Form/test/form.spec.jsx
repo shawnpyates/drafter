@@ -2,7 +2,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import Form from '../form';
+import Form from '../Form';
 
 const { title, inputs: formInputs } = require('../../../../formConstants.json').draft;
 

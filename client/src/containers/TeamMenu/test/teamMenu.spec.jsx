@@ -4,10 +4,10 @@ import { shallow } from 'enzyme';
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
-import TeamMenu from '../teamMenu';
+import TeamMenu from '../TeamMenu';
 
-import Drafts from '../../Drafts/drafts';
-import Players from '../../Players/players';
+import Drafts from '../../Drafts/Drafts';
+import Players from '../../Players/Players';
 
 const mockStore = configureStore([thunk]);
 

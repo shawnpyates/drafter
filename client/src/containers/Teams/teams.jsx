@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import Table from '../../components/Table/table';
-import SelectionList from '../../components/SelectionList/selectionList';
+import { SelectionList, Table } from '../../components';
 
 import {
   fetchTeamsByUser,

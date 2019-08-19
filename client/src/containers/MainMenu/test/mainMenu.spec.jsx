@@ -3,7 +3,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import configureStore from 'redux-mock-store';
 
-import MainMenu from '../mainMenu';
+import MainMenu from '../MainMenu';
 
 const mockStore = configureStore();
 

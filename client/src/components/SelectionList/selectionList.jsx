@@ -1,46 +1,42 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import uuidv4 from 'uuid';
 
 import {
   Container,
-  // AddNewButton,
-  // SelectionListFrame,
-  // SelectionListTitleLine,
-  // SelectionListTitle,
-  // HeaderRow,
-  // DataFrame,
-  // DataRow,
-  // ColumnHeader,
-  // DataLink,
-  // OptionsContainer,
-  // Option,
-} from './styledComponents';
+  ListTitle,
+  ListItem,
 
-const getCellsForRow = (dataEntry) => {
-  const { uuid, ...dataEntryMinusId } = dataEntry;
-  const vals = Object.values(dataEntryMinusId);
-  return vals.map(val => <td key={uuidv4()}>{val}</td>);
-};
+} from './styledComponents';
 
 const SelectionList = ({
   type,
   title,
   data,
-  emptyDataMessage,
-  handleSelect,
+  positions,
+  // TODO: handleSelect
 }) => (
   <Container isLeft={type === 'Teams'}>
-    <p>Look I am a Selection List.</p>
+    <ListTitle>{title}</ListTitle>
+    {data.map(item => (
+      <ul>
+        <ListItem>
+          {item.name}{(positions && item.position) && ` (${positions[item.position]})`}
+        </ListItem>
+      </ul>
+    ))}
   </Container>
 );
+
+SelectionList.defaultProps = {
+  positions: null,
+};
 
 SelectionList.propTypes = {
   type: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
-  emptyDataMessage: PropTypes.string.isRequired,
-  handleSelect: PropTypes.func.isRequired,
+  // handleSelect: PropTypes.func.isRequired,
+  positions: PropTypes.objectOf(PropTypes.any),
 };
 
 export default SelectionList;

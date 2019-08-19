@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { BrowserRouter as Router } from 'react-router-dom';
-import styled from 'styled-components';
 
-import Header from '../../components/Header/header';
-import LoggedInView from '../LoggedInView/loggedInView';
-import LoggedOutView from '../LoggedOutView/loggedOutView';
+import { LoggedInView, LoggedOutView } from '..';
+import { Header } from '../../components';
 import { fetchCurrentUser } from '../../actions';
+
+import { AppContainer, Loading } from './styledComponents';
 
 const { localStorage } = window;
 
@@ -19,9 +19,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => ({
   fetchCurrentUser: () => dispatch(fetchCurrentUser()),
 });
-
-const AppContainer = styled.div``;
-const Loading = styled.div``;
 
 class App extends Component {
   constructor() {

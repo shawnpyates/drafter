@@ -2,12 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import Table from '../../components/Table/table';
-import SelectionList from '../../components/SelectionList/selectionList';
+import { SelectionList, Table } from '../../components';
 
 import { fetchPlayersByTeam, fetchPlayersByDraft } from '../../actions';
 
-import { playersTable as playersTableTexts } from '../../../texts.json';
+import { playersTable as playersTableTexts, positions } from '../../../texts.json';
 
 const mapStateToProps = (state) => {
   const { players } = state.player;
@@ -91,6 +90,7 @@ class Players extends Component {
               title={title}
               data={extractDataForDisplay(players)}
               emptyDataMessage={noPlayersInDraft}
+              positions={positions}
             />
           }
         </div>

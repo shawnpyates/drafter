@@ -4,8 +4,8 @@ import { shallow } from 'enzyme';
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
-import CreatePlayer, { validateForm } from '../createPlayer';
-import Form from '../../../components/Form/form';
+import CreatePlayer, { validateForm } from '../CreatePlayer';
+import { Form } from '../../../components';
 
 import { player as playerForm } from '../../../../formConstants.json';
 

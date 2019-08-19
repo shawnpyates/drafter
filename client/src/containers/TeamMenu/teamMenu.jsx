@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import ProfileCard from '../../components/ProfileCard/profileCard';
+import { ProfileCard } from '../../components';
 
-import Players from '../Players/players';
-import Drafts from '../Drafts/drafts';
+import { Drafts, Players } from '..';
 
 import { team as teamProfileData } from '../../components/ProfileCard/profileCardConstants.json';
 

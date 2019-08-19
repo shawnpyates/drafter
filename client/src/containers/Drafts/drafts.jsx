@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 
-import Table from '../../components/Table/table';
+import { Table } from '../../components';
 
 import { fetchDraftsByUser, fetchDraftsByTeam } from '../../actions';
 
