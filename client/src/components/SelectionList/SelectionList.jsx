@@ -19,7 +19,7 @@ const SelectionList = ({
     <ListTitle>{title}</ListTitle>
     {data.map(item => (
       <ul>
-        <ListItem>
+        <ListItem isCurrentlySelecting={item.isCurrentlySelecting}>
           {item.name}{(positions && item.position) && ` (${positions[item.position]})`}
         </ListItem>
       </ul>

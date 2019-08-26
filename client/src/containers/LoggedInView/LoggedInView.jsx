@@ -13,7 +13,6 @@ const checkForHashThenRender = () => {
   );
 };
 
-
 const LoggedInView = () => (
   <Switch>
     <Route exact path="/" render={() => checkForHashThenRender()} />

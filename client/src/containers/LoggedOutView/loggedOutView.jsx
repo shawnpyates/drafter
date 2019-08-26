@@ -20,9 +20,9 @@ class LoggedOutView extends Component {
     };
   }
 
-  getAnchor(text, isLogInButton) {
+  getAnchor(text, isLoginButton) {
     return (
-      <TabListAnchor onClick={() => this.toggleActiveComponent(isLogInButton)}>
+      <TabListAnchor onClick={() => this.toggleActiveComponent(isLoginButton)}>
         {text}
       </TabListAnchor>
     );

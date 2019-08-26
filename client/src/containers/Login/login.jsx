@@ -21,7 +21,7 @@ const mapDispatchToProps = dispatch => ({
 
 const validateEmail = email => (/\S+@\S+\.\S+/).test(email);
 
-class LogIn extends Component {
+class Login extends Component {
   constructor() {
     super();
     this.state = {
@@ -75,13 +75,13 @@ class LogIn extends Component {
   }
 }
 
-LogIn.defaultProps = {
+Login.defaultProps = {
   errorOnAuthenticateUser: null,
 };
 
-LogIn.propTypes = {
+Login.propTypes = {
   errorOnAuthenticateUser: PropTypes.objectOf(PropTypes.any),
   authenticateUser: PropTypes.func.isRequired,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(LogIn);
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

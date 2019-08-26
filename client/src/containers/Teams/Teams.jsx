@@ -36,6 +36,7 @@ const extractDataForDisplay = teams => (
       draft: draft.name,
       ownerName: `${owner.firstName} ${owner.lastName}`,
       players,
+      isCurrentlySelecting: draft.currentlySelectingTeamId === uuid,
     };
   })
 );

@@ -44,14 +44,25 @@ class DraftMenu extends Component {
     fetchCurrentUserPropFn();
   }
   componentDidUpdate() {
-    const { currentDraft, updateDraftPropFn } = this.props;
+    const { currentDraft, currentUser, updateDraftPropFn } = this.props;
     const now = new Date().toISOString();
-    if (
-      currentDraft
-      && currentDraft.status === 'scheduled'
-      && currentDraft.timeScheduled < now
-    ) {
-      updateDraftPropFn({ status: 'open' });
+    if (currentDraft) {
+      const {
+        status,
+        timeScheduled,
+        currentlySelectingTeamId,
+        Teams: teams,
+      } = currentDraft;
+      if (status === 'scheduled' && timeScheduled < now) {
+        updateDraftPropFn({ status: 'open' });
+      } else if (
+        status === 'open'
+        && !currentlySelectingTeamId
+        && currentUser.uuid === currentDraft.ownerUserId
+        && (teams && teams.length)
+      ) {
+        updateDraftPropFn({ currentlySelectingTeamId: teams[0].uuid });
+      }
     }
   }
 
