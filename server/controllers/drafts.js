@@ -1,4 +1,4 @@
-const { Draft, User } = require('../models');
+const { Draft, Team, User } = require('../models');
 const { create: createUserDraft } = require('./userDrafts');
 
 module.exports = {
@@ -7,7 +7,7 @@ module.exports = {
     try {
       const draft = await Draft.findOne({
         where: { uuid: req.params.id },
-        include: [User],
+        include: [Team, User],
       });
       return res.status(200).send({ draft });
     } catch (e) {
@@ -54,10 +54,16 @@ module.exports = {
 
   async update(req, res) {
     try {
-      const { name, status, timeScheduled } = req.body;
+      const {
+        name,
+        currentlySelectingTeamId,
+        status,
+        timeScheduled,
+      } = req.body;
       const draft = await Draft.findOne({ where: { uuid: req.params.id } });
       if (!draft) return res.status(404).send({ e: 'Draft not found.' });
       const updatedDraft = await draft.update({
+        currentlySelectingTeamId: currentlySelectingTeamId || draft.currentlySelectingTeamId,
         name: name || draft.name,
         status: status || draft.status,
         timeScheduled: timeScheduled || draft.timeScheduled,

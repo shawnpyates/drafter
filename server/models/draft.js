@@ -15,6 +15,13 @@ module.exports = (sequelize, DataTypes) => {
       values: ['unscheduled', 'scheduled', 'open', 'closed'],
       allowNull: false,
     },
+    currentlySelectingTeamId: {
+      type: DataTypes.UUID,
+      references: {
+        model: 'Teams',
+        key: 'uuid',
+      },
+    },
     timeScheduled: DataTypes.DATE,
   });
   Draft.associate = (models) => {

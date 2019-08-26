@@ -1,5 +1,12 @@
 import styled from 'styled-components';
 
+import { styleVars } from '../../styles';
+
+const {
+  SKY_BLUE,
+  WHITE,
+} = styleVars;
+
 const Container = styled.div`
   position: absolute;
   ${props => (props.isLeft ? 'left' : 'right')}: 20%;
@@ -19,6 +26,7 @@ const ListItem = styled.div`
   font-size: 1.5rem;
   padding: 1rem 0.5rem;
   width: 60%;
+  background-color: ${props => (props.isCurrentlySelecting ? SKY_BLUE : WHITE)}
 `;
 
 module.exports = {
