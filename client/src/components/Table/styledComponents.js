@@ -27,14 +27,14 @@ const Container = styled.div`
 const AddNewButton = styled.a`
   background: ${DARK_BLUE};
   float: right;
-  height: 25px;
-  width: 130px;
-  border-radius: 20px;
+  height: 2.5rem;
+  width: 13rem;
+  border-radius: 2rem;
   text-align: center;
   font-weight: 500;
   color: ${WHITE} !important;
   cursor: pointer;
-  margin-right: 40px;
+  margin-right: 4rem;
 
   &:hover {
     color: ${SKY_BLUE} !important;

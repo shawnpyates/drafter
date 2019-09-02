@@ -65,9 +65,25 @@ class DraftMenu extends Component {
       }
     }
   }
-
+  moveSelectionToNextTeam = () => {
+    const { currentDraft, updateDraftPropFn } = this.props;
+    const { Teams: teams, currentlySelectingTeamId } = currentDraft;
+    const indexOfSelectingTeam = (
+      teams.indexOf(teams.find(team => team.uuid === currentlySelectingTeamId))
+    );
+    const indexOfNextTeam = (
+      indexOfSelectingTeam === teams.length - 1
+        ? 0
+        : indexOfSelectingTeam + 1
+    );
+    updateDraftPropFn({ currentlySelectingTeamId: teams[indexOfNextTeam].uuid });
+  }
   render() {
-    const { currentDraft, currentUser, match } = this.props;
+    const {
+      currentDraft,
+      currentUser,
+      match,
+    } = this.props;
     const {
       uuid,
       timeScheduled,
@@ -88,6 +104,7 @@ class DraftMenu extends Component {
       [ownerKey]: ownerName,
     };
     const profileCardLinkForUpdating = `/updateDraft/${uuid}`;
+    const displayType = status === 'scheduled' ? 'table' : 'selectionList';
     return (
       currentDraft &&
         <div>
@@ -103,12 +120,13 @@ class DraftMenu extends Component {
                 draftId={uuid}
                 fetchBy="draft"
                 match={match}
-                displayType={status === 'scheduled' ? 'table' : 'selectionList'}
+                displayType={displayType}
               />
               <Players
-                draftId={uuid}
+                draft={currentDraft}
                 fetchBy="draft"
-                displayType={status === 'scheduled' ? 'table' : 'selectionList'}
+                displayType={displayType}
+                moveSelectionToNextTeam={this.moveSelectionToNextTeam}
               />
               {
                 (
