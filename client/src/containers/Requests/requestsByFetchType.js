@@ -22,8 +22,8 @@ const requestsByFetchType = {
         return {
           uuid,
           team,
-          owner: `${teamOwner.firstName} ${teamOwner.lastName}`,
-          email: teamOwner.email,
+          ownerName: `${teamOwner.firstName} ${teamOwner.lastName}`,
+          ownerEmail: teamOwner.email,
         };
       })
     ),

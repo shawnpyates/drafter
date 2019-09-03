@@ -18,12 +18,6 @@ import {
   Option,
 } from './styledComponents';
 
-const getCellsForRow = (dataEntry) => {
-  const { uuid, ...dataEntryMinusId } = dataEntry;
-  const vals = Object.values(dataEntryMinusId);
-  return vals.map(val => <td key={uuidv4()}>{val}</td>);
-};
-
 const Table = ({
   type,
   title,
@@ -55,9 +49,9 @@ const Table = ({
               {columnHeaders.map(header => (
                 <ColumnHeader
                   columnHeadersLength={columnHeaders.length}
-                  key={header}
+                  key={header.type}
                 >
-                  {header}
+                  {header.value}
                 </ColumnHeader>
               ))}
             </HeaderRow>
@@ -68,7 +62,10 @@ const Table = ({
                 key={entry.uuid}
               >
                 <DataLink to={!options && `/${type.toLowerCase()}/${entry.uuid}/show`}>
-                  {getCellsForRow(entry)}
+                  {columnHeaders
+                    .map(columnHeader => columnHeader.type)
+                    .map(chType => <td key={uuidv4()}>{entry[chType]}</td>)
+                  }
                 </DataLink>
                 {options &&
                   <OptionsContainer>
