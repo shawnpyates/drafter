@@ -43,9 +43,6 @@ class SelectionList extends Component {
               position,
             } = item;
             const isFocussed = uuid === this.state.focussedPlayerId;
-            if (type === 'Players' && item.teamId) {
-              return null;
-            }
             return (
               <div>
                 <ListItem

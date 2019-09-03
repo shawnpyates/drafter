@@ -90,6 +90,7 @@ class DraftMenu extends Component {
       name: profileCardTitle,
       status,
       User: owner,
+      currentlySelectingTeamId,
     } = currentDraft || {};
     const ownerName = owner && `${owner.firstName} ${owner.lastName}`;
     const { scheduledFor, owner: ownerKey } = profileProperties;
@@ -118,6 +119,7 @@ class DraftMenu extends Component {
               {status === 'open' && <Timer />}
               <Teams
                 draftId={uuid}
+                currentlySelectingTeamId={currentlySelectingTeamId}
                 fetchBy="draft"
                 match={match}
                 displayType={displayType}

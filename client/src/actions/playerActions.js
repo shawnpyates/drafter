@@ -5,7 +5,8 @@ export const fetchPlayersByDraft = draftId => (dispatch) => {
   axios.get(`/api/drafts/${draftId}/players`)
     .then((response) => {
       const { players } = response.data;
-      dispatch({ type: 'FETCH_PLAYERS_FROM_DRAFT_FULFILLED', payload: players });
+      const undraftedPlayers = players.filter(p => !p.teamId);
+      dispatch({ type: 'FETCH_PLAYERS_FROM_DRAFT_FULFILLED', payload: undraftedPlayers });
     })
     .catch((err) => {
       dispatch({ type: 'FETCH_PLAYERS_FROM_DRAFT_REJECTED', payload: err });
@@ -41,8 +42,8 @@ export const updatePlayer = ({ id, body }) => (dispatch) => {
   dispatch({ type: 'UPDATE_PLAYER_PENDING ' });
   return axios.put(`/api/players/${id}`, body)
     .then((response) => {
-      const { player } = response.data;
-      dispatch({ type: 'UPDATE_PLAYER_FULFILLED', payload: player });
+      const { players } = response.data;
+      dispatch({ type: 'UPDATE_PLAYER_FULFILLED', payload: players });
     })
     .catch((err) => {
       dispatch({ type: 'UPDATE_PLAYER_REJECTED', payload: err });

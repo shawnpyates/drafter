@@ -12,8 +12,8 @@ import {
 import { teamsTable as teamsTableTexts } from '../../../texts.json';
 
 const mapStateToProps = (state) => {
-  const { teams } = state.team;
-  return { teams };
+  const { teamsFromUser, teamsFromDraft } = state.team;
+  return { teamsFromUser, teamsFromDraft };
 };
 
 const mapDispatchToProps = dispatch => ({
@@ -21,7 +21,7 @@ const mapDispatchToProps = dispatch => ({
   fetchTeamsByDraft: id => dispatch(fetchTeamsByDraft(id)),
 });
 
-const extractDataForDisplay = teams => (
+const extractDataForDisplay = (teams, currentlySelectingTeamId) => (
   teams.map((team) => {
     const {
       uuid,
@@ -36,7 +36,7 @@ const extractDataForDisplay = teams => (
       draft: draft.name,
       ownerName: `${owner.firstName} ${owner.lastName}`,
       players,
-      isCurrentlySelecting: draft.currentlySelectingTeamId === uuid,
+      isCurrentlySelecting: currentlySelectingTeamId === uuid,
     };
   })
 );
@@ -57,7 +57,9 @@ class Teams extends Component {
 
   render() {
     const {
-      teams,
+      teamsFromUser,
+      teamsFromDraft,
+      currentlySelectingTeamId,
       fetchBy,
       match: { url },
       displayType,
@@ -75,14 +77,14 @@ class Teams extends Component {
         : '/createTeams'
     );
     return (
-      teams &&
+      (teamsFromDraft || teamsFromUser) &&
         <div>
           {displayType === 'table' &&
             <Table
               type={type}
               title={title}
               columnHeaders={columnHeaders}
-              data={extractDataForDisplay(teams)}
+              data={extractDataForDisplay(teamsFromUser || teamsFromDraft)}
               emptyDataMessage={fetchBy === 'user' ? belongToNoTeams : noTeamsEntered}
               addNewLink={addNewLink}
             />
@@ -91,7 +93,10 @@ class Teams extends Component {
             <SelectionList
               type={type}
               title={title}
-              data={extractDataForDisplay(teams)}
+              data={extractDataForDisplay(
+                teamsFromUser || teamsFromDraft,
+                currentlySelectingTeamId,
+              )}
               emptyDataMessage={noTeamsEntered}
             />
           }
@@ -103,8 +108,10 @@ class Teams extends Component {
 Teams.defaultProps = {
   draftId: null,
   match: {},
-  teams: null,
   userId: null,
+  teamsFromUser: null,
+  teamsFromDraft: null,
+  currentlySelectingTeamId: null,
 };
 
 Teams.propTypes = {
@@ -114,7 +121,9 @@ Teams.propTypes = {
   fetchTeamsByDraft: PropTypes.func.isRequired,
   fetchTeamsByUser: PropTypes.func.isRequired,
   match: PropTypes.objectOf(PropTypes.any),
-  teams: PropTypes.arrayOf(PropTypes.object),
+  teamsFromUser: PropTypes.arrayOf(PropTypes.object),
+  teamsFromDraft: PropTypes.arrayOf(PropTypes.object),
+  currentlySelectingTeamId: PropTypes.string,
   userId: PropTypes.string,
 };
 

@@ -5,7 +5,8 @@ const initialState = {
   fetching: false,
   fetched: false,
   associated: false,
-  teams: [],
+  teamsFromDraft: null,
+  teamsFromUser: null,
   errorOnCreateTeam: null,
   errorOnFetchTeamsFromUser: null,
   errorOnFetchTeamsFromDraft: null,
@@ -36,7 +37,8 @@ const teamReducer = (state = initialState, action) => {
         ...state,
         fetching: false,
         fetched: true,
-        teams: action.payload,
+        teamsFromDraft: null,
+        teamsFromUser: action.payload,
       };
     }
     case 'FETCH_TEAMS_FROM_DRAFT_PENDING': {
@@ -50,7 +52,8 @@ const teamReducer = (state = initialState, action) => {
         ...state,
         fetching: false,
         fetched: true,
-        teams: action.payload,
+        teamsFromDraft: action.payload,
+        teamsFromUser: null,
       };
     }
 
