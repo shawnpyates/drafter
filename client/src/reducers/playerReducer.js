@@ -7,6 +7,7 @@ const initialState = {
   errorOnCreatePlayer: null,
   errorOnFetchPlayersFromDraft: null,
   errorOnFetchPlayersFromTeam: null,
+  errorOnUpdatePlayer: null,
 };
 
 const playerReducer = (state = initialState, action) => {
@@ -47,6 +48,20 @@ const playerReducer = (state = initialState, action) => {
         ...state,
         fetching: false,
         fetched: true,
+        players: action.payload,
+      };
+    }
+    case 'UPDATE_PLAYER_PENDING': {
+      return { ...state, updating: true };
+    }
+    case 'UPDATE_PLAYER_REJECTED': {
+      return { ...state, updating: false, errorOnUpdatePlayer: action.payload };
+    }
+    case 'UPDATE_PLAYER_FULFILLED': {
+      return {
+        ...state,
+        updating: false,
+        updated: true,
         players: action.payload,
       };
     }

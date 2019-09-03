@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import { SelectionList, Table } from '../../components';
 
-import { fetchPlayersByTeam, fetchPlayersByDraft } from '../../actions';
+import { fetchPlayersByTeam, fetchPlayersByDraft, updatePlayer } from '../../actions';
 
 import { playersTable as playersTableTexts, positions } from '../../../texts.json';
 
@@ -16,6 +16,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => ({
   fetchPlayersByTeam: id => dispatch(fetchPlayersByTeam(id)),
   fetchPlayersByDraft: id => dispatch(fetchPlayersByDraft(id)),
+  updatePlayerPropFn: (id, body) => dispatch(updatePlayer({ id, body })),
 });
 
 const extractDataForDisplay = players => (
@@ -42,13 +43,23 @@ class Players extends Component {
       fetchPlayersByTeam: fetchByTeam,
       fetchPlayersByDraft: fetchByDraft,
       teamId,
-      draftId,
+      draft,
     } = this.props;
     if (fetchBy === 'team') {
       fetchByTeam(teamId);
     } else {
-      fetchByDraft(draftId);
+      fetchByDraft(draft.uuid);
     }
+  }
+
+  assignPlayerToTeam = (playerId) => {
+    const { draft, moveSelectionToNextTeam } = this.props;
+    const { currentlySelectingTeamId } = draft;
+    this.props.updatePlayerPropFn(
+      playerId,
+      { teamId: currentlySelectingTeamId },
+    );
+    moveSelectionToNextTeam();
   }
 
   render() {
@@ -56,7 +67,7 @@ class Players extends Component {
       players,
       fetchBy,
       teamId,
-      draftId,
+      draft,
       displayType,
     } = this.props;
     const {
@@ -69,7 +80,7 @@ class Players extends Component {
     const addNewLink = (
       fetchBy === 'team'
         ? `/teams/${teamId}/createPlayers`
-        : `/drafts/${draftId}/createPlayers`
+        : `/drafts/${draft.uuid}/createPlayers`
     );
     return (
       players &&
@@ -91,6 +102,7 @@ class Players extends Component {
               data={extractDataForDisplay(players)}
               emptyDataMessage={noPlayersInDraft}
               positions={positions}
+              assignPlayerToTeam={this.assignPlayerToTeam}
             />
           }
         </div>
@@ -101,7 +113,8 @@ class Players extends Component {
 Players.defaultProps = {
   players: null,
   teamId: null,
-  draftId: null,
+  draft: null,
+  moveSelectionToNextTeam: null,
 };
 
 Players.propTypes = {
@@ -110,8 +123,10 @@ Players.propTypes = {
   fetchBy: PropTypes.string.isRequired,
   fetchPlayersByTeam: PropTypes.func.isRequired,
   fetchPlayersByDraft: PropTypes.func.isRequired,
+  updatePlayerPropFn: PropTypes.func.isRequired,
   teamId: PropTypes.string,
-  draftId: PropTypes.string,
+  draft: PropTypes.objectOf(PropTypes.any),
+  moveSelectionToNextTeam: PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Players);

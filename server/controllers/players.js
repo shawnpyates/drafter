@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const { Player } = require('../models');
+const { Player, Draft } = require('../models');
 
 const { in: opIn } = Sequelize.Op;
 
@@ -69,7 +69,15 @@ module.exports = {
         teamId,
       } = req.body;
 
-      const player = await Player.findOne({ where: { uuid: req.params.id } });
+      const player = await Player.findOne({
+        where: { uuid: req.params.id },
+        include: [
+          {
+            model: Draft,
+            include: [Player],
+          },
+        ],
+      });
       if (!player) return res.status(404).send({ e: 'Player not found.' });
 
       const updatedPlayer = await player.update({
@@ -79,6 +87,13 @@ module.exports = {
         draftId: draftId || player.draftId,
         teamId: teamId || player.teamId,
       });
+      if (teamId) {
+        const { Players: playersFromDraft } = player.Draft;
+        const undraftedPlayers = playersFromDraft.filter(p => (
+          !p.teamId && p.uuid !== updatedPlayer.uuid
+        ));
+        return res.status(200).send({ players: undraftedPlayers });
+      }
       return res.status(200).send({ player: updatedPlayer });
     } catch (e) {
       return res.status(400).send({ e });

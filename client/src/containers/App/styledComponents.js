@@ -5,7 +5,7 @@ import { mixins, styleVars } from '../../styles';
 
 const { DEFAULT_FONT } = styleVars;
 
-const CENTER_ELEMENT_MIXIN = mixins;
+const { CENTER_ELEMENT_MIXIN } = mixins;
 
 
 const AppContainer = styled.div`
