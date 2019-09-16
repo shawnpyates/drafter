@@ -5,6 +5,7 @@ import playerReducer from './playerReducer';
 import requestReducer from './requestReducer';
 import sessionReducer from './sessionReducer';
 import teamReducer from './teamReducer';
+import uiReducer from './uiReducer';
 import userReducer from './userReducer';
 
 const reducers = combineReducers({
@@ -13,6 +14,7 @@ const reducers = combineReducers({
   request: requestReducer,
   session: sessionReducer,
   team: teamReducer,
+  ui: uiReducer,
   user: userReducer,
 });
 

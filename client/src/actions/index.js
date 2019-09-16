@@ -38,6 +38,8 @@ import {
   destroyRequest,
 } from './requestActions';
 
+import { toggleShouldUpdateDraftData } from './uiActions';
+
 export {
   fetchCurrentUser,
   createUser,
@@ -64,4 +66,5 @@ export {
   fetchRequestsByDraftOwner,
   createRequest,
   destroyRequest,
+  toggleShouldUpdateDraftData,
 };

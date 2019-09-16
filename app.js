@@ -1,11 +1,25 @@
 const express = require('express');
+
+const app = require('express')();
+
 const path = require('path');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const socket = require('socket.io');
+
 require('dotenv').config();
 
-const app = express();
+const server = app.listen(3001, () => {
+  console.log('listening for requests on 3001');
+});
+
+const io = socket(server);
+
+io.on('connection', (s) => {
+  console.log('socket.io connection');
+  s.emit('hello');
+});
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -23,5 +37,6 @@ app.get('*', (req, res) => {
   const params = Object.values(req.params).join('/');
   res.redirect(`/#${params}`);
 });
+
 
 module.exports = app;

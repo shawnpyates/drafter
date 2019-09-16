@@ -4,11 +4,11 @@
   "private": true,
   "scripts": {
     "lint": "./node_modules/.bin/eslint",
-    "start": "PORT=3001 nodemon ./bin/www",
+    "start": "node app.js",
     "test": "jest"
   },
   "dependencies": {
-    "bcrypt": "^1.0.3",
+    "bcrypt": "^3.0.6",
     "body-parser": "^1.18.3",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
@@ -22,7 +22,8 @@
     "request": "~2.88.0",
     "sequelize": "^5.10.1",
     "sequelize-cli": "^5.5.0",
-    "serve-favicon": "~2.4.5"
+    "serve-favicon": "~2.4.5",
+    "socket.io": "^2.2.0"
   },
   "devDependencies": {
     "eslint": "^4.19.1",

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import ioClient from 'socket.io-client';
+
 
 import ProfileCard from '../../components/ProfileCard/ProfileCard';
 import { draft as draftProfileData } from '../../components/ProfileCard/profileCardConstants.json';
@@ -15,6 +17,8 @@ import {
 import { Timer } from '../../components';
 
 import { fetchOneDraft, fetchCurrentUser, updateDraft } from '../../actions';
+
+const { SERVER_URL } = process.env;
 
 const { properties: profileProperties, values: profileValues } = draftProfileData;
 
@@ -34,6 +38,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 };
 
 class DraftMenu extends Component {
+  constructor() {
+    super();
+    this.socket = null;
+  }
   componentDidMount() {
     const {
       fetchOneDraftPropFn,
@@ -42,6 +50,11 @@ class DraftMenu extends Component {
     } = this.props;
     fetchOneDraftPropFn(params.id);
     fetchCurrentUserPropFn();
+    // TODO - listen for incoming data
+    // this.socket = ioClient(SERVER_URL);
+    // this.socket.on('shouldUpdate', (data) => {
+    //   this.fetchUpdatedDraftData();
+    // });
   }
   componentDidUpdate() {
     const { currentDraft, currentUser, updateDraftPropFn } = this.props;
@@ -77,6 +90,9 @@ class DraftMenu extends Component {
         : indexOfSelectingTeam + 1
     );
     updateDraftPropFn({ currentlySelectingTeamId: teams[indexOfNextTeam].uuid });
+  }
+  fetchUpdatedDraftData() {
+
   }
   render() {
     const {
