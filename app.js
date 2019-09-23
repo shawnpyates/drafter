@@ -10,15 +10,17 @@ const socket = require('socket.io');
 
 require('dotenv').config();
 
-const server = app.listen(3001, () => {
-  console.log('listening for requests on 3001');
+const server = app.listen(process.env.PORT, () => {
+  console.log(`listening for requests on ${process.env.PORT}`);
 });
 
 const io = socket(server);
 
 io.on('connection', (s) => {
-  console.log('socket.io connection');
-  s.emit('hello');
+  console.log('connection established');
+  s.on('draftSelection', () => {
+    s.emit('broadcastDraftSelection');
+  });
 });
 
 app.use(logger('dev'));
@@ -37,6 +39,5 @@ app.get('*', (req, res) => {
   const params = Object.values(req.params).join('/');
   res.redirect(`/#${params}`);
 });
-
 
 module.exports = app;

@@ -16,7 +16,13 @@ import {
 
 import { Timer } from '../../components';
 
-import { fetchOneDraft, fetchCurrentUser, updateDraft } from '../../actions';
+import {
+  fetchOneDraft,
+  fetchCurrentUser,
+  fetchPlayersByDraft,
+  fetchTeamsByDraft,
+  updateDraft,
+} from '../../actions';
 
 const { SERVER_URL } = process.env;
 
@@ -34,6 +40,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     fetchOneDraftPropFn: () => dispatch(fetchOneDraft(id)),
     fetchCurrentUserPropFn: () => dispatch(fetchCurrentUser()),
     updateDraftPropFn: body => dispatch(updateDraft({ id, body })),
+    fetchTeamsByDraftPropFn: () => dispatch(fetchTeamsByDraft(id)),
+    fetchPlayersByDraftPropFn: () => dispatch(fetchPlayersByDraft(id)),
   };
 };
 
@@ -46,15 +54,14 @@ class DraftMenu extends Component {
     const {
       fetchOneDraftPropFn,
       fetchCurrentUserPropFn,
-      match: { params },
     } = this.props;
-    fetchOneDraftPropFn(params.id);
+    fetchOneDraftPropFn();
     fetchCurrentUserPropFn();
-    // TODO - listen for incoming data
-    // this.socket = ioClient(SERVER_URL);
-    // this.socket.on('shouldUpdate', (data) => {
-    //   this.fetchUpdatedDraftData();
-    // });
+    this.socket = ioClient(SERVER_URL);
+    this.socket.on('broadcastDraftSelection', () => {
+      console.log('updating after broadcastDraftSelection');
+      fetchOneDraftPropFn();
+    });
   }
   componentDidUpdate() {
     const { currentDraft, currentUser, updateDraftPropFn } = this.props;
@@ -91,9 +98,6 @@ class DraftMenu extends Component {
     );
     updateDraftPropFn({ currentlySelectingTeamId: teams[indexOfNextTeam].uuid });
   }
-  fetchUpdatedDraftData() {
-
-  }
   render() {
     const {
       currentDraft,
@@ -107,6 +111,7 @@ class DraftMenu extends Component {
       status,
       User: owner,
       currentlySelectingTeamId,
+      Players: players,
     } = currentDraft || {};
     const ownerName = owner && `${owner.firstName} ${owner.lastName}`;
     const { scheduledFor, owner: ownerKey } = profileProperties;
@@ -145,6 +150,8 @@ class DraftMenu extends Component {
                 fetchBy="draft"
                 displayType={displayType}
                 moveSelectionToNextTeam={this.moveSelectionToNextTeam}
+                socket={this.socket}
+                players={players}
               />
               {
                 (

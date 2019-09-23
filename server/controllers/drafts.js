@@ -1,4 +1,9 @@
-const { Draft, Team, User } = require('../models');
+const {
+  Draft,
+  Team,
+  User,
+  Player,
+} = require('../models');
 const { create: createUserDraft } = require('./userDrafts');
 
 module.exports = {
@@ -7,7 +12,7 @@ module.exports = {
     try {
       const draft = await Draft.findOne({
         where: { uuid: req.params.id },
-        include: [Team, User],
+        include: [Team, User, Player],
       });
       return res.status(200).send({ draft });
     } catch (e) {

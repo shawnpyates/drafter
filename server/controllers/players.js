@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const { Player, Draft } = require('../models');
+const { Player, Draft, Team } = require('../models');
 
 const { in: opIn } = Sequelize.Op;
 
@@ -74,7 +74,7 @@ module.exports = {
         include: [
           {
             model: Draft,
-            include: [Player],
+            include: [Player, Team],
           },
         ],
       });
@@ -87,13 +87,6 @@ module.exports = {
         draftId: draftId || player.draftId,
         teamId: teamId || player.teamId,
       });
-      if (teamId) {
-        const { Players: playersFromDraft } = player.Draft;
-        const undraftedPlayers = playersFromDraft.filter(p => (
-          !p.teamId && p.uuid !== updatedPlayer.uuid
-        ));
-        return res.status(200).send({ players: undraftedPlayers });
-      }
       return res.status(200).send({ player: updatedPlayer });
     } catch (e) {
       return res.status(400).send({ e });
