@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import ioClient from 'socket.io-client';
+
 
 import ProfileCard from '../../components/ProfileCard/ProfileCard';
 import { draft as draftProfileData } from '../../components/ProfileCard/profileCardConstants.json';
@@ -14,7 +16,13 @@ import {
 
 import { Timer } from '../../components';
 
-import { fetchOneDraft, fetchCurrentUser, updateDraft } from '../../actions';
+import {
+  fetchOneDraft,
+  fetchCurrentUser,
+  updateDraft,
+} from '../../actions';
+
+const { SERVER_URL } = process.env;
 
 const { properties: profileProperties, values: profileValues } = draftProfileData;
 
@@ -34,14 +42,21 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 };
 
 class DraftMenu extends Component {
+  constructor() {
+    super();
+    this.socket = null;
+  }
   componentDidMount() {
     const {
       fetchOneDraftPropFn,
       fetchCurrentUserPropFn,
-      match: { params },
     } = this.props;
-    fetchOneDraftPropFn(params.id);
+    fetchOneDraftPropFn();
     fetchCurrentUserPropFn();
+    this.socket = ioClient(SERVER_URL);
+    this.socket.on('broadcastDraftSelection', () => {
+      fetchOneDraftPropFn();
+    });
   }
   componentDidUpdate() {
     const { currentDraft, currentUser, updateDraftPropFn } = this.props;
@@ -65,19 +80,6 @@ class DraftMenu extends Component {
       }
     }
   }
-  moveSelectionToNextTeam = () => {
-    const { currentDraft, updateDraftPropFn } = this.props;
-    const { Teams: teams, currentlySelectingTeamId } = currentDraft;
-    const indexOfSelectingTeam = (
-      teams.indexOf(teams.find(team => team.uuid === currentlySelectingTeamId))
-    );
-    const indexOfNextTeam = (
-      indexOfSelectingTeam === teams.length - 1
-        ? 0
-        : indexOfSelectingTeam + 1
-    );
-    updateDraftPropFn({ currentlySelectingTeamId: teams[indexOfNextTeam].uuid });
-  }
   render() {
     const {
       currentDraft,
@@ -91,6 +93,7 @@ class DraftMenu extends Component {
       status,
       User: owner,
       currentlySelectingTeamId,
+      Players: players,
     } = currentDraft || {};
     const ownerName = owner && `${owner.firstName} ${owner.lastName}`;
     const { scheduledFor, owner: ownerKey } = profileProperties;
@@ -128,7 +131,8 @@ class DraftMenu extends Component {
                 draft={currentDraft}
                 fetchBy="draft"
                 displayType={displayType}
-                moveSelectionToNextTeam={this.moveSelectionToNextTeam}
+                socket={this.socket}
+                players={players}
               />
               {
                 (

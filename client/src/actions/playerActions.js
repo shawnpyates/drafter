@@ -38,12 +38,15 @@ export const createPlayer = body => (dispatch) => {
     });
 };
 
-export const updatePlayer = ({ id, body }) => (dispatch) => {
-  dispatch({ type: 'UPDATE_PLAYER_PENDING ' });
+export const updatePlayer = ({ id, body, socket }) => (dispatch) => {
+  dispatch({ type: 'UPDATE_PLAYER_PENDING' });
   return axios.put(`/api/players/${id}`, body)
     .then((response) => {
-      const { players } = response.data;
-      dispatch({ type: 'UPDATE_PLAYER_FULFILLED', payload: players });
+      const { player } = response.data;
+      if (socket) {
+        socket.emit('draftSelection');
+      }
+      dispatch({ type: 'UPDATE_PLAYER_FULFILLED', payload: player });
     })
     .catch((err) => {
       dispatch({ type: 'UPDATE_PLAYER_REJECTED', payload: err });

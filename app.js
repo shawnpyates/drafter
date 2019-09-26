@@ -1,11 +1,28 @@
 const express = require('express');
+
+const app = require('express')();
+
 const path = require('path');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const socket = require('socket.io');
+
 require('dotenv').config();
 
-const app = express();
+const server = app.listen(process.env.PORT, () => {
+  console.log(`listening for requests on ${process.env.PORT}`);
+});
+
+const io = socket(server);
+
+io.on('connection', (s) => {
+  console.log('connection established');
+  s.join('draftSelectionRoom');
+  s.on('draftSelection', () => {
+    io.to('draftSelectionRoom').emit('broadcastDraftSelection');
+  });
+});
 
 app.use(logger('dev'));
 app.use(bodyParser.json());

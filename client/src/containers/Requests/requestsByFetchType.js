@@ -66,7 +66,7 @@ const requestsByFetchType = {
         return {
           uuid,
           team,
-          owner: `${teamOwner.firstName} ${teamOwner.lastName}`,
+          ownerName: `${teamOwner.firstName} ${teamOwner.lastName}`,
           draftRequested: draft.name,
         };
       })

@@ -62,7 +62,7 @@ const playerReducer = (state = initialState, action) => {
         ...state,
         updating: false,
         updated: true,
-        players: action.payload,
+        player: action.payload,
       };
     }
 

@@ -1,7 +1,20 @@
 const Sequelize = require('sequelize');
-const { Player, Draft } = require('../models');
+const { Player, Draft, Team } = require('../models');
 
 const { in: opIn } = Sequelize.Op;
+
+const moveSelectionToNextTeam = async (draft) => {
+  const { Teams: teams, currentlySelectingTeamId } = draft;
+  const indexOfSelectingTeam = (
+    teams.indexOf(teams.find(team => team.uuid === currentlySelectingTeamId))
+  );
+  const indexOfNextTeam = (
+    indexOfSelectingTeam === teams.length - 1
+      ? 0
+      : indexOfSelectingTeam + 1
+  );
+  await draft.update({ currentlySelectingTeamId: teams[indexOfNextTeam].uuid });
+};
 
 module.exports = {
 
@@ -74,7 +87,7 @@ module.exports = {
         include: [
           {
             model: Draft,
-            include: [Player],
+            include: [Player, Team],
           },
         ],
       });
@@ -88,11 +101,7 @@ module.exports = {
         teamId: teamId || player.teamId,
       });
       if (teamId) {
-        const { Players: playersFromDraft } = player.Draft;
-        const undraftedPlayers = playersFromDraft.filter(p => (
-          !p.teamId && p.uuid !== updatedPlayer.uuid
-        ));
-        return res.status(200).send({ players: undraftedPlayers });
+        await moveSelectionToNextTeam(updatedPlayer.Draft);
       }
       return res.status(200).send({ player: updatedPlayer });
     } catch (e) {
