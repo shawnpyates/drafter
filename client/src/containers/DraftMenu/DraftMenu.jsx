@@ -19,8 +19,6 @@ import { Timer } from '../../components';
 import {
   fetchOneDraft,
   fetchCurrentUser,
-  fetchPlayersByDraft,
-  fetchTeamsByDraft,
   updateDraft,
 } from '../../actions';
 
@@ -40,8 +38,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     fetchOneDraftPropFn: () => dispatch(fetchOneDraft(id)),
     fetchCurrentUserPropFn: () => dispatch(fetchCurrentUser()),
     updateDraftPropFn: body => dispatch(updateDraft({ id, body })),
-    fetchTeamsByDraftPropFn: () => dispatch(fetchTeamsByDraft(id)),
-    fetchPlayersByDraftPropFn: () => dispatch(fetchPlayersByDraft(id)),
   };
 };
 
@@ -59,7 +55,6 @@ class DraftMenu extends Component {
     fetchCurrentUserPropFn();
     this.socket = ioClient(SERVER_URL);
     this.socket.on('broadcastDraftSelection', () => {
-      console.log('updating after broadcastDraftSelection');
       fetchOneDraftPropFn();
     });
   }
@@ -84,19 +79,6 @@ class DraftMenu extends Component {
         updateDraftPropFn({ currentlySelectingTeamId: teams[0].uuid });
       }
     }
-  }
-  moveSelectionToNextTeam = () => {
-    const { currentDraft, updateDraftPropFn } = this.props;
-    const { Teams: teams, currentlySelectingTeamId } = currentDraft;
-    const indexOfSelectingTeam = (
-      teams.indexOf(teams.find(team => team.uuid === currentlySelectingTeamId))
-    );
-    const indexOfNextTeam = (
-      indexOfSelectingTeam === teams.length - 1
-        ? 0
-        : indexOfSelectingTeam + 1
-    );
-    updateDraftPropFn({ currentlySelectingTeamId: teams[indexOfNextTeam].uuid });
   }
   render() {
     const {
@@ -149,7 +131,6 @@ class DraftMenu extends Component {
                 draft={currentDraft}
                 fetchBy="draft"
                 displayType={displayType}
-                moveSelectionToNextTeam={this.moveSelectionToNextTeam}
                 socket={this.socket}
                 players={players}
               />

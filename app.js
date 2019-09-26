@@ -18,8 +18,9 @@ const io = socket(server);
 
 io.on('connection', (s) => {
   console.log('connection established');
+  s.join('draftSelectionRoom');
   s.on('draftSelection', () => {
-    s.emit('broadcastDraftSelection');
+    io.to('draftSelectionRoom').emit('broadcastDraftSelection');
   });
 });
 
