@@ -6,6 +6,26 @@ const {
 } = require('../models');
 const { create: createUserTeam } = require('./userTeams');
 const { create: createUserDraft } = require('./userDrafts');
+const { createEmailHtml, sendMail } = require('../mailer');
+
+const { SERVER_URL } = process.env;
+
+const getHtmlForMailer = ({
+  teamOwnerFirstName,
+  draftName,
+  teamName,
+}) => (
+  createEmailHtml(`
+    <h2>Congratulations ${teamOwnerFirstName}!</h2>
+    <br>
+    <p>
+      <b>The owner of ${draftName} has accepted your request, and your team ${teamName} is now registered into the draft.</b>
+      <br>
+      Click <a href=${SERVER_URL}>here</a> to visit DraftMachine and see the updates.
+    </p>
+  `)
+);
+
 
 module.exports = {
   async fetchOne(req, res) {
@@ -36,7 +56,12 @@ module.exports = {
 
   async create(req, res) {
     try {
-      const { name, ownerUserId, draftId } = req.body;
+      const {
+        name,
+        ownerUserId,
+        draftId,
+        isFromJoinRequest,
+      } = req.body;
       const team = await Team.create({ name, ownerUserId, draftId });
       const draft = await Draft.findOne({
         where: { uuid: draftId },
@@ -74,6 +99,19 @@ module.exports = {
       const { Teams: otherTeamsInDraftWithSameOwner } = draft;
       if (!otherTeamsInDraftWithSameOwner.length && !isTeamOwnerAlsoDraftOwner) {
         await createUserDraft(userDraftProperties);
+      }
+      if (isFromJoinRequest) {
+        const teamOwner = await User.findOne({ where: { uuid: ownerUserId } });
+        const htmlForMailer = getHtmlForMailer({
+          teamOwnerFirstName: teamOwner.firstName,
+          draftName: draft.name,
+          teamName: name,
+        });
+        await sendMail({
+          toEmail: teamOwner.email,
+          subject: 'You have a new update from DraftMachine',
+          html: htmlForMailer,
+        });
       }
       return res.status(201).send({ team });
     } catch (e) {

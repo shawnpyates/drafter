@@ -11,12 +11,20 @@ import { team as teamForm } from '../../../formConstants.json';
 
 const { missingField } = teamForm.errorMessages;
 
+const ERROR_MESSAGE_DURATION = 2000;
+
 const mapStateToProps = (state) => {
   const {
     user: { currentUser },
     draft: { drafts },
+    request: { createdRequest, errorOnCreateRequest },
   } = state;
-  return { currentUser, drafts };
+  return {
+    currentUser,
+    drafts,
+    createdRequest,
+    errorOnCreateRequest,
+  };
 };
 
 const mapDispatchToProps = dispatch => ({
@@ -65,6 +73,11 @@ class CreateTeam extends Component {
     const { currentUser, drafts } = this.props;
     if (buttonsToHighlight.shouldFindOwnDraft && !drafts) {
       this.props.fetchDraftsByOwner(currentUser.uuid);
+    }
+    if (this.state.errorMessage) {
+      setTimeout(() => {
+        this.setState({ errorMessage: null });
+      }, ERROR_MESSAGE_DURATION);
     }
   }
 
@@ -130,8 +143,16 @@ class CreateTeam extends Component {
       this.setState({ errorMessage: missingField });
       return;
     }
-  this.props.createRequest(body)
-      .then(() => this.setState({ isSubmitComplete: true }));
+    this.props.createRequest(body)
+      .then(() => {
+        const { createdRequest, errorOnCreateRequest } = this.props;
+        if (createdRequest) {
+          this.setState({ isSubmitComplete: true });
+        }
+        if (errorOnCreateRequest) {
+          this.setState({ errorMessage: errorOnCreateRequest });
+        }
+      });
   }
 
   handleSubmit = (ev) => {
@@ -189,14 +210,18 @@ class CreateTeam extends Component {
 }
 
 CreateTeam.defaultProps = {
+  createdRequest: null,
+  errorOnCreateRequest: null,
   match: {},
 };
 
 CreateTeam.propTypes = {
   createRequest: PropTypes.func.isRequired,
+  createdRequest: PropTypes.objectOf(PropTypes.any),
   createTeam: PropTypes.func.isRequired,
   currentUser: PropTypes.objectOf(PropTypes.any).isRequired,
   drafts: PropTypes.arrayOf(PropTypes.object).isRequired,
+  errorOnCreateRequest: PropTypes.string,
   fetchDraftsByOwner: PropTypes.func.isRequired,
   match: PropTypes.objectOf(PropTypes.any),
 };
