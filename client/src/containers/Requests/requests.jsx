@@ -63,6 +63,7 @@ class Requests extends Component {
         name: teamName,
         ownerUserId,
         draftId,
+        isFromJoinRequest: true,
       });
     }
     destroyRequestPropFn(uuid, requestsByFetchType[fetchBy].data);

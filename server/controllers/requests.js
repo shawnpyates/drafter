@@ -2,11 +2,12 @@ const {
   Request,
   User,
   Draft,
-  UserDraft,
 } = require('../models');
-const { createEmailHtml, transport } = require('../mailer');
+const { createEmailHtml, sendMail } = require('../mailer');
 
 const { SERVER_URL } = process.env;
+
+const PENDING_DRAFT_STATUSES = ['unscheduled', 'scheduled'];
 
 const VALID_DURATION = 60 * 60 * 24 * 7 * 1000; // one week
 
@@ -26,15 +27,6 @@ const getHtmlForMailer = ({
     </p>
   `)
 );
-
-const sendMail = async ({ fromEmail, toEmail, html }) => {
-  await transport.sendMail({
-    from: fromEmail,
-    to: toEmail,
-    subject: 'You have a new request from DraftMachine',
-    html,
-  });
-};
 
 module.exports = {
   async fetchOne(req, res) {
@@ -100,6 +92,16 @@ module.exports = {
       const draftWithOwner = await Draft.findOne({
         where: { name: draftName }, include: [User],
       });
+      if (!draftWithOwner) {
+        return res.status(400).send({
+          e: 'Unable to find a draft with that name.',
+        });
+      }
+      if (!PENDING_DRAFT_STATUSES.includes(draftWithOwner.status)) {
+        return res.status(400).send({
+          e: 'Sorry, this draft has already started and cannot accept new teams.',
+        });
+      }
       const requestCreator = await User.findOne({ where: { uuid: requestCreatorId } });
       const {
         firstName: draftOwnerFirstName,
@@ -115,7 +117,7 @@ module.exports = {
       const request = await Request.create({
         teamName,
         expiresAt,
-        draftId: draft.uuid,
+        draftId: draftWithOwner.uuid,
         requestCreatorId,
       });
       const requestCreatorFullName = `${requestCreator.firstName} ${requestCreator.lastName}`;
@@ -126,8 +128,8 @@ module.exports = {
         draftName,
       });
       await sendMail({
-        fromEmail: requestCreator.email,
         toEmail: draftOwnerEmail,
+        subject: 'You have a new request from DraftMachine',
         html: htmlForMailer,
       });
       return res.status(201).send({ request });

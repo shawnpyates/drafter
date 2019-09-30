@@ -44,7 +44,8 @@ export const createRequest = body => (dispatch) => {
       dispatch({ type: 'CREATE_REQUEST_FULFILLED', payload: request });
     })
     .catch((err) => {
-      dispatch({ type: 'CREATE_REQUEST_REJECTED', payload: err });
+      const { e: error } = err.response.data;
+      dispatch({ type: 'CREATE_REQUEST_REJECTED', payload: error });
     });
 };
 

@@ -2,9 +2,9 @@ const nodemailer = require('nodemailer');
 
 const {
   MAIL_HOST,
-  MAIL_PASS,
   MAIL_PORT,
   MAIL_USER,
+  MAIL_PASS,
 } = process.env;
 
 const createEmailHtml = text => `
@@ -31,7 +31,16 @@ const transport = nodemailer.createTransport({
   },
 });
 
+const sendMail = async ({ toEmail, subject, html }) => {
+  await transport.sendMail({
+    from: 'donotreply@draftmachine.com',
+    to: toEmail,
+    subject,
+    html,
+  });
+};
+
 module.exports = {
   createEmailHtml,
-  transport,
+  sendMail,
 };
