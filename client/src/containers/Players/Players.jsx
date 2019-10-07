@@ -13,22 +13,20 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const extractDataForDisplay = players => (
-  players
-    .filter(player => !player.teamId)
-    .map((player) => {
-      const {
-        uuid,
-        name,
-        email,
-        position,
-      } = player;
-      return {
-        uuid,
-        name,
-        email: email || '(Unprovided)',
-        position,
-      };
-    })
+  players.map((player) => {
+    const {
+      uuid,
+      name,
+      email,
+      position,
+    } = player;
+    return {
+      uuid,
+      name,
+      email: email || '(Unprovided)',
+      position,
+    };
+  })
 );
 
 class Players extends Component {
@@ -66,6 +64,10 @@ class Players extends Component {
         ? `/teams/${teamId}/createPlayers`
         : `/drafts/${draft.uuid}/createPlayers`
     );
+    const nonSelectedPlayers = (
+      parent === 'draft'
+      && players.filter(player => !player.teamId)
+    );
     return (
       players &&
         <div>
@@ -83,7 +85,7 @@ class Players extends Component {
             <SelectionList
               type={type}
               title={title}
-              data={extractDataForDisplay(players)}
+              data={extractDataForDisplay(nonSelectedPlayers || players)}
               emptyDataMessage={noPlayersInDraft}
               positions={positions}
               assignPlayerToTeam={this.assignPlayerToTeam}
