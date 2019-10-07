@@ -65,7 +65,10 @@ module.exports = {
         status,
         timeScheduled,
       } = req.body;
-      const draft = await Draft.findOne({ where: { uuid: req.params.id }, include: [Team] });
+      const draft = await Draft.findOne({
+        where: { uuid: req.params.id },
+        include: [Team, Player],
+      });
       if (!draft) return res.status(404).send({ e: 'Draft not found.' });
       const updatedDraft = await draft.update({
         currentlySelectingTeamId: currentlySelectingTeamId || draft.currentlySelectingTeamId,

@@ -49,7 +49,7 @@ class Players extends Component {
   render() {
     const {
       players,
-      fetchBy,
+      parent,
       teamId,
       draft,
       displayType,
@@ -62,7 +62,7 @@ class Players extends Component {
       columnHeaders,
     } = playersTableTexts;
     const addNewLink = (
-      fetchBy === 'team'
+      parent === 'team'
         ? `/teams/${teamId}/createPlayers`
         : `/drafts/${draft.uuid}/createPlayers`
     );
@@ -75,7 +75,7 @@ class Players extends Component {
               title={title}
               columnHeaders={columnHeaders}
               data={extractDataForDisplay(players)}
-              emptyDataMessage={fetchBy === 'team' ? noPlayersOnTeam : noPlayersInDraft}
+              emptyDataMessage={parent === 'team' ? noPlayersOnTeam : noPlayersInDraft}
               addNewLink={addNewLink}
             />
           }
@@ -99,12 +99,13 @@ Players.defaultProps = {
   teamId: null,
   draft: null,
   socket: null,
+  displayType: 'table',
 };
 
 Players.propTypes = {
   players: PropTypes.arrayOf(PropTypes.object),
-  displayType: PropTypes.string.isRequired,
-  fetchBy: PropTypes.string.isRequired,
+  displayType: PropTypes.string,
+  parent: PropTypes.string.isRequired,
   updatePlayerPropFn: PropTypes.func.isRequired,
   teamId: PropTypes.string,
   draft: PropTypes.objectOf(PropTypes.any),

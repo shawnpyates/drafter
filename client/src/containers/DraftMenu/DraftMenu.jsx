@@ -14,7 +14,7 @@ import {
   Teams,
 } from '..';
 
-import { Timer } from '../../components';
+import { Button, Timer } from '../../components';
 
 import {
   fetchOneDraft,
@@ -45,7 +45,11 @@ class DraftMenu extends Component {
   constructor() {
     super();
     this.socket = null;
+    this.state = {
+      shouldOpenButtonRender: false,
+    };
   }
+
   componentDidMount() {
     const {
       fetchOneDraftPropFn,
@@ -58,6 +62,7 @@ class DraftMenu extends Component {
       fetchOneDraftPropFn();
     });
   }
+
   componentDidUpdate() {
     const { currentDraft, currentUser, updateDraftPropFn } = this.props;
     const now = new Date().toISOString();
@@ -69,7 +74,7 @@ class DraftMenu extends Component {
         Teams: teams,
       } = currentDraft;
       if (status === 'scheduled' && timeScheduled < now) {
-        updateDraftPropFn({ status: 'open' });
+        this.renderOpenButtonForOwner();
       } else if (
         status === 'open'
         && !currentlySelectingTeamId
@@ -80,6 +85,18 @@ class DraftMenu extends Component {
       }
     }
   }
+
+  openDraft = () => {
+    this.props.updateDraftPropFn({ status: 'open' });
+  }
+
+  renderOpenButtonForOwner = () => {
+    const { currentDraft, currentUser } = this.props;
+    if (currentDraft.ownerUserId === currentUser.uuid && !this.state.shouldOpenButtonRender) {
+      this.setState({ shouldOpenButtonRender: true });
+    }
+  }
+
   render() {
     const {
       currentDraft,
@@ -119,6 +136,14 @@ class DraftMenu extends Component {
           />
           {(status === 'scheduled' || status === 'open') &&
             <div>
+              {(this.state.shouldOpenButtonRender && status !== 'open') &&
+                <div>
+                  <Button
+                    value="OPEN"
+                    clickHandler={this.openDraft}
+                  />
+                </div>
+              }
               {status === 'open' && <Timer />}
               <Teams
                 draftId={uuid}
@@ -129,7 +154,7 @@ class DraftMenu extends Component {
               />
               <Players
                 draft={currentDraft}
-                fetchBy="draft"
+                parent="draft"
                 displayType={displayType}
                 socket={this.socket}
                 players={players}
@@ -143,7 +168,7 @@ class DraftMenu extends Component {
             </div>
           }
           {status === 'closed' &&
-            <div>Draft is now open!</div>
+            <div>Draft is now closed!</div>
           }
         </div>
     );

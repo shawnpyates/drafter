@@ -5,7 +5,7 @@ import moment from 'moment';
 
 import { Table } from '../../components';
 
-import { fetchDraftsByUser, fetchDraftsByTeam } from '../../actions';
+import { fetchDraftsByUser } from '../../actions';
 
 import { draftsTable as draftsTableTexts } from '../../../texts.json';
 
@@ -16,7 +16,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => ({
   fetchDraftsByUser: id => dispatch(fetchDraftsByUser(id)),
-  fetchDraftsByTeam: id => dispatch(fetchDraftsByTeam(id)),
 });
 
 const extractDataForDisplay = drafts => (
@@ -43,16 +42,8 @@ const extractDataForDisplay = drafts => (
 
 class Drafts extends Component {
   componentDidMount() {
-    const {
-      fetchBy,
-      userId,
-      teamId,
-    } = this.props;
-    if (fetchBy === 'user') {
-      this.props.fetchDraftsByUser(userId);
-    } else {
-      this.props.fetchDraftsByTeam(teamId);
-    }
+    const { userId } = this.props;
+    this.props.fetchDraftsByUser(userId);
   }
 
   render() {
@@ -82,16 +73,12 @@ class Drafts extends Component {
 
 Drafts.defaultProps = {
   drafts: null,
-  teamId: null,
   userId: null,
 };
 
 Drafts.propTypes = {
   drafts: PropTypes.arrayOf(PropTypes.object),
-  fetchBy: PropTypes.string.isRequired,
-  fetchDraftsByTeam: PropTypes.func.isRequired,
   fetchDraftsByUser: PropTypes.func.isRequired,
-  teamId: PropTypes.string,
   userId: PropTypes.string,
 };
 
