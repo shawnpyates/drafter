@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import { ProfileCard } from '../../components';
 
-import { Drafts, Players } from '..';
+import { Players } from '..';
 
 import { team as teamProfileData } from '../../components/ProfileCard/profileCardConstants.json';
 
@@ -34,13 +34,21 @@ class TeamMenu extends Component {
   }
   render() {
     const { currentTeam } = this.props;
-    const { owner: ownerKey } = profileProperties;
+    const {
+      owner: ownerKey,
+      draft: draftKey,
+    } = profileProperties;
     const {
       uuid,
       name: profileCardTitle,
+      Draft: draft,
+      Players: players,
       User: owner,
     } = currentTeam || {};
-    const profileCardData = { [ownerKey]: owner && `${owner.firstName} ${owner.lastName}` };
+    const profileCardData = {
+      [ownerKey]: owner && `${owner.firstName} ${owner.lastName}`,
+      [draftKey]: draft && draft.name,
+    };
     const profileCardLinkForUpdating = `/updateTeam/${uuid}`;
     return (
       currentTeam &&
@@ -50,8 +58,11 @@ class TeamMenu extends Component {
             data={profileCardData}
             linkForUpdating={profileCardLinkForUpdating}
           />
-          <Drafts teamId={uuid} fetchBy="team" />
-          <Players teamId={uuid} fetchBy="team" />
+          <Players
+            teamId={uuid}
+            parent="team"
+            players={players}
+          />
         </div>
     );
   }

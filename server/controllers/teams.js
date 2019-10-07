@@ -32,7 +32,7 @@ module.exports = {
     try {
       const team = await Team.findOne({
         where: { uuid: req.params.id },
-        include: [User],
+        include: [Draft, Player, User],
       });
       return res.status(200).send({ team });
     } catch (e) {

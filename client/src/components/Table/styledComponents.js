@@ -32,12 +32,12 @@ const AddNewButton = styled.a`
   border-radius: 2rem;
   text-align: center;
   font-weight: 500;
-  color: ${WHITE} !important;
+  color: ${WHITE};
   cursor: pointer;
   margin-right: 4rem;
 
   &:hover {
-    color: ${SKY_BLUE} !important;
+    color: ${SKY_BLUE};
     text-decoration: none;
   }
 `;

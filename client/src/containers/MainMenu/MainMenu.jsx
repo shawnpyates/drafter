@@ -37,7 +37,7 @@ const MainMenu = ({ currentUser }) => {
         data={profileCardData}
         linkForUpdating={profileCardLinkForUpdating}
       />
-      <Drafts userId={currentUser.uuid} fetchBy="user" />
+      <Drafts userId={currentUser.uuid} />
       <Teams userId={currentUser.uuid} fetchBy="user" displayType="table" />
       <Requests userId={currentUser.uuid} fetchBy="requester" />
       <Requests userId={currentUser.uuid} fetchBy="draftOwner" />

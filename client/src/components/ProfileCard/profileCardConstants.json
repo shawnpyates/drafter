@@ -15,7 +15,8 @@
   },
   "team": {
     "properties": {
-      "owner": "Owner"
+      "owner": "Owner",
+      "draft": "Draft"
     }
   }
 }
