@@ -16,9 +16,9 @@ const checkForHashThenRender = () => {
 
 class LoggedInView extends Component {
   componentDidMount() {
-    this.props.socket.on('broadcastDraftStart', () => {
+    this.props.socket.on('broadcastDraftStart', (draftId) => {
       const { pathname } = window.location;
-      if (!pathname.includes) {
+      if (!pathname.includes(draftId)) {
         console.log('TODO: send notification for draft starting');
       }
     })

@@ -76,7 +76,11 @@ class DraftMenu extends Component {
         currentlySelectingTeamId,
         Teams: teams,
       } = currentDraft;
-      if (status === 'scheduled' && timeScheduled < now) {
+      if (
+        status === 'scheduled'
+        && timeScheduled < now
+        && !this.state.shouldStartDraftIndicatorRender
+      ) {
         this.renderOpenButtonForOwner();
       } else if (
         status === 'open'
@@ -96,11 +100,12 @@ class DraftMenu extends Component {
     const { uuid: currentDraftId } = this.props.currentDraft || {};
     socket.on('broadcastDraftSelection', (draftId) => {
       if (currentDraftId === draftId) {
-        fetchOneDraftPropFn();
+        this.props.fetchOneDraftPropFn();
       }
     });
     socket.on('broadcastDraftStart', (draftId) => {
       if (currentDraftId === draftId) {
+        this.props.fetchOneDraftPropFn();
         this.setState({
           shouldOpenButtonRender: false,
           shouldStartDraftIndicatorRender: true,

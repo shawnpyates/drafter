@@ -26,7 +26,8 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-require('./server/routes')(app, io);
+require('./server/draftSocketManager')(io);
+require('./server/routes')(app);
 
 app.get('*', (req, res) => {
   const params = Object.values(req.params).join('/');
