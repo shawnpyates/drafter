@@ -28,15 +28,14 @@ module.exports = (app, io) => {
   app.delete('/api/drafts/:id', drafts.destroy);
 
   const draftManager = io.of('/drafts').on('connection', (socket) => {
-    socket.on('joinDraft', (draftSocketId) => {
-      socket.join(draftSocketId);
-      draftManager.to(draftSocketId).emit('joinedDraft', draftSocketId);
+    socket.on('joinDraft', (draftId) => {
+      socket.join(draftId);
     });
-    socket.on('draftSelection', (draftSocketId) => {
-      draftManager.to(draftSocketId).emit('broadcastDraftSelection');
+    socket.on('draftSelection', (draftId) => {
+      draftManager.to(draftId).emit('broadcastDraftSelection', draftId);
     });
-    socket.on('draftStarted', (draftSocketId) => {
-      draftManager.to(draftSocketId).emit('broadcastDraftStart');
+    socket.on('draftStarted', (draftId) => {
+      draftManager.to(draftId).emit('broadcastDraftStart', draftId);
     });
   });
 

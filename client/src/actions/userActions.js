@@ -1,7 +1,10 @@
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
+import ioClient from 'socket.io-client';
 
 const { localStorage } = window;
+
+const { SERVER_URL } = process.env;
 
 export const fetchCurrentUser = () => {
   const token = localStorage.getItem('drafterUserToken');
@@ -15,6 +18,12 @@ export const fetchCurrentUser = () => {
         axios.get(`/api/users/${userId}`)
           .then((response) => {
             const { user } = response.data;
+            const socket = ioClient(`${SERVER_URL}/drafts`);
+            const { Drafts: drafts } = user;
+            drafts.forEach((draft) => {
+              socket.emit('joinDraft', draft.uuid);
+            });
+            dispatch({ type: 'WRITE_SOCKET_CONNECTION_TO_STATE', payload: socket });
             dispatch({ type: 'FETCH_CURRENT_USER_FULFILLED', payload: user });
           })
           .catch((dbFetchingError) => {

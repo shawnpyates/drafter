@@ -34,7 +34,6 @@ class Players extends Component {
     const {
       draft,
       socket,
-      draftSocketId,
       updatePlayerPropFn,
     } = this.props;
     const { currentlySelectingTeamId } = draft;
@@ -42,7 +41,7 @@ class Players extends Component {
       id: playerId,
       body: { teamId: currentlySelectingTeamId },
       socket,
-      draftSocketId,
+      draftId: draft.uuid,
     });
   }
 

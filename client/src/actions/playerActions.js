@@ -42,14 +42,14 @@ export const updatePlayer = ({
   id,
   body,
   socket,
-  draftSocketId,
+  draftId,
 }) => (dispatch) => {
   dispatch({ type: 'UPDATE_PLAYER_PENDING' });
   return axios.put(`/api/players/${id}`, body)
     .then((response) => {
       const { player } = response.data;
       if (socket) {
-        socket.emit('draftSelection', draftSocketId);
+        socket.emit('draftSelection', draftId);
       }
       dispatch({ type: 'UPDATE_PLAYER_FULFILLED', payload: player });
     })

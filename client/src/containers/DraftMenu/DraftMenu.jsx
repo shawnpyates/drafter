@@ -22,8 +22,6 @@ import {
   updateDraft,
 } from '../../actions';
 
-const { SERVER_URL } = process.env;
-
 const { properties: profileProperties, values: profileValues } = draftProfileData;
 
 const START_DRAFT_INDICATOR_DURATION = 3000;
@@ -31,7 +29,8 @@ const START_DRAFT_INDICATOR_DURATION = 3000;
 const mapStateToProps = (state) => {
   const { currentDraft } = state.draft;
   const { currentUser } = state.user;
-  return { currentDraft, currentUser };
+  const { socket } = state.socket;
+  return { currentDraft, currentUser, socket };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
@@ -46,11 +45,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 class DraftMenu extends Component {
   constructor() {
     super();
-    this.socket = null;
-    this.draftSocketId = null;
     this.state = {
       shouldOpenButtonRender: false,
       shouldStartDraftIndicatorRender: false,
+      isUserFetchComplete: false,
     };
   }
 
@@ -61,28 +59,17 @@ class DraftMenu extends Component {
     } = this.props;
     fetchOneDraftPropFn();
     fetchCurrentUserPropFn();
-    this.socket = ioClient(`${SERVER_URL}/drafts`);
-    const { id: draftId } = this.props.match.params;
-    this.draftSocketId = `drafts_${draftId}`;
-    this.socket.emit('joinDraft', this.draftSocketId);
-    this.socket.on('broadcastDraftSelection', () => {
-      fetchOneDraftPropFn();
-    });
-    this.socket.on('broadcastDraftStart', () => {
-      this.setState({
-        shouldOpenButtonRender: false,
-        shouldStartDraftIndicatorRender: true,
-      });
-      setTimeout(() => {
-        this.setState({ shouldStartDraftIndicatorRender: false });
-      }, START_DRAFT_INDICATOR_DURATION);
-    });
   }
 
   componentDidUpdate() {
-    const { currentDraft, currentUser, updateDraftPropFn } = this.props;
-    const now = new Date().toISOString();
+    const {
+      currentDraft,
+      currentUser,
+      updateDraftPropFn,
+      socket,
+    } = this.props;
     if (currentDraft) {
+      const now = new Date().toISOString();
       const {
         status,
         timeScheduled,
@@ -100,11 +87,34 @@ class DraftMenu extends Component {
         updateDraftPropFn({ currentlySelectingTeamId: teams[0].uuid });
       }
     }
+    if (!this.state.isUserFetchComplete && currentUser) {
+      this.listenForSocketEvents(socket);
+    }
+  }
+
+  listenForSocketEvents = (socket) => {
+    const { uuid: currentDraftId } = this.props.currentDraft || {};
+    socket.on('broadcastDraftSelection', (draftId) => {
+      if (currentDraftId === draftId) {
+        fetchOneDraftPropFn();
+      }
+    });
+    socket.on('broadcastDraftStart', (draftId) => {
+      if (currentDraftId === draftId) {
+        this.setState({
+          shouldOpenButtonRender: false,
+          shouldStartDraftIndicatorRender: true,
+        });
+        setTimeout(() => {
+          this.setState({ shouldStartDraftIndicatorRender: false });
+        }, START_DRAFT_INDICATOR_DURATION);
+      }
+    });
   }
 
   openDraft = () => {
     this.props.updateDraftPropFn({ status: 'open' });
-    this.socket.emit('draftStarted', this.draftSocketId);
+    this.props.socket.emit('draftStarted', this.props.currentDraft.uuid);
   }
 
   renderOpenButtonForOwner = () => {
@@ -178,8 +188,7 @@ class DraftMenu extends Component {
                 draft={currentDraft}
                 parent="draft"
                 displayType={displayType}
-                socket={this.socket}
-                draftSocketId={this.draftSocketId}
+                socket={this.props.socket}
                 players={players}
               />
               {(currentDraft.ownerUserId === currentUser.uuid && status === 'scheduled') &&
