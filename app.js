@@ -16,14 +16,6 @@ const server = app.listen(process.env.PORT, () => {
 
 const io = socket(server);
 
-io.on('connection', (s) => {
-  console.log('connection established');
-  s.join('draftSelectionRoom');
-  s.on('draftSelection', () => {
-    io.to('draftSelectionRoom').emit('broadcastDraftSelection');
-  });
-});
-
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -34,7 +26,7 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-require('./server/routes')(app);
+require('./server/routes')(app, io);
 
 app.get('*', (req, res) => {
   const params = Object.values(req.params).join('/');

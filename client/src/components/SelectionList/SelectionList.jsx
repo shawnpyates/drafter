@@ -44,7 +44,7 @@ class SelectionList extends Component {
             } = item;
             const isFocussed = uuid === this.state.focussedPlayerId;
             return (
-              <div>
+              <div key={uuid}>
                 <ListItem
                   isCurrentlySelecting={isCurrentlySelecting}
                   isFocussed={isFocussed}

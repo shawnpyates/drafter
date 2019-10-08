@@ -8,7 +8,7 @@ const {
   userDrafts,
 } = require('../controllers');
 
-module.exports = (app) => {
+module.exports = (app, io) => {
   app.get('/api', (req, res) => {
     res.status(200).send({ message: 'Welcome to the Drafter API.' });
   });
@@ -26,6 +26,19 @@ module.exports = (app) => {
   app.post('/api/drafts', drafts.create);
   app.put('/api/drafts/:id', drafts.update);
   app.delete('/api/drafts/:id', drafts.destroy);
+
+  const draftManager = io.of('/drafts').on('connection', (socket) => {
+    socket.on('joinDraft', (draftSocketId) => {
+      socket.join(draftSocketId);
+      draftManager.to(draftSocketId).emit('joinedDraft', draftSocketId);
+    });
+    socket.on('draftSelection', (draftSocketId) => {
+      draftManager.to(draftSocketId).emit('broadcastDraftSelection');
+    });
+    socket.on('draftStarted', (draftSocketId) => {
+      draftManager.to(draftSocketId).emit('broadcastDraftStart');
+    });
+  });
 
   // teams
   app.get('/api/teams/:id', teams.fetchOne);

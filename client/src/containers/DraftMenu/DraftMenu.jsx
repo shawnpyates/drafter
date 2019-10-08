@@ -26,6 +26,8 @@ const { SERVER_URL } = process.env;
 
 const { properties: profileProperties, values: profileValues } = draftProfileData;
 
+const START_DRAFT_INDICATOR_DURATION = 3000;
+
 const mapStateToProps = (state) => {
   const { currentDraft } = state.draft;
   const { currentUser } = state.user;
@@ -45,8 +47,10 @@ class DraftMenu extends Component {
   constructor() {
     super();
     this.socket = null;
+    this.draftSocketId = null;
     this.state = {
       shouldOpenButtonRender: false,
+      shouldStartDraftIndicatorRender: false,
     };
   }
 
@@ -57,9 +61,21 @@ class DraftMenu extends Component {
     } = this.props;
     fetchOneDraftPropFn();
     fetchCurrentUserPropFn();
-    this.socket = ioClient(SERVER_URL);
+    this.socket = ioClient(`${SERVER_URL}/drafts`);
+    const { id: draftId } = this.props.match.params;
+    this.draftSocketId = `drafts_${draftId}`;
+    this.socket.emit('joinDraft', this.draftSocketId);
     this.socket.on('broadcastDraftSelection', () => {
       fetchOneDraftPropFn();
+    });
+    this.socket.on('broadcastDraftStart', () => {
+      this.setState({
+        shouldOpenButtonRender: false,
+        shouldStartDraftIndicatorRender: true,
+      });
+      setTimeout(() => {
+        this.setState({ shouldStartDraftIndicatorRender: false });
+      }, START_DRAFT_INDICATOR_DURATION);
     });
   }
 
@@ -88,6 +104,7 @@ class DraftMenu extends Component {
 
   openDraft = () => {
     this.props.updateDraftPropFn({ status: 'open' });
+    this.socket.emit('draftStarted', this.draftSocketId);
   }
 
   renderOpenButtonForOwner = () => {
@@ -144,6 +161,11 @@ class DraftMenu extends Component {
                   />
                 </div>
               }
+              {this.state.shouldStartDraftIndicatorRender &&
+                <div>
+                  Draft is started!
+                </div>
+              }
               {status === 'open' && <Timer />}
               <Teams
                 draftId={uuid}
@@ -157,13 +179,11 @@ class DraftMenu extends Component {
                 parent="draft"
                 displayType={displayType}
                 socket={this.socket}
+                draftSocketId={this.draftSocketId}
                 players={players}
               />
-              {
-                (
-                  currentDraft.ownerUserId === currentUser.uuid
-                  && status === 'scheduled'
-                ) && <Requests draftId={uuid} fetchBy="draft" />
+              {(currentDraft.ownerUserId === currentUser.uuid && status === 'scheduled') &&
+                <Requests draftId={uuid} fetchBy="draft" />
               }
             </div>
           }
