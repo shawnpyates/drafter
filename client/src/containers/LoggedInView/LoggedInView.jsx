@@ -7,6 +7,8 @@ import componentRoutes from './componentRoutes';
 
 import { NotificationContainer, NotificationText } from './styledComponents';
 
+const { SERVER_URL } = process.env;
+
 const ALERT_DISPLAY_DURATION = 10000;
 
 const checkForHashThenRender = () => {
@@ -18,11 +20,14 @@ const checkForHashThenRender = () => {
   );
 };
 
+const getDraftUrl = (draftId) => `${SERVER_URL}/drafts/${draftId}/show`;
+
 class LoggedInView extends Component {
   constructor() {
     super();
     this.state = {
       shouldNotificationRender: false,
+      notificationDraftId: null,
       notificationDraftName: null,
     };
   }
@@ -30,13 +35,25 @@ class LoggedInView extends Component {
     this.props.socket.on('broadcastDraftStart', ({ draftId, draftName }) => {
       const { pathname } = window.location;
       if (!pathname.includes(draftId)) {
-        this.setState({ shouldNotificationRender: true, notificationDraftName: draftName }, () => {
+        this.setState({
+          shouldNotificationRender: true,
+          notificationDraftId: draftId,
+          notificationDraftName: draftName,
+         }, () => {
           setTimeout(() => {
-            this.setState({ shouldNotificationRender: false, notificationDraftName: null });
+            this.setState({
+              shouldNotificationRender: false,
+              notificationDraftId: null,
+              notificationDraftName: null,
+            });
           }, ALERT_DISPLAY_DURATION);
         });
       }
     })
+  }
+
+  handleNotificationClick = () => {
+    window.location.replace(getDraftUrl(this.state.notificationDraftId));
   }
 
   render() {
@@ -44,7 +61,7 @@ class LoggedInView extends Component {
     return (
       <div>
         {shouldNotificationRender &&
-          <NotificationContainer>
+          <NotificationContainer onClick={this.handleNotificationClick}>
             <NotificationText>
               {notificationDraftName} has been started by its owner. Click here to go there!
             </NotificationText>
