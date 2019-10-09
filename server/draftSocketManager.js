@@ -6,8 +6,8 @@ module.exports = (io) => {
     socket.on('draftSelection', (draftId) => {
       draftSocketManager.to(draftId).emit('broadcastDraftSelection', draftId);
     });
-    socket.on('draftStarted', (draftId) => {
-      draftSocketManager.to(draftId).emit('broadcastDraftStart', draftId);
+    socket.on('draftStarted', ({ draftId, draftName }) => {
+      draftSocketManager.to(draftId).emit('broadcastDraftStart', { draftId, draftName });
     });
   });
 };

@@ -118,8 +118,19 @@ class DraftMenu extends Component {
   }
 
   openDraft = () => {
-    this.props.updateDraftPropFn({ status: 'open' });
-    this.props.socket.emit('draftStarted', this.props.currentDraft.uuid);
+    const {
+      currentDraft: {
+        uuid: draftId,
+        name: draftName,
+      },
+      updateDraftPropFn,
+      socket,
+    } = this.props;
+    updateDraftPropFn({ status: 'open' });
+    socket.emit(
+      'draftStarted',
+      { draftId, draftName }
+    );
   }
 
   renderOpenButtonForOwner = () => {

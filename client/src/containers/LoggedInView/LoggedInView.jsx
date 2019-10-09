@@ -5,6 +5,10 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import { MainMenu } from '..';
 import componentRoutes from './componentRoutes';
 
+import { NotificationContainer, NotificationText } from './styledComponents';
+
+const ALERT_DISPLAY_DURATION = 10000;
+
 const checkForHashThenRender = () => {
   const { hash } = window.location;
   return (
@@ -15,21 +19,42 @@ const checkForHashThenRender = () => {
 };
 
 class LoggedInView extends Component {
+  constructor() {
+    super();
+    this.state = {
+      shouldNotificationRender: false,
+      notificationDraftName: null,
+    };
+  }
   componentDidMount() {
-    this.props.socket.on('broadcastDraftStart', (draftId) => {
+    this.props.socket.on('broadcastDraftStart', ({ draftId, draftName }) => {
       const { pathname } = window.location;
       if (!pathname.includes(draftId)) {
-        console.log('TODO: send notification for draft starting');
+        this.setState({ shouldNotificationRender: true, notificationDraftName: draftName }, () => {
+          setTimeout(() => {
+            this.setState({ shouldNotificationRender: false, notificationDraftName: null });
+          }, ALERT_DISPLAY_DURATION);
+        });
       }
     })
   }
 
   render() {
+    const { shouldNotificationRender, notificationDraftName } = this.state;
     return (
-      <Switch>
-        <Route exact path="/" render={() => checkForHashThenRender()} />
-        {componentRoutes.map(route => <Route path={route.path} component={route.component} />)}
-      </Switch>
+      <div>
+        {shouldNotificationRender &&
+          <NotificationContainer>
+            <NotificationText>
+              {notificationDraftName} has been started by its owner. Click here to go there!
+            </NotificationText>
+          </NotificationContainer>
+        }
+        <Switch>
+          <Route exact path="/" render={() => checkForHashThenRender()} />
+          {componentRoutes.map(route => <Route path={route.path} component={route.component} />)}
+        </Switch>
+      </div>
     );
   }
 };
