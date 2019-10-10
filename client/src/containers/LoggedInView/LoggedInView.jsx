@@ -20,7 +20,11 @@ const checkForHashThenRender = () => {
   );
 };
 
-const getDraftUrl = (draftId) => `${SERVER_URL}/drafts/${draftId}/show`;
+const getDraftUrl = draftId => `${SERVER_URL}/drafts/${draftId}/show`;
+
+const getNotificationText = draftName => (
+  `${draftName} has been started by its owner. Click here to go there!`
+);
 
 class LoggedInView extends Component {
   constructor() {
@@ -31,15 +35,17 @@ class LoggedInView extends Component {
       notificationDraftName: null,
     };
   }
+
   componentDidMount() {
-    this.props.socket.on('broadcastDraftStart', ({ draftId, draftName }) => {
+    const { socket } = this.props;
+    socket.on('broadcastDraftStart', ({ draftId, draftName }) => {
       const { pathname } = window.location;
       if (!pathname.includes(draftId)) {
         this.setState({
           shouldNotificationRender: true,
           notificationDraftId: draftId,
           notificationDraftName: draftName,
-         }, () => {
+        }, () => {
           setTimeout(() => {
             this.setState({
               shouldNotificationRender: false,
@@ -49,23 +55,26 @@ class LoggedInView extends Component {
           }, ALERT_DISPLAY_DURATION);
         });
       }
-    })
+    });
   }
 
   handleNotificationClick = () => {
-    window.location.replace(getDraftUrl(this.state.notificationDraftId));
+    const { notificationDraftId } = this.state;
+    window.location.replace(getDraftUrl(notificationDraftId));
   }
 
   render() {
     const { shouldNotificationRender, notificationDraftName } = this.state;
     return (
       <div>
-        {shouldNotificationRender &&
-          <NotificationContainer onClick={this.handleNotificationClick}>
-            <NotificationText>
-              {notificationDraftName} has been started by its owner. Click here to go there!
-            </NotificationText>
-          </NotificationContainer>
+        {shouldNotificationRender
+          && (
+            <NotificationContainer onClick={this.handleNotificationClick}>
+              <NotificationText>
+                {getNotificationText(notificationDraftName)}
+              </NotificationText>
+            </NotificationContainer>
+          )
         }
         <Switch>
           <Route exact path="/" render={() => checkForHashThenRender()} />
@@ -74,10 +83,14 @@ class LoggedInView extends Component {
       </div>
     );
   }
+}
+
+LoggedInView.defaultProps = {
+  socket: null,
 };
 
 LoggedInView.propTypes = {
   socket: PropTypes.objectOf(PropTypes.any),
-}
+};
 
 export default LoggedInView;

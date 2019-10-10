@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import ioClient from 'socket.io-client';
 
 
 import ProfileCard from '../../components/ProfileCard/ProfileCard';
@@ -27,10 +26,11 @@ const { properties: profileProperties, values: profileValues } = draftProfileDat
 const START_DRAFT_INDICATOR_DURATION = 3000;
 
 const mapStateToProps = (state) => {
-  const { currentDraft } = state.draft;
-  const { currentUser } = state.user;
-  const { socket } = state.socket;
-  return { currentDraft, currentUser, socket };
+  const { draft, socket: socketState, user } = state;
+  const { currentDraft } = draft;
+  const { socket } = socketState;
+  const { currentUser } = user;
+  return { currentDraft, socket, currentUser };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
@@ -68,6 +68,10 @@ class DraftMenu extends Component {
       updateDraftPropFn,
       socket,
     } = this.props;
+    const {
+      isUserFetchComplete,
+      shouldStartDraftIndicatorRender,
+    } = this.state;
     if (currentDraft) {
       const now = new Date().toISOString();
       const {
@@ -79,7 +83,7 @@ class DraftMenu extends Component {
       if (
         status === 'scheduled'
         && timeScheduled < now
-        && !this.state.shouldStartDraftIndicatorRender
+        && !shouldStartDraftIndicatorRender
       ) {
         this.renderOpenButtonForOwner();
       } else if (
@@ -91,21 +95,25 @@ class DraftMenu extends Component {
         updateDraftPropFn({ currentlySelectingTeamId: teams[0].uuid });
       }
     }
-    if (!this.state.isUserFetchComplete && currentUser) {
+    if (!isUserFetchComplete && currentUser) {
       this.listenForSocketEvents(socket);
     }
   }
 
   listenForSocketEvents = (socket) => {
-    const { uuid: currentDraftId } = this.props.currentDraft || {};
+    const {
+      currentDraft,
+      fetchOneDraftPropFn,
+    } = this.props;
+    const { uuid: currentDraftId } = currentDraft || {};
     socket.on('broadcastDraftSelection', (draftId) => {
       if (currentDraftId === draftId) {
-        this.props.fetchOneDraftPropFn();
+        fetchOneDraftPropFn();
       }
     });
-    socket.on('broadcastDraftStart', (draftId) => {
+    socket.on('broadcastDraftStart', ({ draftId }) => {
       if (currentDraftId === draftId) {
-        this.props.fetchOneDraftPropFn();
+        fetchOneDraftPropFn();
         this.setState({
           shouldOpenButtonRender: false,
           shouldStartDraftIndicatorRender: true,
@@ -129,13 +137,14 @@ class DraftMenu extends Component {
     updateDraftPropFn({ status: 'open' });
     socket.emit(
       'draftStarted',
-      { draftId, draftName }
+      { draftId, draftName },
     );
   }
 
   renderOpenButtonForOwner = () => {
     const { currentDraft, currentUser } = this.props;
-    if (currentDraft.ownerUserId === currentUser.uuid && !this.state.shouldOpenButtonRender) {
+    const { shouldOpenButtonRender } = this.state;
+    if (currentDraft.ownerUserId === currentUser.uuid && !shouldOpenButtonRender) {
       this.setState({ shouldOpenButtonRender: true });
     }
   }
@@ -145,7 +154,12 @@ class DraftMenu extends Component {
       currentDraft,
       currentUser,
       match,
+      socket,
     } = this.props;
+    const {
+      shouldOpenButtonRender,
+      shouldStartDraftIndicatorRender,
+    } = this.state;
     const {
       uuid,
       timeScheduled,
@@ -170,28 +184,32 @@ class DraftMenu extends Component {
     const profileCardLinkForUpdating = `/updateDraft/${uuid}`;
     const displayType = status === 'scheduled' ? 'table' : 'selectionList';
     return (
-      currentDraft &&
+      currentDraft
+      && (
         <div>
           <ProfileCard
             title={profileCardTitle}
             data={profileCardData}
             linkForUpdating={profileCardLinkForUpdating}
           />
-          {(status === 'scheduled' || status === 'open') &&
+          {(status === 'scheduled' || status === 'open')
+          && (
             <div>
-              {(this.state.shouldOpenButtonRender && status !== 'open') &&
+              {(shouldOpenButtonRender && status !== 'open')
+              && (
                 <div>
                   <Button
                     value="OPEN"
                     clickHandler={this.openDraft}
                   />
                 </div>
-              }
-              {this.state.shouldStartDraftIndicatorRender &&
+              )}
+              {shouldStartDraftIndicatorRender
+              && (
                 <div>
                   Draft is started!
                 </div>
-              }
+              )}
               {status === 'open' && <Timer />}
               <Teams
                 draftId={uuid}
@@ -204,18 +222,20 @@ class DraftMenu extends Component {
                 draft={currentDraft}
                 parent="draft"
                 displayType={displayType}
-                socket={this.props.socket}
+                socket={socket}
                 players={players}
               />
-              {(currentDraft.ownerUserId === currentUser.uuid && status === 'scheduled') &&
-                <Requests draftId={uuid} fetchBy="draft" />
+              {(currentDraft.ownerUserId === currentUser.uuid && status === 'scheduled')
+                && <Requests draftId={uuid} fetchBy="draft" />
               }
             </div>
-          }
-          {status === 'closed' &&
+          )}
+          {status === 'closed'
+          && (
             <div>Draft is now closed!</div>
-          }
+          )}
         </div>
+      )
     );
   }
 }
@@ -231,6 +251,7 @@ DraftMenu.propTypes = {
   fetchCurrentUserPropFn: PropTypes.func.isRequired,
   fetchOneDraftPropFn: PropTypes.func.isRequired,
   match: PropTypes.objectOf(PropTypes.any).isRequired,
+  socket: PropTypes.objectOf(PropTypes.any).isRequired,
   updateDraftPropFn: PropTypes.func.isRequired,
 };
 
