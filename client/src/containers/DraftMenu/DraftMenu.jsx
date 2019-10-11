@@ -21,22 +21,27 @@ import {
   updateDraft,
 } from '../../actions';
 
-const { properties: profileProperties, values: profileValues } = draftProfileData;
+import { InfoContainer, InfoText } from './styledComponents';
 
-const START_DRAFT_INDICATOR_DURATION = 3000;
+const { properties: profileProperties, values: profileValues } = draftProfileData;
 
 const mapStateToProps = (state) => {
   const { draft, socket: socketState, user } = state;
-  const { currentDraft } = draft;
+  const { currentDraft, draftInfoText } = draft;
   const { socket } = socketState;
   const { currentUser } = user;
-  return { currentDraft, socket, currentUser };
+  return {
+    currentDraft,
+    draftInfoText,
+    socket,
+    currentUser,
+  };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   const { id } = ownProps.match.params;
   return {
-    fetchOneDraftPropFn: () => dispatch(fetchOneDraft(id)),
+    fetchOneDraftPropFn: (isStart) => dispatch(fetchOneDraft(id, isStart)),
     fetchCurrentUserPropFn: () => dispatch(fetchCurrentUser()),
     updateDraftPropFn: body => dispatch(updateDraft({ id, body })),
   };
@@ -67,11 +72,9 @@ class DraftMenu extends Component {
       currentUser,
       updateDraftPropFn,
       socket,
+      draftInfoText,
     } = this.props;
-    const {
-      isUserFetchComplete,
-      shouldStartDraftIndicatorRender,
-    } = this.state;
+    const { isUserFetchComplete } = this.state;
     if (currentDraft) {
       const now = new Date().toISOString();
       const {
@@ -83,7 +86,7 @@ class DraftMenu extends Component {
       if (
         status === 'scheduled'
         && timeScheduled < now
-        && !shouldStartDraftIndicatorRender
+        && !draftInfoText
       ) {
         this.renderOpenButtonForOwner();
       } else if (
@@ -113,14 +116,8 @@ class DraftMenu extends Component {
     });
     socket.on('broadcastDraftStart', ({ draftId }) => {
       if (currentDraftId === draftId) {
-        fetchOneDraftPropFn();
-        this.setState({
-          shouldOpenButtonRender: false,
-          shouldStartDraftIndicatorRender: true,
-        });
-        setTimeout(() => {
-          this.setState({ shouldStartDraftIndicatorRender: false });
-        }, START_DRAFT_INDICATOR_DURATION);
+        fetchOneDraftPropFn(true);
+        this.setState({ shouldOpenButtonRender: false });
       }
     });
   }
@@ -134,11 +131,13 @@ class DraftMenu extends Component {
       updateDraftPropFn,
       socket,
     } = this.props;
-    updateDraftPropFn({ status: 'open' });
-    socket.emit(
-      'draftStarted',
-      { draftId, draftName },
-    );
+    updateDraftPropFn({ status: 'open' })
+      .then(() => {
+        socket.emit(
+          'draftStarted',
+          { draftId, draftName },
+        );
+      });
   }
 
   renderOpenButtonForOwner = () => {
@@ -155,10 +154,10 @@ class DraftMenu extends Component {
       currentUser,
       match,
       socket,
+      draftInfoText,
     } = this.props;
     const {
       shouldOpenButtonRender,
-      shouldStartDraftIndicatorRender,
     } = this.state;
     const {
       uuid,
@@ -204,12 +203,14 @@ class DraftMenu extends Component {
                   />
                 </div>
               )}
-              {shouldStartDraftIndicatorRender
-              && (
-                <div>
-                  Draft is started!
-                </div>
-              )}
+              <InfoContainer>
+                {draftInfoText
+                && (
+                  <InfoText>
+                    {draftInfoText}
+                  </InfoText>
+                )}
+              </InfoContainer>
               {status === 'open' && <Timer />}
               <Teams
                 draftId={uuid}

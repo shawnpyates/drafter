@@ -13,6 +13,7 @@ const initialState = {
   errorOnFetchDraftsFromOwner: null,
   errorOnFetchOneDraft: null,
   errorOnUpdateDraft: null,
+  draftInfoText: null,
 };
 
 const draftReducer = (state = initialState, action) => {
@@ -101,6 +102,12 @@ const draftReducer = (state = initialState, action) => {
         updated: true,
         currentDraft: action.payload,
       };
+    }
+    case 'SET_DRAFT_INFO_TEXT': {
+      return {
+        ...state,
+        draftInfoText: action.payload,
+      }
     }
 
     default:
