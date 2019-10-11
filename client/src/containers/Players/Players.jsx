@@ -9,7 +9,7 @@ import { updatePlayer } from '../../actions';
 import { playersTable as playersTableTexts, positions } from '../../../texts.json';
 
 const mapDispatchToProps = dispatch => ({
-  updatePlayerPropFn: (id, body, socket) => dispatch(updatePlayer({ id, body, socket })),
+  updatePlayerPropFn: args => dispatch(updatePlayer(args)),
 });
 
 const extractDataForDisplay = players => (
@@ -37,11 +37,12 @@ class Players extends Component {
       updatePlayerPropFn,
     } = this.props;
     const { currentlySelectingTeamId } = draft;
-    updatePlayerPropFn(
-      playerId,
-      { teamId: currentlySelectingTeamId },
+    updatePlayerPropFn({
+      id: playerId,
+      body: { teamId: currentlySelectingTeamId },
       socket,
-    );
+      draftId: draft.uuid,
+    });
   }
 
   render() {
@@ -101,6 +102,7 @@ Players.defaultProps = {
   teamId: null,
   draft: null,
   socket: null,
+  draftSocketId: null,
   displayType: 'table',
 };
 
@@ -112,6 +114,7 @@ Players.propTypes = {
   teamId: PropTypes.string,
   draft: PropTypes.objectOf(PropTypes.any),
   socket: PropTypes.objectOf(PropTypes.any),
+  draftSocketId: PropTypes.string,
 };
 
 export default connect(null, mapDispatchToProps)(Players);

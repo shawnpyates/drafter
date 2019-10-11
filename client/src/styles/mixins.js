@@ -3,7 +3,6 @@ import {
   WHITE,
   SMALL_FONT_SIZE,
   NORMAL_FONT_SIZE,
-  DEFAULT_FONT,
 } from './styleVars';
 
 module.exports = {
@@ -39,5 +38,10 @@ module.exports = {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
+  `,
+  VERTICALLY_CENTER_CONTENT_MIXIN: `
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
   `,
 };

@@ -13,7 +13,8 @@ const { localStorage } = window;
 
 const mapStateToProps = (state) => {
   const { currentUser, errorOnFetchCurrentUser } = state.user;
-  return { currentUser, errorOnFetchCurrentUser };
+  const { socket } = state.socket;
+  return { currentUser, errorOnFetchCurrentUser, socket };
 };
 
 const mapDispatchToProps = dispatch => ({
@@ -25,6 +26,7 @@ class App extends Component {
     super();
     this.state = {
       isTokenMissing: false,
+      isUserFetchComplete: false,
     };
   }
 
@@ -44,13 +46,13 @@ class App extends Component {
   }
 
   render() {
-    const { currentUser, errorOnFetchCurrentUser } = this.props;
+    const { currentUser, errorOnFetchCurrentUser, socket } = this.props;
     return (
       <Router>
         <AppContainer>
           <Header currentUser={currentUser} />
-          {currentUser &&
-            <LoggedInView />
+          {(currentUser && socket) &&
+            <LoggedInView socket={socket} />
           }
           {(!currentUser && (this.state.isTokenMissing || errorOnFetchCurrentUser)) &&
             <LoggedOutView />

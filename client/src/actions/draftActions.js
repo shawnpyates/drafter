@@ -1,5 +1,9 @@
 import axios from 'axios';
 
+const DRAFT_OPEN_TEXT = 'Draft is now starting!';
+
+const DISPLAY_OPEN_TEXT_DURATION = 5000;
+
 export const createDraft = body => (dispatch) => {
   dispatch({ type: 'CREATE_DRAFT_PENDING ' });
   return axios.post('/api/drafts', body)
@@ -49,12 +53,20 @@ export const fetchDraftsByUser = userId => (dispatch) => {
     });
 };
 
-export const fetchOneDraft = id => (dispatch) => {
+export const fetchOneDraft = (id, isStart) => (dispatch) => {
   dispatch({ type: 'FETCH_ONE_DRAFT_PENDING' });
   axios.get(`/api/drafts/${id}`)
     .then((response) => {
       const { draft } = response.data;
       dispatch({ type: 'FETCH_ONE_DRAFT_FULFILLED', payload: draft });
+      if (draft.status === 'open') {
+        setDraftInfoText({
+          dispatch,
+          body: null,
+          draft,
+          isStart,
+        });
+      }
     })
     .catch((err) => {
       dispatch({ type: 'FETCH_ONE_DRAFT_REJECTED', payload: err });
@@ -67,8 +79,33 @@ export const updateDraft = ({ id, body }) => (dispatch) => {
     .then((response) => {
       const { draft } = response.data;
       dispatch({ type: 'UPDATE_DRAFT_FULFILLED', payload: draft });
+      if (draft.status === 'open') {
+        setDraftInfoText(dispatch, body, draft);
+      }
     })
     .catch((err) => {
       dispatch({ type: 'UPDATE_DRAFT_REJECTED', payload: err });
     });
 };
+
+const setDraftInfoText = ({
+  dispatch,
+  body,
+  draft,
+  isStart,
+}) => {
+  if ((body && body.status === 'open') || isStart) {
+    dispatch({ type: 'SET_DRAFT_INFO_TEXT', payload: DRAFT_OPEN_TEXT });
+    setTimeout(() => {
+      dispatch({ type: 'SET_DRAFT_INFO_TEXT', payload: getTeamIsOnClockText(draft) });
+    }, DISPLAY_OPEN_TEXT_DURATION);
+  } else {
+    dispatch({ type: 'SET_DRAFT_INFO_TEXT', payload: getTeamIsOnClockText(draft) });
+  }
+}
+
+const getTeamIsOnClockText = (draft) => {
+  const { Teams: teams } = draft;
+  const teamOnClock = teams.find(team => team.uuid === draft.currentlySelectingTeamId) || teams[0];
+  return `Now on the clock: ${teamOnClock.name}`;
+}
