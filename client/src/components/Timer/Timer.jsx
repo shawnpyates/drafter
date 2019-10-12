@@ -28,7 +28,6 @@ class Timer extends Component {
     const { expiryTime } = this.props;
     const now = Date.now();
     this.setState({ timeLeft: expiryTime - now }, () => {
-      console.log (`${expiryTime} - ${now} = ${expiryTime - now}`);
       this.startTimer();
     });
   }
