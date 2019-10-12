@@ -23,6 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     timeScheduled: DataTypes.DATE,
+    selectingTeamChangeTime: DataTypes.DATE,
   });
   Draft.associate = (models) => {
     Draft.belongsTo(models.User, {

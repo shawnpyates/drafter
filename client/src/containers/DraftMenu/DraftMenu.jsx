@@ -166,6 +166,7 @@ class DraftMenu extends Component {
       status,
       User: owner,
       currentlySelectingTeamId,
+      selectingTeamChangeTime,
       Players: players,
     } = currentDraft || {};
     const ownerName = owner && `${owner.firstName} ${owner.lastName}`;
@@ -176,6 +177,7 @@ class DraftMenu extends Component {
         ? moment(timeScheduled).format('MMM D YYYY, h:mm a')
         : unscheduled
     );
+    const expiryTime = selectingTeamChangeTime && Date.parse(selectingTeamChangeTime);
     const profileCardData = {
       [scheduledFor]: readableTime,
       [ownerKey]: ownerName,
@@ -211,7 +213,7 @@ class DraftMenu extends Component {
                   </InfoText>
                 )}
               </InfoContainer>
-              {status === 'open' && <Timer />}
+              {expiryTime && <Timer expiryTime={expiryTime} />}
               <Teams
                 draftId={uuid}
                 currentlySelectingTeamId={currentlySelectingTeamId}

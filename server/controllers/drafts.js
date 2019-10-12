@@ -6,6 +6,8 @@ const {
 } = require('../models');
 const { create: createUserDraft } = require('./userDrafts');
 
+const SELECTION_TIME_ALLOWANCE = 5 * 60 * 1000; // five minutes
+
 module.exports = {
 
   async fetchOne(req, res) {
@@ -70,11 +72,16 @@ module.exports = {
         include: [Team, Player],
       });
       if (!draft) return res.status(404).send({ e: 'Draft not found.' });
+      const selectingTeamChangeTime = (
+        (status === 'open' || currentlySelectingTeamId) 
+        && new Date(Date.now() + SELECTION_TIME_ALLOWANCE)
+      );
       const updatedDraft = await draft.update({
         currentlySelectingTeamId: currentlySelectingTeamId || draft.currentlySelectingTeamId,
         name: name || draft.name,
         status: status || draft.status,
         timeScheduled: timeScheduled || draft.timeScheduled,
+        selectingTeamChangeTime: selectingTeamChangeTime || draft.selectingTeamChangeTime,
       });
       return res.status(200).send({ draft: updatedDraft });
     } catch (e) {
