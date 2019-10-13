@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 
-import { Container } from './styledComponents';
+import {
+  TimerRow,
+  TimerContainer,
+  TimerText,
+} from './styledComponents';
 
 const msToMinutesAndSeconds = (ms) => {
   const seconds = parseInt(ms / 1000);
@@ -41,9 +45,13 @@ class Timer extends Component {
 
   render() {
     return (
-      <Container>
-        {msToMinutesAndSeconds(this.state.timeLeft)}
-      </Container>
+      <TimerRow>
+        <TimerContainer>
+          <TimerText>
+            {msToMinutesAndSeconds(this.state.timeLeft)}
+          </TimerText>
+        </TimerContainer>
+      </TimerRow>
     );
   }
 };
