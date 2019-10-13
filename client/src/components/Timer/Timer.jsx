@@ -10,13 +10,12 @@ const msToMinutesAndSeconds = (ms) => {
   const seconds = parseInt(ms / 1000);
   const minutesString = String(parseInt(seconds / 60));
   const remainingSeconds = seconds % 60;
-  const remainingSecondsString = String(remainingSeconds);
-  const adjustedSecondsString = (
-    remainingSecondsString.length < 2 
-      ? `0${remainingSecondsString}`
-      : remainingSecondsString
+  const secondsString = (
+    remainingSeconds < 10
+      ? `0${String(remainingSeconds)}`
+      : String(remainingSeconds)
   );
-  return (`${minutesString}:${adjustedSecondsString}`);
+  return (`${minutesString}:${secondsString}`);
 }
 
 class Timer extends Component {
@@ -28,7 +27,10 @@ class Timer extends Component {
   }
 
   componentDidMount() {
-    const { expiryTime } = this.props;
+    this.setTimer(this.props.expiryTime);
+  }
+
+  setTimer(expiryTime) {
     const now = Date.now();
     this.setState({ timeLeft: expiryTime - now }, () => {
       this.startTimer();
@@ -36,11 +38,20 @@ class Timer extends Component {
   }
 
   startTimer() {
-    setInterval(() => {
-      this.setState((prevState) => ({
-        timeLeft: prevState.timeLeft - 1000,
-      }));
+    this.timer = setInterval(() => {
+      const timeMinusOneSecond = this.state.timeLeft - 1000;
+      if (timeMinusOneSecond <= 0) {
+        this.stopTimer();
+      } else {
+        this.setState({ timeLeft: timeMinusOneSecond });
+      }
     }, 1000);
+  }
+
+  stopTimer() {
+    clearInterval(this.timer);
+    this.setState({ timeLeft: 0 });
+    this.props.assignPlayerToTeam();
   }
 
   render() {

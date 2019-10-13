@@ -19,6 +19,7 @@ import {
   fetchOneDraft,
   fetchCurrentUser,
   updateDraft,
+  updatePlayer,
 } from '../../actions';
 
 import { InfoContainer, InfoText } from './styledComponents';
@@ -44,6 +45,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     fetchOneDraftPropFn: (isStart) => dispatch(fetchOneDraft(id, isStart)),
     fetchCurrentUserPropFn: () => dispatch(fetchCurrentUser()),
     updateDraftPropFn: body => dispatch(updateDraft({ id, body })),
+    updatePlayerPropFn: args => dispatch(updatePlayer(args)),
   };
 };
 
@@ -101,6 +103,27 @@ class DraftMenu extends Component {
     if (!isUserFetchComplete && currentUser) {
       this.listenForSocketEvents(socket);
     }
+  }
+
+  assignPlayerToTeam = (playerId) => {
+    const {
+      currentDraft,
+      socket,
+      updatePlayerPropFn,
+    } = this.props;
+    const { Players: players } = currentDraft;
+    // team is assigned random player if they don't make selection in time
+    const randomPlayerId = (
+      !playerId
+      && players[Math.floor(Math.random() * players.length)].uuid
+    );
+    const { currentlySelectingTeamId } = currentDraft;
+    updatePlayerPropFn({
+      id: playerId || randomPlayerId,
+      body: { teamId: currentlySelectingTeamId },
+      socket,
+      draftId: currentDraft.uuid,
+    });
   }
 
   listenForSocketEvents = (socket) => {
@@ -213,7 +236,14 @@ class DraftMenu extends Component {
                   </InfoText>
                 )}
               </InfoContainer>
-              {expiryTime && <Timer expiryTime={expiryTime} />}
+              {expiryTime
+              && (
+                <Timer
+                  expiryTime={expiryTime}
+                  currentlySelectingTeamId={currentlySelectingTeamId}
+                  assignPlayerToTeam={this.assignPlayerToTeam}
+                />
+              )}
               <Teams
                 draftId={uuid}
                 currentlySelectingTeamId={currentlySelectingTeamId}
@@ -225,8 +255,8 @@ class DraftMenu extends Component {
                 draft={currentDraft}
                 parent="draft"
                 displayType={displayType}
-                socket={socket}
                 players={players}
+                assignPlayerToTeam={this.assignPlayerToTeam}
               />
               {(currentDraft.ownerUserId === currentUser.uuid && status === 'scheduled')
                 && <Requests draftId={uuid} fetchBy="draft" />

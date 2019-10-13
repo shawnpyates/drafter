@@ -30,21 +30,6 @@ const extractDataForDisplay = players => (
 );
 
 class Players extends Component {
-  assignPlayerToTeam = (playerId) => {
-    const {
-      draft,
-      socket,
-      updatePlayerPropFn,
-    } = this.props;
-    const { currentlySelectingTeamId } = draft;
-    updatePlayerPropFn({
-      id: playerId,
-      body: { teamId: currentlySelectingTeamId },
-      socket,
-      draftId: draft.uuid,
-    });
-  }
-
   render() {
     const {
       players,
@@ -52,6 +37,7 @@ class Players extends Component {
       teamId,
       draft,
       displayType,
+      assignPlayerToTeam,
     } = this.props;
     const {
       type,
@@ -89,7 +75,7 @@ class Players extends Component {
               data={extractDataForDisplay(nonSelectedPlayers || players)}
               emptyDataMessage={noPlayersInDraft}
               positions={positions}
-              assignPlayerToTeam={this.assignPlayerToTeam}
+              assignPlayerToTeam={assignPlayerToTeam}
             />
           }
         </div>
@@ -101,20 +87,18 @@ Players.defaultProps = {
   players: null,
   teamId: null,
   draft: null,
-  socket: null,
-  draftSocketId: null,
   displayType: 'table',
 };
 
 Players.propTypes = {
+  assignPlayerToTeam: PropTypes.func.isRequired,
   players: PropTypes.arrayOf(PropTypes.object),
   displayType: PropTypes.string,
   parent: PropTypes.string.isRequired,
   updatePlayerPropFn: PropTypes.func.isRequired,
   teamId: PropTypes.string,
   draft: PropTypes.objectOf(PropTypes.any),
-  socket: PropTypes.objectOf(PropTypes.any),
-  draftSocketId: PropTypes.string,
+
 };
 
 export default connect(null, mapDispatchToProps)(Players);
