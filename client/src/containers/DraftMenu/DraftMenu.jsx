@@ -17,7 +17,6 @@ import { Button, Timer } from '../../components';
 
 import {
   fetchOneDraft,
-  fetchCurrentUser,
   updateDraft,
   updatePlayer,
 } from '../../actions';
@@ -43,8 +42,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   const { id } = ownProps.match.params;
   return {
     fetchOneDraftPropFn: (isStart) => dispatch(fetchOneDraft(id, isStart)),
-    fetchCurrentUserPropFn: () => dispatch(fetchCurrentUser()),
-    updateDraftPropFn: body => dispatch(updateDraft({ id, body })),
+    updateDraftPropFn: (body, socket) => dispatch(updateDraft({ id, body, socket })),
     updatePlayerPropFn: args => dispatch(updatePlayer(args)),
   };
 };
@@ -56,23 +54,21 @@ class DraftMenu extends Component {
       shouldOpenButtonRender: false,
       shouldStartDraftIndicatorRender: false,
       isUserFetchComplete: false,
+      hasDraftStarted: false,
     };
   }
 
   componentDidMount() {
     const {
       fetchOneDraftPropFn,
-      fetchCurrentUserPropFn,
     } = this.props;
     fetchOneDraftPropFn();
-    fetchCurrentUserPropFn();
   }
 
   componentDidUpdate() {
     const {
       currentDraft,
       currentUser,
-      updateDraftPropFn,
       socket,
       draftInfoText,
     } = this.props;
@@ -82,8 +78,6 @@ class DraftMenu extends Component {
       const {
         status,
         timeScheduled,
-        currentlySelectingTeamId,
-        Teams: teams,
       } = currentDraft;
       if (
         status === 'scheduled'
@@ -91,14 +85,7 @@ class DraftMenu extends Component {
         && !draftInfoText
       ) {
         this.renderOpenButtonForOwner();
-      } else if (
-        status === 'open'
-        && !currentlySelectingTeamId
-        && currentUser.uuid === currentDraft.ownerUserId
-        && (teams && teams.length)
-      ) {
-        updateDraftPropFn({ currentlySelectingTeamId: teams[0].uuid });
-      }
+      } 
     }
     if (!isUserFetchComplete && currentUser) {
       this.listenForSocketEvents(socket);
@@ -138,9 +125,10 @@ class DraftMenu extends Component {
       }
     });
     socket.on('broadcastDraftStart', ({ draftId }) => {
-      if (currentDraftId === draftId) {
-        fetchOneDraftPropFn(true);
-        this.setState({ shouldOpenButtonRender: false });
+      if (!this.hasDraftStarted && currentDraftId === draftId) {
+        this.setState({ shouldOpenButtonRender: false, hasDraftStarted: true }, () => {
+          fetchOneDraftPropFn(true);
+        });
       }
     });
   }
@@ -148,19 +136,18 @@ class DraftMenu extends Component {
   openDraft = () => {
     const {
       currentDraft: {
-        uuid: draftId,
-        name: draftName,
+        Teams: teams,
       },
       updateDraftPropFn,
       socket,
     } = this.props;
-    updateDraftPropFn({ status: 'open' })
-      .then(() => {
-        socket.emit(
-          'draftStarted',
-          { draftId, draftName },
-        );
-      });
+    updateDraftPropFn(
+      {
+        status: 'open',
+        currentlySelectingTeamId: teams[0].uuid,
+      },
+      socket,
+    );
   }
 
   renderOpenButtonForOwner = () => {
@@ -176,7 +163,6 @@ class DraftMenu extends Component {
       currentDraft,
       currentUser,
       match,
-      socket,
       draftInfoText,
     } = this.props;
     const {
@@ -207,6 +193,7 @@ class DraftMenu extends Component {
     };
     const profileCardLinkForUpdating = `/updateDraft/${uuid}`;
     const displayType = status === 'scheduled' ? 'table' : 'selectionList';
+    console.log('EXPIRY: ', expiryTime);
     return (
       currentDraft
       && (
@@ -240,7 +227,6 @@ class DraftMenu extends Component {
               && (
                 <Timer
                   expiryTime={expiryTime}
-                  currentlySelectingTeamId={currentlySelectingTeamId}
                   assignPlayerToTeam={this.assignPlayerToTeam}
                 />
               )}
@@ -281,7 +267,6 @@ DraftMenu.defaultProps = {
 DraftMenu.propTypes = {
   currentDraft: PropTypes.objectOf(PropTypes.any),
   currentUser: PropTypes.objectOf(PropTypes.any),
-  fetchCurrentUserPropFn: PropTypes.func.isRequired,
   fetchOneDraftPropFn: PropTypes.func.isRequired,
   match: PropTypes.objectOf(PropTypes.any).isRequired,
   socket: PropTypes.objectOf(PropTypes.any).isRequired,

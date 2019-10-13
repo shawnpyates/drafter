@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const { Player, Draft, Team } = require('../models');
+const { getSelectingTeamTimeChange } = require('./drafts');
 
 const { in: opIn } = Sequelize.Op;
 
@@ -13,7 +14,11 @@ const moveSelectionToNextTeam = async (draft) => {
       ? 0
       : indexOfSelectingTeam + 1
   );
-  await draft.update({ currentlySelectingTeamId: teams[indexOfNextTeam].uuid });
+  const selectingTeamChangeTime = getSelectingTeamTimeChange();
+  await draft.update({
+    currentlySelectingTeamId: teams[indexOfNextTeam].uuid,
+    selectingTeamChangeTime,
+  });
 };
 
 module.exports = {

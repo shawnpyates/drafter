@@ -73,15 +73,15 @@ export const fetchOneDraft = (id, isStart) => (dispatch) => {
     });
 };
 
-export const updateDraft = ({ id, body }) => (dispatch) => {
+export const updateDraft = ({ id, body, socket }) => (dispatch) => {
   dispatch({ type: 'UPDATE_DRAFT_PENDING ' });
   return axios.put(`/api/drafts/${id}`, body)
     .then((response) => {
       const { draft } = response.data;
-      dispatch({ type: 'UPDATE_DRAFT_FULFILLED', payload: draft });
-      if (draft.status === 'open') {
-        setDraftInfoText(dispatch, body, draft);
+      if (socket && body.status === 'open') {
+        socket.emit('draftStarted', { draftId: draft.uuid, draftName: draft.name });
       }
+      dispatch({ type: 'UPDATE_DRAFT_FULFILLED', payload: draft });
     })
     .catch((err) => {
       dispatch({ type: 'UPDATE_DRAFT_REJECTED', payload: err });
@@ -102,10 +102,10 @@ const setDraftInfoText = ({
   } else {
     dispatch({ type: 'SET_DRAFT_INFO_TEXT', payload: getTeamIsOnClockText(draft) });
   }
-}
+};
 
 const getTeamIsOnClockText = (draft) => {
   const { Teams: teams } = draft;
   const teamOnClock = teams.find(team => team.uuid === draft.currentlySelectingTeamId) || teams[0];
   return `Now on the clock: ${teamOnClock.name}`;
-}
+};

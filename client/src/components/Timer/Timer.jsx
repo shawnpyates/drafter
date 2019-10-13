@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import {
   TimerRow,
@@ -16,7 +17,7 @@ const msToMinutesAndSeconds = (ms) => {
       : String(remainingSeconds)
   );
   return (`${minutesString}:${secondsString}`);
-}
+};
 
 class Timer extends Component {
   constructor() {
@@ -30,6 +31,13 @@ class Timer extends Component {
     this.setTimer(this.props.expiryTime);
   }
 
+  componentDidUpdate(prevProps) {
+    const { expiryTime } = this.props;
+    if (expiryTime !== prevProps.expiryTime) {
+      this.setTimer(expiryTime);
+    }
+  }
+
   setTimer(expiryTime) {
     const now = Date.now();
     this.setState({ timeLeft: expiryTime - now }, () => {
@@ -41,7 +49,7 @@ class Timer extends Component {
     this.timer = setInterval(() => {
       const timeMinusOneSecond = this.state.timeLeft - 1000;
       if (timeMinusOneSecond <= 0) {
-        this.stopTimer();
+        this.handleExpiry();
       } else {
         this.setState({ timeLeft: timeMinusOneSecond });
       }
@@ -50,6 +58,10 @@ class Timer extends Component {
 
   stopTimer() {
     clearInterval(this.timer);
+  }
+
+  handleExpiry() {
+    this.stopTimer();
     this.setState({ timeLeft: 0 });
     this.props.assignPlayerToTeam();
   }
