@@ -55,6 +55,7 @@ class DraftMenu extends Component {
       shouldStartDraftIndicatorRender: false,
       isUserFetchComplete: false,
       hasDraftStarted: false,
+      lastSelectingTeam: null
     };
   }
 
@@ -120,8 +121,14 @@ class DraftMenu extends Component {
     } = this.props;
     const { uuid: currentDraftId } = currentDraft || {};
     socket.on('broadcastDraftSelection', (draftId) => {
-      if (currentDraftId === draftId) {
-        fetchOneDraftPropFn();
+      const { currentlySelectingTeamId } = this.props.currentDraft;
+      if (
+        this.state.lastSelectingTeam !== currentlySelectingTeamId
+        && currentDraftId === draftId
+      ) {
+        this.setState({ lastSelectingTeam: currentlySelectingTeamId }, () => {
+          fetchOneDraftPropFn();
+        });
       }
     });
     socket.on('broadcastDraftStart', ({ draftId }) => {

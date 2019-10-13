@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 
 import {
   TimerRow,
@@ -34,6 +33,7 @@ class Timer extends Component {
   componentDidUpdate(prevProps) {
     const { expiryTime } = this.props;
     if (expiryTime !== prevProps.expiryTime) {
+      this.stopTimer();
       this.setTimer(expiryTime);
     }
   }

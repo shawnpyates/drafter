@@ -6,7 +6,7 @@ const {
 } = require('../models');
 const { create: createUserDraft } = require('./userDrafts');
 
-const SELECTION_TIME_ALLOWANCE = 20 * 1000; // five minutes
+const SELECTION_TIME_ALLOWANCE = 5 * 60 * 1000; // five minutes
 
 module.exports = {
 
