@@ -105,7 +105,7 @@ Players.propTypes = {
   updatePlayerPropFn: PropTypes.func.isRequired,
   teamId: PropTypes.string,
   draft: PropTypes.objectOf(PropTypes.any),
-
+  shouldDraftViewBlur: PropTypes.bool.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Players);
