@@ -1,8 +1,6 @@
 import axios from 'axios';
 
-const DRAFT_OPEN_TEXT = 'Draft is now starting!';
-
-const DISPLAY_OPEN_TEXT_DURATION = 5000;
+const DISPLAY_INITIAL_TEXT_DURATION = 5000;
 
 export const createDraft = body => (dispatch) => {
   dispatch({ type: 'CREATE_DRAFT_PENDING ' });
@@ -53,7 +51,7 @@ export const fetchDraftsByUser = userId => (dispatch) => {
     });
 };
 
-export const fetchOneDraft = (id, isStart) => (dispatch) => {
+export const fetchOneDraft = (id, message) => (dispatch) => {
   dispatch({ type: 'FETCH_ONE_DRAFT_PENDING' });
   axios.get(`/api/drafts/${id}`)
     .then((response) => {
@@ -64,7 +62,7 @@ export const fetchOneDraft = (id, isStart) => (dispatch) => {
           dispatch,
           body: null,
           draft,
-          isStart,
+          message,
         });
       }
     })
@@ -73,15 +71,15 @@ export const fetchOneDraft = (id, isStart) => (dispatch) => {
     });
 };
 
-export const updateDraft = ({ id, body }) => (dispatch) => {
+export const updateDraft = ({ id, body, socket }) => (dispatch) => {
   dispatch({ type: 'UPDATE_DRAFT_PENDING ' });
   return axios.put(`/api/drafts/${id}`, body)
     .then((response) => {
       const { draft } = response.data;
-      dispatch({ type: 'UPDATE_DRAFT_FULFILLED', payload: draft });
-      if (draft.status === 'open') {
-        setDraftInfoText(dispatch, body, draft);
+      if (socket && body.status === 'open') {
+        socket.emit('draftStarted', { draftId: draft.uuid, draftName: draft.name });
       }
+      dispatch({ type: 'UPDATE_DRAFT_FULFILLED', payload: draft });
     })
     .catch((err) => {
       dispatch({ type: 'UPDATE_DRAFT_REJECTED', payload: err });
@@ -90,22 +88,27 @@ export const updateDraft = ({ id, body }) => (dispatch) => {
 
 const setDraftInfoText = ({
   dispatch,
-  body,
   draft,
-  isStart,
+  message,
 }) => {
-  if ((body && body.status === 'open') || isStart) {
-    dispatch({ type: 'SET_DRAFT_INFO_TEXT', payload: DRAFT_OPEN_TEXT });
+  if (message) {
+    dispatch({ type: 'SET_DRAFT_INFO_TEXT', payload: { message, shouldDraftViewBlur: true } });
     setTimeout(() => {
-      dispatch({ type: 'SET_DRAFT_INFO_TEXT', payload: getTeamIsOnClockText(draft) });
-    }, DISPLAY_OPEN_TEXT_DURATION);
+      dispatch({
+        type: 'SET_DRAFT_INFO_TEXT', 
+        payload: { message: getTeamIsOnClockText(draft), shouldDraftViewBlur: false },
+      });
+    }, DISPLAY_INITIAL_TEXT_DURATION);
   } else {
-    dispatch({ type: 'SET_DRAFT_INFO_TEXT', payload: getTeamIsOnClockText(draft) });
+    dispatch({
+      type: 'SET_DRAFT_INFO_TEXT', 
+      payload: { message: getTeamIsOnClockText(draft), shouldDraftViewBlur: false },
+    });
   }
-}
-
+};
+  
 const getTeamIsOnClockText = (draft) => {
   const { Teams: teams } = draft;
   const teamOnClock = teams.find(team => team.uuid === draft.currentlySelectingTeamId) || teams[0];
   return `Now on the clock: ${teamOnClock.name}`;
-}
+};

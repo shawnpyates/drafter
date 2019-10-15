@@ -12,6 +12,11 @@ const mapDispatchToProps = dispatch => ({
   updatePlayerPropFn: args => dispatch(updatePlayer(args)),
 });
 
+const mapStateToProps = (state) => {
+  const { shouldDraftViewBlur } = state.draft;
+  return { shouldDraftViewBlur };
+};
+
 const extractDataForDisplay = players => (
   players.map((player) => {
     const {
@@ -30,21 +35,6 @@ const extractDataForDisplay = players => (
 );
 
 class Players extends Component {
-  assignPlayerToTeam = (playerId) => {
-    const {
-      draft,
-      socket,
-      updatePlayerPropFn,
-    } = this.props;
-    const { currentlySelectingTeamId } = draft;
-    updatePlayerPropFn({
-      id: playerId,
-      body: { teamId: currentlySelectingTeamId },
-      socket,
-      draftId: draft.uuid,
-    });
-  }
-
   render() {
     const {
       players,
@@ -52,6 +42,8 @@ class Players extends Component {
       teamId,
       draft,
       displayType,
+      assignPlayerToTeam,
+      shouldDraftViewBlur,
     } = this.props;
     const {
       type,
@@ -89,7 +81,8 @@ class Players extends Component {
               data={extractDataForDisplay(nonSelectedPlayers || players)}
               emptyDataMessage={noPlayersInDraft}
               positions={positions}
-              assignPlayerToTeam={this.assignPlayerToTeam}
+              assignPlayerToTeam={assignPlayerToTeam}
+              shouldDraftViewBlur={shouldDraftViewBlur}
             />
           }
         </div>
@@ -101,20 +94,18 @@ Players.defaultProps = {
   players: null,
   teamId: null,
   draft: null,
-  socket: null,
-  draftSocketId: null,
   displayType: 'table',
 };
 
 Players.propTypes = {
+  assignPlayerToTeam: PropTypes.func.isRequired,
   players: PropTypes.arrayOf(PropTypes.object),
   displayType: PropTypes.string,
   parent: PropTypes.string.isRequired,
   updatePlayerPropFn: PropTypes.func.isRequired,
   teamId: PropTypes.string,
   draft: PropTypes.objectOf(PropTypes.any),
-  socket: PropTypes.objectOf(PropTypes.any),
-  draftSocketId: PropTypes.string,
+  shouldDraftViewBlur: PropTypes.bool.isRequired,
 };
 
-export default connect(null, mapDispatchToProps)(Players);
+export default connect(mapStateToProps, mapDispatchToProps)(Players);

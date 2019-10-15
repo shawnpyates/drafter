@@ -17,7 +17,7 @@ class SelectionList extends Component {
     };
   }
   changePlayerFocus = (uuid, type) => {
-    if (type !== 'Players') {
+    if (type !== 'Players' || this.props.shouldDraftViewBlur) {
       return;
     }
     this.setState({ focussedPlayerId: uuid });
@@ -30,6 +30,7 @@ class SelectionList extends Component {
       data,
       positions,
       assignPlayerToTeam,
+      shouldDraftViewBlur,
     } = this.props;
     return (
       <Container isLeft={type === 'Teams'}>
@@ -50,6 +51,7 @@ class SelectionList extends Component {
                   isFocussed={isFocussed}
                   type={type}
                   value={uuid}
+                  shouldDraftViewBlur={shouldDraftViewBlur}
                   onClick={() => this.changePlayerFocus(uuid, type)}
                 >
                   {name}{(positions && position) && ` (${positions[position]})`}
