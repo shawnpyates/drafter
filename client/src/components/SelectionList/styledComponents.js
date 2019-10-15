@@ -32,7 +32,7 @@ const ListItem = styled.li`
   padding: 1rem 0.5rem;
   width: 60%;
   display: inline-block;
-  cursor: ${props => (props.type === 'Players' ? 'pointer' : 'unset')};
+  cursor: ${props => ((props.type === 'Players' && !props.shouldDraftViewBlur) ? 'pointer' : 'unset')};
   background-color: ${props => (props.isCurrentlySelecting || props.isFocussed ? SKY_BLUE : WHITE)};
 `;
 

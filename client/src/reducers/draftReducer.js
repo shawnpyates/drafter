@@ -106,7 +106,8 @@ const draftReducer = (state = initialState, action) => {
     case 'SET_DRAFT_INFO_TEXT': {
       return {
         ...state,
-        draftInfoText: action.payload,
+        draftInfoText: action.payload.message,
+        shouldDraftViewBlur: action.payload.shouldDraftViewBlur,
       }
     }
 

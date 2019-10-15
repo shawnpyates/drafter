@@ -12,6 +12,11 @@ const mapDispatchToProps = dispatch => ({
   updatePlayerPropFn: args => dispatch(updatePlayer(args)),
 });
 
+const mapStateToProps = (state) => {
+  const { shouldDraftViewBlur } = state.draft;
+  return { shouldDraftViewBlur };
+};
+
 const extractDataForDisplay = players => (
   players.map((player) => {
     const {
@@ -38,6 +43,7 @@ class Players extends Component {
       draft,
       displayType,
       assignPlayerToTeam,
+      shouldDraftViewBlur,
     } = this.props;
     const {
       type,
@@ -76,6 +82,7 @@ class Players extends Component {
               emptyDataMessage={noPlayersInDraft}
               positions={positions}
               assignPlayerToTeam={assignPlayerToTeam}
+              shouldDraftViewBlur={shouldDraftViewBlur}
             />
           }
         </div>
@@ -101,4 +108,4 @@ Players.propTypes = {
 
 };
 
-export default connect(null, mapDispatchToProps)(Players);
+export default connect(mapStateToProps, mapDispatchToProps)(Players);

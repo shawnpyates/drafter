@@ -21,13 +21,17 @@ import {
   updatePlayer,
 } from '../../actions';
 
-import { InfoContainer, InfoText } from './styledComponents';
+import {
+  BlurContainer,
+  InfoContainer,
+  InfoText,
+} from './styledComponents';
 
 const { properties: profileProperties, values: profileValues } = draftProfileData;
 
 const mapStateToProps = (state) => {
   const { draft, socket: socketState, user } = state;
-  const { currentDraft, draftInfoText } = draft;
+  const { currentDraft, draftInfoText, shouldDraftViewBlur } = draft;
   const { socket } = socketState;
   const { currentUser } = user;
   return {
@@ -35,6 +39,7 @@ const mapStateToProps = (state) => {
     draftInfoText,
     socket,
     currentUser,
+    shouldDraftViewBlur,
   };
 };
 
@@ -192,6 +197,7 @@ class DraftMenu extends Component {
       currentUser,
       match,
       draftInfoText,
+      shouldDraftViewBlur,
     } = this.props;
     const {
       shouldOpenButtonRender,
@@ -257,20 +263,22 @@ class DraftMenu extends Component {
                   assignPlayerToTeam={this.assignPlayerToTeam}
                 />
               )}
-              <Teams
-                draftId={uuid}
-                currentlySelectingTeamId={currentlySelectingTeamId}
-                fetchBy="draft"
-                match={match}
-                displayType={displayType}
-              />
-              <Players
-                draft={currentDraft}
-                parent="draft"
-                displayType={displayType}
-                players={players}
-                assignPlayerToTeam={this.assignPlayerToTeam}
-              />
+              <BlurContainer shouldDraftViewBlur={shouldDraftViewBlur}>
+                <Teams
+                  draftId={uuid}
+                  currentlySelectingTeamId={currentlySelectingTeamId}
+                  fetchBy="draft"
+                  match={match}
+                  displayType={displayType}
+                />
+                <Players
+                  draft={currentDraft}
+                  parent="draft"
+                  displayType={displayType}
+                  players={players}
+                  assignPlayerToTeam={this.assignPlayerToTeam}
+                />
+              </BlurContainer>
               {(currentDraft.ownerUserId === currentUser.uuid && status === 'scheduled')
                 && <Requests draftId={uuid} fetchBy="draft" />
               }

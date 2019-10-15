@@ -91,10 +91,20 @@ const setDraftInfoText = ({
   draft,
   message,
 }) => {
-  dispatch({ type: 'SET_DRAFT_INFO_TEXT', payload: message });
-  setTimeout(() => {
-    dispatch({ type: 'SET_DRAFT_INFO_TEXT', payload: getTeamIsOnClockText(draft) });
-  }, DISPLAY_INITIAL_TEXT_DURATION);
+  if (message) {
+    dispatch({ type: 'SET_DRAFT_INFO_TEXT', payload: { message, shouldDraftViewBlur: true } });
+    setTimeout(() => {
+      dispatch({
+        type: 'SET_DRAFT_INFO_TEXT', 
+        payload: { message: getTeamIsOnClockText(draft), shouldDraftViewBlur: false },
+      });
+    }, DISPLAY_INITIAL_TEXT_DURATION);
+  } else {
+    dispatch({
+      type: 'SET_DRAFT_INFO_TEXT', 
+      payload: { message: getTeamIsOnClockText(draft), shouldDraftViewBlur: false },
+    });
+  }
 };
   
 const getTeamIsOnClockText = (draft) => {
