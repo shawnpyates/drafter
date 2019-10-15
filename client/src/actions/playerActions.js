@@ -43,13 +43,21 @@ export const updatePlayer = ({
   body,
   socket,
   draftId,
+  teamName,
+  playerName,
+  isRandomAssignment,
 }) => (dispatch) => {
   dispatch({ type: 'UPDATE_PLAYER_PENDING' });
   return axios.put(`/api/players/${id}`, body)
     .then((response) => {
       const { player } = response.data;
       if (socket) {
-        socket.emit('draftSelection', draftId);
+        socket.emit('draftSelection', {
+          draftId,
+          teamName,
+          playerName,
+          isRandomAssignment,
+        });
       }
       dispatch({ type: 'UPDATE_PLAYER_FULFILLED', payload: player });
     })

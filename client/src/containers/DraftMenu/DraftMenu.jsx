@@ -41,7 +41,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   const { id } = ownProps.match.params;
   return {
-    fetchOneDraftPropFn: (isStart) => dispatch(fetchOneDraft(id, isStart)),
+    fetchOneDraftPropFn: (message) => dispatch(fetchOneDraft(id, message)),
     updateDraftPropFn: (body, socket) => dispatch(updateDraft({ id, body, socket })),
     updatePlayerPropFn: args => dispatch(updatePlayer(args)),
   };
@@ -99,18 +99,28 @@ class DraftMenu extends Component {
       socket,
       updatePlayerPropFn,
     } = this.props;
-    const { Players: players } = currentDraft;
+    const { Players: players, Teams: teams } = currentDraft;
     // team is assigned random player if they don't make selection in time
-    const randomPlayerId = (
-      !playerId
-      && players[Math.floor(Math.random() * players.length)].uuid
-    );
+    let randomPlayerId;
+    if (!playerId) {
+      const filteredPlayers = players.filter(player => !player.teamId);
+      randomPlayerId = (
+        filteredPlayers[Math.floor(Math.random() * filteredPlayers.length)].uuid
+      );
+    }
     const { currentlySelectingTeamId } = currentDraft;
+    const { name: teamName } = teams.find(team => team.uuid === currentlySelectingTeamId);
+    const { name: playerName } = players.find(player => (
+      player.uuid === (playerId || randomPlayerId)
+    ));
     updatePlayerPropFn({
       id: playerId || randomPlayerId,
       body: { teamId: currentlySelectingTeamId },
       socket,
       draftId: currentDraft.uuid,
+      teamName,
+      playerName,
+      isRandomAssignment: !!randomPlayerId,
     });
   }
 
@@ -120,21 +130,32 @@ class DraftMenu extends Component {
       fetchOneDraftPropFn,
     } = this.props;
     const { uuid: currentDraftId } = currentDraft || {};
-    socket.on('broadcastDraftSelection', (draftId) => {
+    socket.on('broadcastDraftSelection', ({
+      draftId,
+      teamName,
+      playerName,
+      isRandomAssignment,
+     }) => {
       const { currentlySelectingTeamId } = this.props.currentDraft;
       if (
         this.state.lastSelectingTeam !== currentlySelectingTeamId
         && currentDraftId === draftId
       ) {
         this.setState({ lastSelectingTeam: currentlySelectingTeamId }, () => {
-          fetchOneDraftPropFn();
+          const message = (
+            isRandomAssignment
+              ? `${teamName} failed to select in time. Player randomly assigned: ${playerName}` 
+              : `${teamName} selected ${playerName}.`
+          );
+          fetchOneDraftPropFn(message);
         });
       }
     });
     socket.on('broadcastDraftStart', ({ draftId }) => {
       if (!this.hasDraftStarted && currentDraftId === draftId) {
         this.setState({ shouldOpenButtonRender: false, hasDraftStarted: true }, () => {
-          fetchOneDraftPropFn(true);
+          const message = 'Draft is now starting!';
+          fetchOneDraftPropFn(message);
         });
       }
     });
@@ -200,7 +221,6 @@ class DraftMenu extends Component {
     };
     const profileCardLinkForUpdating = `/updateDraft/${uuid}`;
     const displayType = status === 'scheduled' ? 'table' : 'selectionList';
-    console.log('EXPIRY: ', expiryTime);
     return (
       currentDraft
       && (
