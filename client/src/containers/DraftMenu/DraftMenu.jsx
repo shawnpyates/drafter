@@ -27,8 +27,14 @@ import {
   InfoText,
 } from './styledComponents';
 
+import { getTextWithInjections } from '../../helpers';
+
 import { draftInfoTexts } from '../../../texts.json';
-const { draftStarting: DRAFT_STARTING } = draftInfoTexts;
+const {
+  draftStarting: DRAFT_STARTING,
+  draftSelection: DRAFT_SELECTION,
+  draftRandomAssignment: DRAFT_RANDOM_ASSIGNMENT,
+} = draftInfoTexts;
 
 const { properties: profileProperties, values: profileValues } = draftProfileData;
 
@@ -150,10 +156,9 @@ class DraftMenu extends Component {
         && currentDraftId === draftId
       ) {
         this.setState({ lastSelectingTeam: currentlySelectingTeamId }, () => {
-          const message = (
-            isRandomAssignment
-              ? `${teamName} failed to select in time. Player randomly assigned: ${playerName}` 
-              : `${teamName} selected ${playerName}.`
+          const message = getTextWithInjections(
+            isRandomAssignment ? DRAFT_RANDOM_ASSIGNMENT : DRAFT_SELECTION,
+            { teamName, playerName },
           );
           fetchOneDraftPropFn(message);
         });

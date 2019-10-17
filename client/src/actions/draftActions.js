@@ -1,7 +1,13 @@
 import axios from 'axios';
 
 import { draftInfoTexts } from '../../texts.json';
-const { draftClosed: DRAFT_CLOSED } = draftInfoTexts;
+
+import { getTextWithInjections } from '../helpers';
+
+const {
+  draftClosed: DRAFT_CLOSED,
+  draftTeamOnClock: DRAFT_TEAM_ON_CLOCK,
+} = draftInfoTexts;
 
 const DISPLAY_INITIAL_TEXT_DURATION = 5000;
 
@@ -120,5 +126,5 @@ const setDraftInfoText = ({
 const getTeamIsOnClockText = (draft) => {
   const { Teams: teams } = draft;
   const teamOnClock = teams.find(team => team.uuid === draft.currentlySelectingTeamId) || teams[0];
-  return `Now on the clock: ${teamOnClock.name}`;
+  return getTextWithInjections(DRAFT_TEAM_ON_CLOCK, { teamName: teamOnClock.name });
 };
