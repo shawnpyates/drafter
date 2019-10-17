@@ -5,6 +5,11 @@
     "notLoggedIn": "Not Logged In"
   },
 
+  "draftInfoTexts": {
+    "draftClosed": "Draft is now closed.",
+    "draftStarting": "Draft is now starting!"
+  },
+
   "draftsTable": {
     "type": "Drafts",
     "title": "Drafts",

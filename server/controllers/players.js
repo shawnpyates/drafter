@@ -4,8 +4,17 @@ const { getSelectingTeamTimeChange } = require('./drafts');
 
 const { in: opIn } = Sequelize.Op;
 
-const moveSelectionToNextTeam = async (draft) => {
-  const { Teams: teams, currentlySelectingTeamId } = draft;
+const moveSelectionToNextTeam = async (draft, playerId) => {
+  const { Players: players, Teams: teams, currentlySelectingTeamId } = draft;
+  const playersWithoutTeamId = players.filter(player => !player.teamId);
+  if (playersWithoutTeamId.length === 1 && playersWithoutTeamId[0].uuid === playerId) {
+    await draft.update({
+      status: 'closed',
+      currentlySelectingTeamId: null,
+      selectingTeamChangeTime: null,
+    });
+    return null;
+  }
   const indexOfSelectingTeam = (
     teams.indexOf(teams.find(team => team.uuid === currentlySelectingTeamId))
   );
@@ -106,7 +115,7 @@ module.exports = {
         teamId: teamId || player.teamId,
       });
       if (teamId) {
-        await moveSelectionToNextTeam(updatedPlayer.Draft);
+        await moveSelectionToNextTeam(updatedPlayer.Draft, updatedPlayer.uuid);
       }
       return res.status(200).send({ player: updatedPlayer });
     } catch (e) {
