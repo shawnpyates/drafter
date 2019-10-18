@@ -5,6 +5,14 @@
     "notLoggedIn": "Not Logged In"
   },
 
+  "draftInfoTexts": {
+    "draftClosed": "Draft is now closed.",
+    "draftStarting": "Draft is now starting!",
+    "draftSelection": "<%>teamName</%> selected <%>playerName</%>.",
+    "draftRandomAssignment": "<%>teamName</%> failed to select in time. Player randomly assigned: <%>playerName</%>",
+    "draftTeamOnClock": "Now on the clock: <%>teamName</%>"
+  },
+
   "draftsTable": {
     "type": "Drafts",
     "title": "Drafts",

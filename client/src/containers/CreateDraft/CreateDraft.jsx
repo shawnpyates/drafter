@@ -48,7 +48,7 @@ const validateForm = (state) => {
     return { errorMessage: missingField };
   }
   let finalTimeStamp;
-  if (calendarDate) {
+  if (shouldScheduleTime) {
     const formattedDate = calendarDate.format(CALENDAR_DATE_FORMAT);
     const modifiedTime = get24HourTime(timeCharsAsString, isPmSelected);
     finalTimeStamp = createFinalTimestamp(formattedDate, modifiedTime);

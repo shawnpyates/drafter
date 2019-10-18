@@ -27,6 +27,15 @@ import {
   InfoText,
 } from './styledComponents';
 
+import { getTextWithInjections } from '../../helpers';
+
+import { draftInfoTexts } from '../../../texts.json';
+const {
+  draftStarting: DRAFT_STARTING,
+  draftSelection: DRAFT_SELECTION,
+  draftRandomAssignment: DRAFT_RANDOM_ASSIGNMENT,
+} = draftInfoTexts;
+
 const { properties: profileProperties, values: profileValues } = draftProfileData;
 
 const mapStateToProps = (state) => {
@@ -147,10 +156,9 @@ class DraftMenu extends Component {
         && currentDraftId === draftId
       ) {
         this.setState({ lastSelectingTeam: currentlySelectingTeamId }, () => {
-          const message = (
-            isRandomAssignment
-              ? `${teamName} failed to select in time. Player randomly assigned: ${playerName}` 
-              : `${teamName} selected ${playerName}.`
+          const message = getTextWithInjections(
+            isRandomAssignment ? DRAFT_RANDOM_ASSIGNMENT : DRAFT_SELECTION,
+            { teamName, playerName },
           );
           fetchOneDraftPropFn(message);
         });
@@ -159,8 +167,7 @@ class DraftMenu extends Component {
     socket.on('broadcastDraftStart', ({ draftId }) => {
       if (!this.hasDraftStarted && currentDraftId === draftId) {
         this.setState({ shouldOpenButtonRender: false, hasDraftStarted: true }, () => {
-          const message = 'Draft is now starting!';
-          fetchOneDraftPropFn(message);
+          fetchOneDraftPropFn(DRAFT_STARTING);
         });
       }
     });
@@ -236,58 +243,51 @@ class DraftMenu extends Component {
             data={profileCardData}
             linkForUpdating={profileCardLinkForUpdating}
           />
-          {(status === 'scheduled' || status === 'open')
-          && (
-            <div>
-              {(shouldOpenButtonRender && status !== 'open')
+          <div>
+            {(shouldOpenButtonRender && status !== 'open')
+            && (
+              <div>
+                <Button
+                  value="OPEN"
+                  clickHandler={this.openDraft}
+                />
+              </div>
+            )}
+            <InfoContainer>
+              {draftInfoText
               && (
-                <div>
-                  <Button
-                    value="OPEN"
-                    clickHandler={this.openDraft}
-                  />
-                </div>
+                <InfoText>
+                  {draftInfoText}
+                </InfoText>
               )}
-              <InfoContainer>
-                {draftInfoText
-                && (
-                  <InfoText>
-                    {draftInfoText}
-                  </InfoText>
-                )}
-              </InfoContainer>
-              {expiryTime
-              && (
-                <Timer
-                  expiryTime={expiryTime}
-                  assignPlayerToTeam={this.assignPlayerToTeam}
-                />
-              )}
-              <BlurContainer shouldDraftViewBlur={shouldDraftViewBlur}>
-                <Teams
-                  draftId={uuid}
-                  currentlySelectingTeamId={currentlySelectingTeamId}
-                  fetchBy="draft"
-                  match={match}
-                  displayType={displayType}
-                />
-                <Players
-                  draft={currentDraft}
-                  parent="draft"
-                  displayType={displayType}
-                  players={players}
-                  assignPlayerToTeam={this.assignPlayerToTeam}
-                />
-              </BlurContainer>
-              {(currentDraft.ownerUserId === currentUser.uuid && status === 'scheduled')
-                && <Requests draftId={uuid} fetchBy="draft" />
-              }
-            </div>
-          )}
-          {status === 'closed'
-          && (
-            <div>Draft is now closed!</div>
-          )}
+            </InfoContainer>
+            {expiryTime
+            && (
+              <Timer
+                expiryTime={expiryTime}
+                assignPlayerToTeam={this.assignPlayerToTeam}
+              />
+            )}
+            <BlurContainer shouldDraftViewBlur={shouldDraftViewBlur}>
+              <Teams
+                draftId={uuid}
+                currentlySelectingTeamId={currentlySelectingTeamId}
+                fetchBy="draft"
+                match={match}
+                displayType={displayType}
+              />
+              <Players
+                draft={currentDraft}
+                parent="draft"
+                displayType={displayType}
+                players={players}
+                assignPlayerToTeam={this.assignPlayerToTeam}
+              />
+            </BlurContainer>
+            {(currentDraft.ownerUserId === currentUser.uuid && status === 'scheduled')
+              && <Requests draftId={uuid} fetchBy="draft" />
+            }
+          </div>
         </div>
       )
     );
