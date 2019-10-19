@@ -44,4 +44,14 @@ module.exports = {
     justify-content: center;
     flex-direction: column;
   `,
+  DRAFT_SELECTION_LIST_ITEM_MIXIN: `
+    border: 1px solid #000;
+    margin: 2rem auto;
+    text-align: center;
+    font-size: 1.5rem;
+    padding: 1rem 0.5rem;
+    width: 60%;
+    display: inline-block;
+    position: relative;
+  `,
 };

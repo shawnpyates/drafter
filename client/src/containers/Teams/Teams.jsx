@@ -57,6 +57,7 @@ class Teams extends Component {
 
   render() {
     const {
+      teams,
       teamsFromUser,
       teamsFromDraft,
       currentlySelectingTeamId,
@@ -94,7 +95,7 @@ class Teams extends Component {
               type={type}
               title={title}
               data={extractDataForDisplay(
-                teamsFromUser || teamsFromDraft,
+                teams || teamsFromUser || teamsFromDraft,
                 currentlySelectingTeamId,
               )}
               emptyDataMessage={noTeamsEntered}

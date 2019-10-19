@@ -9,6 +9,8 @@ import {
   SelectButton,
 } from './styledComponents';
 
+import { Collapsible } from '..';
+
 class SelectionList extends Component {
   constructor() {
     super();
@@ -16,6 +18,7 @@ class SelectionList extends Component {
       focussedPlayerId: null,
     };
   }
+
   changePlayerFocus = (uuid, type) => {
     if (type !== 'Players' || this.props.shouldDraftViewBlur) {
       return;
@@ -45,23 +48,34 @@ class SelectionList extends Component {
             } = item;
             const isFocussed = uuid === this.state.focussedPlayerId;
             return (
-              <div key={uuid}>
-                <ListItem
-                  isCurrentlySelecting={isCurrentlySelecting}
-                  isFocussed={isFocussed}
-                  type={type}
-                  value={uuid}
-                  shouldDraftViewBlur={shouldDraftViewBlur}
-                  onClick={() => this.changePlayerFocus(uuid, type)}
-                >
-                  {name}{(positions && position) && ` (${positions[position]})`}
-                </ListItem>
-                {isFocussed &&
-                  <SelectButton onClick={() => assignPlayerToTeam(uuid)}>
-                    Select
-                  </SelectButton>
-                }
-              </div>
+              type === 'Players'
+                ? (
+                  <div key={uuid}>
+                    <ListItem
+                      isFocussed={isFocussed}
+                      type={type}
+                      value={uuid}
+                      shouldDraftViewBlur={shouldDraftViewBlur}
+                      onClick={() => this.changePlayerFocus(uuid, type)}
+                    >
+                      {name}{(positions && position) && ` (${positions[position]})`}
+                    </ListItem>
+                    {isFocussed
+                    && (
+                      <SelectButton onClick={() => assignPlayerToTeam(uuid)}>
+                        Select
+                      </SelectButton>
+                    )}
+                  </div>
+                )
+                : (
+                  <Collapsible
+                    key={uuid}
+                    isCurrentlySelecting={isCurrentlySelecting}
+                  >
+                    {name}
+                  </Collapsible>
+                )
             );
           })}
         </List>

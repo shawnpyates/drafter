@@ -100,7 +100,7 @@ class DraftMenu extends Component {
         && !draftInfoText
       ) {
         this.renderOpenButtonForOwner();
-      } 
+      }
     }
     if (!isUserFetchComplete && currentUser) {
       this.listenForSocketEvents(socket);
@@ -218,6 +218,7 @@ class DraftMenu extends Component {
       currentlySelectingTeamId,
       selectingTeamChangeTime,
       Players: players,
+      Teams: teams,
     } = currentDraft || {};
     const ownerName = owner && `${owner.firstName} ${owner.lastName}`;
     const { scheduledFor, owner: ownerKey } = profileProperties;
@@ -275,6 +276,7 @@ class DraftMenu extends Component {
                 fetchBy="draft"
                 match={match}
                 displayType={displayType}
+                teams={teams}
               />
               <Players
                 draft={currentDraft}
