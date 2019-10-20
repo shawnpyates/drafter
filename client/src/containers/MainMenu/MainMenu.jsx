@@ -23,6 +23,10 @@ const mapStateToProps = (state) => {
 };
 
 const MainMenu = ({ currentUser }) => {
+  const {
+    Drafts: drafts,
+    Teams: teams,
+  } = currentUser;
   const profileCardTitle = `${currentUser.firstName} ${currentUser.lastName}`;
   const { email } = profileProperties;
   const profileCardData = {
@@ -37,8 +41,8 @@ const MainMenu = ({ currentUser }) => {
         data={profileCardData}
         linkForUpdating={profileCardLinkForUpdating}
       />
-      <Drafts userId={currentUser.uuid} />
-      <Teams userId={currentUser.uuid} fetchBy="user" displayType="table" />
+      <Drafts drafts={drafts} />
+      <Teams teams={teams} fetchBy="user" displayType="table" />
       <Requests userId={currentUser.uuid} fetchBy="requester" />
       <Requests userId={currentUser.uuid} fetchBy="draftOwner" />
     </MainMenuContainer>

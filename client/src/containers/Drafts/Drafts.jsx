@@ -1,22 +1,10 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 
 import { Table } from '../../components';
 
-import { fetchDraftsByUser } from '../../actions';
-
 import { draftsTable as draftsTableTexts } from '../../../texts.json';
-
-const mapStateToProps = (state) => {
-  const { drafts } = state.draft;
-  return { drafts };
-};
-
-const mapDispatchToProps = dispatch => ({
-  fetchDraftsByUser: id => dispatch(fetchDraftsByUser(id)),
-});
 
 const extractDataForDisplay = drafts => (
   drafts.map((draft) => {
@@ -40,46 +28,31 @@ const extractDataForDisplay = drafts => (
   })
 );
 
-class Drafts extends Component {
-  componentDidMount() {
-    const { userId } = this.props;
-    this.props.fetchDraftsByUser(userId);
-  }
-
-  render() {
-    const { drafts } = this.props;
-    const {
-      type,
-      title,
-      noneScheduled,
-      columnHeaders,
-    } = draftsTableTexts;
-    return (
-      <div>
-        {drafts &&
-          <Table
-            type={type}
-            title={title}
-            columnHeaders={columnHeaders}
-            data={extractDataForDisplay(drafts)}
-            emptyDataMessage={noneScheduled}
-            addNewLink="/createDrafts"
-          />
-        }
-      </div>
-    );
-  }
-}
-
-Drafts.defaultProps = {
-  drafts: null,
-  userId: null,
+const Drafts = ({ drafts }) => {
+  const {
+    type,
+    title,
+    noneScheduled,
+    columnHeaders,
+  } = draftsTableTexts;
+  return (
+    <div>
+      {drafts &&
+        <Table
+          type={type}
+          title={title}
+          columnHeaders={columnHeaders}
+          data={extractDataForDisplay(drafts)}
+          emptyDataMessage={noneScheduled}
+          addNewLink="/createDrafts"
+        />
+      }
+    </div>
+  );
 };
 
 Drafts.propTypes = {
-  drafts: PropTypes.arrayOf(PropTypes.object),
-  fetchDraftsByUser: PropTypes.func.isRequired,
-  userId: PropTypes.string,
+  drafts: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Drafts);
+export default Drafts;

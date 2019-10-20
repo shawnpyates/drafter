@@ -19,10 +19,11 @@ module.exports = {
         include: [
           {
             model: Team,
-            include: [Player],
+            include: [Draft, Player, User],
           },
           User,
-          Player],
+          Player,
+        ],
       });
       return res.status(200).send({ draft });
     } catch (e) {

@@ -212,10 +212,9 @@ class DraftMenu extends Component {
     const {
       uuid,
       timeScheduled,
-      name: profileCardTitle,
+      name,
       status,
       User: owner,
-      currentlySelectingTeamId,
       selectingTeamChangeTime,
       Players: players,
       Teams: teams,
@@ -240,7 +239,7 @@ class DraftMenu extends Component {
       && (
         <div>
           <ProfileCard
-            title={profileCardTitle}
+            title={name}
             data={profileCardData}
             linkForUpdating={profileCardLinkForUpdating}
           />
@@ -271,8 +270,6 @@ class DraftMenu extends Component {
             )}
             <BlurContainer shouldDraftViewBlur={shouldDraftViewBlur}>
               <Teams
-                draftId={uuid}
-                currentlySelectingTeamId={currentlySelectingTeamId}
                 fetchBy="draft"
                 match={match}
                 displayType={displayType}
