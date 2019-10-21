@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import { SelectionList, Table } from '../../components';
 
-import { playersTable as playersTableTexts, positions } from '../../../texts.json';
+import { playersTable as playersTableTexts } from '../../../texts.json';
 
 const mapStateToProps = state => ({ shouldDraftViewBlur: state.draft.shouldDraftViewBlur });
 
@@ -69,7 +69,6 @@ const Players = ({
             title={title}
             data={extractDataForDisplay(nonSelectedPlayers || players)}
             emptyDataMessage={noPlayersInDraft}
-            positions={positions}
             assignPlayerToTeam={assignPlayerToTeam}
             shouldDraftViewBlur={shouldDraftViewBlur}
           />

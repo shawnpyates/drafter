@@ -4,10 +4,11 @@ import PropTypes from 'prop-types';
 import {
   Icon,
   InnerContent,
-  ListItem,
+  PlayerListItem,
+  TeamListItem,
 } from './styledComponents';
 
-// import { Table } from '..';
+import { positions } from '../../../texts.json';
 
 class Collapsible extends Component {
   constructor() {
@@ -23,36 +24,31 @@ class Collapsible extends Component {
 
   render() {
     const { isOpen } = this.state;
+    const { children, playersFromTeam } = this.props;
     const iconText = isOpen ? '-' : '+';
     return (
-      <ListItem
+      <TeamListItem
         isCurrentlySelecting={this.props.isCurrentlySelecting}
       >
-        {this.props.children}<Icon onClick={this.togglePanel}>{iconText}</Icon>
-        {this.state.isOpen
+        {children}<Icon onClick={this.togglePanel}>{iconText}</Icon>
+        {isOpen
         && (
           <InnerContent>
-            <div>Hi</div>
-            <div>Hi</div>
-            <div>Hi</div>
+            {playersFromTeam.map(player => (
+              <PlayerListItem>
+                {`${player.name}`}{player.position && ` (${positions[player.position]})`}
+              </PlayerListItem>
+            ))}
           </InnerContent>
         )}
-      </ListItem>
+      </TeamListItem>
     );
   }
 }
 
-Collapsible.defaultProps = {
-  // positions: null,
-  // assignPlayerToTeam: null,
-};
-
 Collapsible.propTypes = {
-  // type: PropTypes.string.isRequired,
-  // title: PropTypes.string.isRequired,
-  // data: PropTypes.arrayOf(PropTypes.object).isRequired,
-  // positions: PropTypes.objectOf(PropTypes.any),
-  // assignPlayerToTeam: PropTypes.func,
+  children: PropTypes.string.isRequired,
+  playersFromTeam: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 export default Collapsible;

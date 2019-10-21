@@ -9,6 +9,8 @@ import {
   SelectButton,
 } from './styledComponents';
 
+import { positions } from '../../../texts.json';
+
 import { Collapsible } from '..';
 
 class SelectionList extends Component {
@@ -19,10 +21,7 @@ class SelectionList extends Component {
     };
   }
 
-  changePlayerFocus = (uuid, type) => {
-    if (type !== 'Players' || this.props.shouldDraftViewBlur) {
-      return;
-    }
+  changePlayerFocus = (uuid) => {
     this.setState({ focussedPlayerId: uuid });
   };
 
@@ -31,7 +30,6 @@ class SelectionList extends Component {
       type,
       title,
       data,
-      positions,
       assignPlayerToTeam,
       shouldDraftViewBlur,
     } = this.props;
@@ -45,6 +43,7 @@ class SelectionList extends Component {
               isCurrentlySelecting,
               name,
               position,
+              players,
             } = item;
             const isFocussed = uuid === this.state.focussedPlayerId;
             return (
@@ -56,9 +55,9 @@ class SelectionList extends Component {
                       type={type}
                       value={uuid}
                       shouldDraftViewBlur={shouldDraftViewBlur}
-                      onClick={() => this.changePlayerFocus(uuid, type)}
+                      onClick={() => this.changePlayerFocus(uuid)}
                     >
-                      {name}{(positions && position) && ` (${positions[position]})`}
+                      {name}{position && ` (${positions[position]})`}
                     </ListItem>
                     {isFocussed
                     && (
@@ -72,6 +71,7 @@ class SelectionList extends Component {
                   <Collapsible
                     key={uuid}
                     isCurrentlySelecting={isCurrentlySelecting}
+                    playersFromTeam={players}
                   >
                     {name}
                   </Collapsible>
@@ -85,7 +85,6 @@ class SelectionList extends Component {
 }
 
 SelectionList.defaultProps = {
-  positions: null,
   assignPlayerToTeam: null,
 };
 
@@ -93,7 +92,6 @@ SelectionList.propTypes = {
   type: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
-  positions: PropTypes.objectOf(PropTypes.any),
   assignPlayerToTeam: PropTypes.func,
 };
 

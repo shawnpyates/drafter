@@ -14,7 +14,7 @@ const extractDataForDisplay = (teams) => (
       Draft: draft,
       Players: players,
     } = team;
-    const { currentlySelectingTeamId, name: draftName } = draft;
+    const { currentlySelectingTeamId, name: draftName } = draft || {};
     return {
       uuid,
       name,

@@ -4,9 +4,11 @@ import { mixins, styleVars } from '../../styles';
 
 const {
   DRAFT_SELECTION_LIST_ITEM_MIXIN,
+  P_TEXT_MIXIN,
 } = mixins;
 
 const {
+  EXTRA_SMALL_FONT_SIZE,
   LARGE_FONT_SIZE,
   DARK_BLUE,
   SKY_BLUE,
@@ -28,11 +30,17 @@ const Icon = styled.span`
   top: 0.5rem;
 `;
 
-const InnerContent = styled.div`
+const InnerContent = styled.ul`
   margin-top: 1rem;
 `;
 
-const ListItem = styled.li`
+const PlayerListItem = styled.li`
+  color: ${DARK_BLUE};
+  font-size: ${EXTRA_SMALL_FONT_SIZE};
+  list-style: none;
+`;
+
+const TeamListItem = styled.li`
   background-color: ${props => (props.isCurrentlySelecting || props.isFocussed ? SKY_BLUE : WHITE)};
 
   ${DRAFT_SELECTION_LIST_ITEM_MIXIN}
@@ -42,5 +50,6 @@ module.exports = {
   ContentText,
   Icon,
   InnerContent,
-  ListItem,
+  PlayerListItem,
+  TeamListItem,
 };
