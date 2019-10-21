@@ -6,7 +6,7 @@ const initialState = {
   fetched: false,
   updating: false,
   updated: false,
-  drafts: [],
+  drafts: null,
   errorOnCreateDraft: null,
   errorOnFetchDraftsFromUser: null,
   errorOnFetchDraftsFromTeam: null,
@@ -14,6 +14,7 @@ const initialState = {
   errorOnFetchOneDraft: null,
   errorOnUpdateDraft: null,
   draftInfoText: null,
+  shouldDraftViewBlur: false,
 };
 
 const draftReducer = (state = initialState, action) => {

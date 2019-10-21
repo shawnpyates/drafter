@@ -3,6 +3,7 @@ const {
   Team,
   User,
   Player,
+  Request,
 } = require('../models');
 const { create: createUserDraft } = require('./userDrafts');
 
@@ -21,8 +22,12 @@ module.exports = {
             model: Team,
             include: [Draft, Player, User],
           },
-          User,
+          {
+            model: Request,
+            include: [Draft, User],
+          },
           Player,
+          User,
         ],
       });
       return res.status(200).send({ draft });

@@ -49,19 +49,11 @@ export const createRequest = body => (dispatch) => {
     });
 };
 
-// TODO - target specific request type to remove from state
-export const destroyRequest = (id, requestType) => (dispatch) => {
+export const destroyRequest = (id) => (dispatch) => {
   dispatch({ type: 'DESTROY_REQUEST_PENDING ' });
   return axios.delete(`/api/requests/${id}`)
-    .then((response) => {
-      const { destroyedRequestId } = response.data;
-      dispatch({
-        type: 'DESTROY_REQUEST_FULFILLED',
-        payload: {
-          destroyedRequestId,
-          requestType,
-        },
-      });
+    .then(() => {
+      dispatch({ type: 'DESTROY_REQUEST_FULFILLED' });
     })
     .catch((err) => {
       dispatch({ type: 'DESTROY_REQUEST_REJECTED', payload: err });

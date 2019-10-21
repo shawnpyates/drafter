@@ -217,6 +217,7 @@ class DraftMenu extends Component {
       User: owner,
       selectingTeamChangeTime,
       Players: players,
+      Requests: requests,
       Teams: teams,
     } = currentDraft || {};
     const ownerName = owner && `${owner.firstName} ${owner.lastName}`;
@@ -284,7 +285,7 @@ class DraftMenu extends Component {
               />
             </BlurContainer>
             {(currentDraft.ownerUserId === currentUser.uuid && status === 'scheduled')
-              && <Requests draftId={uuid} fetchBy="draft" />
+              && <Requests requests={requests} fetchBy="draft" />
             }
           </div>
         </div>

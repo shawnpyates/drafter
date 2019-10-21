@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const {
   Draft,
   Player,
+  Request,
   Team,
   User,
 } = require('../models');
@@ -19,12 +20,22 @@ module.exports = {
         include: [
           {
             model: Draft,
-            include: [User],
+            include: [
+              {
+                model: Request,
+                include: [Draft, User]
+              },
+              User,
+            ],
           },
           {
             model: Team,
             include: [Draft, Player, User],
-          }
+          },
+          {
+            model: Request,
+            include: [Draft],
+          },
         ],
       });
       return res.status(200).send({ user });

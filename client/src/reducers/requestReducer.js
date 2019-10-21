@@ -75,13 +75,8 @@ const requestReducer = (state = initialState, action) => {
     case 'DESTROY_REQUEST_REJECTED':
       return { ...state, destroying: false, errorOnDestroyingRequest: action.payload };
     case 'DESTROY_REQUEST_FULFILLED': {
-      const { destroyedRequestId, requestType } = action.payload;
-      const requestsAfterRemoval = state[requestType].filter(request => (
-        request.uuid !== destroyedRequestId
-      ));
       return {
         ...state,
-        [requestType]: requestsAfterRemoval,
         destroying: false,
         destroyed: true,
       };
