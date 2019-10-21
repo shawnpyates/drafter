@@ -49,7 +49,7 @@ const MainMenu = ({ currentUser }) => {
         linkForUpdating={profileCardLinkForUpdating}
       />
       <Drafts drafts={drafts} />
-      <Teams teams={teams} fetchBy="user" displayType="table" />
+      <Teams teams={teams} parent="user" displayType="table" />
       <Requests requests={outgoingRequests} fetchBy="requester" />
       <Requests requests={incomingRequests} fetchBy="draftOwner" />
     </MainMenuContainer>

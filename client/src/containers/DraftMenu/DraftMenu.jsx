@@ -234,7 +234,11 @@ class DraftMenu extends Component {
       [ownerKey]: ownerName,
     };
     const profileCardLinkForUpdating = `/updateDraft/${uuid}`;
-    const displayType = status === 'scheduled' ? 'table' : 'selectionList';
+    const displayType = (
+      status === 'scheduled' || status === 'unscheduled'
+      ? 'table'
+      : 'selectionList'
+    );
     return (
       currentDraft
       && (
@@ -271,7 +275,7 @@ class DraftMenu extends Component {
             )}
             <BlurContainer shouldDraftViewBlur={shouldDraftViewBlur}>
               <Teams
-                fetchBy="draft"
+                parent="draft"
                 match={match}
                 displayType={displayType}
                 teams={teams}
@@ -284,8 +288,8 @@ class DraftMenu extends Component {
                 assignPlayerToTeam={this.assignPlayerToTeam}
               />
             </BlurContainer>
-            {(currentDraft.ownerUserId === currentUser.uuid && status === 'scheduled')
-              && <Requests requests={requests} fetchBy="draft" />
+            {(currentDraft.ownerUserId === currentUser.uuid && displayType === 'table')
+            && <Requests requests={requests} fetchBy="draft" />
             }
           </div>
         </div>

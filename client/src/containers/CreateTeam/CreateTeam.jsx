@@ -5,7 +5,11 @@ import { Redirect } from 'react-router-dom';
 
 import { Form } from '../../components';
 
-import { createRequest, createTeam } from '../../actions';
+import {
+  createRequest,
+  createTeam,
+  fetchCurrentUser,
+} from '../../actions';
 
 import { team as teamForm } from '../../../formConstants.json';
 
@@ -25,9 +29,10 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   createRequest: body => dispatch(createRequest(body)),
   createTeam: body => dispatch(createTeam(body)),
+  fetchCurrentUser: () => dispatch(fetchCurrentUser()),
 });
 
 const getInputsWithoutDraftSelection = inputs => (
@@ -70,6 +75,17 @@ class CreateTeam extends Component {
       setTimeout(() => {
         this.setState({ errorMessage: null });
       }, ERROR_MESSAGE_DURATION);
+    }
+  }
+  
+  componentWillUnmount() {
+    const {
+      match: {
+        params: { url } = {},
+      } = {},
+    } = this.props;
+    if ((!url || !url.includes('drafts')) && this.state.isSubmitComplete) {
+      this.props.fetchCurrentUser();
     }
   }
 

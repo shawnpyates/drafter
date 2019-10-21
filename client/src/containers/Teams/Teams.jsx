@@ -27,7 +27,7 @@ const extractDataForDisplay = (teams) => (
 );
 
 const Teams = ({
-  fetchBy,
+  parent,
   displayType,
   match: { url },
   teams,
@@ -54,7 +54,7 @@ const Teams = ({
             title={title}
             columnHeaders={columnHeaders}
             data={extractDataForDisplay(teams)}
-            emptyDataMessage={fetchBy === 'user' ? belongToNoTeams : noTeamsEntered}
+            emptyDataMessage={parent === 'user' ? belongToNoTeams : noTeamsEntered}
             addNewLink={addNewLink}
           />
         }
@@ -77,7 +77,7 @@ Teams.defaultProps = {
 
 Teams.propTypes = {
   displayType: PropTypes.string.isRequired,
-  fetchBy: PropTypes.string.isRequired,
+  parent: PropTypes.string.isRequired,
   match: PropTypes.objectOf(PropTypes.any),
   teams: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
