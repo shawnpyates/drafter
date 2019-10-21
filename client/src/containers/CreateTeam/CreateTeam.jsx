@@ -5,7 +5,7 @@ import { Redirect } from 'react-router-dom';
 
 import { Form } from '../../components';
 
-import { createRequest, createTeam, fetchDraftsByOwner } from '../../actions';
+import { createRequest, createTeam } from '../../actions';
 
 import { team as teamForm } from '../../../formConstants.json';
 
@@ -16,12 +16,10 @@ const ERROR_MESSAGE_DURATION = 2000;
 const mapStateToProps = (state) => {
   const {
     user: { currentUser },
-    draft: { drafts },
     request: { createdRequest, errorOnCreateRequest },
   } = state;
   return {
     currentUser,
-    drafts,
     createdRequest,
     errorOnCreateRequest,
   };
@@ -30,7 +28,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => ({
   createRequest: body => dispatch(createRequest(body)),
   createTeam: body => dispatch(createTeam(body)),
-  fetchDraftsByOwner: ownerUserId => dispatch(fetchDraftsByOwner(ownerUserId)),
 });
 
 const getInputsWithoutDraftSelection = inputs => (
@@ -62,18 +59,13 @@ class CreateTeam extends Component {
       errorMessage: null,
       buttonsToHighlight: {
         shouldFindOwnDraft: null,
-        draftListSelectionSelection: null,
+        draftListSelection: null,
       },
       draftNameFromTextField: null,
     };
   }
 
   componentDidUpdate() {
-    const { buttonsToHighlight } = this.state;
-    const { currentUser, drafts } = this.props;
-    if (buttonsToHighlight.shouldFindOwnDraft && !drafts) {
-      this.props.fetchDraftsByOwner(currentUser.uuid);
-    }
     if (this.state.errorMessage) {
       setTimeout(() => {
         this.setState({ errorMessage: null });
@@ -113,8 +105,9 @@ class CreateTeam extends Component {
 
   createTeamForDraft = (name, draftListSelection) => {
     const draftIdParam = this.getDraftIdParam();
+    const { uuid: ownerUserId, Drafts: drafts } = this.props.currentUser;
     const { uuid: draftUuid } = (
-      this.props.drafts.find(draft => draft.name === draftListSelection) || {}
+      drafts.find(draft => draft.name === draftListSelection) || {}
     );
     const draftIdForBody = (
       draftIdParam
@@ -126,7 +119,7 @@ class CreateTeam extends Component {
     }
     const body = {
       name,
-      ownerUserId: this.props.currentUser.uuid,
+      ownerUserId,
       draftId: draftIdForBody,
     };
     this.props.createTeam(body)
@@ -171,7 +164,7 @@ class CreateTeam extends Component {
 
 
   render() {
-    const { drafts } = this.props;
+    const { Drafts: drafts } = this.props.currentUser;
     const { errorMessage, isSubmitComplete, buttonsToHighlight } = this.state;
     const { inputs, title } = teamForm;
     const draftIdParam = this.getDraftIdParam();

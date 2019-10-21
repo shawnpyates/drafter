@@ -23,6 +23,17 @@ const mapStateToProps = (state) => {
 };
 
 const MainMenu = ({ currentUser }) => {
+  const {
+    Drafts: drafts,
+    Requests: outgoingRequests,
+    Teams: teams,
+  } = currentUser;
+  const incomingRequests = (
+    drafts
+      .filter(draft => draft.ownerUserId === currentUser.uuid)
+      .map(draft => draft.Requests)
+      .reduce((flat, next) => flat.concat(next), [])
+  );
   const profileCardTitle = `${currentUser.firstName} ${currentUser.lastName}`;
   const { email } = profileProperties;
   const profileCardData = {
@@ -37,10 +48,10 @@ const MainMenu = ({ currentUser }) => {
         data={profileCardData}
         linkForUpdating={profileCardLinkForUpdating}
       />
-      <Drafts userId={currentUser.uuid} />
-      <Teams userId={currentUser.uuid} fetchBy="user" displayType="table" />
-      <Requests userId={currentUser.uuid} fetchBy="requester" />
-      <Requests userId={currentUser.uuid} fetchBy="draftOwner" />
+      <Drafts drafts={drafts} />
+      <Teams teams={teams} fetchBy="user" displayType="table" />
+      <Requests requests={outgoingRequests} fetchBy="requester" />
+      <Requests requests={incomingRequests} fetchBy="draftOwner" />
     </MainMenuContainer>
   );
 };

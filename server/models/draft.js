@@ -39,6 +39,9 @@ module.exports = (sequelize, DataTypes) => {
     Draft.hasMany(models.Player, {
       foreignKey: 'draftId',
     });
+    Draft.hasMany(models.Request, {
+      foreignKey: 'draftId',
+    });
   };
   return Draft;
 };

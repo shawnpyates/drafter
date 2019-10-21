@@ -9,6 +9,10 @@ import {
   SelectButton,
 } from './styledComponents';
 
+import { positions } from '../../../texts.json';
+
+import { Collapsible } from '..';
+
 class SelectionList extends Component {
   constructor() {
     super();
@@ -16,10 +20,8 @@ class SelectionList extends Component {
       focussedPlayerId: null,
     };
   }
-  changePlayerFocus = (uuid, type) => {
-    if (type !== 'Players' || this.props.shouldDraftViewBlur) {
-      return;
-    }
+
+  changePlayerFocus = (uuid) => {
     this.setState({ focussedPlayerId: uuid });
   };
 
@@ -28,7 +30,6 @@ class SelectionList extends Component {
       type,
       title,
       data,
-      positions,
       assignPlayerToTeam,
       shouldDraftViewBlur,
     } = this.props;
@@ -42,26 +43,39 @@ class SelectionList extends Component {
               isCurrentlySelecting,
               name,
               position,
+              players,
             } = item;
             const isFocussed = uuid === this.state.focussedPlayerId;
             return (
-              <div key={uuid}>
-                <ListItem
-                  isCurrentlySelecting={isCurrentlySelecting}
-                  isFocussed={isFocussed}
-                  type={type}
-                  value={uuid}
-                  shouldDraftViewBlur={shouldDraftViewBlur}
-                  onClick={() => this.changePlayerFocus(uuid, type)}
-                >
-                  {name}{(positions && position) && ` (${positions[position]})`}
-                </ListItem>
-                {isFocussed &&
-                  <SelectButton onClick={() => assignPlayerToTeam(uuid)}>
-                    Select
-                  </SelectButton>
-                }
-              </div>
+              type === 'Players'
+                ? (
+                  <div key={uuid}>
+                    <ListItem
+                      isFocussed={isFocussed}
+                      type={type}
+                      value={uuid}
+                      shouldDraftViewBlur={shouldDraftViewBlur}
+                      onClick={() => this.changePlayerFocus(uuid)}
+                    >
+                      {name}{position && ` (${positions[position]})`}
+                    </ListItem>
+                    {isFocussed
+                    && (
+                      <SelectButton onClick={() => assignPlayerToTeam(uuid)}>
+                        Select
+                      </SelectButton>
+                    )}
+                  </div>
+                )
+                : (
+                  <Collapsible
+                    key={uuid}
+                    isCurrentlySelecting={isCurrentlySelecting}
+                    playersFromTeam={players}
+                  >
+                    {name}
+                  </Collapsible>
+                )
             );
           })}
         </List>
@@ -71,7 +85,6 @@ class SelectionList extends Component {
 }
 
 SelectionList.defaultProps = {
-  positions: null,
   assignPlayerToTeam: null,
 };
 
@@ -79,7 +92,6 @@ SelectionList.propTypes = {
   type: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
-  positions: PropTypes.objectOf(PropTypes.any),
   assignPlayerToTeam: PropTypes.func,
 };
 

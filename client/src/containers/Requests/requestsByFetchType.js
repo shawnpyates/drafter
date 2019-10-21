@@ -8,9 +8,6 @@ import {
 
 const requestsByFetchType = {
   draft: {
-    data: 'requestsForDraft',
-    fetchFn: 'fetchByDraft',
-    fetchFnArg: 'draftId',
     tableTexts: requestsForDraftTableTexts,
     getDataForTable: requests => (
       requests.map((request) => {
@@ -29,9 +26,6 @@ const requestsByFetchType = {
     ),
   },
   requester: {
-    data: 'outgoingRequests',
-    fetchFn: 'fetchByRequester',
-    fetchFnArg: 'userId',
     tableTexts: outgoingRequestsTableTexts,
     getDataForTable: requests => (
       requests.map((request) => {
@@ -51,9 +45,6 @@ const requestsByFetchType = {
     ),
   },
   draftOwner: {
-    data: 'incomingRequests',
-    fetchFn: 'fetchByDraftOwner',
-    fetchFnArg: 'userId',
     tableTexts: incomingRequestsTableTexts,
     getDataForTable: requests => (
       requests.map((request) => {

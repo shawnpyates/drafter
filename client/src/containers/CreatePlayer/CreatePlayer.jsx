@@ -14,13 +14,7 @@ const {
   invalidEmail,
 } = playerForm.errorMessages;
 
-const mapStateToProps = (state) => {
-  const {
-    user: { currentUser },
-    draft: { drafts },
-  } = state;
-  return { currentUser, drafts };
-};
+const mapStateToProps = (state) => ({ currentUser: state.user.currentUser });
 
 const mapDispatchToProps = dispatch => ({
   createPlayer: body => dispatch(createPlayer(body)),

@@ -100,7 +100,7 @@ class DraftMenu extends Component {
         && !draftInfoText
       ) {
         this.renderOpenButtonForOwner();
-      } 
+      }
     }
     if (!isUserFetchComplete && currentUser) {
       this.listenForSocketEvents(socket);
@@ -212,12 +212,13 @@ class DraftMenu extends Component {
     const {
       uuid,
       timeScheduled,
-      name: profileCardTitle,
+      name,
       status,
       User: owner,
-      currentlySelectingTeamId,
       selectingTeamChangeTime,
       Players: players,
+      Requests: requests,
+      Teams: teams,
     } = currentDraft || {};
     const ownerName = owner && `${owner.firstName} ${owner.lastName}`;
     const { scheduledFor, owner: ownerKey } = profileProperties;
@@ -239,7 +240,7 @@ class DraftMenu extends Component {
       && (
         <div>
           <ProfileCard
-            title={profileCardTitle}
+            title={name}
             data={profileCardData}
             linkForUpdating={profileCardLinkForUpdating}
           />
@@ -270,11 +271,10 @@ class DraftMenu extends Component {
             )}
             <BlurContainer shouldDraftViewBlur={shouldDraftViewBlur}>
               <Teams
-                draftId={uuid}
-                currentlySelectingTeamId={currentlySelectingTeamId}
                 fetchBy="draft"
                 match={match}
                 displayType={displayType}
+                teams={teams}
               />
               <Players
                 draft={currentDraft}
@@ -285,7 +285,7 @@ class DraftMenu extends Component {
               />
             </BlurContainer>
             {(currentDraft.ownerUserId === currentUser.uuid && status === 'scheduled')
-              && <Requests draftId={uuid} fetchBy="draft" />
+              && <Requests requests={requests} fetchBy="draft" />
             }
           </div>
         </div>

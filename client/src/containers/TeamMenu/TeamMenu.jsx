@@ -51,7 +51,8 @@ class TeamMenu extends Component {
     };
     const profileCardLinkForUpdating = `/updateTeam/${uuid}`;
     return (
-      currentTeam &&
+      currentTeam 
+      && (
         <div>
           <ProfileCard
             title={profileCardTitle}
@@ -64,6 +65,7 @@ class TeamMenu extends Component {
             players={players}
           />
         </div>
+      )
     );
   }
 }

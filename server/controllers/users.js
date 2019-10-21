@@ -1,6 +1,12 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { Draft, User } = require('../models');
+const {
+  Draft,
+  Player,
+  Request,
+  Team,
+  User,
+} = require('../models');
 
 const SECRET = process.env.JWT_SECRET;
 const SALT_ROUNDS = 10;
@@ -11,7 +17,26 @@ module.exports = {
     try {
       const user = await User.findOne({
         where: { uuid: req.params.id },
-        include: [Draft],
+        include: [
+          {
+            model: Draft,
+            include: [
+              {
+                model: Request,
+                include: [Draft, User]
+              },
+              User,
+            ],
+          },
+          {
+            model: Team,
+            include: [Draft, Player, User],
+          },
+          {
+            model: Request,
+            include: [Draft],
+          },
+        ],
       });
       return res.status(200).send({ user });
     } catch (e) {

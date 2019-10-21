@@ -3,6 +3,7 @@ const {
   Team,
   User,
   Player,
+  Request,
 } = require('../models');
 const { create: createUserDraft } = require('./userDrafts');
 
@@ -16,7 +17,18 @@ module.exports = {
     try {
       const draft = await Draft.findOne({
         where: { uuid: req.params.id },
-        include: [Team, User, Player],
+        include: [
+          {
+            model: Team,
+            include: [Draft, Player, User],
+          },
+          {
+            model: Request,
+            include: [Draft, User],
+          },
+          Player,
+          User,
+        ],
       });
       return res.status(200).send({ draft });
     } catch (e) {
@@ -75,7 +87,7 @@ module.exports = {
       });
       if (!draft) return res.status(404).send({ e: 'Draft not found.' });
       const selectingTeamChangeTime = (
-        (status === 'open' || currentlySelectingTeamId) 
+        (status === 'open' || currentlySelectingTeamId)
         && getSelectingTeamTimeChange()
       );
       const updatedDraft = await draft.update({

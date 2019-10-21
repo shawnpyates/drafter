@@ -4,7 +4,6 @@ import { mixins, styleVars } from '../../styles';
 
 const {
   CENTER_ELEMENT_MIXIN,
-  P_TEXT_MIXIN,
   VERTICALLY_CENTER_CONTENT_MIXIN,
 } = mixins;
 
