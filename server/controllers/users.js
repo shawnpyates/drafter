@@ -11,8 +11,7 @@ const {
 const SECRET = process.env.JWT_SECRET;
 const SALT_ROUNDS = 10;
 
-const fetchUserQuery = async ({ id, email }) => {
-  const searchWhere = email ? { email } : { uuid: id };
+const fetchUserQuery = async (searchWhere) => {
   const user = await User.findOne({
     where: searchWhere,
     include: [
@@ -63,14 +62,15 @@ module.exports = {
       const hash = await bcrypt.hash(password, SALT_ROUNDS);
 
       const user = await User.create({
-          firstName,
-          lastName,
-          email,
-          password: hash,
+        firstName,
+        lastName,
+        email,
+        password: hash,
       });
+      const { uuid } = user;
       // 'include' param seems to not work on create method, use refetch for now
-      const userWithAssociations = await fetchUserQuery({ id: user.uuid });
-      const token = { token: jwt.sign({ userId: user.uuid }, SECRET) };
+      const userWithAssociations = await fetchUserQuery({ uuid });
+      const token = { token: jwt.sign({ userId: uuid }, SECRET) };
       return res.status(201).send({ user: userWithAssociations, token });
     } catch (e) {
       return res.status(400).send({ e });
