@@ -13,6 +13,7 @@ module.exports = {
 
   // font families
   DEFAULT_FONT: 'sans-serif',
+  PRETTY_FONT: 'La Belle Aurore',
 
   // font sizes
   EXTRA_SMALL_FONT_SIZE: '1rem',

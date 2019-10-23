@@ -9,6 +9,8 @@ const {
 const {
   DARK_BLUE,
   EXTRA_LARGE_FONT_SIZE,
+  DEFAULT_FONT,
+  PRETTY_FONT,
 } = styleVars;
 
 const rotate = keyframes`
@@ -43,7 +45,7 @@ const LoadingSpinner = styled.div`
 const LoadingText = styled.p`
   color: ${DARK_BLUE};
   font-size: ${EXTRA_LARGE_FONT_SIZE};
-  font-family: 'La Belle Aurore', sans-serif;
+  font-family: ${PRETTY_FONT}, ${DEFAULT_FONT};
 `;
 
 const LoadingTextContainer = styled.div`
