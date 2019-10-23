@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import { LoggedInView, LoggedOutView } from '..';
-import { Header } from '../../components';
+import { Header, LoadingIndicator } from '../../components';
 import { fetchCurrentUser, removeCurrentUserFromState } from '../../actions';
 
 import { AppContainer, Loading } from './styledComponents';
@@ -12,11 +12,11 @@ import { AppContainer, Loading } from './styledComponents';
 const { localStorage } = window;
 
 const mapStateToProps = (state) => {
-  const { currentUser, fetching  } = state.user;
+  const { currentUser, fetching: isFetchingUser  } = state.user;
   const { socket } = state.socket;
   return {
     currentUser,
-    isFetchingUser: fetching,
+    isFetchingUser,
     socket,
   };
 };
@@ -55,7 +55,7 @@ class App extends Component {
           && <LoggedOutView />
           }
           {isFetchingUser
-          && <Loading className="loading">Loading...</Loading>
+          && <LoadingIndicator />
           }
         </AppContainer>
       </Router>

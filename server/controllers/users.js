@@ -43,7 +43,7 @@ module.exports = {
   async fetchOne(req, res) {
     try {
       const { id } = req.params;
-      const user = await fetchUserQuery({ id });
+      const user = await fetchUserQuery({ uuid: id });
       return res.status(200).send({ user });
     } catch (e) {
       return res.status(400).send({ e });
