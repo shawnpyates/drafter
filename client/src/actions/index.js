@@ -5,6 +5,7 @@ import {
   fetchUsersByTeam,
   fetchUsersByDraft,
   updateUser,
+  removeCurrentUserFromState,
 } from './userActions';
 
 import {
@@ -45,6 +46,7 @@ export {
   fetchUsersByTeam,
   fetchUsersByDraft,
   updateUser,
+  removeCurrentUserFromState,
   createDraft,
   fetchDraftsByOwner,
   fetchDraftsByTeam,

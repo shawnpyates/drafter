@@ -11,33 +11,40 @@ const {
 const SECRET = process.env.JWT_SECRET;
 const SALT_ROUNDS = 10;
 
+const fetchUserQuery = async ({ id, email }) => {
+  const searchWhere = email ? { email } : { uuid: id };
+  const user = await User.findOne({
+    where: searchWhere,
+    include: [
+      {
+        model: Draft,
+        include: [
+          {
+            model: Request,
+            include: [Draft, User]
+          },
+          User,
+        ],
+      },
+      {
+        model: Team,
+        include: [Draft, Player, User],
+      },
+      {
+        model: Request,
+        include: [Draft],
+      },
+    ],
+  });
+  return user;
+}
+
 module.exports = {
 
   async fetchOne(req, res) {
     try {
-      const user = await User.findOne({
-        where: { uuid: req.params.id },
-        include: [
-          {
-            model: Draft,
-            include: [
-              {
-                model: Request,
-                include: [Draft, User]
-              },
-              User,
-            ],
-          },
-          {
-            model: Team,
-            include: [Draft, Player, User],
-          },
-          {
-            model: Request,
-            include: [Draft],
-          },
-        ],
-      });
+      const { id } = req.params;
+      const user = await fetchUserQuery({ id });
       return res.status(200).send({ user });
     } catch (e) {
       return res.status(400).send({ e });
@@ -56,12 +63,15 @@ module.exports = {
       const hash = await bcrypt.hash(password, SALT_ROUNDS);
 
       const user = await User.create({
-        firstName,
-        lastName,
-        email,
-        password: hash,
+          firstName,
+          lastName,
+          email,
+          password: hash,
       });
-      return res.status(201).send({ user });
+      // 'include' param seems to not work on create method, use refetch for now
+      const userWithAssociations = await fetchUserQuery({ id: user.uuid });
+      const token = { token: jwt.sign({ userId: user.uuid }, SECRET) };
+      return res.status(201).send({ user: userWithAssociations, token });
     } catch (e) {
       return res.status(400).send({ e });
     }
@@ -71,7 +81,7 @@ module.exports = {
     try {
       const { email, password } = req.body;
 
-      const user = await User.findOne({ where: { email } });
+      const user = await fetchUserQuery({ email });
       if (!user) return res.status(404).send({ failure: 'cannotFindUser' });
 
       const isPasswordCorrect = await bcrypt.compare(password, user.password);
