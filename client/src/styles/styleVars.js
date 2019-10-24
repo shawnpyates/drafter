@@ -13,12 +13,14 @@ module.exports = {
 
   // font families
   DEFAULT_FONT: 'sans-serif',
+  PRETTY_FONT: 'La Belle Aurore',
 
   // font sizes
   EXTRA_SMALL_FONT_SIZE: '1rem',
   SMALL_FONT_SIZE: '1.4rem',
   NORMAL_FONT_SIZE: '1.6rem',
   LARGE_FONT_SIZE: '2.0rem',
+  EXTRA_LARGE_FONT_SIZE: '2.4rem',
 
   // form widths
   NARROW_FORM: '40%',

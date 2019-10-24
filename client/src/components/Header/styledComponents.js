@@ -3,7 +3,13 @@ import styled from 'styled-components';
 import { mixins, styleVars } from '../../styles';
 
 const { HEADING_TEXT_MIXIN } = mixins;
-const { DARK_BLUE, SKY_BLUE, WHITE } = styleVars;
+const {
+  DARK_BLUE,
+  SKY_BLUE,
+  WHITE,
+  DEFAULT_FONT,
+  PRETTY_FONT,
+} = styleVars;
 
 const Container = styled.header`
   background-color: ${DARK_BLUE};
@@ -36,7 +42,7 @@ const TitleBox = styled.div`
 
 const Title = styled.h2`
   display: inline-block;
-  font-family: 'La Belle Aurore', sans-serif;
+  font-family: ${PRETTY_FONT}, ${DEFAULT_FONT};
   font-size: 3.5rem;
   color: #FFF;
 `;

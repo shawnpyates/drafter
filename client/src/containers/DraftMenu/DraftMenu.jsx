@@ -13,7 +13,7 @@ import {
   Teams,
 } from '..';
 
-import { Button, Timer } from '../../components';
+import { Button, LoadingIndicator, Timer } from '../../components';
 
 import {
   fetchOneDraft,
@@ -40,7 +40,12 @@ const { properties: profileProperties, values: profileValues } = draftProfileDat
 
 const mapStateToProps = (state) => {
   const { draft, socket: socketState, user } = state;
-  const { currentDraft, draftInfoText, shouldDraftViewBlur } = draft;
+  const {
+    currentDraft,
+    draftInfoText,
+    shouldDraftViewBlur,
+    fetching: isFetchingDraft,
+  } = draft;
   const { socket } = socketState;
   const { currentUser } = user;
   return {
@@ -49,6 +54,7 @@ const mapStateToProps = (state) => {
     socket,
     currentUser,
     shouldDraftViewBlur,
+    isFetchingDraft,
   };
 };
 
@@ -205,6 +211,7 @@ class DraftMenu extends Component {
       match,
       draftInfoText,
       shouldDraftViewBlur,
+      isFetchingDraft,
     } = this.props;
     const {
       shouldOpenButtonRender,
@@ -234,62 +241,69 @@ class DraftMenu extends Component {
       [ownerKey]: ownerName,
     };
     const profileCardLinkForUpdating = `/updateDraft/${uuid}`;
-    const displayType = status === 'scheduled' ? 'table' : 'selectionList';
+    const displayType = (
+      status === 'scheduled' || status === 'unscheduled'
+      ? 'table'
+      : 'selectionList'
+    );
     return (
-      currentDraft
-      && (
-        <div>
-          <ProfileCard
-            title={name}
-            data={profileCardData}
-            linkForUpdating={profileCardLinkForUpdating}
-          />
+      <div>
+        {(currentDraft && !isFetchingDraft)
+        && (
           <div>
-            {(shouldOpenButtonRender && status !== 'open')
-            && (
-              <div>
-                <Button
-                  value="OPEN"
-                  clickHandler={this.openDraft}
-                />
-              </div>
-            )}
-            <InfoContainer>
-              {draftInfoText
+            <ProfileCard
+              title={name}
+              data={profileCardData}
+              linkForUpdating={profileCardLinkForUpdating}
+            />
+            <div>
+              {(shouldOpenButtonRender && status !== 'open')
               && (
-                <InfoText>
-                  {draftInfoText}
-                </InfoText>
+                <div>
+                  <Button
+                    value="OPEN"
+                    clickHandler={this.openDraft}
+                  />
+                </div>
               )}
-            </InfoContainer>
-            {expiryTime
-            && (
-              <Timer
-                expiryTime={expiryTime}
-                assignPlayerToTeam={this.assignPlayerToTeam}
-              />
-            )}
-            <BlurContainer shouldDraftViewBlur={shouldDraftViewBlur}>
-              <Teams
-                fetchBy="draft"
-                match={match}
-                displayType={displayType}
-                teams={teams}
-              />
-              <Players
-                draft={currentDraft}
-                parent="draft"
-                displayType={displayType}
-                players={players}
-                assignPlayerToTeam={this.assignPlayerToTeam}
-              />
-            </BlurContainer>
-            {(currentDraft.ownerUserId === currentUser.uuid && status === 'scheduled')
+              <InfoContainer>
+                {draftInfoText
+                && (
+                  <InfoText>
+                    {draftInfoText}
+                  </InfoText>
+                )}
+              </InfoContainer>
+              {expiryTime
+              && (
+                <Timer
+                  expiryTime={expiryTime}
+                  assignPlayerToTeam={this.assignPlayerToTeam}
+                />
+              )}
+              <BlurContainer shouldDraftViewBlur={shouldDraftViewBlur}>
+                <Teams
+                  parent="draft"
+                  match={match}
+                  displayType={displayType}
+                  teams={teams}
+                />
+                <Players
+                  draft={currentDraft}
+                  parent="draft"
+                  displayType={displayType}
+                  players={players}
+                  assignPlayerToTeam={this.assignPlayerToTeam}
+                />
+              </BlurContainer>
+              {(currentDraft.ownerUserId === currentUser.uuid && displayType === 'table')
               && <Requests requests={requests} fetchBy="draft" />
-            }
+              }
+            </div>
           </div>
-        </div>
-      )
+        )}
+        {isFetchingDraft && <LoadingIndicator />}
+      </div>
     );
   }
 }

@@ -11,33 +11,39 @@ const {
 const SECRET = process.env.JWT_SECRET;
 const SALT_ROUNDS = 10;
 
+const fetchUserQuery = async (searchWhere) => {
+  const user = await User.findOne({
+    where: searchWhere,
+    include: [
+      {
+        model: Draft,
+        include: [
+          {
+            model: Request,
+            include: [Draft, User]
+          },
+          User,
+        ],
+      },
+      {
+        model: Team,
+        include: [Draft, Player, User],
+      },
+      {
+        model: Request,
+        include: [Draft],
+      },
+    ],
+  });
+  return user;
+}
+
 module.exports = {
 
   async fetchOne(req, res) {
     try {
-      const user = await User.findOne({
-        where: { uuid: req.params.id },
-        include: [
-          {
-            model: Draft,
-            include: [
-              {
-                model: Request,
-                include: [Draft, User]
-              },
-              User,
-            ],
-          },
-          {
-            model: Team,
-            include: [Draft, Player, User],
-          },
-          {
-            model: Request,
-            include: [Draft],
-          },
-        ],
-      });
+      const { id } = req.params;
+      const user = await fetchUserQuery({ uuid: id });
       return res.status(200).send({ user });
     } catch (e) {
       return res.status(400).send({ e });
@@ -61,7 +67,11 @@ module.exports = {
         email,
         password: hash,
       });
-      return res.status(201).send({ user });
+      const { uuid } = user;
+      // 'include' param seems to not work on create method, use refetch for now
+      const userWithAssociations = await fetchUserQuery({ uuid });
+      const token = { token: jwt.sign({ userId: uuid }, SECRET) };
+      return res.status(201).send({ user: userWithAssociations, token });
     } catch (e) {
       return res.status(400).send({ e });
     }
@@ -71,7 +81,7 @@ module.exports = {
     try {
       const { email, password } = req.body;
 
-      const user = await User.findOne({ where: { email } });
+      const user = await fetchUserQuery({ email });
       if (!user) return res.status(404).send({ failure: 'cannotFindUser' });
 
       const isPasswordCorrect = await bcrypt.compare(password, user.password);

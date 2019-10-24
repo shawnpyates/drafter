@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { ProfileCard } from '../../components';
+import { LoadingIndicator, ProfileCard } from '../../components';
 
 import { Players } from '..';
 
@@ -13,8 +13,8 @@ import { fetchOneTeam } from '../../actions';
 const { properties: profileProperties } = teamProfileData;
 
 const mapStateToProps = (state) => {
-  const { currentTeam } = state.team;
-  return { currentTeam };
+  const { currentTeam, fetching: isFetchingTeam } = state.team;
+  return { currentTeam, isFetchingTeam };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
@@ -33,7 +33,7 @@ class TeamMenu extends Component {
     fetchOneTeamPropFn(params.id);
   }
   render() {
-    const { currentTeam } = this.props;
+    const { currentTeam, isFetchingTeam } = this.props;
     const {
       owner: ownerKey,
       draft: draftKey,
@@ -51,21 +51,24 @@ class TeamMenu extends Component {
     };
     const profileCardLinkForUpdating = `/updateTeam/${uuid}`;
     return (
-      currentTeam 
-      && (
-        <div>
-          <ProfileCard
-            title={profileCardTitle}
-            data={profileCardData}
-            linkForUpdating={profileCardLinkForUpdating}
-          />
-          <Players
-            teamId={uuid}
-            parent="team"
-            players={players}
-          />
-        </div>
-      )
+      <div>
+        {(currentTeam && !isFetchingTeam)
+        && (
+          <div>
+            <ProfileCard
+              title={profileCardTitle}
+              data={profileCardData}
+              linkForUpdating={profileCardLinkForUpdating}
+            />
+            <Players
+              teamId={uuid}
+              parent="team"
+              players={players}
+             />
+          </div>
+        )}
+        {isFetchingTeam && <LoadingIndicator />}
+      </div>
     );
   }
 }

@@ -6,6 +6,15 @@ const { localStorage } = window;
 
 const { SERVER_URL } = process.env;
 
+const createSocketConnection = (dispatch, user) => {
+  const { Drafts: drafts } = user;
+  const socket = ioClient(`${SERVER_URL}/drafts`);
+  drafts && drafts.forEach((draft) => {
+    socket.emit('joinDraft', draft.uuid);
+  });
+  dispatch({ type: 'WRITE_SOCKET_CONNECTION_TO_STATE', payload: socket });
+}
+
 export const fetchCurrentUser = () => {
   const token = localStorage.getItem('drafterUserToken');
   return (dispatch) => {
@@ -18,12 +27,7 @@ export const fetchCurrentUser = () => {
         axios.get(`/api/users/${userId}`)
           .then((response) => {
             const { user } = response.data;
-            const socket = ioClient(`${SERVER_URL}/drafts`);
-            const { Drafts: drafts } = user;
-            drafts.forEach((draft) => {
-              socket.emit('joinDraft', draft.uuid);
-            });
-            dispatch({ type: 'WRITE_SOCKET_CONNECTION_TO_STATE', payload: socket });
+            createSocketConnection(dispatch, user);
             dispatch({ type: 'FETCH_CURRENT_USER_FULFILLED', payload: user });
           })
           .catch((dbFetchingError) => {
@@ -41,6 +45,7 @@ export const authenticateUser = body => (dispatch) => {
     .then((response) => {
       const { token, user } = response.data;
       localStorage.setItem('drafterUserToken', token.token);
+      createSocketConnection(dispatch, user);
       dispatch({ type: 'AUTHENTICATE_USER_FULFILLED', payload: user });
     })
     .catch((err) => {
@@ -87,9 +92,10 @@ export const createUser = body => (dispatch) => {
     password,
   })
     .then((response) => {
-      const { user } = response.data;
+      const { token, user } = response.data;
+      localStorage.setItem('drafterUserToken', token.token);
+      createSocketConnection(dispatch, user);
       dispatch({ type: 'CREATE_USER_FULFILLED', payload: user });
-      authenticateUser({ email, password });
     })
     .catch((err) => {
       dispatch({ type: 'CREATE_USER_REJECTED', payload: err });
@@ -110,4 +116,8 @@ export const updateUser = body => (dispatch) => {
     .catch((err) => {
       dispatch({ type: 'UPDATE_CURRENT_USER_REJECTED', payload: err });
     });
+};
+
+export const removeCurrentUserFromState = () => (dispatch) => {
+  dispatch({ type: 'REMOVE_CURRENT_USER_FROM_STATE' });
 };

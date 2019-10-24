@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 
 import { Form } from '../../components';
-import { createDraft } from '../../actions';
+import { createDraft, fetchCurrentUser } from '../../actions';
 
 import { draft as draftForm } from '../../../formConstants.json';
 
@@ -32,6 +32,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => ({
   createDraft: body => dispatch(createDraft(body)),
+  fetchCurrentUser: () => dispatch(fetchCurrentUser()),
 });
 
 const validateForm = (state) => {
@@ -87,6 +88,12 @@ class CreateDraft extends Component {
       setTimeout(() => {
         this.setState({ errorMessage: null });
       }, ERROR_MESSAGE_DURATION);
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.state.isSubmitComplete) {
+      this.props.fetchCurrentUser();
     }
   }
 

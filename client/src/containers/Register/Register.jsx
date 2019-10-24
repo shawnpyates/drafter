@@ -29,14 +29,14 @@ const mapDispatchToProps = dispatch => ({
 
 const isEmailValid = email => (/\S+@\S+\.\S+/).test(email);
 
-const validateForm = (state) => {
+const validateForm = (formState) => {
   const {
     email,
     passwordFirstInsertion,
     passwordSecondInsertion,
-  } = state;
+  } = formState;
 
-  if (Object.values(state).some(value => !value)) {
+  if (Object.values(formState).some(value => !value)) {
     return { errorMessage: missingField };
   }
 
@@ -60,11 +60,13 @@ class Register extends Component {
     super();
     this.state = {
       errorMessage: null,
-      firstName: null,
-      lastName: null,
-      email: null,
-      passwordFirstInsertion: null,
-      passwordSecondInsertion: null,
+      form: {
+        firstName: null,
+        lastName: null,
+        email: null,
+        passwordFirstInsertion: null,
+        passwordSecondInsertion: null,
+      },
     };
   }
 
@@ -83,7 +85,8 @@ class Register extends Component {
 
   handleSubmit = (ev) => {
     ev.preventDefault();
-    const { errorMessage } = validateForm(this.state);
+    const { form } = this.state;
+    const { errorMessage } = validateForm(form);
     if (errorMessage) {
       this.setState({ errorMessage });
       return;
@@ -93,7 +96,7 @@ class Register extends Component {
       lastName,
       email,
       passwordFirstInsertion,
-    } = this.state;
+    } = form;
     const body = {
       firstName,
       lastName,
@@ -104,7 +107,12 @@ class Register extends Component {
   }
 
   updateFieldValue = (name, value) => {
-    this.setState({ [name]: value });
+    this.setState(prevState => ({
+      form: { 
+        ...prevState.form,
+        [name]: value,
+      }, 
+    }));
   }
 
   render() {
