@@ -5,6 +5,8 @@
     "notLoggedIn": "Not Logged In"
   },
 
+  "draftButtonOpenText": "OPEN",
+
   "draftInfoTexts": {
     "draftClosed": "Draft is now closed.",
     "draftStarting": "Draft is now starting!",
@@ -122,6 +124,7 @@
     "title": "Players",
     "noPlayersOnTeam": "There are currently no players on this team.",
     "noPlayersInDraft": "There are currently no players entered into this draft.",
+    "emailUnprovided": "(Unprovided)",
     "columnHeaders": [
       {
         "type": "name",

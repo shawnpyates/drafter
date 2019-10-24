@@ -5,6 +5,16 @@ import { SelectionList, Table } from '../../components';
 
 import { teamsTable as teamsTableTexts } from '../../../texts.json';
 
+const DISPLAY_TYPES = {
+  TABLE: 'table',
+  SELECTION_LIST: 'selectionList',
+};
+
+const URL_NAMESPACES = {
+  SHOW: '/show',
+  CREATE_TEAMS: '/createTeams',
+};
+
 const extractDataForDisplay = (teams) => (
   teams.map((team) => {
     const {
@@ -39,16 +49,17 @@ const Teams = ({
     noTeamsEntered,
     columnHeaders,
   } = teamsTableTexts;
+  const { SHOW, CREATE_TEAMS } = URL_NAMESPACES
   const addNewLink = (
-    (url && url.includes('/show'))
-      ? url.replace('/show', '/createTeams')
-      : '/createTeams'
+    (url && url.includes(SHOW))
+      ? url.replace(SHOW, CREATE_TEAMS)
+      : CREATE_TEAMS
   );
   return (
     teams 
     && (
       <div>
-        {displayType === 'table' &&
+        {displayType === DISPLAY_TYPES.TABLE &&
           <Table
             type={type}
             title={title}
@@ -58,7 +69,7 @@ const Teams = ({
             addNewLink={addNewLink}
           />
         }
-        {displayType === 'selectionList' &&
+        {displayType === DISPLAY_TYPES.SELECTION_LIST &&
           <SelectionList
             type={type}
             title={title}
