@@ -6,6 +6,20 @@ import { SelectionList, Table } from '../../components';
 
 import { playersTable as playersTableTexts } from '../../../texts.json';
 
+const DISPLAY_TYPES = {
+  TABLE: 'table',
+  SELECTION_LIST: 'selectionList',
+};
+
+const {
+  type: TYPE,
+  title: TITLE,
+  noPlayersOnTeam: NO_PLAYERS_ON_TEAM,
+  noPlayersInDraft: NO_PLAYERS_IN_DRAFT,
+  emailUnprovided: EMAIL_UNPROVIDED,
+  columnHeaders: COLUMN_HEADERS,
+} = playersTableTexts;
+
 const mapStateToProps = state => ({ shouldDraftViewBlur: state.draft.shouldDraftViewBlur });
 
 const extractDataForDisplay = players => (
@@ -19,7 +33,7 @@ const extractDataForDisplay = players => (
     return {
       uuid,
       name,
-      email: email || '(Unprovided)',
+      email: email || EMAIL_UNPROVIDED,
       position,
     };
   })
@@ -34,13 +48,6 @@ const Players = ({
   assignPlayerToTeam,
   shouldDraftViewBlur,
 }) => {
-  const {
-    type,
-    title,
-    noPlayersOnTeam,
-    noPlayersInDraft,
-    columnHeaders,
-  } = playersTableTexts;
   const addNewLink = (
     parent === 'team'
       ? `/teams/${teamId}/createPlayers`
@@ -53,22 +60,22 @@ const Players = ({
   return (
     players &&
       <div>
-        {displayType === 'table' &&
+        {displayType === DISPLAY_TYPES.TABLE &&
           <Table
-            type={type}
-            title={title}
-            columnHeaders={columnHeaders}
+            type={TYPE}
+            title={TITLE}
+            columnHeaders={COLUMN_HEADERS}
             data={extractDataForDisplay(players)}
-            emptyDataMessage={parent === 'team' ? noPlayersOnTeam : noPlayersInDraft}
+            emptyDataMessage={parent === 'team' ? NO_PLAYERS_ON_TEAM : NO_PLAYERS_IN_DRAFT}
             addNewLink={addNewLink}
           />
         }
-        {displayType === 'selectionList' &&
+        {displayType === DISPLAY_TYPES.SELECTION_LIST &&
           <SelectionList
-            type={type}
-            title={title}
+            type={TYPE}
+            title={TITLE}
             data={extractDataForDisplay(nonSelectedPlayers || players)}
-            emptyDataMessage={noPlayersInDraft}
+            emptyDataMessage={NO_PLAYERS_IN_DRAFT}
             assignPlayerToTeam={assignPlayerToTeam}
             shouldDraftViewBlur={shouldDraftViewBlur}
           />
