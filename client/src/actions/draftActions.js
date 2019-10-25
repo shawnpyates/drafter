@@ -60,8 +60,8 @@ export const fetchDraftsByUser = userId => (dispatch) => {
     });
 };
 
-export const fetchOneDraft = (id, message) => (dispatch) => {
-  dispatch({ type: 'FETCH_ONE_DRAFT_PENDING' });
+export const fetchOneDraft = (id, message, isRefetch) => (dispatch) => {
+  dispatch({ type: 'FETCH_ONE_DRAFT_PENDING', payload: isRefetch });
   axios.get(`/api/drafts/${id}`)
     .then((response) => {
       const { draft } = response.data;

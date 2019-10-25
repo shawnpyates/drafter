@@ -62,6 +62,7 @@ const mapStateToProps = (state) => {
     draftInfoText,
     shouldDraftViewBlur,
     fetching: isFetchingDraft,
+    isRefetch: isRefetchOfDraft,
   } = draft;
   const { socket } = socketState;
   const { currentUser } = user;
@@ -72,13 +73,14 @@ const mapStateToProps = (state) => {
     currentUser,
     shouldDraftViewBlur,
     isFetchingDraft,
+    isRefetchOfDraft,
   };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   const { id } = ownProps.match.params;
   return {
-    fetchOneDraftPropFn: (message) => dispatch(fetchOneDraft(id, message)),
+    fetchOneDraftPropFn: (message, isRefetch) => dispatch(fetchOneDraft(id, message, isRefetch)),
     updateDraftPropFn: (body, socket) => dispatch(updateDraft({ id, body, socket })),
     updatePlayerPropFn: args => dispatch(updatePlayer(args)),
   };
@@ -145,7 +147,7 @@ class DraftMenu extends Component {
       timeScheduled: previousTimeScheduled
     } = previousDraft || {};
     if (currentChangeTime && (!previousDraft || previousChangeTime !== currentChangeTime)) {
-      this.setState({ parsedTimeChange: Date.parse(selectingTeamChangeTime) });
+      this.setState({ parsedTimeChange: Date.parse(currentChangeTime) });
     }
     if (
       currentTimeScheduled
@@ -153,7 +155,7 @@ class DraftMenu extends Component {
       && status === DRAFT_STATUSES.SCHEDULED
     ) {
       this.setState({
-        timeScheduledReadable: moment(timeScheduled).format('MMM D YYYY, h:mm a'),
+        timeScheduledReadable: moment(currentTimeScheduled).format('MMM D YYYY, h:mm a'),
       });
     }
   }
@@ -211,7 +213,7 @@ class DraftMenu extends Component {
             isRandomAssignment ? DRAFT_RANDOM_ASSIGNMENT : DRAFT_SELECTION,
             { teamName, playerName },
           );
-          fetchOneDraftPropFn(message);
+          fetchOneDraftPropFn(message, true);
         });
       }
     });
@@ -257,6 +259,7 @@ class DraftMenu extends Component {
       draftInfoText,
       shouldDraftViewBlur,
       isFetchingDraft,
+      isRefetchOfDraft,
     } = this.props;
     const {
       shouldOpenButtonRender,
@@ -286,7 +289,7 @@ class DraftMenu extends Component {
     );
     return (
       <div>
-        {(currentDraft && !isFetchingDraft)
+        {(currentDraft && (!isFetchingDraft || isRefetchOfDraft))
         && (
           <div>
             <ProfileCard
@@ -343,7 +346,7 @@ class DraftMenu extends Component {
             </div>
           </div>
         )}
-        {isFetchingDraft && <LoadingIndicator />}
+        {(isFetchingDraft && !isRefetchOfDraft) && <LoadingIndicator />}
       </div>
     );
   }
