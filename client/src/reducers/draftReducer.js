@@ -4,6 +4,7 @@ const initialState = {
   currentDraft: null,
   fetching: false,
   fetched: false,
+  isRefetch: false,
   updating: false,
   updated: false,
   drafts: null,
@@ -77,10 +78,15 @@ const draftReducer = (state = initialState, action) => {
     }
 
     case 'FETCH_ONE_DRAFT_PENDING': {
-      return { ...state, fetching: true };
+      return { ...state, fetching: true, isRefetch: action.payload };
     }
     case 'FETCH_ONE_DRAFT_REJECTED': {
-      return { ...state, fetching: false, errorOnFetchOneDraft: action.payload };
+      return { 
+        ...state,
+        fetching: false,
+        errorOnFetchOneDraft: action.payload,
+        isRefetch: false,
+      };
     }
     case 'FETCH_ONE_DRAFT_FULFILLED': {
       return {
@@ -88,6 +94,7 @@ const draftReducer = (state = initialState, action) => {
         fetching: false,
         fetched: true,
         currentDraft: action.payload,
+        isRefetch: false,
       };
     }
     case 'UPDATE_DRAFT_PENDING': {

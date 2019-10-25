@@ -29,7 +29,7 @@ const extractDataForDisplay = (teams) => (
       uuid,
       name,
       draft: draftName,
-      ownerName: `${owner.firstName} ${owner.lastName}`,
+      ownerName: owner && `${owner.firstName} ${owner.lastName}`,
       players,
       isCurrentlySelecting: currentlySelectingTeamId === uuid,
     };
