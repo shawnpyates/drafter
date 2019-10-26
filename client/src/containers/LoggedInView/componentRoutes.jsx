@@ -28,6 +28,10 @@ module.exports = [
     component: DraftMenu,
   },
   {
+    path: '/drafts/:id/update',
+    component: CreateDraft,
+  },
+  {
     path: '/teams/:id/show',
     component: TeamMenu,
   },

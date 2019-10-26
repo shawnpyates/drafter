@@ -43,6 +43,7 @@ const Form = ({
   buttonsToHighlight,
   isFormWide,
   hasContainer,
+  preexistingValues,
 }) => {
   const handleChange = (ev, dataType) => {
     ev.preventDefault();
@@ -80,7 +81,7 @@ const Form = ({
             <TextFieldContainer key={name}>
               {fieldTitle && <FieldTitle>{fieldTitle}</FieldTitle>}
               <TextField
-                defaultValue={defaultValue || ''}
+                defaultValue={(preexistingValues && preexistingValues[name]) || defaultValue || ''}
                 name={name}
                 type="text"
                 placeholder={text}

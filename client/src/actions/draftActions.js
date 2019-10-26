@@ -101,6 +101,10 @@ export const updateDraft = ({ id, body, socket }) => (dispatch) => {
     });
 };
 
+export const removeCurrentDraftFromState = () => (dispatch) => {
+  dispatch({ type: 'REMOVE_CURRENT_DRAFT_FROM_STATE' });
+};
+
 const setDraftInfoText = ({
   dispatch,
   draft,

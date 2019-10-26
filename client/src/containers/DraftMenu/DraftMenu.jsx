@@ -112,9 +112,10 @@ class DraftMenu extends Component {
       currentDraft,
       socket,
       draftInfoText,
+      isFetchingDraft,
     } = this.props;
     const { isInitialDraftFetchComplete } = this.state;
-    if (currentDraft) {
+    if (currentDraft && !isFetchingDraft) {
       const now = new Date().toISOString();
       const {
         status,
@@ -281,7 +282,7 @@ class DraftMenu extends Component {
       [scheduledFor]: readableTime,
       [ownerKey]: ownerName,
     };
-    const profileCardLinkForUpdating = `/updateDraft/${uuid}`;
+    const profileCardLinkForUpdating = `/drafts/${uuid}/update`;
     const displayType = (
       status === DRAFT_STATUSES.SCHEDULED || status === DRAFT_STATUSES.UNSCHEDULED
         ? DISPLAY_TYPES.TABLE

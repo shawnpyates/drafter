@@ -2,9 +2,15 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
+import moment from 'moment';
 
-import { Form } from '../../components';
-import { createDraft, fetchCurrentUser } from '../../actions';
+import { Form, LoadingIndicator } from '../../components';
+import {
+  createDraft,
+  fetchCurrentUser,
+  fetchOneDraft,
+  removeCurrentDraftFromState,
+} from '../../actions';
 
 import { draft as draftForm } from '../../../formConstants.json';
 
@@ -27,13 +33,25 @@ const VALID_TIME_INPUT = /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
 
 const mapStateToProps = (state) => {
   const { currentUser } = state.user;
-  return { currentUser };
+  const {
+    currentDraft,
+    fetching: isFetchingDraft,
+  } = state.draft;
+  return {
+    currentUser,
+    currentDraft,
+    isFetchingDraft,
+  };
 };
 
-const mapDispatchToProps = dispatch => ({
-  createDraft: body => dispatch(createDraft(body)),
-  fetchCurrentUser: () => dispatch(fetchCurrentUser()),
-});
+const mapDispatchToProps = dispatch => {
+  return {
+    createDraft: body => dispatch(createDraft(body)),
+    fetchCurrentUser: () => dispatch(fetchCurrentUser()),
+    fetchOneDraft: id => dispatch(fetchOneDraft(id)),
+    removeCurrentDraftFromState: () => dispatch(removeCurrentDraftFromState()),
+  }
+};
 
 const validateForm = (state) => {
   const {
@@ -76,18 +94,40 @@ class CreateDraft extends Component {
       buttonsToHighlight: {
         shouldScheduleTime: false,
       },
+      isDraftForUpdateFetched: false,
+      preexistingValues: {
+        name: null,
+        shouldScheduleTime: null,
+        scheduledTime: null,
+      }
     };
   }
 
   componentDidMount() {
-    this.initializeDateAndTime();
+    const {
+      match: {
+        params: { id: idParam } = {},
+      } = {},
+    } = this.props;
+    if (idParam) {
+      this.props.fetchOneDraft(idParam);
+    } else {
+      this.initializeDateAndTime();
+    }
   }
 
   componentDidUpdate() {
-    if (this.state.errorMessage) {
+    const { currentDraft } = this.props;
+    const { errorMessage, isDraftForUpdateFetched } = this.state;
+    if (errorMessage) {
       setTimeout(() => {
         this.setState({ errorMessage: null });
       }, ERROR_MESSAGE_DURATION);
+    }
+    if (currentDraft && !isDraftForUpdateFetched) {
+      this.setState({ isDraftForUpdateFetched: true }, () => {
+        this.prepopulateForm(currentDraft);
+      });
     }
   }
 
@@ -95,6 +135,36 @@ class CreateDraft extends Component {
     if (this.state.isSubmitComplete) {
       this.props.fetchCurrentUser();
     }
+    this.props.removeCurrentDraftFromState();
+  }
+
+  prepopulateForm = (draft) => {
+    const { name, timeScheduled } = draft;
+    const shouldScheduleTime = !!timeScheduled;
+    const timeObj = (
+      shouldScheduleTime
+      ? this.createInputsFromExistingTimeVals(timeScheduled)
+      : initializeDateAndTime()
+    );
+    this.setState({
+      ...timeObj,
+      preexistingValues: { name },
+      buttonsToHighlight: { shouldScheduleTime },
+    });
+  }
+
+  createInputsFromExistingTimeVals = (timeScheduled) =>{
+    const date = new Date(timeScheduled);
+    const timeCharsAsString = (
+      this.convertTo12HourFormat(`${date.getHours()}:${date.getMinutes()}`)
+    );
+    const timeChars = timeCharsAsString.split('');
+    return {
+      calendarDate: moment(timeScheduled),
+      timeCharsAsString,
+      timeChars,
+      isTimePickerEnabled: true,
+    };
   }
 
   initializeDateAndTime = () => {
@@ -214,10 +284,12 @@ class CreateDraft extends Component {
       isTimePickerEnabled,
       isPmSelected,
       buttonsToHighlight,
+      preexistingValues,
     } = this.state;
     return (
       <div>
-        {!isSubmitComplete &&
+        {(!isSubmitComplete && !this.props.isFetchingDraft)
+        && (
           <Form
             updateFieldValue={this.updateFieldValue}
             handleSubmit={this.handleSubmit}
@@ -237,10 +309,12 @@ class CreateDraft extends Component {
             toggleAmPm={this.toggleAmPm}
             handleBlur={this.handleBlur}
             buttonsToHighlight={buttonsToHighlight}
+            preexistingValues={preexistingValues}
           />
-        }
-        {isSubmitComplete &&
-          <Redirect to="/" />
+        )}
+        {this.props.isFetchingDraft && <LoadingIndicator />}
+        {isSubmitComplete 
+        && <Redirect to="/" />
         }
       </div>
     );

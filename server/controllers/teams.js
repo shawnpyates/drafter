@@ -2,11 +2,11 @@ const {
   Team,
   Draft,
   Player,
+  Request,
   User,
 } = require('../models');
 const { create: createUserTeam } = require('./userTeams');
 const { create: createUserDraft } = require('./userDrafts');
-const { destroy: destroyRequest } = require('./requests');
 const { createEmailHtml, sendMail } = require('../mailer');
 
 const { SERVER_URL } = process.env;
@@ -63,10 +63,7 @@ module.exports = {
         draftId,
         requestId,
       } = req.body;
-      const team = await Team.create(
-        { name, ownerUserId, draftId },
-        { include: [User] },
-      );
+      const team = await Team.create({ name, ownerUserId, draftId });
       const draft = await Draft.findOne({
         where: { uuid: draftId },
         include: [
@@ -105,7 +102,11 @@ module.exports = {
         await createUserDraft(userDraftProperties);
       }
       if (requestId) {
-        const { User: teamOwner } = team;
+        const teamWithAssociations = await Team.findOne({
+          where: { uuid: team.uuid },
+          include: [User],
+        });
+        const { User: teamOwner } = teamWithAssociations;
         const htmlForMailer = getHtmlForMailer({
           teamOwnerFirstName: teamOwner.firstName,
           draftName: draft.name,
@@ -116,7 +117,8 @@ module.exports = {
           subject: 'You have a new update from DraftMachine',
           html: htmlForMailer,
         });
-        await destroyRequest(requestId);
+        const request = await Request.findOne({ where: { uuid: requestId } });
+        await request.destroy();
       }
       return res.status(201).send({ team });
     } catch (e) {

@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+
+import { fetchCurrentUser } from '../../actions';
 
 import {
   Drafts,
@@ -19,45 +21,71 @@ const { properties: profileProperties } = userProfileConstants;
 
 const mapStateToProps = (state) => {
   const { currentUser } = state.user;
-  return { currentUser };
+  const { createdTeam } = state.team;
+  return { currentUser, createdTeam };
 };
 
-const MainMenu = ({ currentUser }) => {
-  const {
-    Drafts: drafts,
-    Requests: outgoingRequests,
-    Teams: teams,
-  } = currentUser;
-  const incomingRequests = (
-    drafts
-      .filter(draft => draft.ownerUserId === currentUser.uuid)
-      .map(draft => draft.Requests)
-      .reduce((flat, next) => flat.concat(next), [])
-  );
-  const profileCardTitle = `${currentUser.firstName} ${currentUser.lastName}`;
-  const { email } = profileProperties;
-  const profileCardData = {
-    [email]: currentUser.email,
-  };
-  const profileCardLinkForUpdating = '/updateUser';
-  return (
-    <MainMenuContainer>
-      <WelcomeMessage>Welcome, {currentUser.firstName}!</WelcomeMessage>
-      <ProfileCard
-        title={profileCardTitle}
-        data={profileCardData}
-        linkForUpdating={profileCardLinkForUpdating}
-      />
-      <Drafts drafts={drafts} />
-      <Teams teams={teams} parent="user" displayType="table" />
-      <Requests requests={outgoingRequests} fetchBy="requester" />
-      <Requests requests={incomingRequests} fetchBy="draftOwner" />
-    </MainMenuContainer>
-  );
+const mapDispatchToProps = dispatch => ({
+  fetchCurrentUserPropFn: () => dispatch(fetchCurrentUser()),
+});
+
+class MainMenu extends Component {
+  componentDidUpdate(prevProps) {
+    const { createdTeam, fetchCurrentUserPropFn } = this.props;
+    const { createdTeam: previousTeam } = prevProps;
+    if (createdTeam && (!previousTeam || previousTeam.uuid !== createdTeam.uuid)) {
+      fetchCurrentUserPropFn();
+    }
+  }
+
+  render() {
+    const { currentUser } = this.props;
+    const {
+      uuid,
+      firstName,
+      lastName,
+      email,
+      Drafts: drafts,
+      Requests: outgoingRequests,
+      Teams: teams,
+    } = currentUser;
+    const incomingRequests = (
+      drafts
+        .filter(draft => draft.ownerUserId === uuid)
+        .map(draft => draft.Requests)
+        .reduce((flat, next) => flat.concat(next), [])
+    );
+    const profileCardTitle = `${firstName} ${lastName}`;
+    const { email: emailKey } = profileProperties;
+    const profileCardData = {
+      [emailKey]: email,
+    };
+    const profileCardLinkForUpdating = '/updateUser';
+    return (
+      <MainMenuContainer>
+        <WelcomeMessage>Welcome, {firstName}!</WelcomeMessage>
+        <ProfileCard
+          title={profileCardTitle}
+          data={profileCardData}
+          linkForUpdating={profileCardLinkForUpdating}
+        />
+        <Drafts drafts={drafts} />
+        <Teams teams={teams} parent="user" displayType="table" />
+        <Requests requests={outgoingRequests} fetchBy="requester" />
+        <Requests requests={incomingRequests} fetchBy="draftOwner" />
+      </MainMenuContainer>
+    );
+  }
+};
+
+MainMenu.defaultProps = {
+  createdTeam: null,
 };
 
 MainMenu.propTypes = {
   currentUser: PropTypes.objectOf(PropTypes.any).isRequired,
+  createdTeam: PropTypes.objectOf(PropTypes.any),
+  fetchCurrentUserPropFn: PropTypes.func.isRequired,
 };
 
-export default connect(mapStateToProps)(MainMenu);
+export default connect(mapStateToProps, mapDispatchToProps)(MainMenu);
