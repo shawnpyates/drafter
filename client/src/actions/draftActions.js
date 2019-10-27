@@ -82,7 +82,7 @@ export const fetchOneDraft = (id, message, isRefetch) => (dispatch) => {
 };
 
 export const updateDraft = ({ id, body, socket }) => (dispatch) => {
-  dispatch({ type: 'UPDATE_DRAFT_PENDING ' });
+  dispatch({ type: 'UPDATE_DRAFT_PENDING' });
   return axios.put(`/api/drafts/${id}`, body)
     .then((response) => {
       const { draft } = response.data;

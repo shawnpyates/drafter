@@ -119,7 +119,11 @@ const draftReducer = (state = initialState, action) => {
       }
     }
     case 'REMOVE_CURRENT_DRAFT_FROM_STATE':
-      return { ...state, currentDraft: null };
+      return {
+        ...state,
+        currentDraft: null,
+        draftInfoText: null,
+      };
 
     default:
       break;

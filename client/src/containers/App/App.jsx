@@ -50,7 +50,7 @@ class App extends Component {
             isFetchingUser={isFetchingUser}
             removeCurrentUserFromState={removeCurrentUserFromStatePropFn}
           />
-          {(currentUser && socket)
+          {(currentUser && socket && !isFetchingUser)
           && <LoggedInView socket={socket} />
           }
           {(!currentUser && !isFetchingUser)

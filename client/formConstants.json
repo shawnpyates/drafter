@@ -86,7 +86,8 @@
     }
   },
   "draft": {
-    "title": "Create a New Draft",
+    "titleForCreateNew": "Create a New Draft",
+    "titleForUpdate": "Update Your Draft",
     "inputs": [
       {
         "name": "name",
@@ -126,14 +127,15 @@
       },
       {
         "name": "submitButton",
-        "text": "Create",
+        "text": "Done",
         "type": "submit",
         "enabled": true
       }
     ],
     "errorMessages": {
       "missingField": "Please fill in all fields.",
-      "mustBeFutureTime": "Your draft must be scheduled for a future time."
+      "mustBeFutureTime": "Your draft must be scheduled for a future time.",
+      "validTimeNeeded": "Please insert a valid time."
     }
   },
   "player": {
