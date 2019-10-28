@@ -302,6 +302,9 @@ class DraftMenu extends Component {
             <ProfileCard
               title={name}
               data={profileCardData}
+              shouldUpdatingLinkRender={
+                [DRAFT_STATUSES.SCHEDULED, DRAFT_STATUSES.UNSCHEDULED].includes(status)
+              }
               linkForUpdating={profileCardLinkForUpdating}
             />
             <div>

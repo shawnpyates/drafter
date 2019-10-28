@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
-import moment from 'moment';
 
 import { Form, LoadingIndicator } from '../../components';
 import {
@@ -28,7 +27,9 @@ const {
 
 import {
   addTimeChar,
+  convertTo12HourFormat,
   createFinalTimestamp,
+  createInputsFromExistingTimeVals,
   deleteTimeChar,
   formatTimeChars,
   get24HourTime,
@@ -159,7 +160,7 @@ class CreateDraft extends Component {
     const shouldScheduleTime = !!timeScheduled;
     const timeObj = (
       shouldScheduleTime
-        ? this.createInputsFromExistingTimeVals(timeScheduled)
+        ? createInputsFromExistingTimeVals(timeScheduled)
         : initializeDateAndTime()
     );
     this.setState({
@@ -167,24 +168,6 @@ class CreateDraft extends Component {
       preexistingValues: { name },
       buttonsToHighlight: { shouldScheduleTime },
     });
-  }
-
-  createInputsFromExistingTimeVals = (timeScheduled) =>{
-    const date = new Date(timeScheduled);
-    const timeCharsAsString = (
-      this.convertTo12HourFormat(`${date.getHours()}:${date.getMinutes()}`)
-    );
-    const timeChars = (
-      timeCharsAsString.length > 4
-        ? timeCharsAsString.split('')
-        : ['0', ...timeCharsAsString.split('')]
-    );
-    return {
-      calendarDate: moment(timeScheduled),
-      timeCharsAsString,
-      timeChars,
-      isTimePickerEnabled: true,
-    };
   }
 
   initializeDateAndTime = () => {
@@ -217,22 +200,9 @@ class CreateDraft extends Component {
     });
   }
 
-  convertTo12HourFormat = (timeString) => {
-    const hourColumn = Number(timeString.split(':')[0]);
-    if (hourColumn === 0) {
-      this.setState({ isPmSelected: false });
-      return timeString.replace(hourColumn, 12);
-    }
-    if (hourColumn > 12) {
-      this.setState({ isPmSelected: true });
-      return timeString.replace(hourColumn, hourColumn - 12);
-    }
-    return timeString;
-  }
-
   handleBlur = () => {
-    const timeCharsAsString = formatTimeChars(this.state.timeChars);
-    if (!VALID_TIME_INPUT.test(timeCharsAsString)) {
+    const timeString = formatTimeChars(this.state.timeChars);
+    if (!VALID_TIME_INPUT.test(timeString)) {
       this.setState({
         isTimePickerEnabled: false,
         timeChars: INITIAL_TIME_CHARS,
@@ -241,10 +211,12 @@ class CreateDraft extends Component {
       });
       return;
     }
-    this.setState({
+    const { timeCharsAsString, isPmSelected } = convertTo12HourFormat(timeString);
+    this.setState(prevState => ({
       isTimePickerEnabled: false,
-      timeCharsAsString: this.convertTo12HourFormat(timeCharsAsString),
-    });
+      timeCharsAsString,
+      isPmSelected: isPmSelected !== undefined ? isPmSelected : prevState.isPmSelected,
+    }));
   }
 
   changeDate = (calendarDate) => {
