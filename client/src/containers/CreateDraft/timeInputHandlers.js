@@ -18,7 +18,7 @@ const get24HourTime = (timeString, isPm) => {
 const createFinalTimestamp = (date, time) => date.replace('T12:00:00', ` ${time}:00`);
 
 // allow 06-09 and 16-19 (valid hour values)
-// allow x1-x5 (e.g 95 if user wants 9:50)
+// allow x1-x5 (e.g. 95 if user wants 9:50)
 // do not allow x6-x9 where x > 1 (e.g. 29, 39, 49, etc.)
 // because both 29:00 and 2:90 are invalid times
 const areFirstTwoCharsInvalid = (inputChar, timeChars) => (
@@ -79,9 +79,46 @@ const initializeDateAndTime = () => ({
   timeChars: INITIAL_TIME_CHARS,
 });
 
+const createInputsFromExistingTimeVals = (timeScheduled) =>{
+  const date = new Date(timeScheduled);
+  const { timeCharsAsString, isPmSelected } = convertTo12HourFormat(`${date.getHours()}:${date.getMinutes()}`);
+  // time char input requires 5 chars -- if hours column is single digit, add 0 to front
+  const timeChars = (
+    timeCharsAsString.length > 4
+      ? timeCharsAsString.split('')
+      : ['0', ...timeCharsAsString.split('')]
+  );
+  return {
+    calendarDate: moment(timeScheduled),
+    timeCharsAsString,
+    timeChars,
+    isTimePickerEnabled: true,
+    isPmSelected: isPmSelected || false,
+  };
+};
+
+const convertTo12HourFormat = (timeString) => {
+  const hourColumn = Number(timeString.split(':')[0]);
+  if (hourColumn === 0) {
+    return {
+      timeCharsAsString: timeString.replace(hourColumn, 12),
+      isPmSelected: false,
+    };
+  }
+  if (hourColumn > 12) {
+    return {
+      timeCharsAsString: timeString.replace(hourColumn, hourColumn - 12),
+      isPmSelected: true,
+    };
+  }
+  return { timeCharsAsString: timeString };
+};
+
 module.exports = {
   addTimeChar,
+  convertTo12HourFormat,
   createFinalTimestamp,
+  createInputsFromExistingTimeVals,
   deleteTimeChar,
   formatTimeChars,
   get24HourTime,

@@ -17,10 +17,14 @@ const MAX_EMAIL_DISPLAY = 30;
 const { title, logOut, notLoggedIn } = headerTexts;
 const { localStorage, location } = window;
 
-const Header = ({ currentUser }) => {
+const Header = ({
+  currentUser,
+  removeCurrentUserFromState,
+  isFetchingUser,
+}) => {
   const handleLogOut = () => {
     localStorage.removeItem('drafterUserToken');
-    location.reload();
+    removeCurrentUserFromState();
   };
 
   const trimEmail = email => (
@@ -36,7 +40,8 @@ const Header = ({ currentUser }) => {
           <Title>{title}</Title>
         </Link>
       </TitleBox>
-      {currentUser &&
+      {currentUser
+      && (
         <NavBar>
           <NavBarItem>
             {userEmail.length > MAX_EMAIL_DISPLAY ? trimEmail(userEmail) : userEmail}
@@ -45,12 +50,13 @@ const Header = ({ currentUser }) => {
             <NavBarLogOut onClick={handleLogOut}>{logOut}</NavBarLogOut>
           </Link>
         </NavBar>
-      }
-      {!currentUser &&
+      )}
+      {(!currentUser && !isFetchingUser)
+      && (
         <NavBar>
           <NavBarItem>{notLoggedIn}</NavBarItem>
         </NavBar>
-      }
+      )}
     </Container>
   );
 };

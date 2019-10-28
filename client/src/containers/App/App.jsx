@@ -7,7 +7,7 @@ import { LoggedInView, LoggedOutView } from '..';
 import { Header, LoadingIndicator } from '../../components';
 import { fetchCurrentUser, removeCurrentUserFromState } from '../../actions';
 
-import { AppContainer, Loading } from './styledComponents';
+import { AppContainer } from './styledComponents';
 
 const { localStorage } = window;
 
@@ -33,6 +33,7 @@ class App extends Component {
       this.props.fetchCurrentUser();
     } 
   }
+  
 
   render() {
     const {
@@ -46,9 +47,10 @@ class App extends Component {
         <AppContainer>
           <Header 
             currentUser={currentUser}
+            isFetchingUser={isFetchingUser}
             removeCurrentUserFromState={removeCurrentUserFromStatePropFn}
           />
-          {(currentUser && socket)
+          {(currentUser && socket && !isFetchingUser)
           && <LoggedInView socket={socket} />
           }
           {(!currentUser && !isFetchingUser)

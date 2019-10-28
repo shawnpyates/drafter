@@ -94,7 +94,7 @@ module.exports = {
         currentlySelectingTeamId: currentlySelectingTeamId || draft.currentlySelectingTeamId,
         name: name || draft.name,
         status: status || draft.status,
-        timeScheduled: timeScheduled || draft.timeScheduled,
+        timeScheduled: timeScheduled !== undefined ? timeScheduled : draft.timeScheduled,
         selectingTeamChangeTime: selectingTeamChangeTime || draft.selectingTeamChangeTime,
       });
       return res.status(200).send({ draft: updatedDraft });

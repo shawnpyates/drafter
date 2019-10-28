@@ -82,7 +82,7 @@ export const fetchOneDraft = (id, message, isRefetch) => (dispatch) => {
 };
 
 export const updateDraft = ({ id, body, socket }) => (dispatch) => {
-  dispatch({ type: 'UPDATE_DRAFT_PENDING ' });
+  dispatch({ type: 'UPDATE_DRAFT_PENDING' });
   return axios.put(`/api/drafts/${id}`, body)
     .then((response) => {
       const { draft } = response.data;
@@ -99,6 +99,10 @@ export const updateDraft = ({ id, body, socket }) => (dispatch) => {
     .catch((err) => {
       dispatch({ type: 'UPDATE_DRAFT_REJECTED', payload: err });
     });
+};
+
+export const removeCurrentDraftFromState = () => (dispatch) => {
+  dispatch({ type: 'REMOVE_CURRENT_DRAFT_FROM_STATE' });
 };
 
 const setDraftInfoText = ({

@@ -112,7 +112,8 @@ module.exports = {
         email: email || user.email,
         password: password || user.password,
       });
-      return res.status(200).send({ user: updatedUser });
+      const updatedUserWithAssociations = await fetchUserQuery({ uuid: updatedUser.uuid });
+      return res.status(200).send({ user: updatedUserWithAssociations });
     } catch (e) {
       return res.status(400).send({ e });
     }

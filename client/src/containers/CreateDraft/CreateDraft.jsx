@@ -3,14 +3,33 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 
-import { Form } from '../../components';
-import { createDraft, fetchCurrentUser } from '../../actions';
+import { Form, LoadingIndicator } from '../../components';
+import {
+  createDraft,
+  fetchCurrentUser,
+  fetchOneDraft,
+  updateDraft,
+  removeCurrentDraftFromState,
+} from '../../actions';
 
 import { draft as draftForm } from '../../../formConstants.json';
 
+const {
+  titleForCreateNew: TITLE_FOR_CREATE_NEW,
+  titleForUpdate: TITLE_FOR_UPDATE,
+  inputs: FORM_INPUTS,
+  errorMessages: {
+    missingField: MISSING_FIELD,
+    mustBeFutureTime: MUST_BE_FUTURE_TIME,
+    validTimeNeeded: VALID_TIME_NEEDED,
+  },
+} = draftForm;
+
 import {
   addTimeChar,
+  convertTo12HourFormat,
   createFinalTimestamp,
+  createInputsFromExistingTimeVals,
   deleteTimeChar,
   formatTimeChars,
   get24HourTime,
@@ -27,26 +46,42 @@ const VALID_TIME_INPUT = /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
 
 const mapStateToProps = (state) => {
   const { currentUser } = state.user;
-  return { currentUser };
+  const {
+    currentDraft,
+    fetching: isFetchingDraft,
+  } = state.draft;
+  return {
+    currentUser,
+    currentDraft,
+    isFetchingDraft,
+  };
 };
 
-const mapDispatchToProps = dispatch => ({
-  createDraft: body => dispatch(createDraft(body)),
-  fetchCurrentUser: () => dispatch(fetchCurrentUser()),
-});
+const mapDispatchToProps = dispatch => {
+  return {
+    createDraft: body => dispatch(createDraft(body)),
+    fetchCurrentUser: () => dispatch(fetchCurrentUser()),
+    fetchOneDraft: id => dispatch(fetchOneDraft(id)),
+    updateDraft: (id, body) => dispatch(updateDraft({ id, body })),
+    removeCurrentDraftFromState: () => dispatch(removeCurrentDraftFromState()),
+  }
+};
 
 const validateForm = (state) => {
   const {
-    name,
+    name: nameFromUserInput,
     calendarDate,
     timeCharsAsString,
     isPmSelected,
     buttonsToHighlight,
+    preexistingValues: {
+      name: preexistingName,
+    },
   } = state;
-  const { missingField, mustBeFutureTime } = draftForm.errorMessages;
+  const name = nameFromUserInput || preexistingName;
   const { shouldScheduleTime } = buttonsToHighlight;
   if (!name || (shouldScheduleTime && !timeCharsAsString)) {
-    return { errorMessage: missingField };
+    return { errorMessage: MISSING_FIELD };
   }
   let finalTimeStamp;
   if (shouldScheduleTime) {
@@ -55,7 +90,7 @@ const validateForm = (state) => {
     finalTimeStamp = createFinalTimestamp(formattedDate, modifiedTime);
   }
   if (new Date() > new Date(finalTimeStamp)) {
-    return { errorMessage: mustBeFutureTime };
+    return { errorMessage: MUST_BE_FUTURE_TIME };
   }
   return { finalTimeStamp, name };
 };
@@ -76,25 +111,63 @@ class CreateDraft extends Component {
       buttonsToHighlight: {
         shouldScheduleTime: false,
       },
+      isDraftForUpdateFetched: false,
+      preexistingValues: {
+        name: null,
+        shouldScheduleTime: null,
+        scheduledTime: null,
+      }
     };
   }
 
   componentDidMount() {
-    this.initializeDateAndTime();
+    const {
+      match: {
+        params: { id: idParam } = {},
+      } = {},
+    } = this.props;
+    if (idParam) {
+      this.props.fetchOneDraft(idParam);
+    } else {
+      this.initializeDateAndTime();
+    }
   }
 
   componentDidUpdate() {
-    if (this.state.errorMessage) {
+    const { currentDraft } = this.props;
+    const { errorMessage, isDraftForUpdateFetched } = this.state;
+    if (errorMessage) {
       setTimeout(() => {
         this.setState({ errorMessage: null });
       }, ERROR_MESSAGE_DURATION);
     }
+    if (currentDraft && !isDraftForUpdateFetched) {
+      this.setState({ isDraftForUpdateFetched: true }, () => {
+        this.prepopulateForm(currentDraft);
+      });
+    }
   }
 
   componentWillUnmount() {
+    this.props.removeCurrentDraftFromState();
     if (this.state.isSubmitComplete) {
       this.props.fetchCurrentUser();
     }
+  }
+
+  prepopulateForm = (draft) => {
+    const { name, timeScheduled } = draft;
+    const shouldScheduleTime = !!timeScheduled;
+    const timeObj = (
+      shouldScheduleTime
+        ? createInputsFromExistingTimeVals(timeScheduled)
+        : initializeDateAndTime()
+    );
+    this.setState({
+      ...timeObj,
+      preexistingValues: { name },
+      buttonsToHighlight: { shouldScheduleTime },
+    });
   }
 
   initializeDateAndTime = () => {
@@ -127,34 +200,23 @@ class CreateDraft extends Component {
     });
   }
 
-  convertTo12HourFormat = (timeString) => {
-    const hourColumn = Number(timeString.split(':')[0]);
-    if (hourColumn === 0) {
-      this.setState({ isPmSelected: false });
-      return timeString.replace(hourColumn, 12);
-    }
-    if (hourColumn > 12) {
-      this.setState({ isPmSelected: true });
-      return timeString.replace(hourColumn, hourColumn - 12);
-    }
-    return timeString;
-  }
-
   handleBlur = () => {
-    const timeCharsAsString = formatTimeChars(this.state.timeChars);
-    if (!VALID_TIME_INPUT.test(timeCharsAsString)) {
+    const timeString = formatTimeChars(this.state.timeChars);
+    if (!VALID_TIME_INPUT.test(timeString)) {
       this.setState({
         isTimePickerEnabled: false,
         timeChars: INITIAL_TIME_CHARS,
         timeCharsAsString: null,
-        errorMessage: 'Please insert a valid time.',
+        errorMessage: VALID_TIME_NEEDED,
       });
       return;
     }
-    this.setState({
+    const { timeCharsAsString, isPmSelected } = convertTo12HourFormat(timeString);
+    this.setState(prevState => ({
       isTimePickerEnabled: false,
-      timeCharsAsString: this.convertTo12HourFormat(timeCharsAsString),
-    });
+      timeCharsAsString,
+      isPmSelected: isPmSelected !== undefined ? isPmSelected : prevState.isPmSelected,
+    }));
   }
 
   changeDate = (calendarDate) => {
@@ -197,10 +259,16 @@ class CreateDraft extends Component {
     }
     const body = {
       name,
-      timeScheduled: finalTimeStamp,
+      timeScheduled: finalTimeStamp || null,
       ownerUserId: this.props.currentUser.uuid,
     };
-    this.props.createDraft(body).then(() => this.setState({ isSubmitComplete: true }));
+    if (this.state.isDraftForUpdateFetched) {
+      const { currentDraft } = this.props;
+      this.props.updateDraft(currentDraft.uuid, body)
+        .then(() => this.setState({ isSubmitComplete: true }));
+    } else {
+      this.props.createDraft(body).then(() => this.setState({ isSubmitComplete: true }));
+    }
   }
 
   render() {
@@ -214,15 +282,19 @@ class CreateDraft extends Component {
       isTimePickerEnabled,
       isPmSelected,
       buttonsToHighlight,
+      preexistingValues,
+      isDraftForUpdateFetched,
     } = this.state;
+    const title = isDraftForUpdateFetched ? TITLE_FOR_UPDATE : TITLE_FOR_CREATE_NEW;
     return (
       <div>
-        {!isSubmitComplete &&
+        {(!isSubmitComplete && !this.props.isFetchingDraft)
+        && (
           <Form
             updateFieldValue={this.updateFieldValue}
             handleSubmit={this.handleSubmit}
-            title={draftForm.title}
-            formInputs={draftForm.inputs}
+            title={title}
+            formInputs={FORM_INPUTS}
             errorMessage={errorMessage}
             calendarDate={calendarDate}
             changeDate={this.changeDate}
@@ -237,10 +309,12 @@ class CreateDraft extends Component {
             toggleAmPm={this.toggleAmPm}
             handleBlur={this.handleBlur}
             buttonsToHighlight={buttonsToHighlight}
+            preexistingValues={preexistingValues}
           />
-        }
-        {isSubmitComplete &&
-          <Redirect to="/" />
+        )}
+        {this.props.isFetchingDraft && <LoadingIndicator />}
+        {isSubmitComplete
+        && <Redirect to="/" />
         }
       </div>
     );

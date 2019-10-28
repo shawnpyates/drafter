@@ -1,6 +1,7 @@
 const initialState = {
   creating: false,
   created: false,
+  createdTeam: null,
   currentTeam: null,
   fetching: false,
   fetched: false,

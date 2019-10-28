@@ -30,7 +30,7 @@ class Collapsible extends Component {
       <TeamListItem
         isCurrentlySelecting={this.props.isCurrentlySelecting}
       >
-        {children}<Icon onClick={this.togglePanel}>{iconText}</Icon>
+        {children}{!!playersFromTeam.length && <Icon onClick={this.togglePanel}>{iconText}</Icon>}
         {isOpen
         && (
           <InnerContent>

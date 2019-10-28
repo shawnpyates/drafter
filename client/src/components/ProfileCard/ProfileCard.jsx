@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import uuidv4 from 'uuid';
 
 import {
   InfoWrapper,
@@ -13,28 +12,41 @@ import {
   ListItem,
 } from './styledComponents';
 
-const ProfileCard = ({ title, data, linkForUpdating }) => (
+const ProfileCard = ({
+  title,
+  data,
+  shouldUpdatingLinkRender,
+  linkForUpdating,
+}) => (
   <InfoWrapper>
     <InfoTitle>{title}</InfoTitle>
-    <Link to={linkForUpdating}>
-      <EditButton>
-        Edit
-      </EditButton>
-    </Link>
+    {shouldUpdatingLinkRender
+    && (
+      <Link to={linkForUpdating}>
+        <EditButton>
+          Edit
+        </EditButton>
+      </Link>
+    )}
     <InfoDetails>
       <InfoProperties>
-        {Object.keys(data).map(prop => <ListItem key={uuidv4()}>{prop}</ListItem>)}
+        {Object.keys(data).map(prop => <ListItem key={prop}>{prop}</ListItem>)}
       </InfoProperties>
       <InfoValues>
-        {Object.values(data).map(val => <ListItem key={uuidv4()}>{val}</ListItem>)}
+        {Object.values(data).map((val, i) => <ListItem key={`${val}-${i}`}>{val}</ListItem>)}
       </InfoValues>
     </InfoDetails>
   </InfoWrapper>
 );
 
+ProfileCard.defaultProps = {
+  shouldUpdatingLinkRender: true,
+};
+
 ProfileCard.propTypes = {
   title: PropTypes.string.isRequired,
   data: PropTypes.objectOf(PropTypes.any).isRequired,
+  shouldUpdatingLinkRender: PropTypes.bool,
   linkForUpdating: PropTypes.string.isRequired,
 };
 

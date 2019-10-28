@@ -15,6 +15,7 @@ import {
   fetchDraftsByUser,
   fetchOneDraft,
   updateDraft,
+  removeCurrentDraftFromState,
 } from './draftActions';
 
 import {
@@ -53,6 +54,7 @@ export {
   fetchDraftsByUser,
   fetchOneDraft,
   updateDraft,
+  removeCurrentDraftFromState,
   fetchTeamsByUser,
   fetchTeamsByDraft,
   createTeam,

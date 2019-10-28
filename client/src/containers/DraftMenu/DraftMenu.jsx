@@ -19,6 +19,7 @@ import {
   fetchOneDraft,
   updateDraft,
   updatePlayer,
+  removeCurrentDraftFromState,
 } from '../../actions';
 
 import {
@@ -83,6 +84,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     fetchOneDraftPropFn: (message, isRefetch) => dispatch(fetchOneDraft(id, message, isRefetch)),
     updateDraftPropFn: (body, socket) => dispatch(updateDraft({ id, body, socket })),
     updatePlayerPropFn: args => dispatch(updatePlayer(args)),
+    removeCurrentDraftFromState: () => dispatch(removeCurrentDraftFromState()),
   };
 };
 
@@ -112,9 +114,10 @@ class DraftMenu extends Component {
       currentDraft,
       socket,
       draftInfoText,
+      isFetchingDraft,
     } = this.props;
     const { isInitialDraftFetchComplete } = this.state;
-    if (currentDraft) {
+    if (currentDraft && !isFetchingDraft) {
       const now = new Date().toISOString();
       const {
         status,
@@ -137,6 +140,10 @@ class DraftMenu extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this.props.removeCurrentDraftFromState();
+  }
+
   parseDraftDates = (currentDraft, previousDraft) => {
     const {
       selectingTeamChangeTime: currentChangeTime,
@@ -152,7 +159,6 @@ class DraftMenu extends Component {
     if (
       currentTimeScheduled
       && (!previousDraft || previousTimeScheduled !== currentTimeScheduled)
-      && status === DRAFT_STATUSES.SCHEDULED
     ) {
       this.setState({
         timeScheduledReadable: moment(currentTimeScheduled).format('MMM D YYYY, h:mm a'),
@@ -264,6 +270,7 @@ class DraftMenu extends Component {
     const {
       shouldOpenButtonRender,
       parsedTimeChange,
+      timeScheduledReadable,
     } = this.state;
     const {
       uuid,
@@ -276,12 +283,12 @@ class DraftMenu extends Component {
     } = currentDraft || {};
     const ownerName = owner && `${owner.firstName} ${owner.lastName}`;
     const { scheduledFor, owner: ownerKey } = profileProperties;
-    const readableTime = parsedTimeChange || DRAFT_UNSCHEDULED;
+    const readableTime = timeScheduledReadable || DRAFT_UNSCHEDULED;
     const profileCardData = {
       [scheduledFor]: readableTime,
       [ownerKey]: ownerName,
     };
-    const profileCardLinkForUpdating = `/updateDraft/${uuid}`;
+    const profileCardLinkForUpdating = `/drafts/${uuid}/update`;
     const displayType = (
       status === DRAFT_STATUSES.SCHEDULED || status === DRAFT_STATUSES.UNSCHEDULED
         ? DISPLAY_TYPES.TABLE
@@ -295,6 +302,9 @@ class DraftMenu extends Component {
             <ProfileCard
               title={name}
               data={profileCardData}
+              shouldUpdatingLinkRender={
+                [DRAFT_STATUSES.SCHEDULED, DRAFT_STATUSES.UNSCHEDULED].includes(status)
+              }
               linkForUpdating={profileCardLinkForUpdating}
             />
             <div>
