@@ -27,7 +27,14 @@ const fetchUserQuery = async (searchWhere) => {
       },
       {
         model: Team,
-        include: [Draft, Player, User],
+        include: [
+          {
+            model: Draft,
+            include: [User],
+          },
+          Player,
+          User
+        ],
       },
       {
         model: Request,

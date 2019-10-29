@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import {
@@ -12,6 +13,18 @@ import {
 import { positions } from '../../../texts.json';
 
 import { Collapsible } from '..';
+
+const mapStateToProps = state => ({
+  currentDraft: state.draft.currentDraft,
+  currentUser: state.user.currentUser,
+});
+
+const isCurrentUserSelecting = (draft, user) => {
+  const { Teams: teams } = draft;
+  return teams.find(team => (
+    team.uuid === draft.currentlySelectingTeamId
+  )).ownerUserId === user.uuid;
+}
 
 class SelectionList extends Component {
   constructor() {
@@ -32,6 +45,8 @@ class SelectionList extends Component {
       data,
       assignPlayerToTeam,
       shouldDraftViewBlur,
+      currentDraft,
+      currentUser,
     } = this.props;
     return (
       <Container isLeft={type === 'Teams'}>
@@ -43,40 +58,42 @@ class SelectionList extends Component {
               isCurrentlySelecting,
               name,
               position,
-              players,
+              players = [],
             } = item;
             const isFocussed = uuid === this.state.focussedPlayerId;
-            return (
-              type === 'Players'
-                ? (
-                  <div key={uuid}>
-                    <ListItem
-                      isFocussed={isFocussed}
-                      type={type}
-                      value={uuid}
-                      shouldDraftViewBlur={shouldDraftViewBlur}
-                      onClick={() => this.changePlayerFocus(uuid)}
-                    >
-                      {name}{position && ` (${positions[position]})`}
-                    </ListItem>
-                    {isFocussed
-                    && (
-                      <SelectButton onClick={() => assignPlayerToTeam(uuid)}>
-                        Select
-                      </SelectButton>
-                    )}
-                  </div>
-                )
-                : (
-                  <Collapsible
-                    key={uuid}
-                    isCurrentlySelecting={isCurrentlySelecting}
-                    playersFromTeam={players}
+            if (type === 'Players') {
+              const isCurrentUserTurn = isCurrentUserSelecting(currentDraft, currentUser);
+              return (
+                <div key={uuid}>
+                  <ListItem
+                    isFocussed={isFocussed}
+                    type={type}
+                    value={uuid}
+                    shouldDraftViewBlur={shouldDraftViewBlur}
+                    isCurrentUserTurn={isCurrentUserTurn}
+                    onClick={() => this.changePlayerFocus(uuid)}
                   >
-                    {name}
-                  </Collapsible>
-                )
-            );
+                    {name}{position && ` (${positions[position]})`}
+                  </ListItem>
+                  {(isFocussed && isCurrentUserTurn)
+                  && (
+                    <SelectButton onClick={() => assignPlayerToTeam(uuid)}>
+                      Select
+                    </SelectButton>
+                  )}
+                </div>
+              );
+            } else {
+              return (
+                <Collapsible
+                  key={uuid}
+                  isCurrentlySelecting={isCurrentlySelecting}
+                  playersFromTeam={players}
+                >
+                  {name}
+                </Collapsible>
+              );
+            }
           })}
         </List>
       </Container>
@@ -93,6 +110,8 @@ SelectionList.propTypes = {
   title: PropTypes.string.isRequired,
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
   assignPlayerToTeam: PropTypes.func,
+  currentDraft: PropTypes.objectOf(PropTypes.any).isRequired,
+  currentUser: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
-export default SelectionList;
+export default connect(mapStateToProps)(SelectionList);

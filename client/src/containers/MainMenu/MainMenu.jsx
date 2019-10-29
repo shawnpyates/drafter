@@ -17,6 +17,8 @@ import { MainMenuContainer, WelcomeMessage } from './styledComponents';
 import { user as userProfileConstants }
   from '../../components/ProfileCard/profileCardConstants.json';
 
+import { getAllDrafts } from '../../helpers';
+
 const { properties: profileProperties } = userProfileConstants;
 
 const mapStateToProps = (state) => {
@@ -49,6 +51,7 @@ class MainMenu extends Component {
       Requests: outgoingRequests,
       Teams: teams,
     } = currentUser;
+    const allDrafts = getAllDrafts(drafts, teams);
     const incomingRequests = (
       drafts
         .filter(draft => draft.ownerUserId === uuid)
@@ -69,7 +72,7 @@ class MainMenu extends Component {
           data={profileCardData}
           linkForUpdating={profileCardLinkForUpdating}
         />
-        <Drafts drafts={drafts} />
+        <Drafts drafts={allDrafts} />
         <Teams teams={teams} parent="user" displayType="table" />
         <Requests requests={outgoingRequests} fetchBy="requester" />
         <Requests requests={incomingRequests} fetchBy="draftOwner" />

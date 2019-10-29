@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { LoadingIndicator, ProfileCard } from '../../components';
+import { ErrorIndicator, LoadingIndicator, ProfileCard } from '../../components';
 
 import { Players } from '..';
 
@@ -10,11 +10,14 @@ import { team as teamProfileData } from '../../components/ProfileCard/profileCar
 
 import { fetchOneTeam } from '../../actions';
 
+import { errors as ERROR_TEXTS } from '../../../texts.json';
+
 const { properties: profileProperties } = teamProfileData;
 
 const mapStateToProps = (state) => {
   const { currentTeam, fetching: isFetchingTeam } = state.team;
-  return { currentTeam, isFetchingTeam };
+  const { currentUser } = state.user;
+  return { currentTeam, isFetchingTeam, currentUser };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
@@ -33,7 +36,7 @@ class TeamMenu extends Component {
     fetchOneTeamPropFn(params.id);
   }
   render() {
-    const { currentTeam, isFetchingTeam } = this.props;
+    const { currentTeam, isFetchingTeam, currentUser } = this.props;
     const {
       owner: ownerKey,
       draft: draftKey,
@@ -45,6 +48,9 @@ class TeamMenu extends Component {
       Players: players,
       User: owner,
     } = currentTeam || {};
+    if (currentTeam && ![owner.uuid, draft.ownerUserId].includes(currentUser.uuid)) {
+      return <ErrorIndicator message={ERROR_TEXTS.notAuthorized} />;
+    }
     const profileCardData = {
       [ownerKey]: owner && `${owner.firstName} ${owner.lastName}`,
       [draftKey]: draft && draft.name,

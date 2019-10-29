@@ -1,3 +1,14 @@
+const getAllDrafts = (ownedDrafts, teams) => {
+  const draftsToReturn = [...ownedDrafts];
+  teams.forEach((team) => {
+    const { Draft: draftFromTeam } = team;
+    if (!draftsToReturn.some(draft => draft.uuid !== draftFromTeam.uuid)) {
+      draftsToReturn.push(draftFromTeam);
+    }
+  });
+  return draftsToReturn;
+};
+
 const getTextWithInjections = (inputText, injections) => {
   try {
     let outputText = inputText;
@@ -11,4 +22,7 @@ const getTextWithInjections = (inputText, injections) => {
   }
 };
 
-module.exports = { getTextWithInjections };
+module.exports = {
+  getAllDrafts,
+  getTextWithInjections,
+};

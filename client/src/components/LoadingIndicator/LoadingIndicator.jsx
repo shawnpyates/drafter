@@ -5,7 +5,7 @@ import {
   LoadingSpinner,
   LoadingText,
   LoadingTextContainer,
-} from './styledComonents';
+} from './styledComponents';
 
 const LoadingIndicator = () => (
   <LoadingContainer>

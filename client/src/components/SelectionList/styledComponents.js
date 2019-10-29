@@ -27,7 +27,11 @@ const List = styled.ul`
 `;
 
 const ListItem = styled.li`
-  cursor: ${props => ((props.type === 'Players' && !props.shouldDraftViewBlur) ? 'pointer' : 'unset')};
+  cursor: ${props => (
+    (props.type === 'Players' && !props.shouldDraftViewBlur && props.isCurrentUserTurn)
+      ? 'pointer'
+      : 'auto'
+  )};
 
   ${DRAFT_SELECTION_LIST_ITEM_MIXIN}
 `;
