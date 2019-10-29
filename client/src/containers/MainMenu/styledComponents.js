@@ -2,13 +2,13 @@ import styled from 'styled-components';
 
 import { mixins, styleVars } from '../../styles';
 
-const { HEADING_TEXT_MIXIN, CENTER_ELEMENT_MIXIN } = mixins;
+const { CENTER_ELEMENT_MIXIN, MENU_TEXT_MIXIN } = mixins;
 const { DARK_BLUE } = styleVars;
 
 const MainMenuContainer = styled.div`
   width: 60%;
 
-  ${HEADING_TEXT_MIXIN({ color: DARK_BLUE })}
+  ${MENU_TEXT_MIXIN({ color: DARK_BLUE })}
   ${CENTER_ELEMENT_MIXIN}
 `;
 

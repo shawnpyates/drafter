@@ -51,7 +51,7 @@
       },
       {
         "type": "ownerName",
-        "draft": "Owner Name"
+        "value": "Owner Name"
       },
       {
         "type": "draftRequested",
@@ -76,9 +76,38 @@
       },
       {
         "type": "expiresAt",
-        "draft": "Expires"
+        "value": "Expires"
       }
     ]
+  },
+
+  "playersTable": {
+    "type": "Players",
+    "title": "Players",
+    "noPlayersOnTeam": "There are currently no players on this team.",
+    "noPlayersInDraft": "There are currently no players entered into this draft.",
+    "emailUnprovided": "(Unprovided)",
+    "columnHeaders": [
+      {
+        "type": "name",
+        "value": "Name"
+      },
+      {
+        "type": "email",
+        "value": "Email"
+      },
+      {
+        "type": "position",
+        "value": "Position"
+      }
+    ]
+  },
+
+  "positions": {
+    "Goaltender": "G",
+    "Defence": "D",
+    "Left/Right Wing": "RW/LW",
+    "Center": "C"
   },
 
   "requestsForDraftTable": {
@@ -96,10 +125,15 @@
       },
       {
         "type": "ownerEmail",
-        "draft": "Owner Email"
+        "value": "Owner Email"
       }
     ],
     "options": ["Accept", "Reject"]
+  },
+
+  "tableGeneral": {
+    "addNew": "Add New",
+    "dataUrl": "/<%>type</%>/<%>uuid</%>/show"
   },
 
   "teamsTable": {
@@ -121,34 +155,5 @@
         "value": "Owner"
       }
     ]
-  },
-
-  "playersTable": {
-    "type": "Players",
-    "title": "Players",
-    "noPlayersOnTeam": "There are currently no players on this team.",
-    "noPlayersInDraft": "There are currently no players entered into this draft.",
-    "emailUnprovided": "(Unprovided)",
-    "columnHeaders": [
-      {
-        "type": "name",
-        "value": "Name"
-      },
-      {
-        "type": "email",
-        "draft": "Email"
-      },
-      {
-        "type": "position",
-        "value": "Position"
-      }
-    ]
-  },
-
-  "positions": {
-    "Goaltender": "G",
-    "Defence": "D",
-    "Left/Right Wing": "RW/LW",
-    "Center": "C"
   }
 }

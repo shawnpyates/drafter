@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import { mixins, styleVars } from '../../styles';
 
-const { HEADING_TEXT_MIXIN, CENTER_ELEMENT_MIXIN } = mixins;
+const { MENU_TEXT_MIXIN, CENTER_ELEMENT_MIXIN } = mixins;
 const {
   DARK_BLUE,
   SKY_BLUE,
@@ -19,7 +19,7 @@ const FormContainer = styled.div`
   height: 65rem;
   width: 40%;
 
-  ${HEADING_TEXT_MIXIN({ color: DARK_BLUE })}
+  ${MENU_TEXT_MIXIN({ color: DARK_BLUE })}
   ${CENTER_ELEMENT_MIXIN}
 `;
 

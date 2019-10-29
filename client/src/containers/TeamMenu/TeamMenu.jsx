@@ -12,6 +12,8 @@ import { fetchOneTeam } from '../../actions';
 
 import { errors as ERROR_TEXTS } from '../../../texts.json';
 
+import { TeamMenuContainer } from './styledComponents';
+
 const { properties: profileProperties } = teamProfileData;
 
 const mapStateToProps = (state) => {
@@ -57,7 +59,7 @@ class TeamMenu extends Component {
     };
     const profileCardLinkForUpdating = `/updateTeam/${uuid}`;
     return (
-      <div>
+      <TeamMenuContainer>
         {(currentTeam && !isFetchingTeam)
         && (
           <div>
@@ -74,7 +76,7 @@ class TeamMenu extends Component {
           </div>
         )}
         {isFetchingTeam && <LoadingIndicator />}
-      </div>
+      </TeamMenuContainer>
     );
   }
 }

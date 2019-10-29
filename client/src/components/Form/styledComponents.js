@@ -21,7 +21,7 @@ const {
 
 const {
   P_TEXT_MIXIN,
-  HEADING_TEXT_MIXIN,
+  MENU_TEXT_MIXIN,
   PICKER_WRAPPER_MIXIN,
   PICKER_INPUT_MIXIN,
   CENTER_ELEMENT_MIXIN,
@@ -43,7 +43,7 @@ const Title = styled.h2`
   text-transform: uppercase;
   margin-bottom: 20px;
 
-  ${HEADING_TEXT_MIXIN({ color: DARK_BLUE })}
+  ${MENU_TEXT_MIXIN({ color: DARK_BLUE })}
 `;
 
 const TextFieldContainer = styled.div`

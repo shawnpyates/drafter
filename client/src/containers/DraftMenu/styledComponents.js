@@ -10,12 +10,21 @@ const {
 } = styleVars;
 
 const {
+  CENTER_ELEMENT_MIXIN,
+  MENU_TEXT_MIXIN,
   VERTICALLY_CENTER_CONTENT_MIXIN,
 } = mixins;
 
 const BlurContainer = styled.div`
   filter: ${props => (props.shouldDraftViewBlur ? 'blur(5px)' : 'unset')};
   background-color: ${props => (props.shouldDraftViewBlur ? LIGHT_GRAY : 'unset')};
+`;
+
+const DraftMenuContainer = styled.div`
+  width: ${props => (props.isWide ? '100%' : '60%')};
+  
+  ${MENU_TEXT_MIXIN({ color: DARK_BLUE })}
+  ${CENTER_ELEMENT_MIXIN}
 `;
 
 const InfoContainer = styled.div`
@@ -34,6 +43,7 @@ const InfoText = styled.p`
 
 module.exports = {
   BlurContainer,
+  DraftMenuContainer,
   InfoContainer,
   InfoText,
 };

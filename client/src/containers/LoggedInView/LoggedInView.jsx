@@ -78,7 +78,9 @@ class LoggedInView extends Component {
         }
         <Switch>
           <Route exact path="/" render={() => checkForHashThenRender()} />
-          {componentRoutes.map(route => <Route path={route.path} component={route.component} />)}
+          {componentRoutes.map(route => (
+            <Route path={route.path} component={route.component} key={route.path} />
+          ))}
         </Switch>
       </div>
     );
