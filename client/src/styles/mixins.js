@@ -10,7 +10,7 @@ module.exports = {
     font-size: ${SMALL_FONT_SIZE};
     color: ${props.color};
   `,
-  HEADING_TEXT_MIXIN: props => `
+  MENU_TEXT_MIXIN: props => `
     font-size: ${NORMAL_FONT_SIZE};
     color: ${props.color};
   `,

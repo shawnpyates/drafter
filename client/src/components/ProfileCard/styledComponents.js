@@ -19,6 +19,7 @@ const InfoWrapper = styled.div`
   padding: 3.5rem;
   border-radius: 2px;
   box-shadow: 0px 3px 13px 0px rgba(0, 0, 0, 0.25);
+  width: ${props => (props.shouldAdjustWidth ? '30%' : '50%')};
 `;
 
 const InfoTitle = styled.h4`
@@ -69,6 +70,10 @@ const ListItem = styled.li`
   &:not(:last-child) {
     padding-bottom: 0.8rem;
     border-bottom: 1px solid ${LIGHT_GRAY};
+  }
+
+  &:not(:first-child) {
+    padding-top: 0.8rem;
   }
 `;
 

@@ -17,8 +17,9 @@ const ProfileCard = ({
   data,
   shouldUpdatingLinkRender,
   linkForUpdating,
+  shouldAdjustWidth,
 }) => (
-  <InfoWrapper>
+  <InfoWrapper shouldAdjustWidth={shouldAdjustWidth}>
     <InfoTitle>{title}</InfoTitle>
     {shouldUpdatingLinkRender
     && (

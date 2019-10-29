@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
-import { styleVars } from '../../styles';
+import { mixins, styleVars } from '../../styles';
 
 
 const {
@@ -11,6 +11,8 @@ const {
   WHITE,
 } = styleVars;
 
+const { VERTICALLY_CENTER_CONTENT_MIXIN } = mixins;
+
 const getRowColorOnHover = (props) => {
   if (props.optionsExists) {
     return (props.isEvenNumber ? LIGHT_GRAY : WHITE);
@@ -19,14 +21,12 @@ const getRowColorOnHover = (props) => {
 };
 
 const Container = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-bottom: 40px;
+  margin: 5rem auto;
+  width: 100%;
 `;
 
-const AddNewButton = styled.a`
+const AddNewButton = styled.div`
   background: ${DARK_BLUE};
-  float: right;
   height: 2.5rem;
   width: 13rem;
   border-radius: 2rem;
@@ -34,7 +34,9 @@ const AddNewButton = styled.a`
   font-weight: 500;
   color: ${WHITE};
   cursor: pointer;
-  margin-right: 4rem;
+  float: right;
+
+  ${VERTICALLY_CENTER_CONTENT_MIXIN}
 
   &:hover {
     color: ${SKY_BLUE};
@@ -42,30 +44,30 @@ const AddNewButton = styled.a`
   }
 `;
 
-const TableFrame = styled.table`
-  margin: 5rem auto;
-  text-align: center;
-  width: 100%;
-`;
-
-const TableTitleLine = styled.tr`
-  text-align: left;
+const TableTitleLine = styled.div`
+  margin-bottom: 3.5rem;
 `;
 
 const TableTitle = styled.h3`
   display: inline;
 `;
 
-const HeaderRow = styled.tr`
-  display: table-row;
+const HeaderRow = styled.div`
+  display: table-header-group;
 `;
 
-const DataFrame = styled.table`
+const DataFrame = styled.div`
   width: 100%;
   margin-top: 20px;
+  text-align: center;
+  display: table;
 `;
 
-const DataRow = styled.tr`
+const EmptyDataMessage = styled.div`
+  text-align: center;
+`;
+
+const DataRow = styled.div`
   display: table-row;
   background-color: ${props => (props.isEvenNumber ? LIGHT_GRAY : WHITE)};
   cursor: ${props => (props.optionsExists ? 'default' : 'pointer')};
@@ -75,7 +77,9 @@ const DataRow = styled.tr`
   }
 `;
 
-const ColumnHeader = styled.th`
+const ColumnHeader = styled.div`
+  display: table-cell;
+  font-weight: 600;
   width: ${props => `${100 / props.columnHeadersLength}%`};
 `;
 
@@ -85,8 +89,12 @@ const DataLink = styled(Link)`
   cursor: inherit;
 `;
 
-const OptionsContainer = styled.td`
+const DataCell = styled.div`
+  display: table-cell;
+`;
 
+const OptionsContainer = styled.div`
+  display: table-cell;
 `;
 
 const Option = styled.button`
@@ -98,16 +106,17 @@ const Option = styled.button`
 `;
 
 module.exports = {
-  Container,
   AddNewButton,
-  TableFrame,
-  TableTitleLine,
-  TableTitle,
-  HeaderRow,
-  DataFrame,
-  DataRow,
   ColumnHeader,
+  Container,
+  DataCell,
+  DataFrame,
   DataLink,
-  OptionsContainer,
+  DataRow,
+  EmptyDataMessage,
+  HeaderRow,
   Option,
+  OptionsContainer,
+  TableTitle,
+  TableTitleLine,
 };

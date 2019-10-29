@@ -29,6 +29,7 @@ import {
 
 import {
   BlurContainer,
+  DraftMenuContainer,
   InfoContainer,
   InfoText,
 } from './styledComponents';
@@ -309,7 +310,7 @@ class DraftMenu extends Component {
         : DISPLAY_TYPES.SELECTION_LIST
     );
     return (
-      <div>
+      <DraftMenuContainer isWide={displayType === DISPLAY_TYPES.SELECTION_LIST}>
         {(currentDraft && (!isFetchingDraft || isRefetchOfDraft))
         && (
           <div>
@@ -321,6 +322,7 @@ class DraftMenu extends Component {
                 && isUserAlsoOwner
               }
               linkForUpdating={profileCardLinkForUpdating}
+              shouldAdjustWidth={displayType === DISPLAY_TYPES.SELECTION_LIST}
             />
             <div>
               {(shouldOpenButtonRender && status !== DRAFT_STATUSES.OPEN)
@@ -373,7 +375,7 @@ class DraftMenu extends Component {
           </div>
         )}
         {(isFetchingDraft && !isRefetchOfDraft) && <LoadingIndicator />}
-      </div>
+      </DraftMenuContainer>
     );
   }
 }

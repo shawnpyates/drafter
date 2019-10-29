@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import { mixins, styleVars } from '../../styles';
 
-const { HEADING_TEXT_MIXIN } = mixins;
+const { MENU_TEXT_MIXIN } = mixins;
 const {
   DARK_BLUE,
   SKY_BLUE,
@@ -17,7 +17,7 @@ const Container = styled.header`
   position: relative;
   width: 100%;
 
-  ${HEADING_TEXT_MIXIN({ color: WHITE })}
+  ${MENU_TEXT_MIXIN({ color: WHITE })}
 
   @media only screen and (min-width: 600px) {
     height: 12rem;
