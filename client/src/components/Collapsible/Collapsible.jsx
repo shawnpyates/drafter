@@ -48,7 +48,7 @@ class Collapsible extends Component {
 
 Collapsible.propTypes = {
   children: PropTypes.string.isRequired,
-  playersFromTeam: PropTypes.objectOf(PropTypes.any).isRequired,
+  playersFromTeam: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default Collapsible;

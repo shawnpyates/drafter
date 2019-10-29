@@ -36,6 +36,10 @@
     ]
   },
 
+  "errors": {
+    "notAuthorized": "⛔ Sorry, you are not authorized to view this content. ⛔"
+  },
+
   "incomingRequestsTable": {
     "type": "IncomingRequests",
     "title": "Incoming Requests",

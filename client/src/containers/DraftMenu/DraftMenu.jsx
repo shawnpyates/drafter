@@ -13,7 +13,12 @@ import {
   Teams,
 } from '..';
 
-import { Button, LoadingIndicator, Timer } from '../../components';
+import {
+  Button,
+  ErrorIndicator,
+  LoadingIndicator,
+  Timer,
+} from '../../components';
 
 import {
   fetchOneDraft,
@@ -31,6 +36,7 @@ import {
 import { getTextWithInjections } from '../../helpers';
 
 import {
+  errors as ERROR_TEXTS,
   draftInfoTexts,
   draftButtonOpenText as DRAFT_BUTTON_OPEN_TEXT,
 } from '../../../texts.json';
@@ -281,6 +287,14 @@ class DraftMenu extends Component {
       Requests: requests,
       Teams: teams,
     } = currentDraft || {};
+    const isUserAlsoOwner = owner && owner.uuid === currentUser.uuid;
+    if (
+      !isUserAlsoOwner
+      && teams
+      && !teams.some(team => team.ownerUserId === currentUser.uuid)
+    ) {
+      return <ErrorIndicator message={ERROR_TEXTS.notAuthorized} />;
+    }
     const ownerName = owner && `${owner.firstName} ${owner.lastName}`;
     const { scheduledFor, owner: ownerKey } = profileProperties;
     const readableTime = timeScheduledReadable || DRAFT_UNSCHEDULED;
@@ -304,6 +318,7 @@ class DraftMenu extends Component {
               data={profileCardData}
               shouldUpdatingLinkRender={
                 [DRAFT_STATUSES.SCHEDULED, DRAFT_STATUSES.UNSCHEDULED].includes(status)
+                && isUserAlsoOwner
               }
               linkForUpdating={profileCardLinkForUpdating}
             />
@@ -350,6 +365,7 @@ class DraftMenu extends Component {
               {(
                 currentDraft.ownerUserId === currentUser.uuid
                 && displayType === DISPLAY_TYPES.TABLE
+                && isUserAlsoOwner
               )
               && <Requests requests={requests} fetchBy="draft" />
               }

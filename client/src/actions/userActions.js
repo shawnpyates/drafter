@@ -2,14 +2,17 @@ import axios from 'axios';
 import jwt from 'jsonwebtoken';
 import ioClient from 'socket.io-client';
 
+import { getAllDrafts } from '../helpers';
+
 const { localStorage } = window;
 
 const { SERVER_URL } = process.env;
 
 const createSocketConnection = (dispatch, user) => {
-  const { Drafts: drafts } = user;
+  const { Drafts: drafts, Teams: teams } = user;
+  const allDrafts = getAllDrafts(drafts, teams);
   const socket = ioClient(`${SERVER_URL}/drafts`);
-  drafts && drafts.forEach((draft) => {
+  allDrafts.forEach((draft) => {
     socket.emit('joinDraft', draft.uuid);
   });
   dispatch({ type: 'WRITE_SOCKET_CONNECTION_TO_STATE', payload: socket });
