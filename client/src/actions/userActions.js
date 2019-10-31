@@ -16,7 +16,7 @@ const createSocketConnection = (dispatch, user) => {
     socket.emit('joinDraft', draft.uuid);
   });
   dispatch({ type: 'WRITE_SOCKET_CONNECTION_TO_STATE', payload: socket });
-}
+};
 
 export const fetchCurrentUser = () => {
   const token = localStorage.getItem('drafterUserToken');

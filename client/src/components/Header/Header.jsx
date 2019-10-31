@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { header as headerTexts } from '../../../texts.json';
+import { header as headerTexts } from '../../texts.json';
 
 import {
   Container,
@@ -15,7 +15,7 @@ import {
 const MAX_EMAIL_DISPLAY = 30;
 
 const { title, logOut, notLoggedIn } = headerTexts;
-const { localStorage, location } = window;
+const { localStorage } = window;
 
 const Header = ({
   currentUser,
@@ -67,6 +67,8 @@ Header.defaultProps = {
 
 Header.propTypes = {
   currentUser: PropTypes.objectOf(PropTypes.any),
+  isFetchingUser: PropTypes.bool.isRequired,
+  removeCurrentUserFromState: PropTypes.func.isRequired,
 };
 
 export default Header;

@@ -7,7 +7,7 @@ import thunk from 'redux-thunk';
 import CreateTeam from '../CreateTeam';
 import { Form } from '../../../components';
 
-import { team as teamForm } from '../../../../formConstants.json';
+import { team as teamForm } from '../../../formContent.json';
 
 import { drafts as draftsTestData } from '../../../../../testData.json';
 

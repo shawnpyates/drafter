@@ -1,5 +1,5 @@
 module.exports = {
-  "extends": "airbnb",
+  "extends": ["airbnb", "plugin:react/recommended"],
   "globals": {
     "window": true,
     "document": true,
@@ -11,5 +11,7 @@ module.exports = {
       "components": [ "Link" ],
       "specialLink": [ "to" ],
     }],
+    "import/named": 0,
+    "react/destructuring-assignment": "off",
   },
 };

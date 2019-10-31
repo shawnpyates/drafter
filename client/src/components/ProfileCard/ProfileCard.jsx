@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import uuidv4 from 'uuid';
 
 import {
   InfoWrapper,
@@ -34,19 +35,21 @@ const ProfileCard = ({
         {Object.keys(data).map(prop => <ListItem key={prop}>{prop}</ListItem>)}
       </InfoProperties>
       <InfoValues>
-        {Object.values(data).map((val, i) => <ListItem key={`${val}-${i}`}>{val}</ListItem>)}
+        {Object.values(data).map(val => <ListItem key={uuidv4()}>{val}</ListItem>)}
       </InfoValues>
     </InfoDetails>
   </InfoWrapper>
 );
 
 ProfileCard.defaultProps = {
+  shouldAdjustWidth: null,
   shouldUpdatingLinkRender: true,
 };
 
 ProfileCard.propTypes = {
   title: PropTypes.string.isRequired,
   data: PropTypes.objectOf(PropTypes.any).isRequired,
+  shouldAdjustWidth: PropTypes.bool,
   shouldUpdatingLinkRender: PropTypes.bool,
   linkForUpdating: PropTypes.string.isRequired,
 };

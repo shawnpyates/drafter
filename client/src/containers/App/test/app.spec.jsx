@@ -5,7 +5,9 @@ import configureStore from 'redux-mock-store';
 
 import App from '../App';
 
-import { LoggedInView, LoggedOutView } from '../..';
+import LoggedInView from '../../LoggedInView/LoggedInView';
+import LoggedOutView from '../../LoggedOutView/LoggedOutView';
+
 import { Header } from '../../../components';
 
 const mockStore = configureStore();

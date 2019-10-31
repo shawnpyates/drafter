@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { draftInfoTexts } from '../../texts.json';
+import { draftInfoTexts } from '../texts.json';
 
 import { getTextWithInjections } from '../helpers';
 
@@ -10,6 +10,34 @@ const {
 } = draftInfoTexts;
 
 const DISPLAY_INITIAL_TEXT_DURATION = 5000;
+
+const getTeamIsOnClockText = (draft) => {
+  const { Teams: teams } = draft;
+  const teamOnClock = teams.find(team => team.uuid === draft.currentlySelectingTeamId) || teams[0];
+  return getTextWithInjections(DRAFT_TEAM_ON_CLOCK, { teamName: teamOnClock.name });
+};
+
+const setDraftInfoText = ({
+  dispatch,
+  draft,
+  message,
+}) => {
+  const secondaryMessage = draft.status === 'closed' ? DRAFT_CLOSED : getTeamIsOnClockText(draft);
+  if (message) {
+    dispatch({ type: 'SET_DRAFT_INFO_TEXT', payload: { message, shouldDraftViewBlur: true } });
+    setTimeout(() => {
+      dispatch({
+        type: 'SET_DRAFT_INFO_TEXT',
+        payload: { message: secondaryMessage, shouldDraftViewBlur: false },
+      });
+    }, DISPLAY_INITIAL_TEXT_DURATION);
+  } else {
+    dispatch({
+      type: 'SET_DRAFT_INFO_TEXT',
+      payload: { message: secondaryMessage, shouldDraftViewBlur: false },
+    });
+  }
+};
 
 export const createDraft = body => (dispatch) => {
   dispatch({ type: 'CREATE_DRAFT_PENDING ' });
@@ -103,32 +131,4 @@ export const updateDraft = ({ id, body, socket }) => (dispatch) => {
 
 export const removeCurrentDraftFromState = () => (dispatch) => {
   dispatch({ type: 'REMOVE_CURRENT_DRAFT_FROM_STATE' });
-};
-
-const setDraftInfoText = ({
-  dispatch,
-  draft,
-  message,
-}) => {
-  const secondaryMessage = draft.status === 'closed' ? DRAFT_CLOSED : getTeamIsOnClockText(draft);
-  if (message) {
-    dispatch({ type: 'SET_DRAFT_INFO_TEXT', payload: { message, shouldDraftViewBlur: true } });
-    setTimeout(() => {
-      dispatch({
-        type: 'SET_DRAFT_INFO_TEXT', 
-        payload: { message: secondaryMessage, shouldDraftViewBlur: false },
-      });
-    }, DISPLAY_INITIAL_TEXT_DURATION);
-  } else {
-    dispatch({
-      type: 'SET_DRAFT_INFO_TEXT', 
-      payload: { message: secondaryMessage, shouldDraftViewBlur: false },
-    });
-  }
-};
-  
-const getTeamIsOnClockText = (draft) => {
-  const { Teams: teams } = draft;
-  const teamOnClock = teams.find(team => team.uuid === draft.currentlySelectingTeamId) || teams[0];
-  return getTextWithInjections(DRAFT_TEAM_ON_CLOCK, { teamName: teamOnClock.name });
 };

@@ -81,7 +81,7 @@ const draftReducer = (state = initialState, action) => {
       return { ...state, fetching: true, isRefetch: action.payload };
     }
     case 'FETCH_ONE_DRAFT_REJECTED': {
-      return { 
+      return {
         ...state,
         fetching: false,
         errorOnFetchOneDraft: action.payload,
@@ -116,7 +116,7 @@ const draftReducer = (state = initialState, action) => {
         ...state,
         draftInfoText: action.payload.message,
         shouldDraftViewBlur: action.payload.shouldDraftViewBlur,
-      }
+      };
     }
     case 'REMOVE_CURRENT_DRAFT_FROM_STATE':
       return {

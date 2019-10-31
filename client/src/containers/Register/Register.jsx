@@ -6,7 +6,7 @@ import { Form } from '../../components';
 
 import { createUser } from '../../actions';
 
-import { register as registerForm } from '../../../formConstants.json';
+import { register as registerForm } from '../../formContent.json';
 
 const { inputs: formInputs } = registerForm;
 
@@ -108,10 +108,10 @@ class Register extends Component {
 
   updateFieldValue = (name, value) => {
     this.setState(prevState => ({
-      form: { 
+      form: {
         ...prevState.form,
         [name]: value,
-      }, 
+      },
     }));
   }
 

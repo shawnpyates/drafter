@@ -3,7 +3,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 
 import Header from '../Header';
-import { header as headerTexts } from '../../../../texts.json';
+import { header as headerTexts } from '../../../texts.json';
 
 const { logOut, notLoggedIn } = headerTexts;
 

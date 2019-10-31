@@ -3,12 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import uuidv4 from 'uuid';
 
-import { tableGeneral as TABLE_TEXTS } from '../../../texts.json';
-
-const {
-  addNew: ADD_NEW,
-  dataUrl: DATA_URL
-} = TABLE_TEXTS;
+import { tableGeneral as TABLE_TEXTS } from '../../texts.json';
 
 import { getTextWithInjections } from '../../helpers';
 
@@ -28,6 +23,11 @@ import {
   TableTitleLine,
 } from './styledComponents';
 
+const {
+  addNew: ADD_NEW,
+  dataUrl: DATA_URL,
+} = TABLE_TEXTS;
+
 const Table = ({
   type,
   title,
@@ -41,8 +41,8 @@ const Table = ({
   <Container>
     <TableTitleLine>
       <TableTitle>{title}</TableTitle>
-      {addNewLink &&
-      (
+      {addNewLink
+      && (
         <Link to={addNewLink}>
           <AddNewButton>
             {ADD_NEW}
@@ -50,7 +50,7 @@ const Table = ({
         </Link>
       )}
     </TableTitleLine>
-    {Boolean(data.length) 
+    {Boolean(data.length)
     && (
       <DataFrame>
         <HeaderRow>
@@ -81,19 +81,18 @@ const Table = ({
               }
               {options
               && (
-                  <OptionsContainer>
-                    {options.map(option => (
-                      <DataLink to="/">
-                        <Option
-                          key={option}
-                          value={entry.uuid}
-                          onClick={handleOptionClick}
-                        >
-                          {option}
-                        </Option>
-                      </DataLink>
-                    ))}
-                  </OptionsContainer>
+                <OptionsContainer>
+                  {options.map(option => (
+                    <DataLink to="/" key={option}>
+                      <Option
+                        value={entry.uuid}
+                        onClick={handleOptionClick}
+                      >
+                        {option}
+                      </Option>
+                    </DataLink>
+                  ))}
+                </OptionsContainer>
               )}
             </DataRow>
           </DataLink>

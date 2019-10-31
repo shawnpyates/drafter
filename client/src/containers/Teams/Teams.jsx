@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { SelectionList, Table } from '../../components';
 
-import { teamsTable as teamsTableTexts } from '../../../texts.json';
+import { teamsTable as teamsTableTexts } from '../../texts.json';
 
 const DISPLAY_TYPES = {
   TABLE: 'table',
@@ -15,7 +15,7 @@ const URL_NAMESPACES = {
   CREATE_TEAMS: '/createTeams',
 };
 
-const extractDataForDisplay = (teams) => (
+const extractDataForDisplay = teams => (
   teams.map((team) => {
     const {
       uuid,
@@ -49,17 +49,18 @@ const Teams = ({
     noTeamsEntered,
     columnHeaders,
   } = teamsTableTexts;
-  const { SHOW, CREATE_TEAMS } = URL_NAMESPACES
+  const { SHOW, CREATE_TEAMS } = URL_NAMESPACES;
   const addNewLink = (
     (url && url.includes(SHOW))
       ? url.replace(SHOW, CREATE_TEAMS)
       : CREATE_TEAMS
   );
   return (
-    teams 
+    teams
     && (
       <div>
-        {displayType === DISPLAY_TYPES.TABLE &&
+        {displayType === DISPLAY_TYPES.TABLE
+        && (
           <Table
             type={type}
             title={title}
@@ -68,15 +69,16 @@ const Teams = ({
             emptyDataMessage={parent === 'user' ? belongToNoTeams : noTeamsEntered}
             addNewLink={addNewLink}
           />
-        }
-        {displayType === DISPLAY_TYPES.SELECTION_LIST &&
+        )}
+        {displayType === DISPLAY_TYPES.SELECTION_LIST
+        && (
           <SelectionList
             type={type}
             title={title}
             data={extractDataForDisplay(teams)}
             emptyDataMessage={noTeamsEntered}
           />
-        }
+        )}
       </div>
     )
   );

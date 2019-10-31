@@ -4,7 +4,7 @@ import moment from 'moment';
 
 import { Table } from '../../components';
 
-import { draftsTable as draftsTableTexts } from '../../../texts.json';
+import { draftsTable as draftsTableTexts } from '../../texts.json';
 
 const extractDataForDisplay = drafts => (
   drafts.map((draft) => {
@@ -37,7 +37,8 @@ const Drafts = ({ drafts }) => {
   } = draftsTableTexts;
   return (
     <div>
-      {drafts &&
+      {drafts
+      && (
         <Table
           type={type}
           title={title}
@@ -46,7 +47,7 @@ const Drafts = ({ drafts }) => {
           emptyDataMessage={noneScheduled}
           addNewLink="/createDrafts"
         />
-      }
+      )}
     </div>
   );
 };

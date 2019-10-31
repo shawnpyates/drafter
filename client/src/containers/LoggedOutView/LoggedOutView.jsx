@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 
-import { Login, Register } from '..';
+import Login from '../Login/Login';
+import Register from '../Register/Register';
 
-import { register as registerForm, login as loginForm } from '../../../formConstants.json';
+import { register as registerForm, login as loginForm } from '../../formContent.json';
 
 import {
   FormContainer,
@@ -49,11 +50,11 @@ class LoggedOutView extends Component {
             </li>
           </TabList>
         </TabListContainer>
-        {this.state.isLoginActiveComponent &&
-          <Login />
+        {this.state.isLoginActiveComponent
+        && <Login />
         }
-        {!this.state.isLoginActiveComponent &&
-          <Register />
+        {!this.state.isLoginActiveComponent
+        && <Register />
         }
       </FormContainer>
     );

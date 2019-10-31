@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import {
   TimerRow,
@@ -7,8 +8,8 @@ import {
 } from './styledComponents';
 
 const msToMinutesAndSeconds = (ms) => {
-  const seconds = parseInt(ms / 1000);
-  const minutesString = String(parseInt(seconds / 60));
+  const seconds = ms / 1000;
+  const minutesString = String(seconds / 60);
   const remainingSeconds = seconds % 60;
   const secondsString = (
     remainingSeconds < 10
@@ -77,6 +78,11 @@ class Timer extends Component {
       </TimerRow>
     );
   }
+}
+
+Timer.propTypes = {
+  assignPlayerToTeam: PropTypes.func.isRequired,
+  expiryTime: PropTypes.number.isRequired,
 };
 
 export default Timer;

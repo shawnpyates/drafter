@@ -8,7 +8,7 @@ import {
   TeamListItem,
 } from './styledComponents';
 
-import { positions } from '../../../texts.json';
+import { positions } from '../../texts.json';
 
 class Collapsible extends Component {
   constructor() {
@@ -30,13 +30,15 @@ class Collapsible extends Component {
       <TeamListItem
         isCurrentlySelecting={this.props.isCurrentlySelecting}
       >
-        {children}{!!playersFromTeam.length && <Icon onClick={this.togglePanel}>{iconText}</Icon>}
+        {children}
+        {!!playersFromTeam.length && <Icon onClick={this.togglePanel}>{iconText}</Icon>}
         {isOpen
         && (
           <InnerContent>
             {playersFromTeam.map(player => (
-              <PlayerListItem>
-                {`${player.name}`}{player.position && ` (${positions[player.position]})`}
+              <PlayerListItem key={player.uuid}>
+                {`${player.name}`}
+                {player.position && ` (${positions[player.position]})`}
               </PlayerListItem>
             ))}
           </InnerContent>
@@ -48,6 +50,7 @@ class Collapsible extends Component {
 
 Collapsible.propTypes = {
   children: PropTypes.string.isRequired,
+  isCurrentlySelecting: PropTypes.bool.isRequired,
   playersFromTeam: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 

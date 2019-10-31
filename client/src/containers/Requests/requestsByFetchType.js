@@ -4,7 +4,7 @@ import {
   incomingRequestsTable as incomingRequestsTableTexts,
   outgoingRequestsTable as outgoingRequestsTableTexts,
   requestsForDraftTable as requestsForDraftTableTexts,
-} from '../../../texts.json';
+} from '../../texts.json';
 
 const requestsByFetchType = {
   draft: {

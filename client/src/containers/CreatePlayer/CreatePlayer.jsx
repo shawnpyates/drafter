@@ -7,14 +7,14 @@ import { Form } from '../../components';
 
 import { createPlayer } from '../../actions';
 
-import { player as playerForm } from '../../../formConstants.json';
+import { player as playerForm } from '../../formContent.json';
 
 const {
   missingField,
   invalidEmail,
 } = playerForm.errorMessages;
 
-const mapStateToProps = (state) => ({ currentUser: state.user.currentUser });
+const mapStateToProps = state => ({ currentUser: state.user.currentUser });
 
 const mapDispatchToProps = dispatch => ({
   createPlayer: body => dispatch(createPlayer(body)),
@@ -95,7 +95,8 @@ class CreatePlayer extends Component {
     const { inputs, title } = playerForm;
     return (
       <div>
-        {!isSubmitComplete &&
+        {!isSubmitComplete
+        && (
           <Form
             updateFieldValue={this.updateFieldValue}
             handleSubmit={this.handleSubmit}
@@ -103,9 +104,9 @@ class CreatePlayer extends Component {
             formInputs={inputs}
             errorMessage={errorMessage}
           />
-        }
-        {isSubmitComplete &&
-          <Redirect to={url.replace('/createPlayers', '/show')} />
+        )}
+        {isSubmitComplete
+        && <Redirect to={url.replace('/createPlayers', '/show')} />
         }
       </div>
     );

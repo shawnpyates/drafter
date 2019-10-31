@@ -79,7 +79,24 @@ const initializeDateAndTime = () => ({
   timeChars: INITIAL_TIME_CHARS,
 });
 
-const createInputsFromExistingTimeVals = (timeScheduled) =>{
+const convertTo12HourFormat = (timeString) => {
+  const hourColumn = Number(timeString.split(':')[0]);
+  if (hourColumn === 0) {
+    return {
+      timeCharsAsString: timeString.replace(hourColumn, 12),
+      isPmSelected: false,
+    };
+  }
+  if (hourColumn > 12) {
+    return {
+      timeCharsAsString: timeString.replace(hourColumn, hourColumn - 12),
+      isPmSelected: true,
+    };
+  }
+  return { timeCharsAsString: timeString };
+};
+
+const createInputsFromExistingTimeVals = (timeScheduled) => {
   const date = new Date(timeScheduled);
   const hours = String(date.getHours());
   const minutes = String(date.getMinutes());
@@ -98,23 +115,6 @@ const createInputsFromExistingTimeVals = (timeScheduled) =>{
     isTimePickerEnabled: true,
     isPmSelected: isPmSelected || false,
   };
-};
-
-const convertTo12HourFormat = (timeString) => {
-  const hourColumn = Number(timeString.split(':')[0]);
-  if (hourColumn === 0) {
-    return {
-      timeCharsAsString: timeString.replace(hourColumn, 12),
-      isPmSelected: false,
-    };
-  }
-  if (hourColumn > 12) {
-    return {
-      timeCharsAsString: timeString.replace(hourColumn, hourColumn - 12),
-      isPmSelected: true,
-    };
-  }
-  return { timeCharsAsString: timeString };
 };
 
 module.exports = {

@@ -8,7 +8,7 @@ import moment from 'moment';
 import CreateDraft, { validateForm } from '../CreateDraft';
 import { Form } from '../../../components';
 
-import { draft as draftForm } from '../../../../formConstants.json';
+import { draft as draftForm } from '../../../formContent.json';
 
 const {
   missingField,

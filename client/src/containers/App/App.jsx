@@ -3,7 +3,9 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { BrowserRouter as Router } from 'react-router-dom';
 
-import { LoggedInView, LoggedOutView } from '..';
+import LoggedInView from '../LoggedInView/LoggedInView';
+import LoggedOutView from '../LoggedOutView/LoggedOutView';
+
 import { Header, LoadingIndicator } from '../../components';
 import { fetchCurrentUser, removeCurrentUserFromState } from '../../actions';
 
@@ -12,7 +14,7 @@ import { AppContainer } from './styledComponents';
 const { localStorage } = window;
 
 const mapStateToProps = (state) => {
-  const { currentUser, fetching: isFetchingUser  } = state.user;
+  const { currentUser, fetching: isFetchingUser } = state.user;
   const { socket } = state.socket;
   return {
     currentUser,
@@ -31,9 +33,9 @@ class App extends Component {
     const userToken = localStorage.getItem('drafterUserToken');
     if (!this.props.currentUser && userToken) {
       this.props.fetchCurrentUser();
-    } 
+    }
   }
-  
+
 
   render() {
     const {
@@ -45,7 +47,7 @@ class App extends Component {
     return (
       <Router>
         <AppContainer>
-          <Header 
+          <Header
             currentUser={currentUser}
             isFetchingUser={isFetchingUser}
             removeCurrentUserFromState={removeCurrentUserFromStatePropFn}
@@ -67,13 +69,15 @@ class App extends Component {
 
 App.defaultProps = {
   currentUser: null,
-  errorOnFetchCurrentUser: null,
+  socket: null,
 };
 
 App.propTypes = {
   currentUser: PropTypes.objectOf(PropTypes.any),
   fetchCurrentUser: PropTypes.func.isRequired,
-  errorOnFetchCurrentUser: PropTypes.string,
+  isFetchingUser: PropTypes.bool.isRequired,
+  removeCurrentUserFromState: PropTypes.func.isRequired,
+  socket: PropTypes.objectOf(PropTypes.any),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

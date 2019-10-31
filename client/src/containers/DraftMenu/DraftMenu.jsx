@@ -7,11 +7,9 @@ import moment from 'moment';
 import ProfileCard from '../../components/ProfileCard/ProfileCard';
 import { draft as draftProfileData } from '../../components/ProfileCard/profileCardConstants.json';
 
-import {
-  Players,
-  Requests,
-  Teams,
-} from '..';
+import Players from '../Players/Players';
+import Requests from '../Requests/Requests';
+import Teams from '../Teams/Teams';
 
 import {
   Button,
@@ -40,7 +38,7 @@ import {
   errors as ERROR_TEXTS,
   draftInfoTexts,
   draftButtonOpenText as DRAFT_BUTTON_OPEN_TEXT,
-} from '../../../texts.json';
+} from '../../texts.json';
 
 const {
   draftStarting: DRAFT_STARTING,
@@ -100,8 +98,7 @@ class DraftMenu extends Component {
     super();
     this.state = {
       shouldOpenButtonRender: false,
-      shouldStartDraftIndicatorRender: false,
-      isInitialDraftFetchComplete: false,
+      isSocketStarted: false,
       hasDraftStarted: false,
       lastSelectingTeam: null,
       parsedTimeChange: null,
@@ -123,7 +120,7 @@ class DraftMenu extends Component {
       draftInfoText,
       isFetchingDraft,
     } = this.props;
-    const { isInitialDraftFetchComplete } = this.state;
+    const { isSocketStarted } = this.state;
     if (currentDraft && !isFetchingDraft) {
       const now = new Date().toISOString();
       const {
@@ -137,10 +134,8 @@ class DraftMenu extends Component {
       ) {
         this.renderOpenButtonForOwner();
       }
-      if (!isInitialDraftFetchComplete) {
-        this.setState({ isInitialDraftFetchComplete: true }, () => {
-          this.listenForSocketEvents(socket);
-        });
+      if (!isSocketStarted) {
+        this.listenForSocketEvents(socket);
       }
       const { currentDraft: previousDraft } = prevProps;
       this.parseDraftDates(currentDraft, previousDraft);
@@ -151,6 +146,7 @@ class DraftMenu extends Component {
     this.props.removeCurrentDraftFromState();
   }
 
+
   parseDraftDates = (currentDraft, previousDraft) => {
     const {
       selectingTeamChangeTime: currentChangeTime,
@@ -158,7 +154,7 @@ class DraftMenu extends Component {
     } = currentDraft || {};
     const {
       selectingTeamChangeTime: previousChangeTime,
-      timeScheduled: previousTimeScheduled
+      timeScheduled: previousTimeScheduled,
     } = previousDraft || {};
     if (currentChangeTime && (!previousDraft || previousChangeTime !== currentChangeTime)) {
       this.setState({ parsedTimeChange: Date.parse(currentChangeTime) });
@@ -205,6 +201,7 @@ class DraftMenu extends Component {
   }
 
   listenForSocketEvents = (socket) => {
+    this.setState({ isSocketStarted: true });
     const {
       currentDraft,
       fetchOneDraftPropFn,
@@ -215,7 +212,7 @@ class DraftMenu extends Component {
       teamName,
       playerName,
       isRandomAssignment,
-     }) => {
+    }) => {
       const { currentlySelectingTeamId } = this.props.currentDraft;
       if (
         this.state.lastSelectingTeam !== currentlySelectingTeamId
@@ -231,7 +228,7 @@ class DraftMenu extends Component {
       }
     });
     socket.on('broadcastDraftStart', ({ draftId }) => {
-      if (!this.hasDraftStarted && currentDraftId === draftId) {
+      if (!this.state.hasDraftStarted && currentDraftId === draftId) {
         this.setState({ shouldOpenButtonRender: false, hasDraftStarted: true }, () => {
           fetchOneDraftPropFn(DRAFT_STARTING);
         });
@@ -383,15 +380,22 @@ class DraftMenu extends Component {
 DraftMenu.defaultProps = {
   currentDraft: null,
   currentUser: null,
+  draftInfoText: null,
 };
 
 DraftMenu.propTypes = {
   currentDraft: PropTypes.objectOf(PropTypes.any),
   currentUser: PropTypes.objectOf(PropTypes.any),
+  draftInfoText: PropTypes.string,
   fetchOneDraftPropFn: PropTypes.func.isRequired,
+  isFetchingDraft: PropTypes.bool.isRequired,
+  isRefetchOfDraft: PropTypes.bool.isRequired,
   match: PropTypes.objectOf(PropTypes.any).isRequired,
+  removeCurrentDraftFromState: PropTypes.func.isRequired,
+  shouldDraftViewBlur: PropTypes.bool.isRequired,
   socket: PropTypes.objectOf(PropTypes.any).isRequired,
   updateDraftPropFn: PropTypes.func.isRequired,
+  updatePlayerPropFn: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(DraftMenu);

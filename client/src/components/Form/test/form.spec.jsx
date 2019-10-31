@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 
 import Form from '../Form';
 
-const { title, inputs: formInputs } = require('../../../../formConstants.json').draft;
+const { title, inputs: formInputs } = require('../../../formContent.json').draft;
 
 const props = {
   formInputs,
