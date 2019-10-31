@@ -49,7 +49,7 @@ export const createRequest = body => (dispatch) => {
     });
 };
 
-export const destroyRequest = (id) => (dispatch) => {
+export const destroyRequest = id => (dispatch) => {
   dispatch({ type: 'DESTROY_REQUEST_PENDING ' });
   return axios.delete(`/api/requests/${id}`)
     .then(() => {

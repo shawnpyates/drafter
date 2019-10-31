@@ -3,7 +3,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 
 import Table from '../Table';
-import { draftsTable as draftsTableTexts } from '../../../../texts.json';
+import { draftsTable as draftsTableTexts } from '../../../texts.json';
 import { drafts } from '../../../../../testData.json';
 
 const { columnHeaders, noneScheduled, type } = draftsTableTexts;

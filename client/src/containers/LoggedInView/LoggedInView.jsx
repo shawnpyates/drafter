@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect, Route, Switch } from 'react-router-dom';
 
-import { MainMenu } from '..';
+import MainMenu from '../MainMenu/MainMenu';
+
 import componentRoutes from './componentRoutes';
 
 import { NotificationContainer, NotificationText } from './styledComponents';

@@ -5,7 +5,7 @@ import configureStore from 'redux-mock-store';
 
 import Register, { validateForm } from '../Register';
 
-import { register as registerForm } from '../../../../formConstants.json';
+import { register as registerForm } from '../../../formContent.json';
 
 const {
   missingField,

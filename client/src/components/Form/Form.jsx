@@ -23,27 +23,27 @@ import {
 const DAYS_IN_FIVE_WEEKS = 35;
 
 const Form = ({
-  updateFieldValue,
-  handleSubmit,
-  title,
-  formInputs,
-  errorMessage,
-  calendarDate,
+  buttonsToHighlight,
   changeDate,
+  calendarDate,
+  enableTimePicker,
+  errorMessage,
+  formInputs,
+  handleBlur,
+  handleSubmit,
+  handleTimePickerKeyUp,
+  hasContainer,
   isCalendarFocused,
-  toggleCalendarFocus,
+  isFormWide,
+  isPmSelected,
+  isTimePickerEnabled,
+  preexistingValues,
+  title,
   timeChars,
   timeCharsAsString,
-  handleTimePickerKeyUp,
-  isTimePickerEnabled,
-  enableTimePicker,
-  isPmSelected,
   toggleAmPm,
-  handleBlur,
-  buttonsToHighlight,
-  isFormWide,
-  hasContainer,
-  preexistingValues,
+  toggleCalendarFocus,
+  updateFieldValue,
 }) => {
   const handleChange = (ev, dataType) => {
     ev.preventDefault();
@@ -169,8 +169,8 @@ const Form = ({
                 <TimePicker
                   value={
                     isTimePickerEnabled
-                    ? timeChars.join('')
-                    : (timeCharsAsString || 'Set Time')
+                      ? timeChars.join('')
+                      : (timeCharsAsString || 'Set Time')
                   }
                   name="timePicker"
                   key={name}
@@ -218,45 +218,47 @@ const Form = ({
 };
 
 Form.defaultProps = {
-  errorMessage: null,
+  buttonsToHighlight: {},
   calendarDate: null,
-  timeChars: null,
   changeDate: null,
-  timeCharsAsString: null,
+  enableTimePicker: null,
+  errorMessage: null,
+  handleBlur: null,
+  hasContainer: false,
+  handleTimePickerKeyUp: null,
   isCalendarFocused: false,
   isFormWide: false,
-  isTimePickerEnabled: false,
-  toggleCalendarFocus: null,
-  handleTimePickerKeyUp: null,
-  enableTimePicker: null,
   isPmSelected: false,
+  isTimePickerEnabled: false,
+  preexistingValues: null,
+  timeChars: null,
+  timeCharsAsString: null,
   toggleAmPm: null,
-  handleBlur: null,
-  buttonsToHighlight: {},
-  hasContainer: false,
+  toggleCalendarFocus: null,
 };
 
 Form.propTypes = {
-  updateFieldValue: PropTypes.func.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
-  title: PropTypes.string.isRequired,
-  formInputs: PropTypes.arrayOf(PropTypes.object).isRequired,
-  errorMessage: PropTypes.string,
+  buttonsToHighlight: PropTypes.objectOf(PropTypes.any),
   calendarDate: PropTypes.objectOf(PropTypes.any),
   changeDate: PropTypes.func,
+  enableTimePicker: PropTypes.func,
+  errorMessage: PropTypes.string,
+  formInputs: PropTypes.arrayOf(PropTypes.object).isRequired,
+  handleBlur: PropTypes.func,
+  handleSubmit: PropTypes.func.isRequired,
+  handleTimePickerKeyUp: PropTypes.func,
+  hasContainer: PropTypes.bool,
   isCalendarFocused: PropTypes.bool,
   isFormWide: PropTypes.bool,
-  toggleCalendarFocus: PropTypes.func,
+  isPmSelected: PropTypes.bool,
+  isTimePickerEnabled: PropTypes.bool,
+  preexistingValues: PropTypes.objectOf(PropTypes.any),
   timeChars: PropTypes.arrayOf(PropTypes.string),
   timeCharsAsString: PropTypes.string,
-  handleTimePickerKeyUp: PropTypes.func,
-  isTimePickerEnabled: PropTypes.bool,
-  enableTimePicker: PropTypes.func,
-  isPmSelected: PropTypes.bool,
+  title: PropTypes.string.isRequired,
   toggleAmPm: PropTypes.func,
-  handleBlur: PropTypes.func,
-  buttonsToHighlight: PropTypes.objectOf(PropTypes.any),
-  hasContainer: PropTypes.bool,
+  toggleCalendarFocus: PropTypes.func,
+  updateFieldValue: PropTypes.func.isRequired,
 };
 
 export default Form;

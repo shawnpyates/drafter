@@ -17,6 +17,7 @@ const getTextWithInjections = (inputText, injections) => {
     });
     return outputText;
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.error('[getTextWithInjections] ', e);
     return '';
   }

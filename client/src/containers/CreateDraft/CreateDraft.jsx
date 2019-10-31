@@ -12,18 +12,7 @@ import {
   removeCurrentDraftFromState,
 } from '../../actions';
 
-import { draft as draftForm } from '../../../formConstants.json';
-
-const {
-  titleForCreateNew: TITLE_FOR_CREATE_NEW,
-  titleForUpdate: TITLE_FOR_UPDATE,
-  inputs: FORM_INPUTS,
-  errorMessages: {
-    missingField: MISSING_FIELD,
-    mustBeFutureTime: MUST_BE_FUTURE_TIME,
-    validTimeNeeded: VALID_TIME_NEEDED,
-  },
-} = draftForm;
+import { draft as draftForm } from '../../formContent.json';
 
 import {
   addTimeChar,
@@ -37,6 +26,17 @@ import {
   isInvalidTimeInput,
   resetTimeValues,
 } from './timeInputHandlers';
+
+const {
+  titleForCreateNew: TITLE_FOR_CREATE_NEW,
+  titleForUpdate: TITLE_FOR_UPDATE,
+  inputs: FORM_INPUTS,
+  errorMessages: {
+    missingField: MISSING_FIELD,
+    mustBeFutureTime: MUST_BE_FUTURE_TIME,
+    validTimeNeeded: VALID_TIME_NEEDED,
+  },
+} = draftForm;
 
 const INITIAL_TIME_CHARS = ['-', '-', ':', '-', '-'];
 const CALENDAR_DATE_FORMAT = 'YYYY-MM-DD[T12:00:00]ZZ';
@@ -57,15 +57,13 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    createDraft: body => dispatch(createDraft(body)),
-    fetchCurrentUser: () => dispatch(fetchCurrentUser()),
-    fetchOneDraft: id => dispatch(fetchOneDraft(id)),
-    updateDraft: (id, body) => dispatch(updateDraft({ id, body })),
-    removeCurrentDraftFromState: () => dispatch(removeCurrentDraftFromState()),
-  }
-};
+const mapDispatchToProps = dispatch => ({
+  createDraft: body => dispatch(createDraft(body)),
+  fetchCurrentUser: () => dispatch(fetchCurrentUser()),
+  fetchOneDraft: id => dispatch(fetchOneDraft(id)),
+  updateDraft: (id, body) => dispatch(updateDraft({ id, body })),
+  removeCurrentDraftFromState: () => dispatch(removeCurrentDraftFromState()),
+});
 
 const validateForm = (state) => {
   const {
@@ -116,7 +114,7 @@ class CreateDraft extends Component {
         name: null,
         shouldScheduleTime: null,
         scheduledTime: null,
-      }
+      },
     };
   }
 
@@ -142,9 +140,7 @@ class CreateDraft extends Component {
       }, ERROR_MESSAGE_DURATION);
     }
     if (currentDraft && !isDraftForUpdateFetched) {
-      this.setState({ isDraftForUpdateFetched: true }, () => {
-        this.prepopulateForm(currentDraft);
-      });
+      this.handleDraftForUpdateFetched(currentDraft);
     }
   }
 
@@ -153,6 +149,12 @@ class CreateDraft extends Component {
     if (this.state.isSubmitComplete) {
       this.props.fetchCurrentUser();
     }
+  }
+
+  handleDraftForUpdateFetched = (currentDraft) => {
+    this.setState({ isDraftForUpdateFetched: true }, () => {
+      this.prepopulateForm(currentDraft);
+    });
   }
 
   prepopulateForm = (draft) => {
@@ -321,9 +323,21 @@ class CreateDraft extends Component {
   }
 }
 
+CreateDraft.defaultProps = {
+  currentDraft: null,
+  match: null,
+};
+
 CreateDraft.propTypes = {
   createDraft: PropTypes.func.isRequired,
+  currentDraft: PropTypes.objectOf(PropTypes.any),
   currentUser: PropTypes.objectOf(PropTypes.any).isRequired,
+  fetchCurrentUser: PropTypes.func.isRequired,
+  fetchOneDraft: PropTypes.func.isRequired,
+  isFetchingDraft: PropTypes.bool.isRequired,
+  match: PropTypes.objectOf(PropTypes.any),
+  removeCurrentDraftFromState: PropTypes.func.isRequired,
+  updateDraft: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateDraft);

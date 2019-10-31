@@ -4,7 +4,6 @@ import { mixins, styleVars } from '../../styles';
 
 const {
   DRAFT_SELECTION_LIST_ITEM_MIXIN,
-  P_TEXT_MIXIN,
 } = mixins;
 
 const {

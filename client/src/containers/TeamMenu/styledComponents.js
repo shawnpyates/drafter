@@ -13,7 +13,7 @@ const {
 
 const TeamMenuContainer = styled.div`
   width: 60%;
-  
+
   ${MENU_TEXT_MIXIN({ color: DARK_BLUE })}
   ${CENTER_ELEMENT_MIXIN}
 `;

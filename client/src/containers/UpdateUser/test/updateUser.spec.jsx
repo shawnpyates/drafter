@@ -6,7 +6,7 @@ import thunk from 'redux-thunk';
 
 import UpdateUser, { validateForm } from '../UpdateUser';
 
-import { updateUser as updateUserForm } from '../../../../formConstants.json';
+import { updateUser as updateUserForm } from '../../../formContent.json';
 
 const {
   invalidEmail,

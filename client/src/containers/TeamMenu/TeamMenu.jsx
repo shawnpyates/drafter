@@ -4,13 +4,13 @@ import PropTypes from 'prop-types';
 
 import { ErrorIndicator, LoadingIndicator, ProfileCard } from '../../components';
 
-import { Players } from '..';
+import Players from '../Players/Players';
 
 import { team as teamProfileData } from '../../components/ProfileCard/profileCardConstants.json';
 
 import { fetchOneTeam } from '../../actions';
 
-import { errors as ERROR_TEXTS } from '../../../texts.json';
+import { errors as ERROR_TEXTS } from '../../texts.json';
 
 import { TeamMenuContainer } from './styledComponents';
 
@@ -37,6 +37,7 @@ class TeamMenu extends Component {
     } = this.props;
     fetchOneTeamPropFn(params.id);
   }
+
   render() {
     const { currentTeam, isFetchingTeam, currentUser } = this.props;
     const {
@@ -72,7 +73,7 @@ class TeamMenu extends Component {
               teamId={uuid}
               parent="team"
               players={players}
-             />
+            />
           </div>
         )}
         {isFetchingTeam && <LoadingIndicator />}
@@ -87,7 +88,9 @@ TeamMenu.defaultProps = {
 
 TeamMenu.propTypes = {
   currentTeam: PropTypes.objectOf(PropTypes.any),
+  currentUser: PropTypes.objectOf(PropTypes.any).isRequired,
   fetchOneTeamPropFn: PropTypes.func.isRequired,
+  isFetchingTeam: PropTypes.bool.isRequired,
   match: PropTypes.objectOf(PropTypes.string).isRequired,
 };
 

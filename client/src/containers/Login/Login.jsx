@@ -6,7 +6,7 @@ import { Form } from '../../components';
 
 import { authenticateUser } from '../../actions';
 
-import { login as loginForm } from '../../../formConstants.json';
+import { login as loginForm } from '../../formContent.json';
 
 const { errorMessages } = loginForm;
 

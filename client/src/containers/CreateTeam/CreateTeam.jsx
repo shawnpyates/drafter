@@ -11,7 +11,7 @@ import {
   fetchCurrentUser,
 } from '../../actions';
 
-import { team as teamForm } from '../../../formConstants.json';
+import { team as teamForm } from '../../formContent.json';
 
 const { missingField } = teamForm.errorMessages;
 
@@ -29,7 +29,7 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
   createRequest: body => dispatch(createRequest(body)),
   createTeam: body => dispatch(createTeam(body)),
   fetchCurrentUser: () => dispatch(fetchCurrentUser()),
@@ -77,7 +77,7 @@ class CreateTeam extends Component {
       }, ERROR_MESSAGE_DURATION);
     }
   }
-  
+
   componentWillUnmount() {
     const {
       match: {
@@ -99,11 +99,12 @@ class CreateTeam extends Component {
   }
 
   updateButtonToHighlight = (key, value) => {
-    const buttonsToHighlight = {
-      ...this.state.buttonsToHighlight,
-      [key]: value,
-    };
-    this.setState({ buttonsToHighlight });
+    this.setState(prevState => ({
+      buttonsToHighlight: {
+        ...prevState.buttonsToHighlight,
+        [key]: value,
+      },
+    }));
   }
 
   updateFieldValue = (name, value) => {
@@ -200,7 +201,8 @@ class CreateTeam extends Component {
     );
     return (
       <div>
-        {!isSubmitComplete &&
+        {!isSubmitComplete
+        && (
           <Form
             updateFieldValue={this.updateFieldValue}
             handleSubmit={this.handleSubmit}
@@ -209,9 +211,9 @@ class CreateTeam extends Component {
             errorMessage={errorMessage}
             buttonsToHighlight={buttonsToHighlight}
           />
-        }
-        {isSubmitComplete &&
-          <Redirect to={redirectAfterSubmitUrl} />
+        )}
+        {isSubmitComplete
+        && <Redirect to={redirectAfterSubmitUrl} />
         }
       </div>
     );
@@ -229,9 +231,8 @@ CreateTeam.propTypes = {
   createdRequest: PropTypes.objectOf(PropTypes.any),
   createTeam: PropTypes.func.isRequired,
   currentUser: PropTypes.objectOf(PropTypes.any).isRequired,
-  drafts: PropTypes.arrayOf(PropTypes.object).isRequired,
   errorOnCreateRequest: PropTypes.string,
-  fetchDraftsByOwner: PropTypes.func.isRequired,
+  fetchCurrentUser: PropTypes.func.isRequired,
   match: PropTypes.objectOf(PropTypes.any),
 };
 

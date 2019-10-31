@@ -4,11 +4,9 @@ import PropTypes from 'prop-types';
 
 import { fetchCurrentUser } from '../../actions';
 
-import {
-  Drafts,
-  Teams,
-  Requests,
-} from '..';
+import Drafts from '../Drafts/Drafts';
+import Teams from '../Teams/Teams';
+import Requests from '../Requests/Requests';
 
 import { ProfileCard } from '../../components';
 
@@ -17,7 +15,9 @@ import { MainMenuContainer, WelcomeMessage } from './styledComponents';
 import { user as userProfileConstants }
   from '../../components/ProfileCard/profileCardConstants.json';
 
-import { getAllDrafts } from '../../helpers';
+import { getAllDrafts, getTextWithInjections } from '../../helpers';
+
+import { welcomeMessage } from '../../texts.json';
 
 const { properties: profileProperties } = userProfileConstants;
 
@@ -64,9 +64,10 @@ class MainMenu extends Component {
       [emailKey]: email,
     };
     const profileCardLinkForUpdating = '/updateUser';
+    const welcomeMessageWithFirstName = getTextWithInjections(welcomeMessage, { firstName });
     return (
       <MainMenuContainer>
-        <WelcomeMessage>Welcome, {firstName}!</WelcomeMessage>
+        <WelcomeMessage>{welcomeMessageWithFirstName}</WelcomeMessage>
         <ProfileCard
           title={profileCardTitle}
           data={profileCardData}
@@ -79,7 +80,7 @@ class MainMenu extends Component {
       </MainMenuContainer>
     );
   }
-};
+}
 
 MainMenu.defaultProps = {
   createdTeam: null,

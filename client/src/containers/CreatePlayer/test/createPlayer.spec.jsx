@@ -7,7 +7,7 @@ import thunk from 'redux-thunk';
 import CreatePlayer, { validateForm } from '../CreatePlayer';
 import { Form } from '../../../components';
 
-import { player as playerForm } from '../../../../formConstants.json';
+import { player as playerForm } from '../../../formContent.json';
 
 const {
   invalidEmail,

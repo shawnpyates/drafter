@@ -10,9 +10,9 @@ import {
   SelectButton,
 } from './styledComponents';
 
-import { positions } from '../../../texts.json';
+import { positions } from '../../texts.json';
 
-import { Collapsible } from '..';
+import Collapsible from '../Collapsible/Collapsible';
 
 const mapStateToProps = state => ({
   currentDraft: state.draft.currentDraft,
@@ -24,7 +24,7 @@ const isCurrentUserSelecting = (draft, user) => {
   return teams.find(team => (
     team.uuid === draft.currentlySelectingTeamId
   )).ownerUserId === user.uuid;
-}
+};
 
 class SelectionList extends Component {
   constructor() {
@@ -73,7 +73,8 @@ class SelectionList extends Component {
                     isCurrentUserTurn={isCurrentUserTurn}
                     onClick={() => this.changePlayerFocus(uuid)}
                   >
-                    {name}{position && ` (${positions[position]})`}
+                    {name}
+                    {position && ` (${positions[position]})`}
                   </ListItem>
                   {(isFocussed && isCurrentUserTurn)
                   && (
@@ -83,17 +84,16 @@ class SelectionList extends Component {
                   )}
                 </div>
               );
-            } else {
-              return (
-                <Collapsible
-                  key={uuid}
-                  isCurrentlySelecting={isCurrentlySelecting}
-                  playersFromTeam={players}
-                >
-                  {name}
-                </Collapsible>
-              );
             }
+            return (
+              <Collapsible
+                key={uuid}
+                isCurrentlySelecting={isCurrentlySelecting}
+                playersFromTeam={players}
+              >
+                {name}
+              </Collapsible>
+            );
           })}
         </List>
       </Container>
@@ -112,6 +112,7 @@ SelectionList.propTypes = {
   assignPlayerToTeam: PropTypes.func,
   currentDraft: PropTypes.objectOf(PropTypes.any).isRequired,
   currentUser: PropTypes.objectOf(PropTypes.any).isRequired,
+  shouldDraftViewBlur: PropTypes.bool.isRequired,
 };
 
 export default connect(mapStateToProps)(SelectionList);

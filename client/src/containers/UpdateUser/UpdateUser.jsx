@@ -7,7 +7,7 @@ import { Form } from '../../components';
 
 import { updateUser } from '../../actions';
 
-import { updateUser as updateUserForm } from '../../../formConstants.json';
+import { updateUser as updateUserForm } from '../../formContent.json';
 
 const { inputs: formInputs } = updateUserForm;
 
@@ -36,8 +36,8 @@ const validateForm = (state) => {
     email,
   } = state;
   for (let i = 0; i < keys.length; i += 1) {
-    if ((!values[i] && keys[i] !== 'errorMessage' && keys[i] !== 'isSubmitComplete') &&
-        !(keys[i] === 'position' && registeredAsPlayer === 'No')) {
+    if ((!values[i] && keys[i] !== 'errorMessage' && keys[i] !== 'isSubmitComplete')
+    && !(keys[i] === 'position' && registeredAsPlayer === 'No')) {
       return { errorMessage: missingField };
     }
   }
@@ -94,13 +94,6 @@ class UpdateUser extends Component {
     return inputs.map(input => (input.name === 'position' ? updatedPosition : input));
   }
 
-  updatePositionFieldBasedOnRegisterState() {
-    const isRegistered = this.state.registeredAsPlayer === 'Yes';
-    const { inputs } = this.state;
-    this.setState({ inputs: this.updateObjectInInputs(inputs, isRegistered) });
-    if (!isRegistered) this.setState({ position: null });
-  }
-
   handleSubmit = (ev) => {
     ev.preventDefault();
     const { errorMessage } = validateForm(this.state);
@@ -133,11 +126,19 @@ class UpdateUser extends Component {
     });
   }
 
+  updatePositionFieldBasedOnRegisterState() {
+    const isRegistered = this.state.registeredAsPlayer === 'Yes';
+    const { inputs } = this.state;
+    this.setState({ inputs: this.updateObjectInInputs(inputs, isRegistered) });
+    if (!isRegistered) this.setState({ position: null });
+  }
+
   render() {
     const { errorMessage, inputs, isSubmitComplete } = this.state;
     return (
       <div>
-        {(!isSubmitComplete && inputs) &&
+        {(!isSubmitComplete && inputs)
+        && (
           <Form
             updateFieldValue={this.updateFieldValue}
             handleSubmit={this.handleSubmit}
@@ -145,9 +146,9 @@ class UpdateUser extends Component {
             formInputs={inputs}
             errorMessage={errorMessage}
           />
-        }
-        {isSubmitComplete &&
-          <Redirect to="/" />
+        )}
+        {isSubmitComplete
+        && <Redirect to="/" />
         }
       </div>
     );

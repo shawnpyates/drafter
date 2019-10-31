@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import { SelectionList, Table } from '../../components';
 
-import { playersTable as playersTableTexts } from '../../../texts.json';
+import { playersTable as playersTableTexts } from '../../texts.json';
 
 const DISPLAY_TYPES = {
   TABLE: 'table',
@@ -58,9 +58,11 @@ const Players = ({
     && players.filter(player => !player.teamId)
   );
   return (
-    players &&
+    players
+    && (
       <div>
-        {displayType === DISPLAY_TYPES.TABLE &&
+        {displayType === DISPLAY_TYPES.TABLE
+        && (
           <Table
             type={TYPE}
             title={TITLE}
@@ -69,8 +71,9 @@ const Players = ({
             emptyDataMessage={parent === 'team' ? NO_PLAYERS_ON_TEAM : NO_PLAYERS_IN_DRAFT}
             addNewLink={addNewLink}
           />
-        }
-        {displayType === DISPLAY_TYPES.SELECTION_LIST &&
+        )}
+        {displayType === DISPLAY_TYPES.SELECTION_LIST
+        && (
           <SelectionList
             type={TYPE}
             title={TITLE}
@@ -79,10 +82,11 @@ const Players = ({
             assignPlayerToTeam={assignPlayerToTeam}
             shouldDraftViewBlur={shouldDraftViewBlur}
           />
-        }
+        )}
       </div>
+    )
   );
-}
+};
 
 Players.defaultProps = {
   players: null,
