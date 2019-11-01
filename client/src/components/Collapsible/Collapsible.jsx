@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import {
@@ -10,43 +10,31 @@ import {
 
 import { positions } from '../../texts.json';
 
-class Collapsible extends Component {
-  constructor() {
-    super();
-    this.state = {
-      isOpen: false,
-    };
-  }
-
-  togglePanel = () => {
-    this.setState(prevState => ({ isOpen: !prevState.isOpen }));
-  };
-
-  render() {
-    const { isOpen } = this.state;
-    const { children, playersFromTeam } = this.props;
-    const iconText = isOpen ? '-' : '+';
-    return (
-      <TeamListItem
-        isCurrentlySelecting={this.props.isCurrentlySelecting}
-      >
-        {children}
-        {!!playersFromTeam.length && <Icon onClick={this.togglePanel}>{iconText}</Icon>}
-        {isOpen
-        && (
-          <InnerContent>
-            {playersFromTeam.map(player => (
-              <PlayerListItem key={player.uuid}>
-                {`${player.name}`}
-                {player.position && ` (${positions[player.position]})`}
-              </PlayerListItem>
-            ))}
-          </InnerContent>
-        )}
-      </TeamListItem>
-    );
-  }
-}
+const Collapsible = ({ children, isCurrentlySelecting, playersFromTeam }) => {
+  const [isOpen, toggleOpen] = useState(false);
+  const iconText = isOpen ? '-' : '+';
+  return (
+    <TeamListItem
+      isCurrentlySelecting={isCurrentlySelecting}
+    >
+      {children}
+      {!!playersFromTeam.length
+      && <Icon onClick={() => toggleOpen(wasOpen => !wasOpen)}>{iconText}</Icon>
+      }
+      {isOpen
+      && (
+        <InnerContent>
+          {playersFromTeam.map(player => (
+            <PlayerListItem key={player.uuid}>
+              {`${player.name}`}
+              {player.position && ` (${positions[player.position]})`}
+            </PlayerListItem>
+          ))}
+        </InnerContent>
+      )}
+    </TeamListItem>
+  );
+};
 
 Collapsible.propTypes = {
   children: PropTypes.string.isRequired,

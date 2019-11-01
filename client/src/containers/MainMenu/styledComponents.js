@@ -7,6 +7,7 @@ const { DARK_BLUE } = styleVars;
 
 const MainMenuContainer = styled.div`
   width: 60%;
+  min-width: 65rem;
 
   ${MENU_TEXT_MIXIN({ color: DARK_BLUE })}
   ${CENTER_ELEMENT_MIXIN}

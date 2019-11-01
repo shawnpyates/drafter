@@ -85,8 +85,13 @@ const ColumnHeader = styled.div`
 
 const DataLink = styled(Link)`
   display: contents;
-  text-decoration: none !important;
+  text-decoration: none;
   cursor: inherit;
+  color: ${DARK_BLUE};
+
+  &:visited {
+    color: ${DARK_BLUE};
+  }
 `;
 
 const DataCell = styled.div`

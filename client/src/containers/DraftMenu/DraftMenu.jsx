@@ -381,6 +381,7 @@ DraftMenu.defaultProps = {
   currentDraft: null,
   currentUser: null,
   draftInfoText: null,
+  isRefetchOfDraft: null,
 };
 
 DraftMenu.propTypes = {
@@ -389,7 +390,7 @@ DraftMenu.propTypes = {
   draftInfoText: PropTypes.string,
   fetchOneDraftPropFn: PropTypes.func.isRequired,
   isFetchingDraft: PropTypes.bool.isRequired,
-  isRefetchOfDraft: PropTypes.bool.isRequired,
+  isRefetchOfDraft: PropTypes.bool,
   match: PropTypes.objectOf(PropTypes.any).isRequired,
   removeCurrentDraftFromState: PropTypes.func.isRequired,
   shouldDraftViewBlur: PropTypes.bool.isRequired,
