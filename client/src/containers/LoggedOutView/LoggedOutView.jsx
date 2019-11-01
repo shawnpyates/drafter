@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 
 import Login from '../Login/Login';
 import Register from '../Register/Register';
@@ -13,52 +13,35 @@ import {
   TabListContainer,
 } from './styledComponents';
 
-class LoggedOutView extends Component {
-  constructor() {
-    super();
-    this.state = {
-      isLoginActiveComponent: true,
-    };
-  }
+const LoggedOutView = () => {
+  const [isLoginActiveComponent, toggleActiveComponent] = useState(true);
 
-  getAnchor(text, isLoginButton) {
-    return (
-      <TabListAnchor onClick={() => this.toggleActiveComponent(isLoginButton)}>
-        {text}
-      </TabListAnchor>
-    );
-  }
+  const getAnchor = (text, isLoginButton) => (
+    <TabListAnchor onClick={() => toggleActiveComponent(isLoginButton)}>
+      {text}
+    </TabListAnchor>
+  );
 
-  toggleActiveComponent(isLoginActiveComponent) {
-    this.setState({ isLoginActiveComponent });
-  }
-
-  render() {
-    return (
-      <FormContainer>
-        <TabListContainer>
-          <TabList>
-            <li>
-              <TabListItem isLeft>
-                {this.getAnchor(registerForm.title, false)}
-              </TabListItem>
-            </li>
-            <li>
-              <TabListItem isLeft={false}>
-                {this.getAnchor(loginForm.title, true)}
-              </TabListItem>
-            </li>
-          </TabList>
-        </TabListContainer>
-        {this.state.isLoginActiveComponent
-        && <Login />
-        }
-        {!this.state.isLoginActiveComponent
-        && <Register />
-        }
-      </FormContainer>
-    );
-  }
-}
+  return (
+    <FormContainer>
+      <TabListContainer>
+        <TabList>
+          <li>
+            <TabListItem isLeft>
+              {getAnchor(registerForm.title, false)}
+            </TabListItem>
+          </li>
+          <li>
+            <TabListItem isLeft={false}>
+              {getAnchor(loginForm.title, true)}
+            </TabListItem>
+          </li>
+        </TabList>
+      </TabListContainer>
+      {isLoginActiveComponent && <Login />}
+      {!isLoginActiveComponent && <Register />}
+    </FormContainer>
+  );
+};
 
 export default LoggedOutView;
