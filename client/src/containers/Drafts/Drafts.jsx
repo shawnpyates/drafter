@@ -28,7 +28,7 @@ const extractDataForDisplay = drafts => (
   })
 );
 
-const Drafts = ({ drafts }) => {
+function Drafts({ drafts }) {
   const {
     type,
     title,
@@ -50,7 +50,7 @@ const Drafts = ({ drafts }) => {
       )}
     </div>
   );
-};
+}
 
 Drafts.propTypes = {
   drafts: PropTypes.arrayOf(PropTypes.object).isRequired,

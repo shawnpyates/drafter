@@ -5,17 +5,21 @@ import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
 import Players from '../Players';
-import { SelectionList, Table } from '../../../components';
+// import { SelectionList, Table } from '../../../components';
+import SelectionList from '../../../components/SelectionList/SelectionList';
+import Table from '../../../components/Table/Table';
 
 const mockStore = configureStore([thunk]);
 
 const defaultProps = {
   displayType: 'table',
+  players: [{ uuid: 'abc123' }],
+  draft: { uuid: 'def456' },
 };
 
 const store = {
-  player: {
-    players: [{ foo: 'bar' }],
+  draft: {
+    shouldDraftViewBlur: false,
   },
 };
 
@@ -30,8 +34,8 @@ describe('<Players />', () => {
     expect(received).toEqual(expected);
   });
   test('Renders table as child if Players exist and displayType is table', () => {
-    const deepWrapper = getWrapper(store, defaultProps).dive().dive();
-    const tableLength = deepWrapper.find(Table).length;
+    const deepWrapper = getWrapper(store, defaultProps);
+    const tableLength = deepWrapper.find(Table).length.dive().dive();
     const selectionListLength = deepWrapper.find(SelectionList).length;
     expect(tableLength).toEqual(1);
     expect(selectionListLength).toEqual(0);
@@ -42,8 +46,8 @@ describe('<Players />', () => {
     const tableLength = deepWrapper.find(Table).length;
     expect(tableLength).toEqual(0);
   });
-  test('Renders selectionList as child if Players exist and displayType is selectionList', () => {
-    const modifiedProps = { displayType: 'selectionList' };
+  test.only('Renders selectionList as child if Players exist and displayType is selectionList', () => {
+    const modifiedProps = { ...defaultProps, displayType: 'selectionList' };
     const deepWrapper = getWrapper(store, modifiedProps).dive().dive();
     const tableLength = deepWrapper.find(Table).length;
     const selectionListLength = deepWrapper.find(SelectionList).length;

@@ -22,7 +22,7 @@ const BlurContainer = styled.div`
 
 const DraftMenuContainer = styled.div`
   width: ${props => (props.isWide ? '100%' : '60%')};
-  
+
   ${MENU_TEXT_MIXIN({ color: DARK_BLUE })}
   ${CENTER_ELEMENT_MIXIN}
 `;

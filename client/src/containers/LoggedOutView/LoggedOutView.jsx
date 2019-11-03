@@ -13,7 +13,7 @@ import {
   TabListContainer,
 } from './styledComponents';
 
-const LoggedOutView = () => {
+function LoggedOutView() {
   const [isLoginActiveComponent, toggleActiveComponent] = useState(true);
 
   const getAnchor = (text, isLoginButton) => (

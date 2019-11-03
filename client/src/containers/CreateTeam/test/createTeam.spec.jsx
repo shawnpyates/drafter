@@ -17,10 +17,16 @@ const mockStore = configureStore([thunk]);
 
 const store = {
   user: {
-    currentUser: { uuid: 'abc123' },
+    currentUser: {
+      uuid: 'abc123',
+      drafts: [],
+    },
   },
   draft: {
     drafts: draftsTestData,
+  },
+  request: {
+    createdRequest: { uuid: 'def456' },
   },
 };
 

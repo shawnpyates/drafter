@@ -39,7 +39,7 @@ const extractDataForDisplay = players => (
   })
 );
 
-const Players = ({
+function Players({
   players,
   parent,
   teamId,
@@ -47,7 +47,7 @@ const Players = ({
   displayType,
   assignPlayerToTeam,
   shouldDraftViewBlur,
-}) => {
+}) {
   const addNewLink = (
     parent === 'team'
       ? `/teams/${teamId}/createPlayers`

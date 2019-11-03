@@ -4,11 +4,11 @@ import { shallow } from 'enzyme';
 
 import Form from '../Form';
 
-const { title, inputs: formInputs } = require('../../../formContent.json').draft;
+const { titleForCreateNew, inputs: formInputs } = require('../../../formContent.json').draft;
 
 const props = {
   formInputs,
-  title,
+  title: titleForCreateNew,
 };
 
 const wrapper = shallow(<Form {...props} />);
@@ -24,7 +24,7 @@ describe('<Form />', () => {
     const elementType = titleElement.text();
     const elementHtml = titleElement.html();
     expect(elementType).toEqual('<styled.h2 />');
-    expect(elementHtml).toContain(title);
+    expect(elementHtml).toContain(titleForCreateNew);
   });
   test('Text type renders text input', () => {
     const inputContainerElement = wrapper.childAt(1);
