@@ -279,13 +279,14 @@ class DraftMenu extends Component {
     const {
       uuid,
       name,
+      ownerUserId,
       status,
       User: owner,
       Players: players,
       Requests: requests,
       Teams: teams,
     } = currentDraft || {};
-    const isUserAlsoOwner = owner && owner.uuid === currentUser.uuid;
+    const isUserAlsoOwner = ownerUserId === currentUser.uuid;
     if (
       !isUserAlsoOwner
       && teams
@@ -362,9 +363,8 @@ class DraftMenu extends Component {
                 />
               </BlurContainer>
               {(
-                currentDraft.ownerUserId === currentUser.uuid
+                isUserAlsoOwner
                 && displayType === DISPLAY_TYPES.TABLE
-                && isUserAlsoOwner
               )
               && <Requests requests={requests} fetchBy="draft" />
               }

@@ -9,40 +9,32 @@ import { Table } from '../../../components';
 
 const mockStore = configureStore([thunk]);
 
-const store = {
-  request: {
-    requestsForDraft: [
-      {
-        uuid: 'abc123',
-        teamName: 'Wings',
-        User: {
-          firstName: 'Ed',
-          lastName: 'Eden',
-          email: 'ee@foo.bar',
-        },
+const defaultProps = {
+  requests: [
+    {
+      uuid: 'abc123',
+      teamName: 'Wings',
+      User: {
+        firstName: 'Ed',
+        lastName: 'Eden',
+        email: 'ee@foo.bar',
       },
-    ],
-  },
+    },
+  ],
+  fetchBy: 'draft',
 };
 
-const props = { fetchBy: 'draft' };
-
-const getWrapper = storeObj => shallow(<Requests {...props} store={mockStore(storeObj)} />);
+const getWrapper = props => shallow(<Requests {...props} store={mockStore({})} />);
 
 describe('<Requests />', () => {
-  test('Render a <Requests /> component', () => {
-    const received = getWrapper(store).text();
-    const expected = '<Requests />';
-    expect(received).toEqual(expected);
-  });
   test('Renders table as child if drafts exist', () => {
-    const deepWrapper = getWrapper(store).dive().dive();
+    const deepWrapper = getWrapper(defaultProps).dive();
     const tableLength = deepWrapper.find(Table).length;
     expect(tableLength).toEqual(1);
   });
   test('Does not render table as child if no drafts exist', () => {
-    const modifiedStore = { request: { requestsForDraft: null } };
-    const deepWrapper = getWrapper(modifiedStore).dive().dive();
+    const modifiedProps = { ...defaultProps, requests: null };
+    const deepWrapper = getWrapper(modifiedProps).dive();
     const tableLength = deepWrapper.find(Table).length;
     expect(tableLength).toEqual(0);
   });

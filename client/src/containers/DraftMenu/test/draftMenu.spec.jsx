@@ -16,6 +16,9 @@ const store = {
   draft: {
     currentDraft: { uuid: 'def234', ownerUserId: 'abc123', status: 'scheduled' },
   },
+  socket: {
+    socket: {},
+  },
 };
 
 const props = {
@@ -24,6 +27,7 @@ const props = {
       id: 'def234',
     },
   },
+  displayType: 'table',
 };
 
 describe('<DraftMenu />', () => {

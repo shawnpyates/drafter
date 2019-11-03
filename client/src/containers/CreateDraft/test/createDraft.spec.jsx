@@ -21,6 +21,15 @@ const store = {
   user: {
     currentUser: { uuid: 'abc123' },
   },
+  draft: {
+    currentDraft: { uuid: 'def456' },
+  },
+};
+
+const props = {
+  match: {
+    params: { id: 'foo' },
+  },
 };
 
 const GET_THREE_DAYS_FROM_NOW_TIMESTAMP = () => {
@@ -36,9 +45,14 @@ const localState = {
   buttonsToHighlight: {
     shouldScheduleTime: true,
   },
+  preexistingValues: {
+    name: null,
+    shouldScheduleTime: null,
+    scheduledTime: null,
+  },
 };
 
-const wrapper = shallow(<CreateDraft store={mockStore(store)} />);
+const wrapper = shallow(<CreateDraft {...props} store={mockStore(store)} />);
 
 describe('<CreateDraft />', () => {
   describe('CreateDraft component', () => {

@@ -26,7 +26,7 @@ const isCurrentUserSelecting = (draft, user) => {
   )).ownerUserId === user.uuid;
 };
 
-const SelectionList = ({
+function SelectionList({
   type,
   title,
   data,
@@ -34,7 +34,7 @@ const SelectionList = ({
   shouldDraftViewBlur,
   currentDraft,
   currentUser,
-}) => {
+}) {
   const [focussedPlayerId, changePlayerFocus] = useState(null);
   return (
     <Container isLeft={type === 'Teams'}>

@@ -5,17 +5,20 @@ import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
 import Players from '../Players';
+
 import { SelectionList, Table } from '../../../components';
 
 const mockStore = configureStore([thunk]);
 
 const defaultProps = {
   displayType: 'table',
+  players: [{ uuid: 'abc123' }],
+  draft: { uuid: 'def456' },
 };
 
 const store = {
-  player: {
-    players: [{ foo: 'bar' }],
+  draft: {
+    shouldDraftViewBlur: false,
   },
 };
 
@@ -37,13 +40,13 @@ describe('<Players />', () => {
     expect(selectionListLength).toEqual(0);
   });
   test('Does not render table as child if no Players exist', () => {
-    const modifiedStore = { player: { players: null } };
-    const deepWrapper = getWrapper(modifiedStore, defaultProps).dive().dive();
+    const modifiedProps = { ...defaultProps, players: null };
+    const deepWrapper = getWrapper(store, modifiedProps).dive().dive();
     const tableLength = deepWrapper.find(Table).length;
     expect(tableLength).toEqual(0);
   });
   test('Renders selectionList as child if Players exist and displayType is selectionList', () => {
-    const modifiedProps = { displayType: 'selectionList' };
+    const modifiedProps = { ...defaultProps, displayType: 'selectionList' };
     const deepWrapper = getWrapper(store, modifiedProps).dive().dive();
     const tableLength = deepWrapper.find(Table).length;
     const selectionListLength = deepWrapper.find(SelectionList).length;

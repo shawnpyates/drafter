@@ -28,7 +28,7 @@ const {
   dataUrl: DATA_URL,
 } = TABLE_TEXTS;
 
-const Table = ({
+function Table({
   type,
   title,
   columnHeaders,
@@ -37,71 +37,73 @@ const Table = ({
   addNewLink,
   options,
   handleOptionClick,
-}) => (
-  <Container>
-    <TableTitleLine>
-      <TableTitle>{title}</TableTitle>
-      {addNewLink
+}) {
+  return (
+    <Container>
+      <TableTitleLine>
+        <TableTitle>{title}</TableTitle>
+        {addNewLink
+        && (
+          <Link to={addNewLink}>
+            <AddNewButton>
+              {ADD_NEW}
+            </AddNewButton>
+          </Link>
+        )}
+      </TableTitleLine>
+      {Boolean(data.length)
       && (
-        <Link to={addNewLink}>
-          <AddNewButton>
-            {ADD_NEW}
-          </AddNewButton>
-        </Link>
-      )}
-    </TableTitleLine>
-    {Boolean(data.length)
-    && (
-      <DataFrame>
-        <HeaderRow>
-          {columnHeaders.map(header => (
-            <ColumnHeader
-              columnHeadersLength={columnHeaders.length}
-              key={header.type}
-            >
-              {header.value}
-            </ColumnHeader>
-          ))}
-        </HeaderRow>
-        {data.map((entry, i) => (
-          <DataLink
-            to={
-              !options
-              && getTextWithInjections(DATA_URL, { type: type.toLowerCase(), uuid: entry.uuid })
-            }
-            key={entry.uuid}
-          >
-            <DataRow
-              isEvenNumber={i % 2 === 0}
-              optionsExists={!!options}
-            >
-              {columnHeaders
-                .map(columnHeader => columnHeader.type)
-                .map(chType => <DataCell key={uuidv4()}>{entry[chType]}</DataCell>)
+        <DataFrame>
+          <HeaderRow>
+            {columnHeaders.map(header => (
+              <ColumnHeader
+                columnHeadersLength={columnHeaders.length}
+                key={header.type}
+              >
+                {header.value}
+              </ColumnHeader>
+            ))}
+          </HeaderRow>
+          {data.map((entry, i) => (
+            <DataLink
+              to={
+                !options
+                && getTextWithInjections(DATA_URL, { type: type.toLowerCase(), uuid: entry.uuid })
               }
-              {options
-              && (
-                <OptionsContainer>
-                  {options.map(option => (
-                    <DataLink to="/" key={option}>
-                      <Option
-                        value={entry.uuid}
-                        onClick={handleOptionClick}
-                      >
-                        {option}
-                      </Option>
-                    </DataLink>
-                  ))}
-                </OptionsContainer>
-              )}
-            </DataRow>
-          </DataLink>
-        ))}
-      </DataFrame>
-    )}
-    {!data.length && <EmptyDataMessage>{emptyDataMessage}</EmptyDataMessage>}
-  </Container>
-);
+              key={entry.uuid}
+            >
+              <DataRow
+                isEvenNumber={i % 2 === 0}
+                optionsExists={!!options}
+              >
+                {columnHeaders
+                  .map(columnHeader => columnHeader.type)
+                  .map(chType => <DataCell key={uuidv4()}>{entry[chType]}</DataCell>)
+                }
+                {options
+                && (
+                  <OptionsContainer>
+                    {options.map(option => (
+                      <DataLink to="/" key={option}>
+                        <Option
+                          value={entry.uuid}
+                          onClick={handleOptionClick}
+                        >
+                          {option}
+                        </Option>
+                      </DataLink>
+                    ))}
+                  </OptionsContainer>
+                )}
+              </DataRow>
+            </DataLink>
+          ))}
+        </DataFrame>
+      )}
+      {!data.length && <EmptyDataMessage>{emptyDataMessage}</EmptyDataMessage>}
+    </Container>
+  );
+}
 
 Table.defaultProps = {
   addNewLink: null,
