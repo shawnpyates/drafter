@@ -19,11 +19,6 @@ const props = {
 };
 
 describe('<Drafts />', () => {
-  test('Render a <Drafts /> component', () => {
-    const received = shallow(<Drafts {...props} />).text();
-    const expected = '<Drafts />';
-    expect(received).toEqual(expected);
-  });
   test('Renders table as child if drafts exist', () => {
     const deepWrapper = shallow(<Drafts {...props} />);
     const tableLength = deepWrapper.find(Table).length;

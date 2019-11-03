@@ -19,11 +19,8 @@ const store = {
   user: {
     currentUser: {
       uuid: 'abc123',
-      drafts: [],
+      Drafts: draftsTestData,
     },
-  },
-  draft: {
-    drafts: draftsTestData,
   },
   request: {
     createdRequest: { uuid: 'def456' },

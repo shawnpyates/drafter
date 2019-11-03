@@ -45,6 +45,11 @@ const localState = {
   buttonsToHighlight: {
     shouldScheduleTime: true,
   },
+  preexistingValues: {
+    name: null,
+    shouldScheduleTime: null,
+    scheduledTime: null,
+  },
 };
 
 const wrapper = shallow(<CreateDraft {...props} store={mockStore(store)} />);
