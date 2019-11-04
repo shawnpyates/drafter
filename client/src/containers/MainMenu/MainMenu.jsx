@@ -21,7 +21,7 @@ const { properties: profileProperties } = userProfileConstants;
 
 const mapStateToProps = state => ({ currentUser: state.user.currentUser });
 
-const MainMenu = ({ currentUser }) => {
+function MainMenu({ currentUser }) {
   const {
     uuid,
     firstName,
@@ -60,7 +60,7 @@ const MainMenu = ({ currentUser }) => {
       <Requests requests={incomingRequests} fetchBy="draftOwner" />
     </MainMenuContainer>
   );
-};
+}
 
 MainMenu.propTypes = {
   currentUser: PropTypes.objectOf(PropTypes.any).isRequired,

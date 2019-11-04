@@ -13,33 +13,35 @@ import {
   ListItem,
 } from './styledComponents';
 
-const ProfileCard = ({
+function ProfileCard({
   title,
   data,
   shouldUpdatingLinkRender,
   linkForUpdating,
   shouldAdjustWidth,
-}) => (
-  <InfoWrapper shouldAdjustWidth={shouldAdjustWidth}>
-    <InfoTitle>{title}</InfoTitle>
-    {shouldUpdatingLinkRender
-    && (
-      <Link to={linkForUpdating}>
-        <EditButton>
-          Edit
-        </EditButton>
-      </Link>
-    )}
-    <InfoDetails>
-      <InfoProperties>
-        {Object.keys(data).map(prop => <ListItem key={prop}>{prop}</ListItem>)}
-      </InfoProperties>
-      <InfoValues>
-        {Object.values(data).map(val => <ListItem key={uuidv4()}>{val}</ListItem>)}
-      </InfoValues>
-    </InfoDetails>
-  </InfoWrapper>
-);
+}) {
+  return (
+    <InfoWrapper shouldAdjustWidth={shouldAdjustWidth}>
+      <InfoTitle>{title}</InfoTitle>
+      {shouldUpdatingLinkRender
+      && (
+        <Link to={linkForUpdating}>
+          <EditButton>
+            Edit
+          </EditButton>
+        </Link>
+      )}
+      <InfoDetails>
+        <InfoProperties>
+          {Object.keys(data).map(prop => <ListItem key={prop}>{prop}</ListItem>)}
+        </InfoProperties>
+        <InfoValues>
+          {Object.values(data).map(val => <ListItem key={uuidv4()}>{val}</ListItem>)}
+        </InfoValues>
+      </InfoDetails>
+    </InfoWrapper>
+  );
+}
 
 ProfileCard.defaultProps = {
   shouldAdjustWidth: null,

@@ -7,13 +7,15 @@ import {
   ErrorTextContainer,
 } from './styledComponents';
 
-const ErrorIndicator = ({ message }) => (
-  <ErrorContainer>
-    <ErrorTextContainer>
-      <ErrorText>{message}</ErrorText>
-    </ErrorTextContainer>
-  </ErrorContainer>
-);
+function ErrorIndicator({ message }) {
+  return (
+    <ErrorContainer>
+      <ErrorTextContainer>
+        <ErrorText>{message}</ErrorText>
+      </ErrorTextContainer>
+    </ErrorContainer>
+  );
+}
 
 ErrorIndicator.propTypes = {
   message: PropTypes.string.isRequired,

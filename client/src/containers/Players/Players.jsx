@@ -86,7 +86,7 @@ function Players({
       </div>
     )
   );
-};
+}
 
 Players.defaultProps = {
   players: null,

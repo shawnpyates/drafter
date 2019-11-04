@@ -105,13 +105,9 @@ export const createUser = body => (dispatch) => {
     });
 };
 
-export const updateUser = body => (dispatch) => {
+export const updateUser = (id, body) => (dispatch) => {
   dispatch({ type: 'UPDATE_CURRENT_USER_PENDING' });
-  const {
-    id,
-    email,
-  } = body;
-  return axios.put(`/api/users/${id}`, { email })
+  return axios.put(`/api/users/${id}`, body)
     .then((response) => {
       const { user } = response.data;
       dispatch({ type: 'UPDATE_CURRENT_USER_FULFILLED', payload: user });
