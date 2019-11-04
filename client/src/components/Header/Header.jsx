@@ -17,11 +17,11 @@ const MAX_EMAIL_DISPLAY = 30;
 const { title, logOut, notLoggedIn } = headerTexts;
 const { localStorage } = window;
 
-const Header = ({
+function Header({
   currentUser,
   removeCurrentUserFromState,
   isFetchingUser,
-}) => {
+}) {
   const handleLogOut = () => {
     localStorage.removeItem('drafterUserToken');
     removeCurrentUserFromState();
@@ -59,7 +59,7 @@ const Header = ({
       )}
     </Container>
   );
-};
+}
 
 Header.defaultProps = {
   currentUser: null,

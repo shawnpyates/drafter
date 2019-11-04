@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect, Route, Switch } from 'react-router-dom';
 
@@ -7,6 +7,10 @@ import MainMenu from '../MainMenu/MainMenu';
 import componentRoutes from './componentRoutes';
 
 import { NotificationContainer, NotificationText } from './styledComponents';
+
+import { getTextWithInjections } from '../../helpers';
+
+import { draftNotificationText } from '../../texts.json';
 
 const { SERVER_URL } = process.env;
 
@@ -23,69 +27,59 @@ const checkForHashThenRender = () => {
 
 const getDraftUrl = draftId => `${SERVER_URL}/drafts/${draftId}/show`;
 
-const getNotificationText = draftName => (
-  `${draftName} has been started by its owner. Click here to go there!`
-);
 
-class LoggedInView extends Component {
-  constructor() {
-    super();
-    this.state = {
-      shouldNotificationRender: false,
-      notificationDraftId: null,
-      notificationDraftName: null,
-    };
-  }
-
-  componentDidMount() {
-    const { socket } = this.props;
+function LoggedInView({ socket }) {
+  const [state, setState] = useState({
+    shouldNotificationRender: false,
+    notificationDraftId: null,
+    notificationDraftName: null,
+  });
+  useEffect(() => {
     socket.on('broadcastDraftStart', ({ draftId, draftName }) => {
       const { pathname } = window.location;
       if (!pathname.includes(draftId)) {
-        this.setState({
+        setState({
           shouldNotificationRender: true,
           notificationDraftId: draftId,
           notificationDraftName: draftName,
-        }, () => {
-          setTimeout(() => {
-            this.setState({
-              shouldNotificationRender: false,
-              notificationDraftId: null,
-              notificationDraftName: null,
-            });
-          }, ALERT_DISPLAY_DURATION);
         });
+        setTimeout(() => {
+          setState({
+            shouldNotificationRender: false,
+            notificationDraftId: null,
+            notificationDraftName: null,
+          });
+        }, ALERT_DISPLAY_DURATION);
       }
     });
-  }
+  }, []);
 
-  handleNotificationClick = () => {
-    const { notificationDraftId } = this.state;
+  const handleNotificationClick = () => {
+    const { notificationDraftId } = state;
     window.location.replace(getDraftUrl(notificationDraftId));
-  }
+  };
 
-  render() {
-    const { shouldNotificationRender, notificationDraftName } = this.state;
-    return (
-      <div>
-        {shouldNotificationRender
-          && (
-            <NotificationContainer onClick={this.handleNotificationClick}>
-              <NotificationText>
-                {getNotificationText(notificationDraftName)}
-              </NotificationText>
-            </NotificationContainer>
-          )
-        }
-        <Switch>
-          <Route exact path="/" render={() => checkForHashThenRender()} />
-          {componentRoutes.map(route => (
-            <Route path={route.path} component={route.component} key={route.path} />
-          ))}
-        </Switch>
-      </div>
-    );
-  }
+  const { shouldNotificationRender, notificationDraftName } = state;
+
+  return (
+    <div>
+      {shouldNotificationRender
+        && (
+          <NotificationContainer onClick={handleNotificationClick}>
+            <NotificationText>
+              {getTextWithInjections(draftNotificationText, { draftName: notificationDraftName })}
+            </NotificationText>
+          </NotificationContainer>
+        )
+      }
+      <Switch>
+        <Route exact path="/" render={() => checkForHashThenRender()} />
+        {componentRoutes.map(route => (
+          <Route path={route.path} component={route.component} key={route.path} />
+        ))}
+      </Switch>
+    </div>
+  );
 }
 
 LoggedInView.defaultProps = {

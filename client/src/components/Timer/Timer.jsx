@@ -19,10 +19,10 @@ const msToMinutesAndSeconds = (ms) => {
   return (`${minutesString}:${secondsString}`);
 };
 
-const Timer = ({
+function Timer({
   assignPlayerToTeam,
   expiryTime,
-}) => {
+}) {
   const [timeLeft, setTimeLeft] = useState(null);
   const [isActive, setIsActive] = useState(false);
 
@@ -63,7 +63,7 @@ const Timer = ({
       </TimerContainer>
     </TimerRow>
   );
-};
+}
 
 Timer.propTypes = {
   assignPlayerToTeam: PropTypes.func.isRequired,

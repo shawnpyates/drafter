@@ -22,7 +22,7 @@ import {
 
 const DAYS_IN_FIVE_WEEKS = 35;
 
-const Form = ({
+function Form({
   buttonsToHighlight,
   changeDate,
   calendarDate,
@@ -44,7 +44,7 @@ const Form = ({
   toggleAmPm,
   toggleCalendarFocus,
   updateFieldValue,
-}) => {
+}) {
   const handleChange = (ev, dataType) => {
     ev.preventDefault();
     const { name, value } = ev.target;
@@ -215,7 +215,7 @@ const Form = ({
       </ErrorMessageContainer>
     </FieldWrapper>
   );
-};
+}
 
 Form.defaultProps = {
   buttonsToHighlight: {},

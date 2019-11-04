@@ -10,7 +10,7 @@ import {
 
 import { positions } from '../../texts.json';
 
-const Collapsible = ({ children, isCurrentlySelecting, playersFromTeam }) => {
+function Collapsible({ children, isCurrentlySelecting, playersFromTeam }) {
   const [isOpen, toggleOpen] = useState(false);
   const iconText = isOpen ? '-' : '+';
   return (
@@ -34,7 +34,7 @@ const Collapsible = ({ children, isCurrentlySelecting, playersFromTeam }) => {
       )}
     </TeamListItem>
   );
-};
+}
 
 Collapsible.propTypes = {
   children: PropTypes.string.isRequired,

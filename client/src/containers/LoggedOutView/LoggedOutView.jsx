@@ -42,6 +42,6 @@ function LoggedOutView() {
       {!isLoginActiveComponent && <Register />}
     </FormContainer>
   );
-};
+}
 
 export default LoggedOutView;

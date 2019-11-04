@@ -49,7 +49,6 @@ describe('<App />', () => {
     const modifiedUser = { ...store.user, currentUser: null };
     const modifiedStore = { ...store, user: modifiedUser };
     const deepWrapper = getWrapper(modifiedStore).dive().dive();
-    deepWrapper.setState({ isTokenMissing: true });
     const loggedInViewLength = deepWrapper.find(LoggedInView).length;
     const loggedOutViewLength = deepWrapper.find(LoggedOutView).length;
     const loadingViewLength = deepWrapper.find(LoadingIndicator).length;
@@ -61,7 +60,6 @@ describe('<App />', () => {
     const modifiedUser = { fetching: true, currentUser: null };
     const modifiedStore = { ...store, user: modifiedUser };
     const deepWrapper = getWrapper(modifiedStore).dive().dive();
-    deepWrapper.setState({ isTokenMissing: false });
     const loggedInViewLength = deepWrapper.find(LoggedInView).length;
     const loggedOutViewLength = deepWrapper.find(LoggedOutView).length;
     const loadingViewLength = deepWrapper.find(LoadingIndicator).length;

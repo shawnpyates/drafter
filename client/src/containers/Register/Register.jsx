@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -11,11 +11,11 @@ import { register as registerForm } from '../../formContent.json';
 const { inputs: formInputs } = registerForm;
 
 const {
-  missingField,
-  passwordsDidNotMatch,
-  tooShort,
-  invalidEmail,
-  unexpected,
+  missingField: MISSING_FIELD,
+  passwordsDidNotMatch: PASSWORDS_DID_NOT_MATCH,
+  tooShort: TOO_SHORT,
+  invalidEmail: INVALID_EMAIL,
+  unexpected: UNEXPECTED_ERROR,
 } = registerForm.errorMessages;
 
 const mapStateToProps = (state) => {
@@ -37,58 +37,49 @@ const validateForm = (formState) => {
   } = formState;
 
   if (Object.values(formState).some(value => !value)) {
-    return { errorMessage: missingField };
+    return { errorMessage: MISSING_FIELD };
   }
 
   if (passwordFirstInsertion !== passwordSecondInsertion) {
-    return { errorMessage: passwordsDidNotMatch };
+    return { errorMessage: PASSWORDS_DID_NOT_MATCH };
   }
 
   if (passwordFirstInsertion.length < registerForm.passwordMinimumLength) {
-    return { errorMessage: tooShort };
+    return { errorMessage: TOO_SHORT };
   }
 
   if (!isEmailValid(email)) {
-    return { errorMessage: invalidEmail };
+    return { errorMessage: INVALID_EMAIL };
   }
 
   return { success: true };
 };
 
-class Register extends Component {
-  constructor() {
-    super();
-    this.state = {
-      errorMessage: null,
-      form: {
-        firstName: null,
-        lastName: null,
-        email: null,
-        passwordFirstInsertion: null,
-        passwordSecondInsertion: null,
-      },
-    };
-  }
+function Register({
+  errorOnAuthenticateUser,
+  errorOnCreateUser,
+  createUser: createUserPropFn,
+}) {
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [form, setForm] = useState({
+    firstName: null,
+    lastName: null,
+    email: null,
+    passwordFirstInsertion: null,
+    passwordSecondInsertion: null,
+  });
 
-  componentDidUpdate(prevProps) {
-    if (
-      !(prevProps.errorOnAuthenticateUser || prevProps.errorOnCreateUser)
-      && (this.props.errorOnAuthenticateUser || this.props.errorOnCreateUser)
-    ) {
-      this.setErrorMessage(unexpected);
+  useEffect(() => {
+    if (errorOnAuthenticateUser || errorOnCreateUser) {
+      setErrorMessage(UNEXPECTED_ERROR);
     }
-  }
+  }, [errorOnAuthenticateUser, errorOnCreateUser]);
 
-  setErrorMessage = (errorMessage) => {
-    this.setState({ errorMessage });
-  }
-
-  handleSubmit = (ev) => {
+  const handleSubmit = (ev) => {
     ev.preventDefault();
-    const { form } = this.state;
-    const { errorMessage } = validateForm(form);
-    if (errorMessage) {
-      this.setState({ errorMessage });
+    const { errorMessage: validationErrorMessage } = validateForm(form);
+    if (validationErrorMessage) {
+      setErrorMessage(validationErrorMessage);
       return;
     }
     const {
@@ -103,32 +94,24 @@ class Register extends Component {
       email,
       password: passwordFirstInsertion,
     };
-    this.props.createUser(body);
-  }
+    createUserPropFn(body);
+  };
 
-  updateFieldValue = (name, value) => {
-    this.setState(prevState => ({
-      form: {
-        ...prevState.form,
-        [name]: value,
-      },
-    }));
-  }
+  const updateFormValue = (name, value) => {
+    setForm({ ...form, [name]: value });
+  };
 
-  render() {
-    const { errorMessage } = this.state;
-    return (
-      <Form
-        isFormWide
-        updateFieldValue={this.updateFieldValue}
-        handleSubmit={this.handleSubmit}
-        title={registerForm.title}
-        formInputs={formInputs}
-        errorMessage={errorMessage}
-        hasContainer
-      />
-    );
-  }
+  return (
+    <Form
+      isFormWide
+      updateFieldValue={updateFormValue}
+      handleSubmit={handleSubmit}
+      title={registerForm.title}
+      formInputs={formInputs}
+      errorMessage={errorMessage}
+      hasContainer
+    />
+  );
 }
 
 Register.defaultProps = {

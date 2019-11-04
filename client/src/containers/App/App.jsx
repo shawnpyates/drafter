@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { BrowserRouter as Router } from 'react-router-dom';
@@ -28,43 +28,40 @@ const mapDispatchToProps = dispatch => ({
   removeCurrentUserFromState: () => dispatch(removeCurrentUserFromState()),
 });
 
-class App extends Component {
-  componentDidMount() {
+function App({
+  currentUser,
+  isFetchingUser,
+  socket,
+  fetchCurrentUser: fetchCurrentUserPropFn,
+  removeCurrentUserFromState: removeCurrentUserFromStatePropFn,
+}) {
+  useEffect(() => {
     const userToken = localStorage.getItem('drafterUserToken');
-    if (!this.props.currentUser && userToken) {
-      this.props.fetchCurrentUser();
+    if (!currentUser && userToken) {
+      fetchCurrentUserPropFn();
     }
-  }
+  }, []);
 
-
-  render() {
-    const {
-      currentUser,
-      isFetchingUser,
-      removeCurrentUserFromState: removeCurrentUserFromStatePropFn,
-      socket,
-    } = this.props;
-    return (
-      <Router>
-        <AppContainer>
-          <Header
-            currentUser={currentUser}
-            isFetchingUser={isFetchingUser}
-            removeCurrentUserFromState={removeCurrentUserFromStatePropFn}
-          />
-          {(currentUser && socket && !isFetchingUser)
-          && <LoggedInView socket={socket} />
-          }
-          {(!currentUser && !isFetchingUser)
-          && <LoggedOutView />
-          }
-          {isFetchingUser
-          && <LoadingIndicator />
-          }
-        </AppContainer>
-      </Router>
-    );
-  }
+  return (
+    <Router>
+      <AppContainer>
+        <Header
+          currentUser={currentUser}
+          isFetchingUser={isFetchingUser}
+          removeCurrentUserFromState={removeCurrentUserFromStatePropFn}
+        />
+        {(currentUser && socket && !isFetchingUser)
+        && <LoggedInView socket={socket} />
+        }
+        {(!currentUser && !isFetchingUser)
+        && <LoggedOutView />
+        }
+        {isFetchingUser
+        && <LoadingIndicator />
+        }
+      </AppContainer>
+    </Router>
+  );
 }
 
 App.defaultProps = {

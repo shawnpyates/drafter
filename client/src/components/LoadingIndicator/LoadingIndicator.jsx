@@ -7,13 +7,15 @@ import {
   LoadingTextContainer,
 } from './styledComponents';
 
-const LoadingIndicator = () => (
-  <LoadingContainer>
-    <LoadingSpinner />
-    <LoadingTextContainer>
-      <LoadingText>Loading...</LoadingText>
-    </LoadingTextContainer>
-  </LoadingContainer>
-);
+function LoadingIndicator() {
+  return (
+    <LoadingContainer>
+      <LoadingSpinner />
+      <LoadingTextContainer>
+        <LoadingText>Loading...</LoadingText>
+      </LoadingTextContainer>
+    </LoadingContainer>
+  );
+}
 
 export default LoadingIndicator;

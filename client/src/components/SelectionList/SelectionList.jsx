@@ -86,7 +86,7 @@ function SelectionList({
       </List>
     </Container>
   );
-};
+}
 
 SelectionList.defaultProps = {
   assignPlayerToTeam: null,

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -21,58 +21,51 @@ const mapDispatchToProps = dispatch => ({
 
 const validateEmail = email => (/\S+@\S+\.\S+/).test(email);
 
-class Login extends Component {
-  constructor() {
-    super();
-    this.state = {
-      errorMessage: null,
-      email: null,
-      password: null,
-    };
-  }
+function Login({
+  errorOnAuthenticateUser,
+  authenticateUser: authenticateUserPropFn,
+}) {
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [credentials, setCredentials] = useState({ email: null, password: null });
 
-  componentDidUpdate(prevProps) {
-    if (!prevProps.errorOnAuthenticateUser && this.props.errorOnAuthenticateUser) {
-      const { failure } = this.props.errorOnAuthenticateUser.response.data;
-      if (failure) {
-        this.setErrorMessage(errorMessages[failure]);
-      } else {
-        this.setErrorMessage(errorMessages.unexpected);
-      }
+  useEffect(() => {
+    const {
+      response: {
+        data: { failure } = {},
+      } = {},
+    } = errorOnAuthenticateUser || {};
+    if (failure) {
+      setErrorMessage(errorMessages[failure]);
+    } else {
+      setErrorMessage(errorMessages.unexpected);
     }
-  }
+  }, [errorOnAuthenticateUser]);
 
-  setErrorMessage = (errorMessage) => {
-    this.setState({ errorMessage });
-  }
+  const updateCredentialValue = (name, value) => {
+    setCredentials({ ...credentials, [name]: value });
+  };
 
-  updateFieldValue = (name, value) => {
-    this.setState({ [name]: value });
-  }
-
-  handleSubmit = (ev) => {
+  const handleSubmit = (ev) => {
     ev.preventDefault();
-    if (!validateEmail(this.state.email)) {
-      this.setState({ errorMessage: errorMessages.invalidEmail });
+    const { email, password } = credentials;
+    if (!validateEmail(email)) {
+      setErrorMessage(errorMessages.invalidEmail);
       return;
     }
-    const { email, password } = this.state;
-    this.props.authenticateUser({ email, password });
-  }
+    authenticateUserPropFn({ email, password });
+  };
 
-  render() {
-    return (
-      <Form
-        isFormWide
-        updateFieldValue={this.updateFieldValue}
-        handleSubmit={this.handleSubmit}
-        title={loginForm.title}
-        formInputs={loginForm.inputs}
-        errorMessage={this.state.errorMessage}
-        hasContainer
-      />
-    );
-  }
+  return (
+    <Form
+      isFormWide
+      updateFieldValue={updateCredentialValue}
+      handleSubmit={handleSubmit}
+      title={loginForm.title}
+      formInputs={loginForm.inputs}
+      errorMessage={errorMessage}
+      hasContainer
+    />
+  );
 }
 
 Login.defaultProps = {
