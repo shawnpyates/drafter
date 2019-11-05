@@ -1,15 +1,19 @@
+const webpack = require('webpack');
 const Dotenv = require('dotenv-webpack');
 const path = require('path');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 module.exports = {
-  mode: 'development',
-  devtool: 'eval-source-map',
   entry: './src/index.jsx',
   output: {
     path: path.resolve(__dirname, 'public/dist'),
     filename: 'bundle.js',
   },
-  plugins: [new Dotenv({ path: '../.env' })],
+  plugins: [
+    new Dotenv({ path: '../.env' }),
+    new BundleAnalyzerPlugin(),
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+  ],
   module: {
     rules: [
       {
