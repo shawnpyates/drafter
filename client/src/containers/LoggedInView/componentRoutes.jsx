@@ -1,15 +1,14 @@
-// destructured imports doesn't work here
-import CreateDraft from '../CreateDraft/CreateDraft';
 import CreatePlayer from '../CreatePlayer/CreatePlayer';
 import CreateTeam from '../CreateTeam/CreateTeam';
 import DraftMenu from '../DraftMenu/DraftMenu';
+import LoadableCreateDraft from '../CreateDraft/LoadableCreateDraft';
 import TeamMenu from '../TeamMenu/TeamMenu';
 import UpdateUser from '../UpdateUser/UpdateUser';
 
 module.exports = [
   {
     path: '/createDrafts',
-    component: CreateDraft,
+    component: LoadableCreateDraft,
   },
   {
     path: '/createTeams',
@@ -29,7 +28,7 @@ module.exports = [
   },
   {
     path: '/drafts/:id/update',
-    component: CreateDraft,
+    component: LoadableCreateDraft,
   },
   {
     path: '/teams/:id/show',

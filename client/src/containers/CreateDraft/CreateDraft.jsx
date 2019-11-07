@@ -118,14 +118,12 @@ class CreateDraft extends Component {
     };
   }
 
+
   componentDidMount() {
-    const {
-      match: {
-        params: { id: idParam } = {},
-      } = {},
-    } = this.props;
-    if (idParam) {
-      this.props.fetchOneDraft(idParam);
+    const { match } = this.props;
+    // destructuring with default empty obj syntax doesn't work when lazy loaded
+    if (match && match.params && match.params.id) {
+      this.props.fetchOneDraft(match.params.id);
     } else {
       this.initializeDateAndTime();
     }
