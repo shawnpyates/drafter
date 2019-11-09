@@ -30,7 +30,9 @@ Create and host sports drafts (for recreational leagues or potentially fantasy l
       MAIL_USER=
       MAIL_PASS=
     ```
-1. Install client-side dependencies and generate webpack bundle: `cd client && npm install && npm build-prod && cd ..`
+1. Install client-side dependencies and generate webpack bundle:
+
+    `cd client && npm install && npm build-prod && cd ..`
 
 1. Run server: `npm start`
 
