@@ -16,7 +16,7 @@ Create and host sports drafts (for recreational leagues or potentially fantasy l
 1. Create `.env` file in the root directory and fill in the following env variables. Note that you will need to have to run your own postgres instance as well as your own credentials for the e-mail notifications service.
 
     ```
-      # ./env
+      # .env
 
       PORT=3001
       NODE_ENV=production
