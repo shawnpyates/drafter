@@ -2,7 +2,14 @@
 
 Create and host sports drafts (for recreational leagues or potentially fantasy leagues) in live time.
 
-To run locally:
+#### Tech used:
+
+**Server**: Node, Express, Postgres, Sequelize, Socket IO
+
+**Client**: React, Redux, Webpack/Babel, CSS (Styled Components), Socket IO Client, Jest, Enzyme
+
+
+#### To run locally:
 
 1. Install server dependencies: `npm install`
 
@@ -28,8 +35,7 @@ To run locally:
 1. Run server: `npm start`
 
 
-
-#### Key Remaining Todos
+#### Key Remaining Todos:
 
 1. Reduce web bundle size:
     - implement bundle chunking (attempt with React.lazy have been unsucessful, likely due to dependency conflict)
