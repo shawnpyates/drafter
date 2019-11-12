@@ -46,5 +46,3 @@ Create and host sports drafts (for recreational leagues or potentially fantasy l
 1. Change more class components to functional components using hooks API.
 1. Mass-create feature (enable user to create multiple players in a single form).
 1. Prettier styling.
-
-

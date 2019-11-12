@@ -14,9 +14,15 @@ import { positions } from '../../texts.json';
 
 import Collapsible from '../Collapsible/Collapsible';
 
+import { blurDraft } from '../../actions';
+
 const mapStateToProps = state => ({
   currentDraft: state.draft.currentDraft,
   currentUser: state.user.currentUser,
+});
+
+const mapDispatchToProps = dispatch => ({
+  blurDraftPropFn: () => dispatch(blurDraft()),
 });
 
 const isCurrentUserSelecting = (draft, user) => {
@@ -34,8 +40,13 @@ function SelectionList({
   shouldDraftViewBlur,
   currentDraft,
   currentUser,
+  blurDraftPropFn,
 }) {
-  const [focussedPlayerId, changePlayerFocus] = useState(null);
+  const [focussedPlayerId, setPlayerFocus] = useState(null);
+  const handleSelection = (uuid) => {
+    blurDraftPropFn();
+    assignPlayerToTeam(uuid);
+  };
   return (
     <Container isLeft={type === 'Teams'}>
       <ListTitle>{title}</ListTitle>
@@ -59,14 +70,14 @@ function SelectionList({
                   value={uuid}
                   shouldDraftViewBlur={shouldDraftViewBlur}
                   isCurrentUserTurn={isCurrentUserTurn}
-                  onClick={() => changePlayerFocus(uuid)}
+                  onClick={() => setPlayerFocus(uuid)}
                 >
                   {name}
                   {position && ` (${positions[position]})`}
                 </ListItem>
                 {(isFocussed && isCurrentUserTurn)
                 && (
-                  <SelectButton onClick={() => assignPlayerToTeam(uuid)}>
+                  <SelectButton onClick={() => handleSelection(uuid)}>
                     Select
                   </SelectButton>
                 )}
@@ -100,6 +111,7 @@ SelectionList.propTypes = {
   currentDraft: PropTypes.objectOf(PropTypes.any).isRequired,
   currentUser: PropTypes.objectOf(PropTypes.any).isRequired,
   shouldDraftViewBlur: PropTypes.bool.isRequired,
+  blurDraftPropFn: PropTypes.func.isRequired,
 };
 
-export default connect(mapStateToProps)(SelectionList);
+export default connect(mapStateToProps, mapDispatchToProps)(SelectionList);

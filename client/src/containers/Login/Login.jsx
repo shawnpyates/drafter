@@ -36,7 +36,7 @@ function Login({
     } = errorOnAuthenticateUser || {};
     if (failure) {
       setErrorMessage(errorMessages[failure]);
-    } else {
+    } else if (errorOnAuthenticateUser) {
       setErrorMessage(errorMessages.unexpected);
     }
   }, [errorOnAuthenticateUser]);
