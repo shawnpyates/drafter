@@ -27,6 +27,14 @@ function Timer({
   const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {
+    if (timeLeft && (timeLeft - 1000 <= 0)) {
+      setTimeLeft(0);
+      setIsActive(false);
+      assignPlayerToTeam();
+    }
+  }, [timeLeft]);
+
+  useEffect(() => {
     if (expiryTime) {
       const now = Date.now();
       setTimeLeft(expiryTime - now);
@@ -45,14 +53,6 @@ function Timer({
     }
     return () => clearInterval(timer);
   }, [isActive]);
-
-  useEffect(() => {
-    if (timeLeft && (timeLeft - 1000 <= 0)) {
-      setTimeLeft(0);
-      setIsActive(false);
-      assignPlayerToTeam();
-    }
-  }, [timeLeft]);
 
   return (
     <TimerRow>

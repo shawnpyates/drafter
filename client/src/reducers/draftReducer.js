@@ -118,13 +118,16 @@ const draftReducer = (state = initialState, action) => {
         shouldDraftViewBlur: action.payload.shouldDraftViewBlur,
       };
     }
-    case 'REMOVE_CURRENT_DRAFT_FROM_STATE':
+    case 'REMOVE_CURRENT_DRAFT_FROM_STATE': {
       return {
         ...state,
         currentDraft: null,
         draftInfoText: null,
       };
-
+    }
+    case 'BLUR_DRAFT': {
+      return { ...state, shouldDraftViewBlur: true };
+    }
     default:
       break;
   }
