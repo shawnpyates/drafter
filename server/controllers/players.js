@@ -28,6 +28,7 @@ const moveSelectionToNextTeam = async (draft, playerId) => {
     currentlySelectingTeamId: teams[indexOfNextTeam].uuid,
     selectingTeamChangeTime,
   });
+  return null;
 };
 
 module.exports = {

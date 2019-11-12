@@ -132,3 +132,7 @@ export const updateDraft = ({ id, body, socket }) => (dispatch) => {
 export const removeCurrentDraftFromState = () => (dispatch) => {
   dispatch({ type: 'REMOVE_CURRENT_DRAFT_FROM_STATE' });
 };
+
+export const blurDraft = () => (dispatch) => {
+  dispatch({ type: 'BLUR_DRAFT' });
+};
