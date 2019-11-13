@@ -1,14 +1,14 @@
 import CreatePlayer from '../CreatePlayer/CreatePlayer';
 import CreateTeam from '../CreateTeam/CreateTeam';
 import DraftMenu from '../DraftMenu/DraftMenu';
-import LoadableCreateDraft from '../CreateDraft/LoadableCreateDraft';
+import CreateDraft from '../CreateDraft/CreateDraft';
 import TeamMenu from '../TeamMenu/TeamMenu';
 import UpdateUser from '../UpdateUser/UpdateUser';
 
 module.exports = [
   {
     path: '/createDrafts',
-    component: LoadableCreateDraft,
+    component: CreateDraft,
   },
   {
     path: '/createTeams',
@@ -28,7 +28,7 @@ module.exports = [
   },
   {
     path: '/drafts/:id/update',
-    component: LoadableCreateDraft,
+    component: CreateDraft,
   },
   {
     path: '/teams/:id/show',
