@@ -27,9 +27,8 @@ export const fetchTeamsByDraft = draftId => (dispatch) => {
 export const createTeam = body => (dispatch) => {
   dispatch({ type: 'CREATE_TEAM_PENDING ' });
   return axios.post('/api/teams', body)
-    .then((response) => {
-      const { team } = response.data;
-      dispatch({ type: 'CREATE_TEAM_FULFILLED', payload: team });
+    .then(() => {
+      dispatch({ type: 'CREATE_TEAM_FULFILLED' });
     })
     .catch((err) => {
       dispatch({ type: 'CREATE_TEAM_REJECTED', payload: err });

@@ -1,7 +1,6 @@
 const initialState = {
   creating: false,
   created: false,
-  createdTeam: null,
   currentTeam: null,
   fetching: false,
   fetched: false,
@@ -25,7 +24,6 @@ const teamReducer = (state = initialState, action) => {
         ...state,
         creating: false,
         created: true,
-        createdTeam: action.payload,
       };
     case 'FETCH_TEAMS_FROM_USER_PENDING': {
       return { ...state, fetching: true };

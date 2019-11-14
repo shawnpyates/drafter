@@ -21,7 +21,6 @@ const playerReducer = (state = initialState, action) => {
         ...state,
         creating: false,
         created: true,
-        createdPlayer: action.payload,
       };
     case 'CREATE_MANY_PLAYERS_PENDING':
       return { ...state, creating: true };

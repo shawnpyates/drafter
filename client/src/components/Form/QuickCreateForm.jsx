@@ -19,7 +19,6 @@ import {
 
 const getInputWidth = (formInputs) => {
   const inputsMinusSubmit = formInputs.filter(input => input.type !== 'submit');
-  console.log({ result: `${(1 / inputsMinusSubmit.length) * 100 - (25 + (inputsMinusSubmit.length * 5))}%` })
   return `${(1 / inputsMinusSubmit.length) * 100 - (25 - (inputsMinusSubmit.length * 7))}%`;
 };
 
@@ -42,7 +41,6 @@ function QuickCreateForm({
     updateFieldValue({ rowNumChangeVal: changeVal, index });
   };
   const inputWidth = getInputWidth(formInputs);
-  console.log({ inputWidth });
   const inputs = currentValues.map((val, i) => {
     const contentInputs = formInputs.map((input) => {
       const {

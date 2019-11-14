@@ -111,7 +111,7 @@ function CreateTeam({
         ]);
       } else {
         const rowToChange = quickCreateForm[index];
-        const updatedRow = { ...rowToChange, [name]: value };
+        const updatedRow = { ...rowToChange, [keyName]: value };
         setQuickCreateForm([
           ...quickCreateForm.slice(0, index),
           updatedRow,
@@ -163,9 +163,12 @@ function CreateTeam({
       return null;
     }
     const body = quickCreateForm.map((row) => {
-      // IDs are for UI rendering purposes only, remove before sending req
-      const { id, ...rowWithIdRemoved } = row;
-      return rowWithIdRemoved;
+      const rowWithMetaData = {
+        name: row.name,
+        draftId: draftIdParam,
+        ownerUserId: currentUser.uuid,
+      };
+      return rowWithMetaData;
     });
     return createTeamPropFn(body).then(() => setIsSubmitComplete(true));
   };

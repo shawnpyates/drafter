@@ -5,8 +5,6 @@ const {
   Request,
   User,
 } = require('../models');
-const { create: createUserTeam } = require('./userTeams');
-const { create: createUserDraft } = require('./userDrafts');
 const { createEmailHtml, sendMail } = require('../mailer');
 
 const { SERVER_URL } = process.env;
@@ -57,51 +55,28 @@ module.exports = {
 
   async create(req, res) {
     try {
+      const { body } = req;
+      if (Array.isArray(body)) {
+        await Team.bulkCreate(body);
+        return res.status(201).send({ success: true });
+      }
       const {
+        draftId,
         name,
         ownerUserId,
-        draftId,
         requestId,
-      } = req.body;
-      const team = await Team.create({ name, ownerUserId, draftId });
-      const draft = await Draft.findOne({
-        where: { uuid: draftId },
-        include: [
-          {
-            model: Team,
-            where: { ownerUserId },
-          },
-        ],
-      });
-      const isTeamOwnerAlsoDraftOwner = draft.ownerUserId === ownerUserId;
-      const userTeamProperties = {
-        body: {
-          isOwner: true,
-          isAdmin: true,
-        },
-        params: {
-          teamId: team.uuid,
-          userId: ownerUserId,
-        },
-      };
-      const userDraftProperties = {
-        body: {
-          isOwner: isTeamOwnerAlsoDraftOwner,
-          isAdmin: isTeamOwnerAlsoDraftOwner,
-        },
-        params: {
-          draftId,
-          userId: ownerUserId,
-        },
-      };
-
-      await createUserTeam(userTeamProperties);
-      // only create userDraft association if it doesn't already exist
-      const { Teams: otherTeamsInDraftWithSameOwner } = draft;
-      if (!otherTeamsInDraftWithSameOwner.length && !isTeamOwnerAlsoDraftOwner) {
-        await createUserDraft(userDraftProperties);
-      }
+      } = body;
+      const team = await Team.create({ draftId, name, ownerUserId });
       if (requestId) {
+        const draft = await Draft.findOne({
+          where: { uuid: draftId },
+          include: [
+            {
+              model: Team,
+              where: { ownerUserId },
+            },
+          ],
+        });
         const teamWithAssociations = await Team.findOne({
           where: { uuid: team.uuid },
           include: [User],
@@ -120,7 +95,7 @@ module.exports = {
         const request = await Request.findOne({ where: { uuid: requestId } });
         await request.destroy();
       }
-      return res.status(201).send({ team });
+      return res.status(201).send({ success: true });
     } catch (e) {
       return res.status(400).send({ e });
     }
