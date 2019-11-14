@@ -27,11 +27,10 @@ export const fetchPlayersByTeam = teamId => (dispatch) => {
 
 
 export const createPlayer = body => (dispatch) => {
-  dispatch({ type: 'CREATE_PLAYER_PENDING ' });
+  dispatch({ type: 'CREATE_PLAYER_PENDING' });
   return axios.post('/api/players', body)
-    .then((response) => {
-      const { player } = response.data;
-      dispatch({ type: 'CREATE_PLAYER_FULFILLED', payload: player });
+    .then(() => {
+      dispatch({ type: 'CREATE_PLAYER_FULFILLED' });
     })
     .catch((err) => {
       dispatch({ type: 'CREATE_PLAYER_REJECTED', payload: err });
