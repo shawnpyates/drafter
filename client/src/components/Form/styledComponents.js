@@ -17,6 +17,7 @@ const {
   LIGHT_GRAY,
   SKY_BLUE,
   WHITE,
+  EXTRA_SMALL_FONT_SIZE,
 } = styleVars;
 
 const {
@@ -68,7 +69,7 @@ const TextField = styled.input`
 `;
 
 const SelectTitle = styled.p`
-  margin: 3rem auto;
+  margin: ${props => (props.hasNoMargin ? 'auto' : '3rem auto')};
 
   ${P_TEXT_MIXIN({ color: DARK_BLUE })}
 `;
@@ -96,6 +97,8 @@ const FormButton = styled.button`
   ${P_TEXT_MIXIN({})}
 `;
 
+const SubmitContainer = styled.div`
+`;
 
 const SubmitButton = styled.input`
   padding: 1.6rem;
@@ -187,6 +190,48 @@ const ErrorMessage = styled.p`
   margin: 7px auto 0;
 `;
 
+const QuickCreateTextContainer = styled.div`
+  display: inline-block;
+  width: 30%;
+`;
+
+const QuickCreateSelectContainer = styled.div`
+  display: inline-block;
+  width: 25%;
+`;
+
+const QuickCreateTextField = styled.input`
+  padding: 1.6rem;
+  border: 1px solid ${LIGHT_GRAY};
+  border-radius: 3px;
+  margin-bottom: 1rem;
+  width: 80%;
+
+  ${P_TEXT_MIXIN({ color: DARK_BLUE })}
+`;
+
+const AddRowButtonContainer = styled.div`
+  display: flex;
+  margin-top: 1rem;
+  margin-left: 5rem;
+  width: 10%;
+`;
+
+const RemoveRowButtonContainer = styled.div`
+  display: inline-block;
+  width: 0;
+`;
+
+const RowButton = styled.input`
+  background-color: ${LIGHT_GRAY};
+  border-radius: 3px;
+  float: left;
+  margin-left: 3rem;
+  padding: 0.5rem;
+  font-size: ${EXTRA_SMALL_FONT_SIZE};
+  cursor: pointer;
+`;
+
 module.exports = {
   FieldWrapper,
   Title,
@@ -196,6 +241,7 @@ module.exports = {
   Select,
   SelectTitle,
   FormButton,
+  SubmitContainer,
   SubmitButton,
   SchedulerContainer,
   CalendarWrapper,
@@ -204,4 +250,10 @@ module.exports = {
   TimePicker,
   ErrorMessageContainer,
   ErrorMessage,
+  QuickCreateTextContainer,
+  QuickCreateSelectContainer,
+  QuickCreateTextField,
+  AddRowButtonContainer,
+  RemoveRowButtonContainer,
+  RowButton,
 };

@@ -139,7 +139,7 @@
     }
   },
   "player": {
-    "title": "Create a New Player",
+    "title": "Create New Player(s)",
     "inputs": [
       {
         "name": "name",
