@@ -64,23 +64,22 @@ module.exports = {
 
   async create(req, res) {
     try {
-      const {
-        name,
-        email,
-        position,
-        draftId,
-        teamId,
-        creatorUserId,
-      } = req.body;
+      const { body } = req;
+      if (Array.isArray(body)) {
+        await Player.bulkCreate(body);
+      } else {
+        await Player.create({ ...body });
+      }
+      return res.status(201).send({ success: true });
+    } catch (e) {
+      return res.status(400).send({ e });
+    }
+  },
 
-      const player = await Player.create({
-        name,
-        email,
-        position,
-        draftId,
-        teamId,
-        creatorUserId,
-      });
+  async createMany(req, res) {
+    try {
+      const { body } = req;
+      const player = await Player.bulkCreate(body);
       return res.status(201).send({ player });
     } catch (e) {
       return res.status(400).send({ e });

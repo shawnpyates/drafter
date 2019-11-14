@@ -21,7 +21,16 @@ const playerReducer = (state = initialState, action) => {
         ...state,
         creating: false,
         created: true,
-        createdPlayer: action.payload,
+      };
+    case 'CREATE_MANY_PLAYERS_PENDING':
+      return { ...state, creating: true };
+    case 'CREATE_MANY_PLAYERS_REJECTED':
+      return { ...state, creating: false, errorOnCreatePlayer: action.payload };
+    case 'CREATE_MANY_PLAYERS_FULFILLED':
+      return {
+        ...state,
+        creating: false,
+        created: true,
       };
     case 'FETCH_PLAYERS_FROM_DRAFT_PENDING': {
       return { ...state, fetching: true };

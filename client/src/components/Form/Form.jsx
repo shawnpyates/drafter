@@ -49,7 +49,7 @@ function Form({
     ev.preventDefault();
     const { name, value } = ev.target;
     const valueToUpdate = dataType === 'boolean' ? (value === 'true') : value;
-    updateFieldValue(name, valueToUpdate);
+    updateFieldValue({ name, value: valueToUpdate });
   };
   const shouldBeShown = (dependsOn, options) => (
     options[dependsOn.name] === dependsOn.requiredOptionValue

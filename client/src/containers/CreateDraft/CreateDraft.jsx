@@ -232,7 +232,7 @@ class CreateDraft extends Component {
     this.setState({ isCalendarFocused });
   }
 
-  updateFieldValue = (name, value) => {
+  updateFieldValue = ({ name, value }) => {
     const buttonsToHighlight = {
       ...this.state.buttonsToHighlight,
       shouldScheduleTime: value,

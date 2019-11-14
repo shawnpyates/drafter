@@ -139,7 +139,7 @@
     }
   },
   "player": {
-    "title": "Create a New Player",
+    "title": "Create New Player(s)",
     "inputs": [
       {
         "name": "name",
@@ -182,6 +182,7 @@
   },
   "team": {
     "title": "Create a New Team",
+    "quickCreateTitle": "Create New Team(s)",
     "inputs": [
       {
         "name": "name",

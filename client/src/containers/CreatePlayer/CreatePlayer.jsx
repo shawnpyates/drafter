@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
+import uuidv4 from 'uuid';
 
-import { Form } from '../../components';
+import { QuickCreateForm } from '../../components';
 
 import { createPlayer } from '../../actions';
 
@@ -24,93 +25,97 @@ const isEmailValid = email => (/\S+@\S+\.\S+/).test(email);
 
 const validateForm = ({ name, email, position }) => {
   if (!name || !position) {
-    return { errorMessage: missingField };
+    return { validationErrorMessage: missingField };
   }
   if (email && !isEmailValid(email)) {
-    return { errorMessage: invalidEmail };
+    return { validationErrorMessage: invalidEmail };
   }
   return { success: true };
 };
 
-class CreatePlayer extends Component {
-  constructor() {
-    super();
+function CreatePlayer({
+  createPlayer: createPlayerPropFn,
+  currentUser,
+  match,
+}) {
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [isSubmitComplete, setIsSubmitComplete] = useState(false);
+  const [quickCreateForm, setQuickCreateForm] = useState([{ id: uuidv4() }]);
 
-    this.state = {
-      name: null,
-      email: null,
-      position: null,
-      isSubmitComplete: false,
-      errorMessage: null,
-    };
-  }
+  const {
+    url = '',
+    params: { id: urlIdParam } = {},
+  } = match;
+  const urlTypeNamespace = url.split(urlIdParam)[0];
 
-  getUrlNamespaces = () => {
-    const {
-      match: {
-        url = '',
-        params: { id } = {},
-      },
-    } = this.props;
-    return {
-      type: url.split(id)[0],
-      id,
-    };
-  }
-
-  updateFieldValue = (name, value) => {
-    this.setState({ [name]: value });
-  }
-
-  handleSubmit = (ev) => {
-    ev.preventDefault();
-    const {
-      name,
-      email,
-      position,
-    } = this.state;
-    const { errorMessage } = validateForm({ name, email, position });
-    if (errorMessage) {
-      this.setState({ errorMessage });
-      return;
+  const updateFieldValue = ({
+    name,
+    value,
+    rowNumChangeVal,
+    index,
+  }) => {
+    if (rowNumChangeVal === 1) {
+      setQuickCreateForm([...quickCreateForm, { id: uuidv4() }]);
+    } else if (rowNumChangeVal === -1) {
+      setQuickCreateForm([
+        ...quickCreateForm.slice(0, index),
+        ...quickCreateForm.slice(index + 1),
+      ]);
+    } else {
+      const rowToChange = quickCreateForm[index];
+      const updatedRow = { ...rowToChange, [name]: value };
+      setQuickCreateForm([
+        ...quickCreateForm.slice(0, index),
+        updatedRow,
+        ...quickCreateForm.slice(index + 1),
+      ]);
     }
+  };
 
-    const urlNamespace = this.getUrlNamespaces();
-    const orgKey = urlNamespace.type === '/teams/' ? 'teamId' : 'draftId';
-    const { currentUser } = this.props;
-    const body = {
-      name,
-      email,
-      position,
+  const validateAndGetBody = (data) => {
+    const { validationErrorMessage } = validateForm(data);
+    const orgKey = urlTypeNamespace === '/teams/' ? 'teamId' : 'draftId';
+    if (validationErrorMessage) {
+      setErrorMessage(validationErrorMessage);
+    }
+    return {
+      ...data,
       creatorUserId: currentUser.uuid,
-      [orgKey]: urlNamespace.id,
+      [orgKey]: urlIdParam,
     };
-    this.props.createPlayer(body).then(() => this.setState({ isSubmitComplete: true }));
-  }
+  };
 
+  const handleSubmit = (ev) => {
+    ev.preventDefault();
+    const body = quickCreateForm.map(row => validateAndGetBody(row));
+    // IDs are for UI rendering purposes only, remove before sending req
+    const bodyWithIdsRemoved = body.map((row) => {
+      const { id, ...rowWithIdRemoved } = row;
+      return rowWithIdRemoved;
+    });
+    createPlayerPropFn(bodyWithIdsRemoved).then(() => setIsSubmitComplete(true));
+  };
+  const { inputs, title } = playerForm;
 
-  render() {
-    const { url } = this.props.match;
-    const { errorMessage, isSubmitComplete } = this.state;
-    const { inputs, title } = playerForm;
-    return (
-      <div>
-        {!isSubmitComplete
-        && (
-          <Form
-            updateFieldValue={this.updateFieldValue}
-            handleSubmit={this.handleSubmit}
-            title={title}
-            formInputs={inputs}
-            errorMessage={errorMessage}
-          />
-        )}
-        {isSubmitComplete
-        && <Redirect to={url.replace('/createPlayers', '/show')} />
-        }
-      </div>
-    );
-  }
+  return (
+    <div>
+      {!isSubmitComplete
+      && (
+        <QuickCreateForm
+          updateFieldValue={updateFieldValue}
+          handleSubmit={handleSubmit}
+          title={title}
+          formInputs={inputs}
+          errorMessage={errorMessage}
+          currentValues={quickCreateForm}
+          isWide
+        />
+      )}
+      {isSubmitComplete
+      && <Redirect to={url.replace('/createPlayers', '/show')} />
+      }
+    </div>
+  );
 }
 
 CreatePlayer.defaultProps = {
@@ -119,7 +124,7 @@ CreatePlayer.defaultProps = {
 
 CreatePlayer.propTypes = {
   createPlayer: PropTypes.func.isRequired,
-  currentUser: PropTypes.number.isRequired,
+  currentUser: PropTypes.objectOf(PropTypes.any).isRequired,
   match: PropTypes.objectOf(PropTypes.any),
 };
 
