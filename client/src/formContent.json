@@ -182,6 +182,7 @@
   },
   "team": {
     "title": "Create a New Team",
+    "quickCreateTitle": "Create New Teams(s)",
     "inputs": [
       {
         "name": "name",

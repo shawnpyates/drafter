@@ -10,13 +10,18 @@ import {
   SelectTitle,
   SubmitContainer,
   SubmitButton,
-  QuickCreateTextContainer,
-  QuickCreateSelectContainer,
+  QuickCreateInputContainer,
   QuickCreateTextField,
   AddRowButtonContainer,
   RemoveRowButtonContainer,
   RowButton,
 } from './styledComponents';
+
+const getInputWidth = (formInputs) => {
+  const inputsMinusSubmit = formInputs.filter(input => input.type !== 'submit');
+  console.log({ result: `${(1 / inputsMinusSubmit.length) * 100 - (25 + (inputsMinusSubmit.length * 5))}%` })
+  return `${(1 / inputsMinusSubmit.length) * 100 - (25 - (inputsMinusSubmit.length * 7))}%`;
+};
 
 function QuickCreateForm({
   errorMessage,
@@ -25,6 +30,7 @@ function QuickCreateForm({
   title,
   handleSubmit,
   currentValues,
+  isWide,
 }) {
   const handleChange = (ev, index) => {
     ev.preventDefault();
@@ -35,6 +41,8 @@ function QuickCreateForm({
     ev.preventDefault();
     updateFieldValue({ rowNumChangeVal: changeVal, index });
   };
+  const inputWidth = getInputWidth(formInputs);
+  console.log({ inputWidth });
   const inputs = currentValues.map((val, i) => {
     const contentInputs = formInputs.map((input) => {
       const {
@@ -48,7 +56,10 @@ function QuickCreateForm({
       switch (type) {
         case 'text':
           return (
-            <QuickCreateTextContainer key={name}>
+            <QuickCreateInputContainer
+              key={name}
+              width={inputWidth}
+            >
               <QuickCreateTextField
                 defaultValue={defaultValue}
                 name={name}
@@ -57,11 +68,14 @@ function QuickCreateForm({
                 onChange={ev => handleChange(ev, i)}
                 value={val[name]}
               />
-            </QuickCreateTextContainer>
+            </QuickCreateInputContainer>
           );
         case 'select':
           return (
-            <QuickCreateSelectContainer key={name}>
+            <QuickCreateInputContainer
+              key={name}
+              width={inputWidth}
+            >
               <SelectTitle hasNoMargin>{text}</SelectTitle>
               <Select
                 defaultValue={defaultValue || placeholder}
@@ -72,7 +86,7 @@ function QuickCreateForm({
                 <option disabled>{placeholder}</option>
                 {options.map(op => <option key={op}>{op}</option>)}
               </Select>
-            </QuickCreateSelectContainer>
+            </QuickCreateInputContainer>
           );
         default:
           return null;
@@ -97,7 +111,7 @@ function QuickCreateForm({
   const submitButtonData = formInputs.find(data => data.type === 'submit');
   return (
     <FieldWrapper
-      isWide
+      isWide={isWide}
       onSubmit={handleSubmit}
     >
       <Title>{title}</Title>
@@ -126,6 +140,7 @@ function QuickCreateForm({
 
 QuickCreateForm.defaultProps = {
   errorMessage: null,
+  isWide: false,
 };
 
 QuickCreateForm.propTypes = {
@@ -133,6 +148,7 @@ QuickCreateForm.propTypes = {
   errorMessage: PropTypes.string,
   formInputs: PropTypes.arrayOf(PropTypes.object).isRequired,
   handleSubmit: PropTypes.func.isRequired,
+  isWide: PropTypes.bool,
   title: PropTypes.string.isRequired,
   updateFieldValue: PropTypes.func.isRequired,
 };

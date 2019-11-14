@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
+import uuidv4 from 'uuid';
 
-import { Form } from '../../components';
+import { Form, QuickCreateForm } from '../../components';
 
 import {
   createRequest,
@@ -36,7 +37,10 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const getInputsWithoutDraftSelection = inputs => (
-  inputs.filter(input => input.name !== 'shouldFindOwnDraft')
+  inputs.filter(input => (
+    input.name !== 'shouldFindOwnDraft'
+    && !(input.dependsOn && input.dependsOn.name === 'shouldFindOwnDraft')
+  ))
 );
 
 const getInputsWithDrafts = (inputs, drafts) => {
@@ -54,75 +58,86 @@ const getInputsWithDrafts = (inputs, drafts) => {
   return clonedInputs;
 };
 
-class CreateTeam extends Component {
-  constructor() {
-    super();
+function CreateTeam({
+  createRequest: createRequestPropFn,
+  createdRequest,
+  createTeam: createTeamPropFn,
+  currentUser,
+  errorOnCreateRequest,
+  fetchCurrentUser: fetchCurrentUserPropFn,
+  match,
+}) {
+  const { params: { id: draftIdParam, url } = {} } = match;
 
-    this.state = {
-      name: null,
-      isSubmitComplete: false,
-      errorMessage: null,
-      buttonsToHighlight: {
-        shouldFindOwnDraft: null,
-        draftListSelection: null,
-      },
-      draftNameFromTextField: null,
-    };
-  }
+  const [name, setName] = useState(null);
+  const [isSubmitComplete, setIsSubmitComplete] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [buttonsToHighlight, setButtonsToHighlight] = useState({
+    shouldFindOwnDraft: null,
+    draftListSelection: null,
+  });
+  const [draftNameFromTextField, setDraftNameFromTextField] = useState(null);
+  const [quickCreateForm, setQuickCreateForm] = useState(draftIdParam ? [{ id: uuidv4() }] : null);
 
-  componentDidUpdate() {
-    if (this.state.errorMessage) {
+  useEffect(() => {
+    if (errorMessage) {
       setTimeout(() => {
-        this.setState({ errorMessage: null });
+        setErrorMessage(null);
       }, ERROR_MESSAGE_DURATION);
     }
-  }
+  }, [errorMessage]);
 
-  componentWillUnmount() {
-    const {
-      match: {
-        params: { url } = {},
-      } = {},
-    } = this.props;
-    if ((!url || !url.includes('drafts')) && this.state.isSubmitComplete) {
-      this.props.fetchCurrentUser();
+  useEffect(() => (
+    function cleanup() {
+      if ((!url || !url.includes('drafts')) && isSubmitComplete) {
+        fetchCurrentUserPropFn();
+      }
     }
-  }
+  ));
 
-  getDraftIdParam() {
-    const {
-      match: {
-        params: { id } = {},
-      } = {},
-    } = this.props;
-    return id;
-  }
-
-  updateButtonToHighlight = (key, value) => {
-    this.setState(prevState => ({
-      buttonsToHighlight: {
-        ...prevState.buttonsToHighlight,
-        [key]: value,
-      },
-    }));
-  }
-
-  updateFieldValue = (name, value) => {
-    switch (name) {
+  const updateFieldValue = ({
+    name: keyName,
+    value,
+    rowNumChangeVal,
+    index,
+  }) => {
+    if (draftIdParam) {
+      if (rowNumChangeVal === 1) {
+        setQuickCreateForm([...quickCreateForm, { id: uuidv4() }]);
+      } else if (rowNumChangeVal === -1) {
+        setQuickCreateForm([
+          ...quickCreateForm.slice(0, index),
+          ...quickCreateForm.slice(index + 1),
+        ]);
+      } else {
+        const rowToChange = quickCreateForm[index];
+        const updatedRow = { ...rowToChange, [name]: value };
+        setQuickCreateForm([
+          ...quickCreateForm.slice(0, index),
+          updatedRow,
+          ...quickCreateForm.slice(index + 1),
+        ]);
+      }
+      return;
+    }
+    switch (keyName) {
       case 'shouldFindOwnDraft':
-        this.updateButtonToHighlight('shouldFindOwnDraft', value);
-        break;
       case 'draftListSelection':
-        this.updateButtonToHighlight('draftListSelection', value);
+        setButtonsToHighlight({ ...buttonsToHighlight, [keyName]: value });
+        break;
+      case 'draftNameFromTextField':
+        setDraftNameFromTextField(value);
+        break;
+      case 'name':
+        setName(value);
         break;
       default:
-        this.setState({ [name]: value });
+        break;
     }
-  }
+  };
 
-  createTeamForDraft = (name, draftListSelection) => {
-    const draftIdParam = this.getDraftIdParam();
-    const { uuid: ownerUserId, Drafts: drafts } = this.props.currentUser;
+  const createTeamForDraft = (teamName, draftListSelection) => {
+    const { uuid: ownerUserId, Drafts: drafts } = currentUser;
     const { uuid: draftUuid } = (
       drafts.find(draft => draft.name === draftListSelection) || {}
     );
@@ -130,94 +145,112 @@ class CreateTeam extends Component {
       draftIdParam
       || draftUuid
     );
-    if (!name || !draftIdForBody) {
-      this.setState({ errorMessage: missingField });
+    if (!teamName || !draftIdForBody) {
+      setErrorMessage(missingField);
       return;
     }
     const body = {
-      name,
+      name: teamName,
       ownerUserId,
       draftId: draftIdForBody,
     };
-    this.props.createTeam(body)
-      .then(() => this.setState({ isSubmitComplete: true }));
-  }
+    createTeamPropFn(body).then(() => setIsSubmitComplete(true));
+  };
 
-  createRequestToJoinDraft = (teamName, draftName) => {
+  const createManyTeamsForDraft = () => {
+    if (quickCreateForm.some(row => !row.name)) {
+      setErrorMessage(missingField);
+      return null;
+    }
+    const body = quickCreateForm.map((row) => {
+      // IDs are for UI rendering purposes only, remove before sending req
+      const { id, ...rowWithIdRemoved } = row;
+      return rowWithIdRemoved;
+    });
+    return createTeamPropFn(body).then(() => setIsSubmitComplete(true));
+  };
+
+  const createRequestToJoinDraft = (teamName, draftName) => {
     const body = {
       teamName,
       draftName,
-      requestCreatorId: this.props.currentUser.uuid,
+      requestCreatorId: currentUser.uuid,
     };
     if (!teamName || !draftName) {
-      this.setState({ errorMessage: missingField });
+      setErrorMessage(missingField);
       return;
     }
-    this.props.createRequest(body)
+    createRequestPropFn(body)
       .then(() => {
-        const { createdRequest, errorOnCreateRequest } = this.props;
         if (createdRequest) {
-          this.setState({ isSubmitComplete: true });
+          setIsSubmitComplete(true);
         }
         if (errorOnCreateRequest) {
-          this.setState({ errorMessage: errorOnCreateRequest });
+          setErrorMessage(errorOnCreateRequest);
         }
       });
-  }
+  };
 
-  handleSubmit = (ev) => {
+  const handleSubmit = (ev) => {
     ev.preventDefault();
-    const {
-      name: teamName,
-      buttonsToHighlight: { draftListSelection },
-      draftNameFromTextField,
-    } = this.state;
+    const { draftListSelection } = buttonsToHighlight;
     if (draftNameFromTextField) {
-      this.createRequestToJoinDraft(teamName, draftNameFromTextField);
+      createRequestToJoinDraft(name, draftNameFromTextField);
+    } else if (quickCreateForm) {
+      createManyTeamsForDraft();
     } else {
-      this.createTeamForDraft(teamName, draftListSelection);
+      createTeamForDraft(name, draftListSelection);
     }
-  }
+  };
 
+  const { Drafts: drafts } = currentUser;
+  const { inputs, title, quickCreateTitle } = teamForm;
+  const inputsAfterFilter = quickCreateForm && getInputsWithoutDraftSelection(inputs);
 
-  render() {
-    const { Drafts: drafts } = this.props.currentUser;
-    const { errorMessage, isSubmitComplete, buttonsToHighlight } = this.state;
-    const { inputs, title } = teamForm;
-    const draftIdParam = this.getDraftIdParam();
-    const inputsAfterFilter = draftIdParam && getInputsWithoutDraftSelection(inputs);
-    const inputsToRender = (
-      inputsAfterFilter
-      || (
-        drafts && drafts.length
-          ? getInputsWithDrafts(inputs, drafts)
-          : inputs
-      )
-    );
-    const redirectAfterSubmitUrl = (
-      draftIdParam
-        ? `/drafts/${draftIdParam}/show`
-        : '/'
-    );
-    return (
-      <div>
-        {!isSubmitComplete
-        && (
-          <Form
-            updateFieldValue={this.updateFieldValue}
-            handleSubmit={this.handleSubmit}
-            title={title}
-            formInputs={inputsToRender}
-            errorMessage={errorMessage}
-            buttonsToHighlight={buttonsToHighlight}
-          />
-        )}
-        {isSubmitComplete
-        && <Redirect to={redirectAfterSubmitUrl} />
-        }
-      </div>
-    );
-  }
+  const inputsToRender = (
+    inputsAfterFilter
+    || (
+      drafts && drafts.length
+        ? getInputsWithDrafts(inputs, drafts)
+        : inputs
+    )
+  );
+  const redirectAfterSubmitUrl = (
+    draftIdParam
+      ? `/drafts/${draftIdParam}/show`
+      : '/'
+  );
+
+  return (
+    <div>
+      {!isSubmitComplete
+      && (
+        quickCreateForm
+          ? (
+            <QuickCreateForm
+              updateFieldValue={updateFieldValue}
+              handleSubmit={handleSubmit}
+              title={quickCreateTitle}
+              formInputs={inputsToRender}
+              errorMessage={errorMessage}
+              currentValues={quickCreateForm}
+            />
+          ) : (
+            <Form
+              updateFieldValue={updateFieldValue}
+              handleSubmit={handleSubmit}
+              title={title}
+              formInputs={inputsToRender}
+              errorMessage={errorMessage}
+              buttonsToHighlight={buttonsToHighlight}
+            />
+          )
+      )}
+      {isSubmitComplete
+      && <Redirect to={redirectAfterSubmitUrl} />
+      }
+    </div>
+  );
 }
 
 CreateTeam.defaultProps = {

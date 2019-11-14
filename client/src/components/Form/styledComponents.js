@@ -190,14 +190,9 @@ const ErrorMessage = styled.p`
   margin: 7px auto 0;
 `;
 
-const QuickCreateTextContainer = styled.div`
+const QuickCreateInputContainer = styled.div`
   display: inline-block;
-  width: 30%;
-`;
-
-const QuickCreateSelectContainer = styled.div`
-  display: inline-block;
-  width: 25%;
+  width: ${props => props.width};
 `;
 
 const QuickCreateTextField = styled.input`
@@ -250,8 +245,7 @@ module.exports = {
   TimePicker,
   ErrorMessageContainer,
   ErrorMessage,
-  QuickCreateTextContainer,
-  QuickCreateSelectContainer,
+  QuickCreateInputContainer,
   QuickCreateTextField,
   AddRowButtonContainer,
   RemoveRowButtonContainer,

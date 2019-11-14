@@ -108,6 +108,7 @@ function CreatePlayer({
           formInputs={inputs}
           errorMessage={errorMessage}
           currentValues={quickCreateForm}
+          isWide
         />
       )}
       {isSubmitComplete
