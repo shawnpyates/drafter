@@ -85,7 +85,7 @@ const userReducer = (state = initialState, action) => {
         updated: true,
         currentUser: action.payload,
       };
-    case 'CLEAR_STATE_EXCEPT_USER':
+    case 'REVERT_STATE_EXCEPT_USER':
       return {
         ...initialState,
         currentUser: state.currentUser,

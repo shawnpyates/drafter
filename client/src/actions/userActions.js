@@ -117,8 +117,8 @@ export const updateUser = (id, body) => (dispatch) => {
     });
 };
 
-export const clearStateExceptUser = () => (dispatch) => {
-  dispatch({ type: 'CLEAR_STATE_EXCEPT_USER' });
+export const revertStateExceptUser = () => (dispatch) => {
+  dispatch({ type: 'REVERT_STATE_EXCEPT_USER' });
 };
 
 export const removeCurrentUserFromState = () => (dispatch) => {

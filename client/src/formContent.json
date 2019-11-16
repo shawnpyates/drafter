@@ -275,7 +275,6 @@
       "inputs": [
         {
           "name": "oldPassword",
-
           "text": "Old Password",
           "type": "password",
           "isWide": true,

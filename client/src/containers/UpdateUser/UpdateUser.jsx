@@ -5,7 +5,7 @@ import { Redirect } from 'react-router-dom';
 
 import { Form } from '../../components';
 
-import { updateUser, clearStateExceptUser } from '../../actions';
+import { updateUser, revertStateExceptUser } from '../../actions';
 
 import { updateUser as updateUserForm } from '../../formContent.json';
 
@@ -41,7 +41,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => ({
   updateUser: (id, body) => dispatch(updateUser(id, body)),
-  clearStateExceptUser: () => dispatch(clearStateExceptUser()),
+  revertStateExceptUser: () => dispatch(revertStateExceptUser()),
 });
 
 const isEmailValid = email => (/\S+@\S+\.\S+/).test(email);
@@ -84,7 +84,7 @@ function UpdateUser({
   currentUserUpdated,
   errorOnUpdateCurrentUser,
   updateUser: updateUserPropFn,
-  clearStateExceptUser: clearStateExceptUserPropFn,
+  revertStateExceptUser: revertStateExceptUserPropFn,
 }) {
   const [isUpdateEmailActiveForm, toggleActiveForm] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
@@ -128,7 +128,7 @@ function UpdateUser({
 
   useEffect(() => (
     function cleanup() {
-      clearStateExceptUserPropFn();
+      revertStateExceptUserPropFn();
     }
   ));
 
@@ -203,7 +203,7 @@ UpdateUser.propTypes = {
   currentUserUpdated: PropTypes.bool.isRequired,
   errorOnUpdateCurrentUser: PropTypes.objectOf(PropTypes.any),
   updateUser: PropTypes.func.isRequired,
-  clearStateExceptUser: PropTypes.func.isRequired,
+  revertStateExceptUser: PropTypes.func.isRequired,
 };
 
 
