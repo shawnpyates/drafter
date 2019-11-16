@@ -33,7 +33,7 @@ const fetchUserQuery = async (searchWhere) => {
             include: [User],
           },
           Player,
-          User
+          User,
         ],
       },
       {
@@ -107,17 +107,25 @@ module.exports = {
         firstName,
         lastName,
         email,
-        password,
+        oldPassword,
+        newPasswordFirstInsertion: newPassword,
       } = req.body;
 
       const user = await User.findOne({ where: { uuid: req.params.id } });
       if (!user) return res.status(404).send({ e: 'User not found.' });
 
+      let hash;
+      if (newPassword) {
+        const isOldPasswordCorrect = await bcrypt.compare(oldPassword, user.password);
+        if (!isOldPasswordCorrect) return res.status(401).send({ failure: 'incorrectPassword' });
+        hash = await bcrypt.hash(newPassword, SALT_ROUNDS);
+      }
+
       const updatedUser = await user.update({
         firstName: firstName || user.firstName,
         lastName: lastName || user.lastName,
         email: email || user.email,
-        password: password || user.password,
+        password: hash || user.password,
       });
       const updatedUserWithAssociations = await fetchUserQuery({ uuid: updatedUser.uuid });
       return res.status(200).send({ user: updatedUserWithAssociations });
