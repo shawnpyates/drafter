@@ -262,12 +262,7 @@
           "type": "submit",
           "enabled": true
         }
-      ],
-      "errorMessages": {
-        "invalidEmail": "Please enter a valid e-mail address.",
-        "missingField": "Please fill in all fields.",
-        "unexpected": "An unexpected error occurred. Please try again."
-      }
+      ]
     },
     "password": {
       "title": "Update Your Password",
@@ -300,13 +295,16 @@
           "type": "submit",
           "enabled": true
         }
-      ],
-      "errorMessages": {
-        "incorrectPassword": "The value you provided as your old password is incorrect.",
-        "oldAndNewSame": "Looks like your new password is the same as your old one. No need to update.",
-        "passwordsDidNotMatch": "Your new passwords did not match. Please try again.",
-        "tooShort": "Your new password must contain at least 8 characters."
-      }
+      ]
+    },
+    "errorMessages": {
+      "invalidEmail": "Please enter a valid e-mail address.",
+      "missingField": "Please fill in all fields.",
+      "unexpected": "An unexpected error occurred. Please try again.",
+      "incorrectPassword": "The value you provided as your old password is incorrect.",
+      "oldAndNewSame": "Looks like your new password is the same as your old one. No need to update.",
+      "passwordsDidNotMatch": "Your new passwords did not match. Please try again.",
+      "tooShort": "Your new password must contain at least 8 characters."
     }
   }
 }

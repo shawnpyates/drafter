@@ -17,20 +17,15 @@ import {
 const {
   email: updateEmailForm,
   password: updatePasswordForm,
+  errorMessages: {
+    missingField: MISSING_FIELD,
+    invalidEmail: INVALID_EMAIL,
+    unexpected: UNEXPECTED_ERROR,
+    oldAndNewSame: OLD_AND_NEW_SAME,
+    passwordsDidNotMatch: PASSWORDS_DID_NOT_MATCH,
+    tooShort: TOO_SHORT,
+  },
 } = updateUserForm;
-
-const {
-  missingField: MISSING_FIELD,
-  invalidEmail: INVALID_EMAIL,
-  unexpected: UNEXPECTED_ERROR,
-} = updateEmailForm.errorMessages;
-
-const {
-  incorrectPassword: INCORRECT_PASSWORD,
-  oldAndNewSame: OLD_AND_NEW_SAME,
-  passwordsDidNotMatch: PASSWORDS_DID_NOT_MATCH,
-  tooShort: TOO_SHORT,
-} = updatePasswordForm.errorMessages;
 
 const ERROR_MESSAGE_DURATION = 2000;
 
@@ -103,8 +98,9 @@ function UpdateUser({
         data: { failure } = {},
       } = {},
     } = errorOnUpdateCurrentUser || {};
-    if (failure && failure === 'incorrectPassword') {
-      setErrorMessage(INCORRECT_PASSWORD);
+    const { errorMessages } = updateUserForm;
+    if (failure && errorMessages[failure]) {
+      setErrorMessage(errorMessages[failure]);
     } else if (errorOnUpdateCurrentUser) {
       setErrorMessage(UNEXPECTED_ERROR);
     }
