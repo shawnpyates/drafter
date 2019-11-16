@@ -42,7 +42,5 @@ Create and host sports drafts (for recreational leagues or potentially fantasy l
 1. Reduce web bundle size:
     - implement bundle chunking (attempt with React.lazy have been unsucessful, likely due to dependency conflict)
     - implement lightweight calendar solution for datepicker (currently using `react-dates` which requires the monstrous `Moment.js` as a codependency)
-1. Include `Change Password` option in `UpdateUser`.
 1. Change more class components to functional components using hooks API.
-1. Mass-create feature (enable user to create multiple players in a single form).
 1. Prettier styling.

@@ -85,6 +85,11 @@ const userReducer = (state = initialState, action) => {
         updated: true,
         currentUser: action.payload,
       };
+    case 'CLEAR_STATE_EXCEPT_USER':
+      return {
+        ...initialState,
+        currentUser: state.currentUser,
+      };
     case 'REMOVE_CURRENT_USER_FROM_STATE':
       return { ...state, currentUser: null };
     default:

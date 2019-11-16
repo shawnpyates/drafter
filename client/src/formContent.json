@@ -246,26 +246,68 @@
     }
   },
   "updateUser": {
-    "title": "Update Your Email",
-    "inputs": [
-      {
-        "name": "email",
-        "text": "E-mail",
-        "type": "text",
-        "isWide": true,
-        "enabled": true
-      },
-      {
-        "name": "submitButton",
-        "text": "Submit Updates",
-        "type": "submit",
-        "enabled": true
+    "email": {
+      "title": "Update Your Email",
+      "inputs": [
+        {
+          "name": "email",
+          "text": "E-mail",
+          "type": "text",
+          "isWide": true,
+          "enabled": true
+        },
+        {
+          "name": "submitButton",
+          "text": "Submit Updates",
+          "type": "submit",
+          "enabled": true
+        }
+      ],
+      "errorMessages": {
+        "invalidEmail": "Please enter a valid e-mail address.",
+        "missingField": "Please fill in all fields.",
+        "unexpected": "An unexpected error occurred. Please try again."
       }
-    ],
-    "errorMessages": {
-      "invalidEmail": "Please enter a valid e-mail address.",
-      "missingField": "Please fill in all fields.",
-      "unexpected": "An unexpected error occurred. Please try again."
+    },
+    "password": {
+      "title": "Update Your Password",
+      "passwordMinimumLength": 8,
+      "inputs": [
+        {
+          "name": "oldPassword",
+
+          "text": "Old Password",
+          "type": "password",
+          "isWide": true,
+          "enabled": true
+        },
+        {
+          "name": "newPasswordFirstInsertion",
+          "text": "Create a New Password",
+          "type": "password",
+          "isWide": true,
+          "enabled": true
+        },
+        {
+          "name": "newPasswordSecondInsertion",
+          "text": "Confirm Your New Password",
+          "type": "password",
+          "isWide": true,
+          "enabled": true
+        },
+        {
+          "name": "submitButton",
+          "text": "Log In",
+          "type": "submit",
+          "enabled": true
+        }
+      ],
+      "errorMessages": {
+        "incorrectPassword": "The value you provided as your old password is incorrect.",
+        "oldAndNewSame": "Looks like your new password is the same as your old one. No need to update.",
+        "passwordsDidNotMatch": "Your new passwords did not match. Please try again.",
+        "tooShort": "Your new password must contain at least 8 characters."
+      }
     }
   }
 }

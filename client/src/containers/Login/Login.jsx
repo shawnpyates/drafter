@@ -41,7 +41,7 @@ function Login({
     }
   }, [errorOnAuthenticateUser]);
 
-  const updateCredentialValue = (name, value) => {
+  const updateCredentialValue = ({ name, value }) => {
     setCredentials({ ...credentials, [name]: value });
   };
 
