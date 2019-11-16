@@ -13,6 +13,14 @@
       "unscheduled": "(Unscheduled)"
     }
   },
+  "player": {
+    "properties": {
+      "email": "Email",
+      "position": "Position",
+      "team": "Team",
+      "draft": "Draft"
+    }
+  },
   "team": {
     "properties": {
       "owner": "Owner",

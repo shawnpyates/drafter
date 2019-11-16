@@ -64,3 +64,19 @@ export const updatePlayer = ({
       dispatch({ type: 'UPDATE_PLAYER_REJECTED', payload: err });
     });
 };
+
+export const fetchOnePlayer = id => (dispatch) => {
+  dispatch({ type: 'FETCH_ONE_PLAYER_PENDING' });
+  axios.get(`/api/players/${id}`)
+    .then((response) => {
+      const { player } = response.data;
+      dispatch({ type: 'FETCH_ONE_PLAYER_FULFILLED', payload: player });
+    })
+    .catch((err) => {
+      dispatch({ type: 'FETCH_ONE_PLAYER_REJECTED', payload: err });
+    });
+};
+
+export const removeCurrentPlayerFromState = () => (dispatch) => {
+  dispatch({ type: 'REMOVE_CURRENT_PLAYER_FROM_STATE' });
+};

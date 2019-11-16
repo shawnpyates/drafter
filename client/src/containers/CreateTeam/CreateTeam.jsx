@@ -93,7 +93,7 @@ function CreateTeam({
         fetchCurrentUserPropFn();
       }
     }
-  ));
+  ), []);
 
   const updateFieldValue = ({
     name: keyName,

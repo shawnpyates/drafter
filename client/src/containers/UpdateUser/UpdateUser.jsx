@@ -126,7 +126,7 @@ function UpdateUser({
     function cleanup() {
       revertStateExceptUserPropFn();
     }
-  ));
+  ), []);
 
   const handleSubmit = (ev) => {
     ev.preventDefault();

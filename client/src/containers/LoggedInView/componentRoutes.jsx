@@ -1,7 +1,8 @@
+import CreateDraft from '../CreateDraft/CreateDraft';
 import CreatePlayer from '../CreatePlayer/CreatePlayer';
 import CreateTeam from '../CreateTeam/CreateTeam';
 import DraftMenu from '../DraftMenu/DraftMenu';
-import CreateDraft from '../CreateDraft/CreateDraft';
+import PlayerMenu from '../PlayerMenu/PlayerMenu';
 import TeamMenu from '../TeamMenu/TeamMenu';
 import UpdateUser from '../UpdateUser/UpdateUser';
 
@@ -41,5 +42,9 @@ module.exports = [
   {
     path: '/drafts/:id/createPlayers',
     component: CreatePlayer,
+  },
+  {
+    path: '/players/:id/show',
+    component: PlayerMenu,
   },
 ];
