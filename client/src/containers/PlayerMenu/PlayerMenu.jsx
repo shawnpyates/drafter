@@ -49,10 +49,11 @@ function PlayerMenu({
     name: playerName,
     email,
     position,
-    Team: { name: teamName } = {},
-    Draft: { name: draftName } = {},
+    Team: team,
+    Draft: draft,
     creatorUserId,
   } = currentPlayer || {};
+  console.log({ currentPlayer });
   const {
     email: emailKey,
     position: positionKey,
@@ -62,8 +63,8 @@ function PlayerMenu({
   const profileCardData = {
     [emailKey]: email,
     [positionKey]: position,
-    [teamKey]: teamName,
-    [draftKey]: draftName,
+    [teamKey]: team ? team.name : '(undrafted)',
+    [draftKey]: draft ? draft.name : '(not in any draft)',
   };
   const profileCardLinkForUpdating = '/updatePlayer';
   const shouldUpdatingLinkRender = creatorUserId === currentUser.uuid;
