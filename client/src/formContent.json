@@ -139,7 +139,8 @@
     }
   },
   "player": {
-    "title": "Create New Player(s)",
+    "titleForCreateNew": "Create New Player(s)",
+    "titleForUpdate": "Update Your Player",
     "inputs": [
       {
         "name": "name",
@@ -170,7 +171,7 @@
       },
       {
         "name": "submitButton",
-        "text": "Create",
+        "text": "Done",
         "type": "submit",
         "enabled": true
       }

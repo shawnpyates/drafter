@@ -54,7 +54,6 @@ function PlayerMenu({
     Draft: draft,
     creatorUserId,
   } = currentPlayer || {};
-  console.log({ currentPlayer });
   const {
     email: emailKey,
     position: positionKey,
@@ -62,7 +61,7 @@ function PlayerMenu({
     draft: draftKey,
   } = profileProperties;
   const profileCardData = {
-    [emailKey]: email,
+    [emailKey]: email || '(unprovided)',
     [positionKey]: position,
     [teamKey]: team ? team.name : '(undrafted)',
     [draftKey]: draft ? draft.name : '(not in any draft)',

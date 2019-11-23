@@ -62,9 +62,10 @@ function CreatePlayer({
     params: { id: urlIdParam } = {},
   } = match;
   const urlTypeNamespace = url.split(urlIdParam)[0];
+  const isInUpdateMode = urlTypeNamespace === '/players/';
 
   useEffect(() => {
-    if (!currentPlayer && urlTypeNamespace === '/players/') {
+    if (!currentPlayer && isInUpdateMode) {
       fetchOnePlayerPropFn(urlIdParam);
     } else if (currentPlayer) {
       const { name, email, position } = currentPlayer;
@@ -129,7 +130,7 @@ function CreatePlayer({
   const handleSubmit = (ev) => {
     ev.preventDefault();
     const body = quickCreateForm.map(row => validateAndGetBody(row));
-    if (currentPlayer) {
+    if (isInUpdateMode) {
       updatePlayerPropFn(urlIdParam, removeIdFromRow(quickCreateForm[0]))
         .then(() => setIsSubmitComplete(true));
     } else {
@@ -137,7 +138,7 @@ function CreatePlayer({
       createPlayerPropFn(bodyWithIdsRemoved).then(() => setIsSubmitComplete(true));
     }
   };
-  const { inputs, title } = playerForm;
+  const { inputs, titleForCreateNew, titleForUpdate } = playerForm;
 
   return (
     <div>
@@ -146,17 +147,17 @@ function CreatePlayer({
         <QuickCreateForm
           updateFieldValue={updateFieldValue}
           handleSubmit={handleSubmit}
-          title={title}
+          title={isInUpdateMode ? titleForUpdate : titleForCreateNew}
           formInputs={inputs}
           errorMessage={errorMessage}
           currentValues={quickCreateForm}
-          shouldDisplayAddRowButton={!currentPlayer}
+          shouldDisplayAddRowButton={!isInUpdateMode}
           isWide
         />
       )}
       {isSubmitComplete
       && (
-        <Redirect to={url.replace((currentPlayer ? '/update' : '/createPlayers'), '/show')}/>
+        <Redirect to={url.replace((isInUpdateMode ? '/update' : '/createPlayers'), '/show')}/>
       )}
     </div>
   );
