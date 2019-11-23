@@ -30,6 +30,7 @@ function QuickCreateForm({
   handleSubmit,
   currentValues,
   isWide,
+  shouldDisplayAddRowButton,
 }) {
   const handleChange = (ev, index) => {
     ev.preventDefault();
@@ -114,13 +115,16 @@ function QuickCreateForm({
     >
       <Title>{title}</Title>
       {inputs}
-      <AddRowButtonContainer>
-        <RowButton
-          onClick={ev => handleRowNumberChange(ev, 1)}
-          type="button"
-          value="+ Add Another"
-        />
-      </AddRowButtonContainer>
+      {shouldDisplayAddRowButton
+      && (
+        <AddRowButtonContainer>
+          <RowButton
+            onClick={ev => handleRowNumberChange(ev, 1)}
+            type="button"
+            value="+ Add Another"
+          />
+        </AddRowButtonContainer>
+      )}
       <SubmitContainer>
         <SubmitButton
           name={submitButtonData.name}

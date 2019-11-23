@@ -32,6 +32,8 @@ import {
   fetchPlayersByTeam,
   createPlayer,
   updatePlayer,
+  fetchOnePlayer,
+  removeCurrentPlayerFromState,
 } from './playerActions';
 
 import {
@@ -67,6 +69,8 @@ export {
   fetchPlayersByTeam,
   createPlayer,
   updatePlayer,
+  fetchOnePlayer,
+  removeCurrentPlayerFromState,
   fetchRequestsByDraft,
   fetchRequestsByRequester,
   fetchRequestsByDraftOwner,

@@ -35,7 +35,10 @@ module.exports = {
 
   async fetchOne(req, res) {
     try {
-      const player = await Player.findOne({ where: { uuid: req.params.id } });
+      const player = await Player.findOne({
+        where: { uuid: req.params.id },
+        include: [Draft, Team],
+      });
       return res.status(200).send({ player });
     } catch (e) {
       return res.status(400).send({ e });
