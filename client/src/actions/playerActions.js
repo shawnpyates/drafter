@@ -50,7 +50,7 @@ export const updatePlayer = ({
   return axios.put(`/api/players/${id}`, body)
     .then((response) => {
       const { player } = response.data;
-      if (socket) {
+      if (socket && teamName) {
         socket.emit('draftSelection', {
           draftId,
           teamName,

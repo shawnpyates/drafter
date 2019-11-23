@@ -44,6 +44,10 @@ module.exports = [
     component: CreatePlayer,
   },
   {
+    path: '/players/:id/update',
+    component: CreatePlayer,
+  },
+  {
     path: '/players/:id/show',
     component: PlayerMenu,
   },

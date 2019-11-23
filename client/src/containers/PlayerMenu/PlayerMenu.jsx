@@ -46,6 +46,7 @@ function PlayerMenu({
     }
   ), []);
   const {
+    uuid,
     name: playerName,
     email,
     position,
@@ -66,7 +67,7 @@ function PlayerMenu({
     [teamKey]: team ? team.name : '(undrafted)',
     [draftKey]: draft ? draft.name : '(not in any draft)',
   };
-  const profileCardLinkForUpdating = '/updatePlayer';
+  const profileCardLinkForUpdating = `/players/${uuid}/update`;
   const shouldUpdatingLinkRender = creatorUserId === currentUser.uuid;
   return (
     <PlayerMenuContainer>
