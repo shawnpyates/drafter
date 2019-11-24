@@ -10,6 +10,9 @@ import {
   createRequest,
   createTeam,
   fetchCurrentUser,
+  fetchOneTeam,
+  removeCurrentTeamFromState,
+  updateTeam,
 } from '../../actions';
 
 import { team as teamForm } from '../../formContent.json';
@@ -22,11 +25,14 @@ const mapStateToProps = (state) => {
   const {
     user: { currentUser },
     request: { createdRequest, errorOnCreateRequest },
+    team: { currentTeam, fetching: isFetchingTeam },
   } = state;
   return {
+    currentTeam,
     currentUser,
     createdRequest,
     errorOnCreateRequest,
+    isFetchingTeam,
   };
 };
 
@@ -34,6 +40,9 @@ const mapDispatchToProps = dispatch => ({
   createRequest: body => dispatch(createRequest(body)),
   createTeam: body => dispatch(createTeam(body)),
   fetchCurrentUser: () => dispatch(fetchCurrentUser()),
+  fetchOneTeam: id => dispatch(fetchOneTeam(id)),
+  removeCurrentTeamFromState: () => dispatch(removeCurrentTeamFromState()),
+  updateTeam: (id, body) => dispatch(updateTeam(id, body)),
 });
 
 const getInputsWithoutDraftSelection = inputs => (
@@ -62,12 +71,18 @@ function CreateTeam({
   createRequest: createRequestPropFn,
   createdRequest,
   createTeam: createTeamPropFn,
+  currentTeam,
   currentUser,
   errorOnCreateRequest,
   fetchCurrentUser: fetchCurrentUserPropFn,
+  fetchOneTeam: fetchOneTeamPropFn,
+  isFetchingTeam,
   match,
+  removeCurrentTeamFromState: removeCurrentTeamFromStatePropFn,
+  updateTeam: updateTeamPropFn,
 }) {
-  const { params: { id: draftIdParam, url } = {} } = match;
+  const { url, params: { id: urlIdParam } = {} } = match;
+  const isInUpdateMode = url && url.split(urlIdParam)[1] === '/update';
 
   const [name, setName] = useState(null);
   const [isSubmitComplete, setIsSubmitComplete] = useState(false);
@@ -77,7 +92,18 @@ function CreateTeam({
     draftListSelection: null,
   });
   const [draftNameFromTextField, setDraftNameFromTextField] = useState(null);
-  const [quickCreateForm, setQuickCreateForm] = useState(draftIdParam ? [{ id: uuidv4() }] : null);
+  const [quickCreateForm, setQuickCreateForm] = useState(urlIdParam ? [{ id: uuidv4() }] : null);
+
+  useEffect(() => {
+    if (!currentTeam && isInUpdateMode) {
+      fetchOneTeamPropFn(urlIdParam);
+    } else if (currentTeam) {
+      setQuickCreateForm([{
+        ...quickCreateForm[0],
+        name: currentTeam.name,
+      }]);
+    }
+  }, [currentTeam]);
 
   useEffect(() => {
     if (errorMessage) {
@@ -101,7 +127,7 @@ function CreateTeam({
     rowNumChangeVal,
     index,
   }) => {
-    if (draftIdParam) {
+    if (urlIdParam) {
       if (rowNumChangeVal === 1) {
         setQuickCreateForm([...quickCreateForm, { id: uuidv4() }]);
       } else if (rowNumChangeVal === -1) {
@@ -142,7 +168,7 @@ function CreateTeam({
       drafts.find(draft => draft.name === draftListSelection) || {}
     );
     const draftIdForBody = (
-      draftIdParam
+      urlIdParam
       || draftUuid
     );
     if (!teamName || !draftIdForBody) {
@@ -165,7 +191,7 @@ function CreateTeam({
     const body = quickCreateForm.map((row) => {
       const rowWithMetaData = {
         name: row.name,
-        draftId: draftIdParam,
+        draftId: urlIdParam,
         ownerUserId: currentUser.uuid,
       };
       return rowWithMetaData;
@@ -196,6 +222,17 @@ function CreateTeam({
 
   const handleSubmit = (ev) => {
     ev.preventDefault();
+    if (isInUpdateMode) {
+      if (!quickCreateForm[0].name) {
+        setErrorMessage(missingField);
+        return;
+      }
+      updateTeamPropFn(urlIdParam, { name: quickCreateForm[0].name })
+        .then(() => {
+          setIsSubmitComplete(true)
+          return;
+        });
+    }
     const { draftListSelection } = buttonsToHighlight;
     if (draftNameFromTextField) {
       createRequestToJoinDraft(name, draftNameFromTextField);
@@ -207,7 +244,12 @@ function CreateTeam({
   };
 
   const { Drafts: drafts } = currentUser;
-  const { inputs, title, quickCreateTitle } = teamForm;
+  const {
+    inputs,
+    title,
+    quickCreateTitle,
+    titleForUpdate,
+  } = teamForm;
   const inputsAfterFilter = quickCreateForm && getInputsWithoutDraftSelection(inputs);
 
   const inputsToRender = (
@@ -219,24 +261,27 @@ function CreateTeam({
     )
   );
   const redirectAfterSubmitUrl = (
-    draftIdParam
-      ? `/drafts/${draftIdParam}/show`
-      : '/'
+    isInUpdateMode
+      ? `/teams/${urlIdParam}/show`
+      : urlIdParam
+        ? `/drafts/${urlIdParam}/show`
+        : '/'
   );
 
   return (
     <div>
-      {!isSubmitComplete
+      {((!isSubmitComplete && !(isInUpdateMode && (isFetchingTeam || !currentTeam))))
       && (
         quickCreateForm
           ? (
             <QuickCreateForm
               updateFieldValue={updateFieldValue}
               handleSubmit={handleSubmit}
-              title={quickCreateTitle}
+              title={isInUpdateMode ? titleForUpdate : quickCreateTitle}
               formInputs={inputsToRender}
               errorMessage={errorMessage}
               currentValues={quickCreateForm}
+              shouldDisplayAddRowButton={!isInUpdateMode}
             />
           ) : (
             <Form
@@ -258,6 +303,7 @@ function CreateTeam({
 
 CreateTeam.defaultProps = {
   createdRequest: null,
+  currentTeam: null,
   errorOnCreateRequest: null,
   match: {},
 };
@@ -266,10 +312,15 @@ CreateTeam.propTypes = {
   createRequest: PropTypes.func.isRequired,
   createdRequest: PropTypes.objectOf(PropTypes.any),
   createTeam: PropTypes.func.isRequired,
+  currentTeam: PropTypes.objectOf(PropTypes.any),
   currentUser: PropTypes.objectOf(PropTypes.any).isRequired,
   errorOnCreateRequest: PropTypes.string,
   fetchCurrentUser: PropTypes.func.isRequired,
+  fetchOneTeam: PropTypes.func.isRequired,
+  isFetchingTeam: PropTypes.bool.isRequired,
   match: PropTypes.objectOf(PropTypes.any),
+  removeCurrentTeamFromState: PropTypes.func.isRequired,
+  updateTeam: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateTeam);

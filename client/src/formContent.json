@@ -184,6 +184,7 @@
   "team": {
     "title": "Create a New Team",
     "quickCreateTitle": "Create New Team(s)",
+    "titleForUpdate": "Update Your Team Name",
     "inputs": [
       {
         "name": "name",
@@ -237,7 +238,7 @@
       },
       {
         "name": "submitButton",
-        "text": "Create",
+        "text": "Done",
         "type": "submit",
         "enabled": true
       }
