@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import { fetchCurrentUser } from './';
+
 export const fetchTeamsByUser = userId => (dispatch) => {
   dispatch({ type: 'FETCH_TEAMS_FROM_USER_PENDING' });
   axios.get(`${process.env.SERVER_URL}/api/users/${userId}/teams`)
@@ -45,4 +47,20 @@ export const fetchOneTeam = id => (dispatch) => {
     .catch((err) => {
       dispatch({ type: 'FETCH_ONE_TEAM_REJECTED', payload: err });
     });
+};
+
+export const updateTeam = (id, body) => (dispatch) => {
+  dispatch({ type: 'UPDATE_TEAM_PENDING' });
+  return axios.put(`/api/teams/${id}`, body)
+    .then(() => {
+      dispatch({ type: 'UPDATE_TEAM_FULFILLED' });
+    })
+    .catch((err) => {
+      dispatch({ type: 'UPDATE_TEAM_REJECTED', payload: err });
+    });
+};
+
+export const removeCurrentTeamFromState = () => (dispatch) => {
+  dispatch({ type: 'REMOVE_CURRENT_TEAM_FROM_STATE' });
+  dispatch(fetchCurrentUser());
 };

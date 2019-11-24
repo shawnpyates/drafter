@@ -89,8 +89,8 @@ function CreateTeam({
 
   useEffect(() => (
     function cleanup() {
-      if ((!url || !url.includes('drafts')) && isSubmitComplete) {
-        fetchCurrentUserPropFn();
+      if (isInUpdateMode) {
+        removeCurrentTeamFromStatePropFn();
       }
     }
   ), []);
