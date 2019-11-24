@@ -39,10 +39,13 @@ const {
 } = draftForm;
 
 const INITIAL_TIME_CHARS = ['-', '-', ':', '-', '-'];
-const CALENDAR_DATE_FORMAT = 'YYYY-MM-DD[T12:00:00]ZZ';
 const DELETE_KEY_CODE = 8;
 const ERROR_MESSAGE_DURATION = 2000;
 const VALID_TIME_INPUT = /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
+
+const getFormattedDate = (d) => (
+  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}[T12:00:00]ZZ`
+);
 
 const mapStateToProps = (state) => {
   const { currentUser } = state.user;
@@ -83,7 +86,7 @@ const validateForm = (state) => {
   }
   let finalTimeStamp;
   if (shouldScheduleTime) {
-    const formattedDate = calendarDate.format(CALENDAR_DATE_FORMAT);
+    const formattedDate = getFormattedDate(calendarDate);
     const modifiedTime = get24HourTime(timeCharsAsString, isPmSelected);
     finalTimeStamp = createFinalTimestamp(formattedDate, modifiedTime);
   }
@@ -212,6 +215,7 @@ class CreateDraft extends Component {
       return;
     }
     const { timeCharsAsString, isPmSelected } = convertTo12HourFormat(timeString);
+    console.log({ timeCharsAsString });
     this.setState(prevState => ({
       isTimePickerEnabled: false,
       timeCharsAsString,
@@ -220,7 +224,8 @@ class CreateDraft extends Component {
   }
 
   changeDate = (calendarDate) => {
-    this.setState({ calendarDate });
+    console.log('calendar date: ', calendarDate);
+    this.setState({ calendarDate, isCalendarFocused: false });
   }
 
   toggleAmPm = (ev, isPmSelected) => {

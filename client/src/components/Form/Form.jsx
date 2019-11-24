@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
+
 import PropTypes from 'prop-types';
+import Calendar from 'react-calendar';
 
 import {
   FieldWrapper,
@@ -13,7 +15,7 @@ import {
   SubmitButton,
   SchedulerContainer,
   CalendarWrapper,
-  Calendar,
+  // Calendar,
   TimePickerWrapper,
   TimePicker,
   ErrorMessageContainer,
@@ -21,6 +23,10 @@ import {
 } from './styledComponents';
 
 const DAYS_IN_FIVE_WEEKS = 35;
+
+const getStringFromDateObject = (d) => (
+  `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`
+);
 
 function Form({
   buttonsToHighlight,
@@ -54,6 +60,21 @@ function Form({
   const shouldBeShown = (dependsOn, options) => (
     options[dependsOn.name] === dependsOn.requiredOptionValue
   );
+  const useOutsideClickHandler = (ref) => {
+    function handleClickOutside(event) {
+      if (ref.current && !ref.current.contains(event.target)) {
+        toggleCalendarFocus(false);
+      }
+    }
+    useEffect(() => {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    });
+  }
+  const calendarRef = useRef(null);
+  useOutsideClickHandler(calendarRef);
   const getInputs = inputs => (
     inputs.map((input) => {
       const {
@@ -152,18 +173,24 @@ function Form({
             <SchedulerContainer key={name}>
               <SelectTitle>{text}</SelectTitle>
               <CalendarWrapper>
-                <Calendar
-                  date={calendarDate}
-                  onDateChange={date => changeDate(date)}
-                  focused={isCalendarFocused}
-                  onFocusChange={({ focused }) => toggleCalendarFocus(focused)}
-                  id={name}
-                  showCaret={false}
-                  openDirection="up"
-                  numberOfMonths={1}
-                  hideKeyboardShortcutsPanel
-                  daySize={DAYS_IN_FIVE_WEEKS}
-                />
+                {isCalendarFocused
+                  ? (
+                    <div ref={calendarRef}>
+                      <Calendar
+                        value={calendarDate}
+                        onChange={date => changeDate(date)}
+                      />
+                    </div>
+                    )
+                    : (
+                      
+                      <TimePicker
+                        value={calendarDate ? getStringFromDateObject(calendarDate) : 'Set Date'}
+                        onClick={() => toggleCalendarFocus(true)}
+                      />
+                  )
+
+                }
               </CalendarWrapper>
               <TimePickerWrapper>
                 <TimePicker

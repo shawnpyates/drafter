@@ -75,7 +75,6 @@ const resetTimeValues = () => ({
 });
 
 const initializeDateAndTime = () => ({
-  calendarDate: moment(),
   timeChars: INITIAL_TIME_CHARS,
 });
 
@@ -109,7 +108,7 @@ const createInputsFromExistingTimeVals = (timeScheduled) => {
       : ['0', ...timeCharsAsString.split('')]
   );
   return {
-    calendarDate: moment(timeScheduled),
+    calendarDate: timeScheduled,
     timeCharsAsString,
     timeChars,
     isTimePickerEnabled: true,

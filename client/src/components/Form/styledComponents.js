@@ -118,51 +118,7 @@ const SchedulerContainer = styled.div`
 
 const CalendarWrapper = styled.div`
   ${PICKER_WRAPPER_MIXIN({ side: 'left' })}
-
   height: 2.6rem;
-
-  .SingleDatePicker {
-    height: 2.6rem;
-  }
-
-  .SingleDatePickerInput__withBorder {
-    border: 1px solid ${LIGHT_GRAY};
-    border-radius: 3px;
-  }
-
-  .DateInput {
-    width: inherit;
-  }
-
-  .DateInput_input {
-    border-bottom: 0;
-
-    ${PICKER_INPUT_MIXIN}
-  }
-
-  .CalendarDay__selected {
-    background-color: ${SKY_BLUE};
-  }
-
-  .CalendarMonth {
-    font-family: ${DEFAULT_FONT};
-
-    &_table {
-      margin-top: 1rem;
-    }
-  }
-
-  .DayPicker {
-
-    &_transitionContainer {
-      min-height: 310px;
-    }
-
-    &_weekHeader {
-      font-family: ${DEFAULT_FONT};
-    }
-
-  }
 `;
 
 const TimePickerWrapper = styled.div`
