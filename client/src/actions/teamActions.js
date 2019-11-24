@@ -46,3 +46,18 @@ export const fetchOneTeam = id => (dispatch) => {
       dispatch({ type: 'FETCH_ONE_TEAM_REJECTED', payload: err });
     });
 };
+
+export const updateTeam = (id, body) => (dispatch) => {
+  dispatch({ type: 'UPDATE_TEAM_PENDING' });
+  return axios.put(`/api/teams/${id}`, body)
+    .then(() => {
+      dispatch({ type: 'UPDATE_TEAM_FULFILLED' });
+    })
+    .catch((err) => {
+      dispatch({ type: 'UPDATE_TEAM_REJECTED', payload: err });
+    });
+};
+
+export const removeCurrentTeamFromState = () => (dispatch) => {
+  dispatch({ type: 'REMOVE_CURRENT_TEAM_FROM_STATE' });
+};

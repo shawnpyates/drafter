@@ -89,6 +89,7 @@ function Players({
 }
 
 Players.defaultProps = {
+  assignPlayerToTeam: null,
   players: null,
   teamId: null,
   draft: null,
@@ -96,7 +97,7 @@ Players.defaultProps = {
 };
 
 Players.propTypes = {
-  assignPlayerToTeam: PropTypes.func.isRequired,
+  assignPlayerToTeam: PropTypes.func,
   players: PropTypes.arrayOf(PropTypes.object),
   displayType: PropTypes.string,
   parent: PropTypes.string.isRequired,

@@ -5,6 +5,8 @@ const initialState = {
   fetched: false,
   players: [],
   currentPlayer: null,
+  updating: false,
+  updated: false,
   errorOnCreatePlayer: null,
   errorOnFetchPlayersFromDraft: null,
   errorOnFetchPlayersFromTeam: null,

@@ -20,6 +20,10 @@ module.exports = [
     component: CreateTeam,
   },
   {
+    path: '/teams/:id/update',
+    component: CreateTeam,
+  },
+  {
     path: '/updateUser',
     component: UpdateUser,
   },
