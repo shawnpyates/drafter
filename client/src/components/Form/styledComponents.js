@@ -1,7 +1,4 @@
 import styled from 'styled-components';
-import { SingleDatePicker } from 'react-dates';
-import 'react-dates/initialize';
-import 'react-dates/lib/css/_datepicker.css';
 
 import { mixins, styleVars } from '../../styles';
 
@@ -132,9 +129,6 @@ const TimePicker = styled.input`
   border: 1px solid ${LIGHT_GRAY};
 
   ${PICKER_INPUT_MIXIN}
-`;
-
-const Calendar = styled(SingleDatePicker)`
 `;
 
 const ErrorMessageContainer = styled.div`

@@ -1,5 +1,3 @@
-import moment from 'moment';
-
 const MAX_HOURS_COLUMN_VALUE = 23;
 const INITIAL_TIME_CHARS = ['-', '-', ':', '-', '-'];
 

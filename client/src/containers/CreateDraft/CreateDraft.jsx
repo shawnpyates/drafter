@@ -43,9 +43,12 @@ const DELETE_KEY_CODE = 8;
 const ERROR_MESSAGE_DURATION = 2000;
 const VALID_TIME_INPUT = /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
 
-const getFormattedDate = (d) => (
-  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}[T12:00:00]ZZ`
-);
+const getFormattedDate = (d) => {
+  const offset = new Date().toString().split("GMT")[1].split(" (")[0];
+  return (
+    `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}T12:00:00${offset}`
+  );
+};
 
 const mapStateToProps = (state) => {
   const { currentUser } = state.user;
