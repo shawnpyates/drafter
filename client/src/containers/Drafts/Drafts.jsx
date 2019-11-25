@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
-
+import dayjs from 'dayjs';
 import { Table } from '../../components';
 
 import { draftsTable as draftsTableTexts } from '../../texts.json';
@@ -16,7 +15,7 @@ const extractDataForDisplay = drafts => (
     } = draft;
     const readableTime = (
       timeScheduled
-        ? moment(timeScheduled).format('MMM D YYYY, h:mm a')
+        ? dayjs(timeScheduled).format('MMM D YYYY, h:mm a')
         : draftsTableTexts.unscheduled
     );
     return {

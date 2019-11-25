@@ -114,7 +114,7 @@ const SchedulerContainer = styled.div`
 `;
 
 const CalendarWrapper = styled.div`
-  ${PICKER_WRAPPER_MIXIN({ side: 'left' })}
+  ${props => PICKER_WRAPPER_MIXIN({ side: 'left', isCalendarFocused: props.isCalendarFocused })}
   height: 2.6rem;
 `;
 
@@ -190,7 +190,6 @@ module.exports = {
   SubmitButton,
   SchedulerContainer,
   CalendarWrapper,
-  Calendar,
   TimePickerWrapper,
   TimePicker,
   ErrorMessageContainer,

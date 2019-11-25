@@ -218,7 +218,6 @@ class CreateDraft extends Component {
       return;
     }
     const { timeCharsAsString, isPmSelected } = convertTo12HourFormat(timeString);
-    console.log({ timeCharsAsString });
     this.setState(prevState => ({
       isTimePickerEnabled: false,
       timeCharsAsString,
@@ -227,7 +226,6 @@ class CreateDraft extends Component {
   }
 
   changeDate = (calendarDate) => {
-    console.log('calendar date: ', calendarDate);
     this.setState({ calendarDate, isCalendarFocused: false });
   }
 

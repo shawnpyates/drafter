@@ -16,8 +16,17 @@ module.exports = {
   `,
   PICKER_WRAPPER_MIXIN: props => `
     position: absolute;
-    width: 30%;
-    ${props.side}: 15%;
+    ${props.isCalendarFocused
+      ? `
+        top: -125%;
+        z-index: 1000;
+        ${props.side}: -10%;
+        `
+      : `
+        width: 30%;
+        ${props.side}: 15%
+        `
+    };
   `,
   PICKER_INPUT_MIXIN: `
     color: ${WHITE};

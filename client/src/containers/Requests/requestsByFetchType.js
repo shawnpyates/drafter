@@ -1,4 +1,4 @@
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 import {
   incomingRequestsTable as incomingRequestsTableTexts,
@@ -39,7 +39,7 @@ const requestsByFetchType = {
           uuid,
           team,
           draftRequested: draft.name,
-          expiresAt: moment(expiresAt).format('MMM D YYYY, h:mm a'),
+          expiresAt: dayjs(expiresAt).format('MMM D YYYY, h:mm a'),
         };
       })
     ),

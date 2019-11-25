@@ -15,14 +15,11 @@ import {
   SubmitButton,
   SchedulerContainer,
   CalendarWrapper,
-  // Calendar,
   TimePickerWrapper,
   TimePicker,
   ErrorMessageContainer,
   ErrorMessage,
 } from './styledComponents';
-
-const DAYS_IN_FIVE_WEEKS = 35;
 
 const getStringFromDateObject = (d) => (
   `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`
@@ -172,13 +169,14 @@ function Form({
           return (
             <SchedulerContainer key={name}>
               <SelectTitle>{text}</SelectTitle>
-              <CalendarWrapper>
+              <CalendarWrapper isCalendarFocused={isCalendarFocused}>
                 {isCalendarFocused
                   ? (
                     <div ref={calendarRef}>
                       <Calendar
                         value={calendarDate}
                         onChange={date => changeDate(date)}
+                        minDate={new Date()}
                       />
                     </div>
                     )
@@ -187,6 +185,7 @@ function Form({
                       <TimePicker
                         value={calendarDate ? getStringFromDateObject(calendarDate) : 'Set Date'}
                         onClick={() => toggleCalendarFocus(true)}
+                        readOnly
                       />
                   )
 

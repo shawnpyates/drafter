@@ -12,7 +12,6 @@ module.exports = {
   plugins: [
     new Dotenv({ path: '../.env' }),
     new BundleAnalyzerPlugin(),
-    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
   ],
   module: {
     rules: [

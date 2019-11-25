@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import dayjs from 'dayjs';
 
 import ProfileCard from '../../components/ProfileCard/ProfileCard';
 import { draft as draftProfileData } from '../../components/ProfileCard/profileCardConstants.json';
@@ -162,7 +163,7 @@ class DraftMenu extends Component {
       && (!previousDraft || previousTimeScheduled !== currentTimeScheduled)
     ) {
       this.setState({
-        timeScheduledReadable: moment(currentTimeScheduled).format('MMM D YYYY, h:mm a'),
+        timeScheduledReadable: dayjs(currentTimeScheduled).format('MMM D YYYY, h:mm a'),
       });
     }
   }
