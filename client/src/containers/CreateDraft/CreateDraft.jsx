@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
+import dayjs from 'dayjs';
 
 import { Form, LoadingIndicator } from '../../components';
 import {
@@ -83,7 +84,7 @@ const validateForm = (state) => {
   }
   let finalTimeStamp;
   if (shouldScheduleTime) {
-    const formattedDate = calendarDate.format(CALENDAR_DATE_FORMAT);
+    const formattedDate = dayjs(calendarDate).format(CALENDAR_DATE_FORMAT);
     const modifiedTime = get24HourTime(timeCharsAsString, isPmSelected);
     finalTimeStamp = createFinalTimestamp(formattedDate, modifiedTime);
   }
@@ -220,7 +221,7 @@ class CreateDraft extends Component {
   }
 
   changeDate = (calendarDate) => {
-    this.setState({ calendarDate });
+    this.setState({ calendarDate, isCalendarFocused: false });
   }
 
   toggleAmPm = (ev, isPmSelected) => {

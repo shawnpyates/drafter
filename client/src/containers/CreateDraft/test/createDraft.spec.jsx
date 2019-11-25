@@ -3,7 +3,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 import CreateDraft, { validateForm } from '../CreateDraft';
 import { Form } from '../../../components';
@@ -39,7 +39,7 @@ const GET_THREE_DAYS_FROM_NOW_TIMESTAMP = () => {
 
 const localState = {
   name: 'Foo',
-  calendarDate: moment(GET_THREE_DAYS_FROM_NOW_TIMESTAMP()),
+  calendarDate: dayjs(GET_THREE_DAYS_FROM_NOW_TIMESTAMP()),
   timeCharsAsString: '5:50',
   isPmSelected: true,
   buttonsToHighlight: {
@@ -76,7 +76,7 @@ describe('<CreateDraft />', () => {
   });
   describe('validateForm', () => {
     test('returns finalTimeStamp and name if form valid', () => {
-      const threeDaysFromNow = moment(GET_THREE_DAYS_FROM_NOW_TIMESTAMP());
+      const threeDaysFromNow = dayjs(GET_THREE_DAYS_FROM_NOW_TIMESTAMP());
       const formattedDate = threeDaysFromNow.format('YYYY-MM-DD');
       const received = validateForm(localState);
       expect(received.finalTimeStamp.split(' ')[0]).toEqual(formattedDate);
@@ -91,7 +91,7 @@ describe('<CreateDraft />', () => {
     test('rejects if user has chosen to schedule time in the past', () => {
       const modifiedState = {
         ...localState,
-        calendarDate: moment(),
+        calendarDate: dayjs(),
         timeCharsAsString: '12:00',
         isPmSelected: false,
       };
