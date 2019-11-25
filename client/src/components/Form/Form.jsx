@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 
 import PropTypes from 'prop-types';
 import Calendar from 'react-calendar';
+import dayjs from 'dayjs';
 
 import {
   FieldWrapper,
@@ -20,10 +21,6 @@ import {
   ErrorMessageContainer,
   ErrorMessage,
 } from './styledComponents';
-
-const getStringFromDateObject = (d) => (
-  `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`
-);
 
 function Form({
   buttonsToHighlight,
@@ -183,7 +180,11 @@ function Form({
                     : (
                       
                       <TimePicker
-                        value={calendarDate ? getStringFromDateObject(calendarDate) : 'Set Date'}
+                        value={
+                          calendarDate
+                          ? dayjs(calendarDate).format('MMM D, YYYY')
+                          : 'Set Date'
+                        }
                         onClick={() => toggleCalendarFocus(true)}
                         readOnly
                       />
