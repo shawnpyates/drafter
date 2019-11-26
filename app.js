@@ -7,6 +7,7 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const socket = require('socket.io');
+const shrinkRay = require('shrink-ray-current');
 
 require('dotenv').config();
 
@@ -16,6 +17,7 @@ const server = app.listen(process.env.PORT, () => {
 
 const io = socket(server);
 
+app.use(shrinkRay());
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
