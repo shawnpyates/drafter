@@ -44,6 +44,7 @@ module.exports = {
       const requests = await Request.findAll({
         where: { draftId },
         include: [User, Draft],
+        order: [['createdAt', 'asc']],
       });
       if (!requests.length) return res.status(200).send({ requests: [] });
       return res.status(200).send({ requests });
@@ -59,6 +60,7 @@ module.exports = {
       const requests = await Request.findAll({
         where: { requestCreatorId: userId },
         include: [Draft],
+        order: [['createdAt', 'asc']],
       });
       if (!requests.length) return res.status(200).send({ requests: [] });
       return res.status(200).send({ requests });
@@ -78,6 +80,7 @@ module.exports = {
           },
           User,
         ],
+        order: [['createdAt', 'asc']],
       });
       if (!requests.length) return res.status(200).send({ requests: [] });
       return res.status(200).send({ requests });

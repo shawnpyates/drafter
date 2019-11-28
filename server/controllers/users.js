@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const sequelize = require('sequelize');
 const {
   Draft,
   Player,
@@ -40,6 +41,11 @@ const fetchUserQuery = async (searchWhere) => {
         model: Request,
         include: [Draft],
       },
+    ],
+    order: [
+      [Team, 'createdAt', 'asc'],
+      [Draft, 'createdAt', 'asc'],
+      [Request, 'createdAt', 'asc'],
     ],
   });
   return user;
