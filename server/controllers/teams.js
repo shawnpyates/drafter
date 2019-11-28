@@ -45,6 +45,7 @@ module.exports = {
       const teams = await Team.findAll({
         where: { draftId },
         include: [Draft, User, Player],
+        order: [['createdAt', 'asc']],
       });
       if (!teams.length) return res.status(200).send({ teams: [] });
       return res.status(200).send({ teams });

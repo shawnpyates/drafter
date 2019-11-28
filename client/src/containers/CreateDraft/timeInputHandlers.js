@@ -96,9 +96,8 @@ const convertTo12HourFormat = (timeString) => {
 const createInputsFromExistingTimeVals = (timeScheduled) => {
   const date = new Date(timeScheduled);
   const hours = String(date.getHours());
-  const minutes = String(date.getMinutes());
-  const minutesRepaired = minutes.length > 1 ? minutes : `0${minutes}`;
-  const { timeCharsAsString, isPmSelected } = convertTo12HourFormat(`${hours}:${minutesRepaired}`);
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const { timeCharsAsString, isPmSelected } = convertTo12HourFormat(`${hours}:${minutes}`);
   // time char input requires 5 chars -- if hours column is single digit, add 0 to front
   const timeChars = (
     timeCharsAsString.length > 4

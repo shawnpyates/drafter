@@ -48,7 +48,7 @@ module.exports = {
   async fetchByDraft(req, res) {
     try {
       const { id: draftId } = req.params;
-      const players = await Player.findAll({ where: { draftId } });
+      const players = await Player.findAll({ where: { draftId }, order: [['createdAt', 'asc']] });
       return res.status(200).send({ players });
     } catch (e) {
       return res.status(400).send({ e });
@@ -58,7 +58,7 @@ module.exports = {
   async fetchByTeam(req, res) {
     try {
       const { id: teamId } = req.params;
-      const players = await Player.findAll({ where: { teamId } });
+      const players = await Player.findAll({ where: { teamId }, order: [['createdAt', 'asc']] });
       return res.status(200).send({ players });
     } catch (e) {
       return res.status(400).send({ e });
