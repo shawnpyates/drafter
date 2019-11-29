@@ -159,6 +159,10 @@
       {
         "type": "ownerName",
         "value": "Owner"
+      },
+      {
+        "type": "selectionOrder",
+        "value": "Order"
       }
     ]
   },

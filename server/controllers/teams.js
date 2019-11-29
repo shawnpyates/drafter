@@ -25,6 +25,14 @@ const getHtmlForMailer = ({
   `)
 );
 
+const assignSelectionOrderToTeams = (teams, teamsInDraftLength) => {
+  let selectionOrder = teamsInDraftLength;
+  return teams.map((team) => {
+    selectionOrder += 1;
+    return { ...team, selectionOrder };
+  })
+};
+
 
 module.exports = {
   async fetchOne(req, res) {
@@ -45,7 +53,7 @@ module.exports = {
       const teams = await Team.findAll({
         where: { draftId },
         include: [Draft, User, Player],
-        order: [['createdAt', 'asc']],
+        order: [['selectionOrder', 'asc']],
       });
       if (!teams.length) return res.status(200).send({ teams: [] });
       return res.status(200).send({ teams });
@@ -57,27 +65,30 @@ module.exports = {
   async create(req, res) {
     try {
       const { body } = req;
-      if (Array.isArray(body)) {
-        await Team.bulkCreate(body);
+      const isBulkCreate = Array.isArray(body);
+      const {
+        name,
+        ownerUserId,
+        draftId,
+        requestId,
+      } = isBulkCreate ? body[0] : body;
+      const draftToJoin = await Draft.findOne({
+        where: { uuid: draftId },
+        include: [Team],
+      });
+      const { length: teamsInDraftLength } = draftToJoin.Teams;
+      if (isBulkCreate) {
+        const teamsWithSelectionIds = assignSelectionOrderToTeams(body, teamsInDraftLength);
+        await Team.bulkCreate(teamsWithSelectionIds);
         return res.status(201).send({ success: true });
       }
-      const {
+      const team = await Team.create({
         draftId,
         name,
         ownerUserId,
-        requestId,
-      } = body;
-      const team = await Team.create({ draftId, name, ownerUserId });
+        selectionOrder: teamsInDraftLength + 1,
+      });
       if (requestId) {
-        const draft = await Draft.findOne({
-          where: { uuid: draftId },
-          include: [
-            {
-              model: Team,
-              where: { ownerUserId },
-            },
-          ],
-        });
         const teamWithAssociations = await Team.findOne({
           where: { uuid: team.uuid },
           include: [User],
@@ -85,7 +96,7 @@ module.exports = {
         const { User: teamOwner } = teamWithAssociations;
         const htmlForMailer = getHtmlForMailer({
           teamOwnerFirstName: teamOwner.firstName,
-          draftName: draft.name,
+          draftName: draftToJoin.name,
           teamName: name,
         });
         await sendMail({
