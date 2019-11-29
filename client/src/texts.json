@@ -58,6 +58,10 @@
       {
         "type": "draftRequested",
         "value": "Draft Requested"
+      },
+      {
+        "type": "options",
+        "value": ""
       }
     ],
     "options": ["Accept", "Reject"]

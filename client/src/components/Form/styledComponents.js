@@ -45,7 +45,7 @@ const Title = styled.h2`
 `;
 
 const TextFieldContainer = styled.div`
-  min-height: 5rem;
+  min-height: 7rem;
 `;
 
 const FieldTitle = styled.p`

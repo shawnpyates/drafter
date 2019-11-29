@@ -98,14 +98,10 @@ const DataCell = styled.div`
   display: table-cell;
 `;
 
-const OptionsContainer = styled.div`
-  display: table-cell;
-`;
-
 const Option = styled.button`
   border: none;
   background: transparent;
-  margin: auto 2rem;
+  margin: auto 1rem;
   font-size: 0.5rem;
   cursor: pointer;
 `;
@@ -121,7 +117,6 @@ module.exports = {
   EmptyDataMessage,
   HeaderRow,
   Option,
-  OptionsContainer,
   TableTitle,
   TableTitleLine,
 };

@@ -18,7 +18,6 @@ import {
   EmptyDataMessage,
   HeaderRow,
   Option,
-  OptionsContainer,
   TableTitle,
   TableTitleLine,
 } from './styledComponents';
@@ -78,23 +77,26 @@ function Table({
               >
                 {columnHeaders
                   .map(columnHeader => columnHeader.type)
-                  .map(chType => <DataCell key={uuidv4()}>{entry[chType]}</DataCell>)
+                  .map(chType => (
+                    <DataCell key={uuidv4()}>
+                      {chType === "options"
+                        ? (
+                          options.map(option => (
+                            <DataLink to="/" key={option}>
+                              <Option
+                                value={entry.uuid}
+                                onClick={handleOptionClick}
+                              >
+                                {option}
+                              </Option>
+                            </DataLink>
+                          ))
+                        )
+                        : entry[chType]
+                      }
+                    </DataCell>
+                  ))
                 }
-                {options
-                && (
-                  <OptionsContainer>
-                    {options.map(option => (
-                      <DataLink to="/" key={option}>
-                        <Option
-                          value={entry.uuid}
-                          onClick={handleOptionClick}
-                        >
-                          {option}
-                        </Option>
-                      </DataLink>
-                    ))}
-                  </OptionsContainer>
-                )}
               </DataRow>
             </DataLink>
           ))}
