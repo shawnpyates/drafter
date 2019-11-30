@@ -34,6 +34,7 @@ function Table({
   data,
   emptyDataMessage,
   addNewLink,
+  reorderTeamsLink,
   options,
   handleOptionClick,
 }) {
@@ -46,6 +47,14 @@ function Table({
           <Link to={addNewLink}>
             <AddNewButton>
               {ADD_NEW}
+            </AddNewButton>
+          </Link>
+        )}
+        {reorderTeamsLink
+        && (
+          <Link to={reorderTeamsLink}>
+            <AddNewButton>
+              Update Selection Order
             </AddNewButton>
           </Link>
         )}

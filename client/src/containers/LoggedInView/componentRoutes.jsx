@@ -4,6 +4,7 @@ import CreateTeam from '../CreateTeam/CreateTeam';
 import DraftMenu from '../DraftMenu/DraftMenu';
 import PlayerMenu from '../PlayerMenu/PlayerMenu';
 import TeamMenu from '../TeamMenu/TeamMenu';
+import UpdateSelectionOrder from '../UpdateSelectionOrder/UpdateSelectionOrder';
 import UpdateUser from '../UpdateUser/UpdateUser';
 
 module.exports = [
@@ -34,6 +35,10 @@ module.exports = [
   {
     path: '/drafts/:id/update',
     component: CreateDraft,
+  },
+  {
+    path: '/drafts/:id/reorderTeams',
+    component: UpdateSelectionOrder,
   },
   {
     path: '/teams/:id/show',

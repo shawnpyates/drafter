@@ -22,13 +22,10 @@ const mapStateToProps = (state) => {
   return { currentTeam, isFetchingTeam, currentUser };
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
-  const { id } = ownProps.match.params;
-  return {
-    fetchOneTeam: () => dispatch(fetchOneTeam(id)),
-    removeCurrentTeamFromState: () => dispatch(removeCurrentTeamFromState()),
-  };
-};
+const mapDispatchToProps = (dispatch) => ({
+  fetchOneTeam: (id) => dispatch(fetchOneTeam(id)),
+  removeCurrentTeamFromState: () => dispatch(removeCurrentTeamFromState()),
+});
 
 function TeamMenu({
   currentTeam,
