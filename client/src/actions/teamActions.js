@@ -47,6 +47,17 @@ export const fetchOneTeam = id => (dispatch) => {
     });
 };
 
+export const updateSelectionOrder = (id, body) => (dispatch) => {
+  dispatch({ type: 'UPDATE_SELECTION_ORDER_PENDING' });
+  return axios.put(`/api/drafts/${id}/reorderTeams`, body)
+    .then(() => {
+      dispatch({ type: 'UPDATE_SELECTION_ORDER_FULFILLED' });
+    })
+    .catch((err) => {
+      dispatch({ type: 'UPDATE_SELECTION_ORDER_REJECTED', payload: err });
+    });
+};
+
 export const updateTeam = (id, body) => (dispatch) => {
   dispatch({ type: 'UPDATE_TEAM_PENDING' });
   return axios.put(`/api/teams/${id}`, body)
@@ -56,6 +67,10 @@ export const updateTeam = (id, body) => (dispatch) => {
     .catch((err) => {
       dispatch({ type: 'UPDATE_TEAM_REJECTED', payload: err });
     });
+};
+
+export const ackUpdate = () => (dispatch) => {
+  dispatch({ type: 'ACK_UPDATE' });
 };
 
 export const removeCurrentTeamFromState = () => (dispatch) => {

@@ -21,11 +21,13 @@ import {
 } from './draftActions';
 
 import {
+  ackUpdate as ackTeamUpdate,
   fetchTeamsByUser,
   fetchTeamsByDraft,
   createTeam,
   fetchOneTeam,
   removeCurrentTeamFromState,
+  updateSelectionOrder,
   updateTeam,
 } from './teamActions';
 
@@ -63,11 +65,13 @@ export {
   updateDraft,
   removeCurrentDraftFromState,
   blurDraft,
+  ackTeamUpdate,
   fetchTeamsByUser,
   fetchTeamsByDraft,
   createTeam,
   fetchOneTeam,
   removeCurrentTeamFromState,
+  updateSelectionOrder,
   updateTeam,
   fetchPlayersByDraft,
   fetchPlayersByTeam,

@@ -1,3 +1,5 @@
+const { Sequelize } = require('sequelize');
+
 const {
   Team,
   Draft,
@@ -119,6 +121,45 @@ module.exports = {
       if (!team) return res.status(404).send({ e: 'Team not found.' });
       const updatedTeam = await team.update({ name: req.body.name || team.name });
       return res.status(200).send({ team: updatedTeam });
+    } catch (e) {
+      return res.status(400).send({ e });
+    }
+  },
+
+  async updateSelectionOrder(req, res) {
+    try {
+      const { sourceIndex, destinationIndex } = req.body;
+      const teams = await Team.findAll({ where: { draftId: req.params.id } });
+      const movedTeam = teams.find(team => team.selectionOrder === sourceIndex + 1);
+      await movedTeam.update({ selectionOrder: destinationIndex + 1 });
+      if (sourceIndex > destinationIndex) {
+        const teamsToUpdate = (
+          teams
+            .filter((team) => {
+              const { selectionOrder } = team;
+              return (selectionOrder > destinationIndex) && (selectionOrder < sourceIndex + 1);
+            })
+            .map(team => team.uuid)
+        );
+        await Team.update({
+          where: { uuid: { [Sequelize.Op.in]: teamsToUpdate } },
+          selectionOrder: Sequelize.literal('selectionOrder + 1'),
+        });
+      } else {
+        const teamsToUpdate = (
+          teams
+            .filter((team) => {
+              const { selectionOrder } = team;
+              return (selectionOrder < destinationIndex + 1) && (selectionOrder > sourceIndex + 1);
+            })
+            .map(team => team.uuid)
+        );
+        await Team.update({
+          where: { uuid: { [Sequelize.Op.in]: teamsToUpdate } },
+          selectionOrder: Sequelize.literal('selectionOrder - 1'),
+        });
+      }
+      return res.status(201).send({ success: true });
     } catch (e) {
       return res.status(400).send({ e });
     }
