@@ -47,7 +47,7 @@ export const fetchOneTeam = id => (dispatch) => {
     });
 };
 
-export const updateSelectionOrder = (id, body) => (dispatch) => {
+export const updateOrder = (id, body) => (dispatch) => {
   dispatch({ type: 'UPDATE_SELECTION_ORDER_PENDING' });
   return axios.put(`/api/drafts/${id}/reorderTeams`, body)
     .then(() => {

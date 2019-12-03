@@ -31,7 +31,7 @@ module.exports = (app) => {
   app.get('/api/teams/:id', teams.fetchOne);
   app.get('/api/drafts/:id/teams', teams.fetchByDraft);
   app.post('/api/teams', teams.create);
-  app.put('/api/drafts/:id/reorderTeams', teams.updateSelectionOrder);
+  app.put('/api/drafts/:id/reorderTeams', teams.updateOrder);
   app.put('/api/teams/:id', teams.update);
   app.delete('/api/teams/:id', teams.destroy);
 

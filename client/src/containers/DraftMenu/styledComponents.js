@@ -16,8 +16,11 @@ const {
 } = mixins;
 
 const BlurContainer = styled.div`
-  filter: ${props => (props.shouldDraftViewBlur ? 'blur(5px)' : 'unset')};
-  background-color: ${props => (props.shouldDraftViewBlur ? LIGHT_GRAY : 'unset')};
+  ${props => (
+    props.shouldDraftViewBlur
+      ? `filter: blur(5px); background-color: ${LIGHT_GRAY};`
+      : ''
+  )}
 `;
 
 const DraftMenuContainer = styled.div`

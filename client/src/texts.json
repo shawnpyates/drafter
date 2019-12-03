@@ -161,8 +161,8 @@
         "value": "Owner"
       },
       {
-        "type": "selectionOrder",
-        "value": "Order"
+        "type": "selectionorder",
+        "value": "Selection Order"
       }
     ]
   },

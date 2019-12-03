@@ -27,7 +27,7 @@ import {
   createTeam,
   fetchOneTeam,
   removeCurrentTeamFromState,
-  updateSelectionOrder,
+  updateOrder,
   updateTeam,
 } from './teamActions';
 
@@ -71,7 +71,7 @@ export {
   createTeam,
   fetchOneTeam,
   removeCurrentTeamFromState,
-  updateSelectionOrder,
+  updateOrder,
   updateTeam,
   fetchPlayersByDraft,
   fetchPlayersByTeam,

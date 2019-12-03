@@ -15,7 +15,7 @@ import {
   ackTeamUpdate,
   fetchCurrentUser,
   fetchOneDraft,
-  updateSelectionOrder,
+  updateOrder,
   removeCurrentDraftFromState,
 } from '../../actions';
 
@@ -26,9 +26,10 @@ const mapStateToProps = (state) => {
     currentDraft,
     fetching: isFetchingDraft,
   } = state.draft;
-  const { updated: areTeamsUpdated } = state.team;
+  const { updated: areTeamsUpdated, updating: areTeamsUpdating } = state.team;
   return {
     areTeamsUpdated,
+    areTeamsUpdating,
     currentUser,
     currentDraft,
     isFetchingDraft,
@@ -39,13 +40,14 @@ const mapDispatchToProps = dispatch => ({
   ackTeamUpdate: () => dispatch(ackTeamUpdate()),
   fetchCurrentUser: () => dispatch(fetchCurrentUser()),
   fetchOneDraft: id => dispatch(fetchOneDraft(id)),
-  updateSelectionOrder: (draftId, body) => dispatch(updateSelectionOrder(draftId, body)),
+  updateOrder: (draftId, body) => dispatch(updateOrder(draftId, body)),
   removeCurrentDraftFromState: () => dispatch(removeCurrentDraftFromState()),
 });
 
 function UpdateSelectionOrder({
   ackTeamUpdate,
   areTeamsUpdated,
+  areTeamsUpdating,
   currentDraft,
   currentUser,
   fetchCurrentUser: fetchCurrentUserPropFn,
@@ -53,7 +55,7 @@ function UpdateSelectionOrder({
   isFetchingDraft,
   match,
   removeCurrentDraftFromState: removeCurrentDraftFromStatePropFn,
-  updateSelectionOrder: updateSelectionOrderPropFn,
+  updateOrder: updateOrderPropFn,
 }) {
   const { params: { id } = {} } = match; 
   useEffect(() => {
@@ -80,29 +82,34 @@ function UpdateSelectionOrder({
   }
 
   const onDragEnd = (result) => {
-    if (!result.destination) {
-      return;
+    try {
+      const {
+        source: { index: sourceIndex },
+        destination: { index: destinationIndex },
+      } = result;
+      if (sourceIndex === destinationIndex) {
+        return;
+      }
+      updateOrderPropFn(id, { sourceIndex, destinationIndex });
+    } catch (error) {
+      console.log(`[onDragEnd] Unexpected error: ${error}`);
     }
-    const {
-      source: { index: sourceIndex },
-      destination: { index: destinationIndex },
-    } = result;
-    updateSelectionOrderPropFn(id, { sourceIndex, destinationIndex });
   };
 
   return (
     <div>
-      {(currentDraft && !isFetchingDraft)
+      {(currentDraft && (!isFetchingDraft || areTeamsUpdating))
       && (
         <div>
           <DragAndDropTable
             title={draftName}
             teams={teams}
             onDragEnd={onDragEnd}
+            areTeamsUpdating={areTeamsUpdating}
           />
         </div>
       )}
-      {isFetchingDraft && <LoadingIndicator />}
+      {(isFetchingDraft && !areTeamsUpdating) && <LoadingIndicator />}
     </div>
   );
 }

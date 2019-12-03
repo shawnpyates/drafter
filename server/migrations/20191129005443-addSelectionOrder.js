@@ -4,7 +4,7 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.addColumn(
       'Teams',
-      'selectionOrder',
+      'selectionorder',
       { type: Sequelize.INTEGER },
     );
   },
@@ -12,7 +12,7 @@ module.exports = {
   down: (queryInterface) => {
     return queryInterface.removeColumn(
       'Teams',
-      'selectionOrder',
+      'selectionorder',
     );
   },
 };

@@ -1,17 +1,21 @@
 import styled from 'styled-components';
 
-import { styleVars } from '../../styles';
+import { mixins, styleVars } from '../../styles';
+
+const { CENTER_ELEMENT_MIXIN } = mixins;
 
 const {
   DARK_BLUE,
+  LIGHT_GRAY,
+  NORMAL_FONT_SIZE,
   LARGE_FONT_SIZE,
   EXTRA_LARGE_FONT_SIZE,
 } = styleVars;
 
-
 const Container = styled.div`
   width: 100%;
   text-align: center;
+  filter: ${props => (props.shouldBlur ? 'blur(5px)' : 'unset')};
 `;
 
 const Title = styled.div`
@@ -39,9 +43,26 @@ const ListItemText = styled.p`
   transform: translateY(-50%);
 `;
 
+const UpdatingIndicator = styled.div`
+  height: 7rem;
+  width: 15rem;
+  color: ${DARK_BLUE};
+  font-size: ${NORMAL_FONT_SIZE};
+  border: 1px solid black;
+  background-color: ${LIGHT_GRAY};
+  padding: 3rem;
+  text-align: center;
+  top: 25rem;
+  z-index: 1000;
+  visibility: ${props => (props.isVisible ? 'visible' : 'hidden')}
+  
+  ${CENTER_ELEMENT_MIXIN}
+`;
+
 module.exports = {
   Container,
   ListItem,
   ListItemText,
   Title,
+  UpdatingIndicator,
 };
