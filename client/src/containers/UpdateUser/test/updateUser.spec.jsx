@@ -21,8 +21,11 @@ const store = {
   },
 };
 
-const localState = {
+const formState = {
   email: 'foo@bar.com',
+  oldPassword: 'abcdefgh',
+  newPasswordFirstInsertion: 'ijklmnop',
+  newPasswordSecondInsertion: 'ijklmnop',
 };
 
 const wrapper = shallow((
@@ -41,19 +44,19 @@ describe('<UpdateUser />', () => {
   });
   describe('validateForm', () => {
     test('should validate form as success if fields look good', () => {
-      const received = validateForm(localState);
+      const received = validateForm(formState);
       const expected = { success: true };
       expect(received).toEqual(expected);
     });
     test('should reject form if field is missing', () => {
-      const modifiedState = { ...localState, email: null };
+      const modifiedState = { ...formState, email: null };
       const received = validateForm(modifiedState);
       const expected = { errorMessage: missingField };
       expect(received).toEqual(expected);
     });
     test('should reject form if email is invalid', () => {
       const modifiedState = {
-        ...localState,
+        ...formState,
         email: 'notarealemail.com',
       };
       const received = validateForm(modifiedState);
