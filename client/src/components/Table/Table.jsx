@@ -17,8 +17,8 @@ import {
   EmptyDataMessage,
   HeaderRow,
   Option,
-  TableButton,
   TableTitle,
+  TableButton,
   TableTitleLine,
 } from './styledComponents';
 
