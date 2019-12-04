@@ -38,6 +38,12 @@
     ]
   },
 
+  "dragAndDropTable": {
+    "goBackToDraft": "< Go back to draft",
+    "updateSelectionOrder": "Update Draft Selection Order",
+    "updating": "Updating..."
+  },
+
   "errors": {
     "notAuthorized": "⛔ Sorry, you are not authorized to view this content. ⛔"
   },

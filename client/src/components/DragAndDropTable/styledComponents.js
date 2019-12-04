@@ -7,6 +7,7 @@ const { CENTER_ELEMENT_MIXIN } = mixins;
 const {
   DARK_BLUE,
   LIGHT_GRAY,
+  DARK_GRAY,
   NORMAL_FONT_SIZE,
   LARGE_FONT_SIZE,
   EXTRA_LARGE_FONT_SIZE,
@@ -20,8 +21,13 @@ const Container = styled.div`
 
 const Title = styled.div`
   color: ${DARK_BLUE};
-  margin: 3rem;
+  margin: 1rem;
   font-size: ${EXTRA_LARGE_FONT_SIZE};
+`;
+
+const Subtitle = styled.div`
+  color: ${DARK_GRAY};
+  font-size: ${NORMAL_FONT_SIZE};
 `;
 
 const ListItem = styled.div`
@@ -63,6 +69,7 @@ module.exports = {
   Container,
   ListItem,
   ListItemText,
+  Subtitle,
   Title,
   UpdatingIndicator,
 };

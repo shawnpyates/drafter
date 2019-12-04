@@ -11,7 +11,8 @@
       "program": "${workspaceRoot}/app.js",
       "args": ["|", "bunyan"],
       "console": "integratedTerminal",
-      "runtimeArgs": ["--preserve-symlinks"]
+      "runtimeArgs": ["--preserve-symlinks"],
+      "runtimeVersion": "13.1.0"
     },
     {
       "name": "Debug Jest Tests",
@@ -23,6 +24,7 @@
         "--runInBand"
       ],
       "console": "integratedTerminal",
+      "runtimeVersion": "13.1.0",
       "internalConsoleOptions": "neverOpen",
       "port": 9229
     }

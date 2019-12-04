@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
@@ -57,7 +57,9 @@ function UpdateSelectionOrder({
   removeCurrentDraftFromState: removeCurrentDraftFromStatePropFn,
   updateOrder: updateOrderPropFn,
 }) {
-  const { params: { id } = {} } = match; 
+  const [shouldRedirect, setShouldRedirect] = useState(false);
+  const { params: { id } = {}, url } = match; 
+  const redirectUrl = url.replace('reorderTeams', 'show');
   useEffect(() => {
     if (!currentDraft || areTeamsUpdated) {
       ackTeamUpdate();
@@ -81,6 +83,11 @@ function UpdateSelectionOrder({
     return <ErrorIndicator message={ERROR_TEXTS.notAuthorized} />;
   }
 
+  const redirectToDraftHandler = (ev) => {
+    ev.preventDefault();
+    setShouldRedirect(true);
+  };
+
   const onDragEnd = (result) => {
     try {
       const {
@@ -100,15 +107,15 @@ function UpdateSelectionOrder({
     <div>
       {(currentDraft && (!isFetchingDraft || areTeamsUpdating))
       && (
-        <div>
-          <DragAndDropTable
-            title={draftName}
-            teams={teams}
-            onDragEnd={onDragEnd}
-            areTeamsUpdating={areTeamsUpdating}
-          />
-        </div>
+        <DragAndDropTable
+          title={draftName}
+          teams={teams}
+          onDragEnd={onDragEnd}
+          areTeamsUpdating={areTeamsUpdating}
+          redirectToDraftHandler={redirectToDraftHandler}
+        />
       )}
+      {shouldRedirect && <Redirect to={redirectUrl} />}
       {(isFetchingDraft && !areTeamsUpdating) && <LoadingIndicator />}
     </div>
   );
@@ -119,11 +126,17 @@ UpdateSelectionOrder.defaultProps = {
 };
 
 UpdateSelectionOrder.propTypes = {
-  currentPlayer: PropTypes.objectOf(PropTypes.any),
+  ackTeamUpdate: PropTypes.func.isRequired,
+  areTeamsUpdated: PropTypes.bool.isRequired,
+  areTeamsUpdating: PropTypes.bool.isRequired,
+  currentDraft: PropTypes.objectOf(PropTypes.any),
   currentUser: PropTypes.objectOf(PropTypes.any).isRequired,
-  fetchOnePlayer: PropTypes.func.isRequired,
-  isFetchingPlayer: PropTypes.bool.isRequired,
-  removeCurrentPlayerFromState: PropTypes.func.isRequired,
+  fetchCurrentUser: PropTypes.func.isRequired,
+  fetchOneDraft: PropTypes.func.isRequired,
+  isFetchingDraft: PropTypes.bool.isRequired,
+  match: PropTypes.objectOf(PropTypes.any).isRequired,
+  removeCurrentDraftFromState: PropTypes.func.isRequired,
+  updateOrder: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(UpdateSelectionOrder);

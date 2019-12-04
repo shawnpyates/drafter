@@ -8,7 +8,6 @@ import { tableGeneral as TABLE_TEXTS } from '../../texts.json';
 import { getTextWithInjections } from '../../helpers';
 
 import {
-  AddNewButton,
   ColumnHeader,
   Container,
   DataCell,
@@ -18,6 +17,7 @@ import {
   EmptyDataMessage,
   HeaderRow,
   Option,
+  TableButton,
   TableTitle,
   TableTitleLine,
 } from './styledComponents';
@@ -45,17 +45,17 @@ function Table({
         {addNewLink
         && (
           <Link to={addNewLink}>
-            <AddNewButton>
+            <TableButton>
               {ADD_NEW}
-            </AddNewButton>
+            </TableButton>
           </Link>
         )}
         {reorderTeamsLink
         && (
           <Link to={reorderTeamsLink}>
-            <AddNewButton>
+            <TableButton>
               Update Selection Order
-            </AddNewButton>
+            </TableButton>
           </Link>
         )}
       </TableTitleLine>
