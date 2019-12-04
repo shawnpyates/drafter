@@ -48,12 +48,13 @@ const validateForm = (form) => {
     newPasswordFirstInsertion,
     newPasswordSecondInsertion,
   } = form;
+
+  if (email) {
+    return isEmailValid(email) ? { success: true } : { errorMessage: INVALID_EMAIL };
+  }
+  
   if (Object.values(form).some(value => !value)) {
     return { errorMessage: MISSING_FIELD };
-  }
-
-  if (email && !isEmailValid(email)) {
-    return { errorMessage: INVALID_EMAIL };
   }
 
   if (newPasswordFirstInsertion !== newPasswordSecondInsertion) {

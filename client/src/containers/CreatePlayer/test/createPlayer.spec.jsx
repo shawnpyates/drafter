@@ -20,9 +20,9 @@ const store = {
   user: {
     currentUser: { uuid: 'abc123' },
   },
-  draft: {
-    drafts: [],
-  },
+  player: {
+    currentPlayer: null,
+  }
 };
 
 const props = {
@@ -49,18 +49,6 @@ describe('<CreatePlayer />', () => {
       const expected = '<CreatePlayer />';
       expect(received).toEqual(expected);
     });
-    test('should render a <Form /> component as child if form not submitted yet', () => {
-      const deepWrapper = wrapper.dive().dive();
-      deepWrapper.setState({ isSubmitComplete: false });
-      const formLength = deepWrapper.find(Form).length;
-      expect(formLength).toEqual(1);
-    });
-    test('should not render <Form /> component as child if form submitted', () => {
-      const deepWrapper = wrapper.dive().dive();
-      deepWrapper.setState({ isSubmitComplete: true });
-      const formLength = deepWrapper.find(Form).length;
-      expect(formLength).toEqual(0);
-    });
   });
   describe('validateForm', () => {
     test('returns success if fields are valid', () => {
@@ -75,13 +63,13 @@ describe('<CreatePlayer />', () => {
     test('rejects if required field is missing', () => {
       const modifiedState = { ...localState, position: null };
       const received = validateForm(modifiedState);
-      const expected = { errorMessage: missingField };
+      const expected = { validationErrorMessage: missingField };
       expect(received).toEqual(expected);
     });
     test('rejects if email is provided but is not valid email', () => {
       const modifiedState = { ...localState, email: 'notarealemail@toobad' };
       const received = validateForm(modifiedState);
-      const expected = { errorMessage: invalidEmail };
+      const expected = { validationErrorMessage: invalidEmail };
       expect(received).toEqual(expected);
     });
   });
