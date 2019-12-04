@@ -29,6 +29,9 @@ module.exports = {
           Player,
           User,
         ],
+        order: [
+          [Team, 'selectionorder', 'asc'],
+        ],
       });
       return res.status(200).send({ draft });
     } catch (e) {

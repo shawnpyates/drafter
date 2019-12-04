@@ -19,10 +19,16 @@ const ButtonInput = styled.input`
   background-color: ${DARK_BLUE};
   border-radius: 3px;
   margin: 6rem auto 1rem;
-  width: 10%;
   cursor: pointer;
-
-  ${CENTER_ELEMENT_MIXIN}
+  ${props => (
+    props.isCenter
+      ? `
+        margin: 6rem auto 1rem;
+        width: 10%; 
+        ${CENTER_ELEMENT_MIXIN}
+      `
+      : `margin: 6rem 3rem;`
+  )}
   ${P_TEXT_MIXIN({ color: WHITE })}
 
   &:hover {

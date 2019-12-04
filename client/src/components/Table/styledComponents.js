@@ -25,10 +25,11 @@ const Container = styled.div`
   width: 100%;
 `;
 
-const AddNewButton = styled.div`
+const TableButton = styled.div`
   background: ${DARK_BLUE};
+  margin: auto 0.5rem;
+  padding: 1rem;
   height: 2.5rem;
-  width: 13rem;
   border-radius: 2rem;
   text-align: center;
   font-weight: 500;
@@ -98,20 +99,15 @@ const DataCell = styled.div`
   display: table-cell;
 `;
 
-const OptionsContainer = styled.div`
-  display: table-cell;
-`;
-
 const Option = styled.button`
   border: none;
   background: transparent;
-  margin: auto 2rem;
+  margin: auto 1rem;
   font-size: 0.5rem;
   cursor: pointer;
 `;
 
 module.exports = {
-  AddNewButton,
   ColumnHeader,
   Container,
   DataCell,
@@ -121,7 +117,7 @@ module.exports = {
   EmptyDataMessage,
   HeaderRow,
   Option,
-  OptionsContainer,
+  TableButton,
   TableTitle,
   TableTitleLine,
 };

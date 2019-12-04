@@ -3,9 +3,13 @@ import PropTypes from 'prop-types';
 
 import { ButtonInput, ButtonContainer } from './styledComponents';
 
-function Button({ value, clickHandler }) {
+function Button({
+  value,
+  clickHandler,
+  shouldPositionCenter = true,
+}) {
   return (
-    <ButtonContainer>
+    <ButtonContainer isCenter={shouldPositionCenter}>
       <ButtonInput
         type="button"
         value={value}

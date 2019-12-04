@@ -72,6 +72,26 @@ const teamReducer = (state = initialState, action) => {
         currentTeam: action.payload,
       };
     }
+    case 'UPDATE_SELECTION_ORDER_PENDING': {
+      return {
+        ...state,
+        updating: true,
+      };
+    }
+    case 'UPDATE_SELECTION_ORDER_REJECTED': {
+      return {
+        ...state,
+        updating: false,
+        errorOnUpdateTeam: action.payload,
+      };
+    }
+    case 'UPDATE_SELECTION_ORDER_FULFILLED': {
+      return {
+        ...state,
+        updating: false,
+        updated: true,
+      };
+    }
     case 'UPDATE_TEAM_PENDING': {
       return {
         ...state,
@@ -85,11 +105,17 @@ const teamReducer = (state = initialState, action) => {
         errorOnUpdateTeam: action.payload,
       };
     }
-    case 'UPDATE_TEAM': {
+    case 'UPDATE_TEAM_FULFILLED': {
       return {
         ...state,
         updating: false,
         updated: true,
+      };
+    }
+    case 'ACK_UPDATE': {
+      return {
+        ...state,
+        updated: false,
       };
     }
     case 'REMOVE_CURRENT_TEAM_FROM_STATE': {

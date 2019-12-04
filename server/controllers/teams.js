@@ -1,3 +1,5 @@
+const { Sequelize } = require('sequelize');
+
 const {
   Team,
   Draft,
@@ -25,6 +27,14 @@ const getHtmlForMailer = ({
   `)
 );
 
+const assignOrderToTeams = (teams, teamsInDraftLength) => {
+  let selectionorder = teamsInDraftLength;
+  return teams.map((team) => {
+    selectionorder += 1;
+    return { ...team, selectionorder };
+  })
+};
+
 
 module.exports = {
   async fetchOne(req, res) {
@@ -45,7 +55,7 @@ module.exports = {
       const teams = await Team.findAll({
         where: { draftId },
         include: [Draft, User, Player],
-        order: [['createdAt', 'asc']],
+        order: [['selectionorder', 'asc']],
       });
       if (!teams.length) return res.status(200).send({ teams: [] });
       return res.status(200).send({ teams });
@@ -57,27 +67,30 @@ module.exports = {
   async create(req, res) {
     try {
       const { body } = req;
-      if (Array.isArray(body)) {
-        await Team.bulkCreate(body);
+      const isBulkCreate = Array.isArray(body);
+      const {
+        name,
+        ownerUserId,
+        draftId,
+        requestId,
+      } = isBulkCreate ? body[0] : body;
+      const draftToJoin = await Draft.findOne({
+        where: { uuid: draftId },
+        include: [Team],
+      });
+      const { length: teamsInDraftLength } = draftToJoin.Teams;
+      if (isBulkCreate) {
+        const teamsWithSelectionIds = assignOrderToTeams(body, teamsInDraftLength);
+        await Team.bulkCreate(teamsWithSelectionIds);
         return res.status(201).send({ success: true });
       }
-      const {
+      const team = await Team.create({
         draftId,
         name,
         ownerUserId,
-        requestId,
-      } = body;
-      const team = await Team.create({ draftId, name, ownerUserId });
+        order: teamsInDraftLength + 1,
+      });
       if (requestId) {
-        const draft = await Draft.findOne({
-          where: { uuid: draftId },
-          include: [
-            {
-              model: Team,
-              where: { ownerUserId },
-            },
-          ],
-        });
         const teamWithAssociations = await Team.findOne({
           where: { uuid: team.uuid },
           include: [User],
@@ -85,7 +98,7 @@ module.exports = {
         const { User: teamOwner } = teamWithAssociations;
         const htmlForMailer = getHtmlForMailer({
           teamOwnerFirstName: teamOwner.firstName,
-          draftName: draft.name,
+          draftName: draftToJoin.name,
           teamName: name,
         });
         await sendMail({
@@ -108,6 +121,45 @@ module.exports = {
       if (!team) return res.status(404).send({ e: 'Team not found.' });
       const updatedTeam = await team.update({ name: req.body.name || team.name });
       return res.status(200).send({ team: updatedTeam });
+    } catch (e) {
+      return res.status(400).send({ e });
+    }
+  },
+
+  async updateOrder(req, res) {
+    try {
+      const { sourceIndex, destinationIndex } = req.body;
+      const teams = await Team.findAll({ where: { draftId: req.params.id } });
+      if (sourceIndex > destinationIndex) {
+        const teamsToUpdate = (
+          teams
+            .filter((team) => {
+              const { selectionorder } = team;
+              return (selectionorder > destinationIndex) && (selectionorder < sourceIndex + 1);
+            })
+            .map(team => team.uuid)
+        );
+        await Team.update(
+          { selectionorder: Sequelize.literal('selectionorder + 1') },
+          { where: { uuid: { [Sequelize.Op.in]: teamsToUpdate } } },
+        );
+      } else {
+        const teamsToUpdate = (
+          teams
+            .filter((team) => {
+              const { selectionorder } = team;
+              return (selectionorder < destinationIndex + 2) && (selectionorder > sourceIndex + 1);
+            })
+            .map(team => team.uuid)
+        );
+        await Team.update(
+          { selectionorder: Sequelize.literal('selectionorder - 1') },
+          { where: { uuid: { [Sequelize.Op.in]: teamsToUpdate } } },
+        );
+      }
+      const movedTeam = teams.find(team => team.selectionorder === sourceIndex + 1);
+      await movedTeam.update({ selectionorder: destinationIndex + 1 });
+      return res.status(201).send({ success: true });
     } catch (e) {
       return res.status(400).send({ e });
     }

@@ -9,6 +9,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    selectionorder: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
   });
   Team.associate = (models) => {
     Team.belongsTo(models.User, {

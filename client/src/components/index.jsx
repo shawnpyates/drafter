@@ -1,5 +1,6 @@
 import Button_ from './Button/Button';
 import Collapsible_ from './Collapsible/Collapsible';
+import DragAndDropTable_ from './DragAndDropTable/DragAndDropTable';
 import ErrorIndicator_ from './ErrorIndicator/ErrorIndicator';
 import Form_ from './Form/Form';
 import Header_ from './Header/Header';
@@ -12,6 +13,7 @@ import Timer_ from './Timer/Timer';
 
 export const Button = Button_;
 export const Collapsible = Collapsible_;
+export const DragAndDropTable = DragAndDropTable_;
 export const ErrorIndicator = ErrorIndicator_;
 export const Form = Form_;
 export const Header = Header_;

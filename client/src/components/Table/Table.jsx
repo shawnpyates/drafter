@@ -8,7 +8,6 @@ import { tableGeneral as TABLE_TEXTS } from '../../texts.json';
 import { getTextWithInjections } from '../../helpers';
 
 import {
-  AddNewButton,
   ColumnHeader,
   Container,
   DataCell,
@@ -18,8 +17,8 @@ import {
   EmptyDataMessage,
   HeaderRow,
   Option,
-  OptionsContainer,
   TableTitle,
+  TableButton,
   TableTitleLine,
 } from './styledComponents';
 
@@ -35,6 +34,7 @@ function Table({
   data,
   emptyDataMessage,
   addNewLink,
+  reorderTeamsLink,
   options,
   handleOptionClick,
 }) {
@@ -45,9 +45,17 @@ function Table({
         {addNewLink
         && (
           <Link to={addNewLink}>
-            <AddNewButton>
+            <TableButton>
               {ADD_NEW}
-            </AddNewButton>
+            </TableButton>
+          </Link>
+        )}
+        {reorderTeamsLink
+        && (
+          <Link to={reorderTeamsLink}>
+            <TableButton>
+              Update Selection Order
+            </TableButton>
           </Link>
         )}
       </TableTitleLine>
@@ -78,23 +86,26 @@ function Table({
               >
                 {columnHeaders
                   .map(columnHeader => columnHeader.type)
-                  .map(chType => <DataCell key={uuidv4()}>{entry[chType]}</DataCell>)
+                  .map(chType => (
+                    <DataCell key={uuidv4()}>
+                      {chType === "options"
+                        ? (
+                          options.map(option => (
+                            <DataLink to="/" key={option}>
+                              <Option
+                                value={entry.uuid}
+                                onClick={handleOptionClick}
+                              >
+                                {option}
+                              </Option>
+                            </DataLink>
+                          ))
+                        )
+                        : entry[chType]
+                      }
+                    </DataCell>
+                  ))
                 }
-                {options
-                && (
-                  <OptionsContainer>
-                    {options.map(option => (
-                      <DataLink to="/" key={option}>
-                        <Option
-                          value={entry.uuid}
-                          onClick={handleOptionClick}
-                        >
-                          {option}
-                        </Option>
-                      </DataLink>
-                    ))}
-                  </OptionsContainer>
-                )}
               </DataRow>
             </DataLink>
           ))}

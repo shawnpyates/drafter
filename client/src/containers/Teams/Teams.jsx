@@ -13,6 +13,7 @@ const DISPLAY_TYPES = {
 const URL_NAMESPACES = {
   SHOW: '/show',
   CREATE_TEAMS: '/createTeams',
+  UPDATE_ORDER: '/reorderTeams',
 };
 
 const extractDataForDisplay = teams => (
@@ -21,6 +22,7 @@ const extractDataForDisplay = teams => (
       uuid,
       name,
       User: owner,
+      selectionorder,
       Draft: draft,
       Players: players,
     } = team;
@@ -30,6 +32,7 @@ const extractDataForDisplay = teams => (
       name,
       draft: draftName,
       ownerName: owner && `${owner.firstName} ${owner.lastName}`,
+      selectionorder,
       players,
       isCurrentlySelecting: currentlySelectingTeamId === uuid,
     };
@@ -49,11 +52,15 @@ const Teams = ({
     noTeamsEntered,
     columnHeaders,
   } = teamsTableTexts;
-  const { SHOW, CREATE_TEAMS } = URL_NAMESPACES;
+  const { SHOW, CREATE_TEAMS, UPDATE_ORDER } = URL_NAMESPACES;
   const addNewLink = (
     (url && url.includes(SHOW))
       ? url.replace(SHOW, CREATE_TEAMS)
       : CREATE_TEAMS
+  );
+  const reorderTeamsLink = (
+    parent === 'draft'
+    && url.replace(SHOW, UPDATE_ORDER)
   );
   return (
     teams
@@ -68,6 +75,7 @@ const Teams = ({
             data={extractDataForDisplay(teams)}
             emptyDataMessage={parent === 'user' ? belongToNoTeams : noTeamsEntered}
             addNewLink={addNewLink}
+            reorderTeamsLink={reorderTeamsLink}
           />
         )}
         {displayType === DISPLAY_TYPES.SELECTION_LIST
