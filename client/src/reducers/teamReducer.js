@@ -112,17 +112,8 @@ const teamReducer = (state = initialState, action) => {
         updated: true,
       };
     }
-    case 'ACK_UPDATE': {
-      return {
-        ...state,
-        updated: false,
-      };
-    }
-    case 'REMOVE_CURRENT_TEAM_FROM_STATE': {
-      return {
-        ...state,
-        currentTeam: null,
-      };
+    case 'RESET_TEAM_STATE': {
+      return { ...initialState };
     }
     default:
       break;

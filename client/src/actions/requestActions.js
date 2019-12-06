@@ -59,3 +59,7 @@ export const destroyRequest = id => (dispatch) => {
       dispatch({ type: 'DESTROY_REQUEST_REJECTED', payload: err });
     });
 };
+
+export const resetRequestState = () => (dispatch) => {
+  dispatch({ type: 'RESET_REQUEST_STATE' });
+};

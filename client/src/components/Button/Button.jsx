@@ -9,11 +9,12 @@ function Button({
   shouldPositionCenter = true,
 }) {
   return (
-    <ButtonContainer isCenter={shouldPositionCenter}>
+    <ButtonContainer>
       <ButtonInput
         type="button"
         value={value}
         onClick={clickHandler}
+        isCenter={shouldPositionCenter}
       />
     </ButtonContainer>
   );

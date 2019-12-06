@@ -21,12 +21,11 @@ import {
 } from './draftActions';
 
 import {
-  ackUpdate as ackTeamUpdate,
   fetchTeamsByUser,
   fetchTeamsByDraft,
   createTeam,
   fetchOneTeam,
-  removeCurrentTeamFromState,
+  resetTeamState,
   updateOrder,
   updateTeam,
 } from './teamActions';
@@ -46,6 +45,7 @@ import {
   fetchRequestsByDraftOwner,
   createRequest,
   destroyRequest,
+  resetRequestState,
 } from './requestActions';
 
 export {
@@ -57,6 +57,7 @@ export {
   updateUser,
   revertStateExceptUser,
   removeCurrentUserFromState,
+
   createDraft,
   fetchDraftsByOwner,
   fetchDraftsByTeam,
@@ -65,23 +66,26 @@ export {
   updateDraft,
   removeCurrentDraftFromState,
   blurDraft,
-  ackTeamUpdate,
+
   fetchTeamsByUser,
   fetchTeamsByDraft,
   createTeam,
   fetchOneTeam,
-  removeCurrentTeamFromState,
+  resetTeamState,
   updateOrder,
   updateTeam,
   fetchPlayersByDraft,
   fetchPlayersByTeam,
   createPlayer,
+  
   updatePlayer,
   fetchOnePlayer,
   removeCurrentPlayerFromState,
+  
   fetchRequestsByDraft,
   fetchRequestsByRequester,
   fetchRequestsByDraftOwner,
   createRequest,
   destroyRequest,
+  resetRequestState,
 };

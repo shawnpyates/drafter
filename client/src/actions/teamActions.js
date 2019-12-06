@@ -69,10 +69,6 @@ export const updateTeam = (id, body) => (dispatch) => {
     });
 };
 
-export const ackUpdate = () => (dispatch) => {
-  dispatch({ type: 'ACK_UPDATE' });
-};
-
-export const removeCurrentTeamFromState = () => (dispatch) => {
-  dispatch({ type: 'REMOVE_CURRENT_TEAM_FROM_STATE' });
+export const resetTeamState = () => (dispatch) => {
+  dispatch({ type: 'RESET_TEAM_STATE' });
 };

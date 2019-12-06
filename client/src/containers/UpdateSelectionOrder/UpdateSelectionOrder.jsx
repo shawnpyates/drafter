@@ -12,9 +12,9 @@ import {
 } from '../../components';
 
 import {
-  ackTeamUpdate,
   fetchCurrentUser,
   fetchOneDraft,
+  resetTeamState,
   updateOrder,
   removeCurrentDraftFromState,
 } from '../../actions';
@@ -37,15 +37,14 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  ackTeamUpdate: () => dispatch(ackTeamUpdate()),
   fetchCurrentUser: () => dispatch(fetchCurrentUser()),
   fetchOneDraft: id => dispatch(fetchOneDraft(id)),
-  updateOrder: (draftId, body) => dispatch(updateOrder(draftId, body)),
   removeCurrentDraftFromState: () => dispatch(removeCurrentDraftFromState()),
+  resetTeamState: () => dispatch(resetTeamState()),
+  updateOrder: (draftId, body) => dispatch(updateOrder(draftId, body)),
 });
 
 function UpdateSelectionOrder({
-  ackTeamUpdate,
   areTeamsUpdated,
   areTeamsUpdating,
   currentDraft,
@@ -55,6 +54,7 @@ function UpdateSelectionOrder({
   isFetchingDraft,
   match,
   removeCurrentDraftFromState: removeCurrentDraftFromStatePropFn,
+  resetTeamState,
   updateOrder: updateOrderPropFn,
 }) {
   const [shouldRedirect, setShouldRedirect] = useState(false);
@@ -62,7 +62,7 @@ function UpdateSelectionOrder({
   const redirectUrl = url.replace('reorderTeams', 'show');
   useEffect(() => {
     if (!currentDraft || areTeamsUpdated) {
-      ackTeamUpdate();
+      resetTeamState();
       fetchOneDraftPropFn(id);
     } 
   }, [currentDraft, areTeamsUpdated]);
@@ -126,7 +126,7 @@ UpdateSelectionOrder.defaultProps = {
 };
 
 UpdateSelectionOrder.propTypes = {
-  ackTeamUpdate: PropTypes.func.isRequired,
+  resetTeamState: PropTypes.func.isRequired,
   areTeamsUpdated: PropTypes.bool.isRequired,
   areTeamsUpdating: PropTypes.bool.isRequired,
   currentDraft: PropTypes.objectOf(PropTypes.any),
