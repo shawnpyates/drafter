@@ -88,7 +88,7 @@ module.exports = {
         draftId,
         name,
         ownerUserId,
-        order: teamsInDraftLength + 1,
+        selectionorder: teamsInDraftLength + 1,
       });
       if (requestId) {
         const teamWithAssociations = await Team.findOne({

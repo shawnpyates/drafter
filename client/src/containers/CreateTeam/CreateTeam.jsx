@@ -11,7 +11,8 @@ import {
   createTeam,
   fetchCurrentUser,
   fetchOneTeam,
-  removeCurrentTeamFromState,
+  resetRequestState,
+  resetTeamState,
   updateTeam,
 } from '../../actions';
 
@@ -24,15 +25,23 @@ const ERROR_MESSAGE_DURATION = 2000;
 const mapStateToProps = (state) => {
   const {
     user: { currentUser },
-    request: { createdRequest, errorOnCreateRequest },
-    team: { currentTeam, fetching: isFetchingTeam },
+    request: { created: isRequestCreated, errorOnCreateRequest },
+    team: {
+      currentTeam,
+      fetching: isFetchingTeam,
+      created: isTeamCreated,
+      updated: isTeamUpdated,
+    },
   } = state;
   return {
     currentTeam,
     currentUser,
-    createdRequest,
+    isRequestCreated,
     errorOnCreateRequest,
     isFetchingTeam,
+    isRequestCreated,
+    isTeamCreated,
+    isTeamUpdated,
   };
 };
 
@@ -41,7 +50,8 @@ const mapDispatchToProps = dispatch => ({
   createTeam: body => dispatch(createTeam(body)),
   fetchCurrentUser: () => dispatch(fetchCurrentUser()),
   fetchOneTeam: id => dispatch(fetchOneTeam(id)),
-  removeCurrentTeamFromState: () => dispatch(removeCurrentTeamFromState()),
+  resetRequestState: () => dispatch(resetRequestState()),
+  resetTeamState: () => dispatch(resetTeamState()),
   updateTeam: (id, body) => dispatch(updateTeam(id, body)),
 });
 
@@ -69,7 +79,6 @@ const getInputsWithDrafts = (inputs, drafts) => {
 
 function CreateTeam({
   createRequest: createRequestPropFn,
-  createdRequest,
   createTeam: createTeamPropFn,
   currentTeam,
   currentUser,
@@ -77,8 +86,12 @@ function CreateTeam({
   fetchCurrentUser: fetchCurrentUserPropFn,
   fetchOneTeam: fetchOneTeamPropFn,
   isFetchingTeam,
+  isRequestCreated,
+  isTeamCreated,
+  isTeamUpdated,
   match,
-  removeCurrentTeamFromState: removeCurrentTeamFromStatePropFn,
+  resetRequestState: resetRequestStatePropFn,
+  resetTeamState: resetTeamStatePropFn,
   updateTeam: updateTeamPropFn,
 }) {
   const { url, params: { id: urlIdParam } = {} } = match;
@@ -113,12 +126,25 @@ function CreateTeam({
     }
   }, [errorMessage]);
 
+  useEffect(() => {
+    if (isRequestCreated || isTeamCreated || isTeamUpdated) {
+      setIsSubmitComplete(true);
+    }
+  }, [isRequestCreated, isTeamCreated, isTeamUpdated]);
+
   useEffect(() => (
     function cleanup() {
-      removeCurrentTeamFromStatePropFn();
+      resetRequestStatePropFn();
+      resetTeamStatePropFn();
       fetchCurrentUserPropFn();
     }
   ), []);
+
+  useEffect(() => {
+    if (errorOnCreateRequest) {
+      setErrorMessage(errorOnCreateRequest);
+    }
+  }, [errorOnCreateRequest]);
 
   const updateFieldValue = ({
     name: keyName,
@@ -179,7 +205,7 @@ function CreateTeam({
       ownerUserId,
       draftId: draftIdForBody,
     };
-    createTeamPropFn(body).then(() => setIsSubmitComplete(true));
+    createTeamPropFn(body);
   };
 
   const createManyTeamsForDraft = () => {
@@ -195,7 +221,7 @@ function CreateTeam({
       };
       return rowWithMetaData;
     });
-    return createTeamPropFn(body).then(() => setIsSubmitComplete(true));
+    createTeamPropFn(body);
   };
 
   const createRequestToJoinDraft = (teamName, draftName) => {
@@ -208,15 +234,7 @@ function CreateTeam({
       setErrorMessage(missingField);
       return;
     }
-    createRequestPropFn(body)
-      .then(() => {
-        if (createdRequest) {
-          setIsSubmitComplete(true);
-        }
-        if (errorOnCreateRequest) {
-          setErrorMessage(errorOnCreateRequest);
-        }
-      });
+    createRequestPropFn(body);
   };
 
   const handleSubmit = (ev) => {
@@ -227,10 +245,7 @@ function CreateTeam({
         return;
       }
       updateTeamPropFn(urlIdParam, { name: quickCreateForm[0].name })
-        .then(() => {
-          setIsSubmitComplete(true)
-          return;
-        });
+      return;
     }
     const { draftListSelection } = buttonsToHighlight;
     if (draftNameFromTextField) {
@@ -301,7 +316,7 @@ function CreateTeam({
 }
 
 CreateTeam.defaultProps = {
-  createdRequest: null,
+  isRequestCreated: null,
   currentTeam: null,
   errorOnCreateRequest: null,
   match: {},
@@ -309,7 +324,7 @@ CreateTeam.defaultProps = {
 
 CreateTeam.propTypes = {
   createRequest: PropTypes.func.isRequired,
-  createdRequest: PropTypes.objectOf(PropTypes.any),
+  isRequestCreated: PropTypes.objectOf(PropTypes.any),
   createTeam: PropTypes.func.isRequired,
   currentTeam: PropTypes.objectOf(PropTypes.any),
   currentUser: PropTypes.objectOf(PropTypes.any).isRequired,

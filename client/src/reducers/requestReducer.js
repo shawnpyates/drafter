@@ -81,6 +81,9 @@ const requestReducer = (state = initialState, action) => {
         destroyed: true,
       };
     }
+    case 'RESET_REQUEST_STATE': {
+      return { ...initialState };
+    }
 
     default:
       break;
