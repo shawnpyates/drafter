@@ -9,6 +9,15 @@ import { Table } from '../../../components';
 
 const mockStore = configureStore([thunk]);
 
+const store = {
+  request: {
+    destroyed: false,
+  },
+  team: {
+    created: false,
+  },
+};
+
 const defaultProps = {
   requests: [
     {
@@ -24,7 +33,7 @@ const defaultProps = {
   fetchBy: 'draft',
 };
 
-const getWrapper = props => shallow(<Requests {...props} store={mockStore({})} />);
+const getWrapper = props => shallow(<Requests {...props} store={mockStore(store)} />);
 
 describe('<Requests />', () => {
   test('Renders table as child if drafts exist', () => {
