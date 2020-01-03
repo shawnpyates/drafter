@@ -11,6 +11,7 @@ import {
 
 import {
   createDraft,
+  destroyDraft,
   fetchDraftsByOwner,
   fetchDraftsByTeam,
   fetchDraftsByUser,
@@ -24,6 +25,7 @@ import {
   fetchTeamsByUser,
   fetchTeamsByDraft,
   createTeam,
+  destroyTeam,
   fetchOneTeam,
   resetTeamState,
   updateOrder,
@@ -34,6 +36,7 @@ import {
   fetchPlayersByDraft,
   fetchPlayersByTeam,
   createPlayer,
+  destroyPlayer,
   updatePlayer,
   fetchOnePlayer,
   removeCurrentPlayerFromState,
@@ -59,6 +62,7 @@ export {
   removeCurrentUserFromState,
 
   createDraft,
+  destroyDraft,
   fetchDraftsByOwner,
   fetchDraftsByTeam,
   fetchDraftsByUser,
@@ -70,14 +74,16 @@ export {
   fetchTeamsByUser,
   fetchTeamsByDraft,
   createTeam,
+  destroyTeam,
   fetchOneTeam,
   resetTeamState,
   updateOrder,
   updateTeam,
+
   fetchPlayersByDraft,
   fetchPlayersByTeam,
   createPlayer,
-  
+  destroyPlayer,  
   updatePlayer,
   fetchOnePlayer,
   removeCurrentPlayerFromState,

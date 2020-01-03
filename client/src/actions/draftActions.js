@@ -51,6 +51,17 @@ export const createDraft = body => (dispatch) => {
     });
 };
 
+export const destroyDraft = id => (dispatch) => {
+  dispatch({ type: 'DESTROY_DRAFT_PENDING ' });
+  return axios.delete(`/api/drafts/${id}`)
+    .then(() => {
+      dispatch({ type: 'DESTROY_DRAFT_FULFILLED' });
+    })
+    .catch((err) => {
+      dispatch({ type: 'DESTROY_DRAFT_REJECTED', payload: err });
+    });
+};
+
 export const fetchDraftsByOwner = ownerUserId => (dispatch) => {
   dispatch({ type: 'FETCH_DRAFTS_FROM_OWNER_PENDING' });
   axios.get(`/api/owners/${ownerUserId}/drafts`)

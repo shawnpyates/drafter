@@ -74,16 +74,10 @@ function Table({
           </HeaderRow>
           {data.map((entry, i) => (
             <DataLink
-              to={
-                !options
-                && getTextWithInjections(DATA_URL, { type: type.toLowerCase(), uuid: entry.uuid })
-              }
+              to={getTextWithInjections(DATA_URL, { type: type.toLowerCase(), uuid: entry.uuid })}
               key={entry.uuid}
             >
-              <DataRow
-                isEvenNumber={i % 2 === 0}
-                optionsExists={!!options}
-              >
+              <DataRow isEvenNumber={i % 2 === 0}>
                 {columnHeaders
                   .map(columnHeader => columnHeader.type)
                   .map(chType => (

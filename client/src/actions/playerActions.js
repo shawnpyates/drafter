@@ -37,6 +37,17 @@ export const createPlayer = body => (dispatch) => {
     });
 };
 
+export const destroyPlayer = id => (dispatch) => {
+  dispatch({ type: 'DESTROY_PLAYER_PENDING ' });
+  return axios.delete(`/api/players/${id}`)
+    .then(() => {
+      dispatch({ type: 'DESTROY_PLAYER_FULFILLED' });
+    })
+    .catch((err) => {
+      dispatch({ type: 'DESTROY_PLAYER_REJECTED', payload: err });
+    });
+};
+
 export const updatePlayer = ({
   id,
   body,
