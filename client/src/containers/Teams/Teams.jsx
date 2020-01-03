@@ -1,9 +1,12 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { SelectionList, Table } from '../../components';
 
 import { teamsTable as teamsTableTexts } from '../../texts.json';
+
+import { destroyTeam } from '../../actions';
 
 const DISPLAY_TYPES = {
   TABLE: 'table',
@@ -15,6 +18,10 @@ const URL_NAMESPACES = {
   CREATE_TEAMS: '/createTeams',
   UPDATE_ORDER: '/reorderTeams',
 };
+
+const mapDispatchToProps = dispatch => ({
+  destroyTeam: id => dispatch(destroyTeam(id)),
+});
 
 const extractDataForDisplay = teams => (
   teams.map((team) => {
@@ -39,18 +46,20 @@ const extractDataForDisplay = teams => (
   })
 );
 
-const Teams = ({
+function Teams({
   parent,
   displayType,
   match: { url },
   teams,
-}) => {
+  destroyTeam: destroyTeamPropFn,
+}) {
   const {
     type,
     title,
     belongToNoTeams,
     noTeamsEntered,
     columnHeaders,
+    options,
   } = teamsTableTexts;
   const { SHOW, CREATE_TEAMS, UPDATE_ORDER } = URL_NAMESPACES;
   const addNewLink = (
@@ -62,6 +71,12 @@ const Teams = ({
     parent === 'draft'
     && url.replace(SHOW, UPDATE_ORDER)
   );
+
+  const handleDestroy = (ev) => {
+    const { value } = ev.target;
+    destroyTeamPropFn(value);
+  };
+
   return (
     teams
     && (
@@ -76,6 +91,8 @@ const Teams = ({
             emptyDataMessage={parent === 'user' ? belongToNoTeams : noTeamsEntered}
             addNewLink={addNewLink}
             reorderTeamsLink={reorderTeamsLink}
+            options={options}
+            handleOptionClick={handleDestroy}
           />
         )}
         {displayType === DISPLAY_TYPES.SELECTION_LIST
@@ -90,17 +107,18 @@ const Teams = ({
       </div>
     )
   );
-};
+}
 
 Teams.defaultProps = {
   match: {},
 };
 
 Teams.propTypes = {
+  destroyTeam: PropTypes.func.isRequired,
   displayType: PropTypes.string.isRequired,
   parent: PropTypes.string.isRequired,
   match: PropTypes.objectOf(PropTypes.any),
   teams: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
-export default Teams;
+export default connect(null, mapDispatchToProps)(Teams);

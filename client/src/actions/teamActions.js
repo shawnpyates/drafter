@@ -35,6 +35,17 @@ export const createTeam = body => (dispatch) => {
     });
 };
 
+export const destroyTeam = id => (dispatch) => {
+  dispatch({ type: 'DESTROY_TEAM_PENDING ' });
+  return axios.delete(`/api/teams/${id}`)
+    .then(() => {
+      dispatch({ type: 'DESTROY_TEAM_FULFILLED' });
+    })
+    .catch((err) => {
+      dispatch({ type: 'DESTROY_TEAM_REJECTED', payload: err });
+    });
+};
+
 export const fetchOneTeam = id => (dispatch) => {
   dispatch({ type: 'FETCH_ONE_TEAM_PENDING' });
   axios.get(`/api/teams/${id}`)

@@ -34,8 +34,13 @@
       {
         "type": "ownerName",
         "value": "Owner Name"
+      },
+      {
+        "type": "options",
+        "value": ""
       }
-    ]
+    ],
+    "options": ["Delete"]
   },
 
   "dragAndDropTable": {
@@ -169,8 +174,13 @@
       {
         "type": "selectionorder",
         "value": "Selection Order"
+      },
+      {
+        "type": "options",
+        "value": ""
       }
-    ]
+    ],
+    "options": ["Delete"]
   },
 
   "welcomeMessage": "Welcome, <%>firstName</%>!"

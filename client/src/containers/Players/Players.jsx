@@ -6,6 +6,8 @@ import { SelectionList, Table } from '../../components';
 
 import { playersTable as playersTableTexts } from '../../texts.json';
 
+import { destroyPlayer } from '../../actions';
+
 const DISPLAY_TYPES = {
   TABLE: 'table',
   SELECTION_LIST: 'selectionList',
@@ -21,6 +23,10 @@ const {
 } = playersTableTexts;
 
 const mapStateToProps = state => ({ shouldDraftViewBlur: state.draft.shouldDraftViewBlur });
+
+const mapDispatchToProps = dispatch => ({
+  destroyPlayer: id => dispatch(destroyPlayer(id)),
+});
 
 const extractDataForDisplay = players => (
   players.map((player) => {
@@ -47,6 +53,7 @@ function Players({
   displayType,
   assignPlayerToTeam,
   shouldDraftViewBlur,
+  destroyPlayer: destroyPlayerPropFn,
 }) {
   const addNewLink = (
     parent === 'team'
@@ -57,6 +64,12 @@ function Players({
     parent === 'draft'
     && players.filter(player => !player.teamId)
   );
+
+  const handleDestroy = (ev) => {
+    const { value } = ev.target;
+    destroyPlayerPropFn(value);
+  };
+
   return (
     players
     && (
@@ -70,6 +83,8 @@ function Players({
             data={extractDataForDisplay(players)}
             emptyDataMessage={parent === 'team' ? NO_PLAYERS_ON_TEAM : NO_PLAYERS_IN_DRAFT}
             addNewLink={addNewLink}
+            options={options}
+            handleOptionClick={handleDestroy}
           />
         )}
         {displayType === DISPLAY_TYPES.SELECTION_LIST
@@ -98,6 +113,7 @@ Players.defaultProps = {
 
 Players.propTypes = {
   assignPlayerToTeam: PropTypes.func,
+  destroyPlayer: PropTypes.func.isRequired,
   players: PropTypes.arrayOf(PropTypes.object),
   displayType: PropTypes.string,
   parent: PropTypes.string.isRequired,
@@ -106,4 +122,4 @@ Players.propTypes = {
   shouldDraftViewBlur: PropTypes.bool.isRequired,
 };
 
-export default connect(mapStateToProps)(Players);
+export default connect(mapStateToProps, mapDispatchToProps)(Players);
