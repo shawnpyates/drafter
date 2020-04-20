@@ -19,9 +19,9 @@ const TABLE_OPTIONS = {
   REJECT: 'Reject',
 };
 
-const mapStateToProps = (state) => ({
-  isRequestDestroyed: state.request.destroyed,
-  isTeamCreated: state.team.created,
+const mapStateToProps = ({ request, team }) => ({
+  isRequestDestroyed: request.destroyed,
+  isTeamCreated: team.created,
 });
 
 const mapDispatchToProps = dispatch => ({

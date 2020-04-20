@@ -52,7 +52,7 @@ const validateForm = (form) => {
   if (email) {
     return isEmailValid(email) ? { success: true } : { errorMessage: INVALID_EMAIL };
   }
-  
+
   if (Object.values(form).some(value => !value)) {
     return { errorMessage: MISSING_FIELD };
   }
@@ -161,15 +161,19 @@ function UpdateUser({
           <TabList>
             <li>
               <TabListItem
+                onClick={() => {
+                  toggleActiveForm(true);
+                }}
                 isLeft
-                onClick={() => toggleActiveForm(true)}
               >
                 {updateEmailForm.title}
               </TabListItem>
             </li>
             <li>
               <TabListItem
-                onClick={() => toggleActiveForm(false)}
+                onClick={() => {
+                  toggleActiveForm(false);
+                }}
               >
                 {updatePasswordForm.title}
               </TabListItem>

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import uuidv4 from 'uuid';
 
 import { tableGeneral as TABLE_TEXTS } from '../../texts.json';
@@ -12,7 +12,6 @@ import {
   Container,
   DataCell,
   DataFrame,
-  DataLink,
   DataRow,
   EmptyDataMessage,
   HeaderRow,
@@ -38,6 +37,7 @@ function Table({
   options,
   handleOptionClick,
 }) {
+  const history = useHistory();
   return (
     <Container>
       <TableTitleLine>
@@ -73,41 +73,45 @@ function Table({
             ))}
           </HeaderRow>
           {data.map((entry, i) => (
-            <DataLink
-              to={
-                !options
-                && getTextWithInjections(DATA_URL, { type: type.toLowerCase(), uuid: entry.uuid })
-              }
+            <DataRow
+              isEvenNumber={i % 2 === 0}
+              optionsExists={!!options}
               key={entry.uuid}
-            >
-              <DataRow
-                isEvenNumber={i % 2 === 0}
-                optionsExists={!!options}
-              >
-                {columnHeaders
-                  .map(columnHeader => columnHeader.type)
-                  .map(chType => (
-                    <DataCell key={uuidv4()}>
-                      {chType === "options"
-                        ? (
-                          options.map(option => (
-                            <DataLink to="/" key={option}>
-                              <Option
-                                value={entry.uuid}
-                                onClick={handleOptionClick}
-                              >
-                                {option}
-                              </Option>
-                            </DataLink>
-                          ))
-                        )
-                        : entry[chType]
-                      }
-                    </DataCell>
-                  ))
+              onClick={() => {
+                if (!options) {
+                  history.push(
+                    getTextWithInjections(
+                      DATA_URL,
+                      { type: type.toLowerCase(), uuid: entry.uuid },
+                    ),
+                  );
                 }
-              </DataRow>
-            </DataLink>
+              }}
+            >
+              {columnHeaders
+                .map(columnHeader => columnHeader.type)
+                .map(chType => (
+                  <DataCell key={uuidv4()}>
+                    {chType === 'options'
+                      ? (
+                        options.map((option, index) => (
+                          <Option
+                            value={entry.uuid}
+                            onClick={handleOptionClick}
+                            key={option}
+                            totalNum={options.length}
+                            index={index}
+                          >
+                            {option}
+                          </Option>
+                        ))
+                      )
+                      : entry[chType]
+                      }
+                  </DataCell>
+                ))
+                }
+            </DataRow>
           ))}
         </DataFrame>
       )}
@@ -120,6 +124,7 @@ Table.defaultProps = {
   addNewLink: null,
   options: null,
   handleOptionClick: null,
+  reorderTeamsLink: null,
 };
 
 Table.propTypes = {
@@ -129,6 +134,7 @@ Table.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
   emptyDataMessage: PropTypes.string.isRequired,
   addNewLink: PropTypes.string,
+  reorderTeamsLink: PropTypes.string,
   options: PropTypes.arrayOf(PropTypes.string),
   handleOptionClick: PropTypes.func,
 };

@@ -74,15 +74,15 @@ function CreatePlayer({
         name,
         email,
         position,
-      }])
+      }]);
     }
-  }, [currentPlayer])
+  }, [currentPlayer]);
 
   useEffect(() => (
     function cleanup() {
       removeCurrentPlayerFromStatePropFn();
     }
-  ), [])
+  ), []);
 
   const updateFieldValue = ({
     name,
@@ -113,6 +113,7 @@ function CreatePlayer({
     const orgKey = urlTypeNamespace === '/teams/' ? 'teamId' : 'draftId';
     if (validationErrorMessage) {
       setErrorMessage(validationErrorMessage);
+      throw new Error();
     }
     return {
       ...data,
@@ -129,13 +130,17 @@ function CreatePlayer({
 
   const handleSubmit = (ev) => {
     ev.preventDefault();
-    const body = quickCreateForm.map(row => validateAndGetBody(row));
-    if (isInUpdateMode) {
-      updatePlayerPropFn(urlIdParam, removeIdFromRow(quickCreateForm[0]))
-        .then(() => setIsSubmitComplete(true));
-    } else {
-      const bodyWithIdsRemoved = body.map((row) => removeIdFromRow(row));
-      createPlayerPropFn(bodyWithIdsRemoved).then(() => setIsSubmitComplete(true));
+    try {
+      const body = quickCreateForm.map(row => validateAndGetBody(row));
+      if (isInUpdateMode) {
+        updatePlayerPropFn(urlIdParam, removeIdFromRow(quickCreateForm[0]))
+          .then(() => setIsSubmitComplete(true));
+      } else {
+        const bodyWithIdsRemoved = body.map(row => removeIdFromRow(row));
+        createPlayerPropFn(bodyWithIdsRemoved).then(() => setIsSubmitComplete(true));
+      }
+    } catch (e) {
+      // no operation
     }
   };
   const { inputs, titleForCreateNew, titleForUpdate } = playerForm;
@@ -157,7 +162,7 @@ function CreatePlayer({
       )}
       {isSubmitComplete
       && (
-        <Redirect to={url.replace((isInUpdateMode ? '/update' : '/createPlayers'), '/show')}/>
+        <Redirect to={url.replace((isInUpdateMode ? '/update' : '/createPlayers'), '/show')} />
       )}
     </div>
   );

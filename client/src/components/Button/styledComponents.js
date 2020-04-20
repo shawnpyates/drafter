@@ -27,7 +27,7 @@ const ButtonInput = styled.input`
         width: 10%; 
         ${CENTER_ELEMENT_MIXIN}
       `
-      : `margin: 6rem 3rem;`
+      : 'margin: 6rem 3rem;'
   )}
   ${P_TEXT_MIXIN({ color: WHITE })}
 

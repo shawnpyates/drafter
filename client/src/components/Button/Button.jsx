@@ -6,7 +6,7 @@ import { ButtonInput, ButtonContainer } from './styledComponents';
 function Button({
   value,
   clickHandler,
-  shouldPositionCenter = true,
+  shouldPositionCenter,
 }) {
   return (
     <ButtonContainer>
@@ -22,11 +22,13 @@ function Button({
 
 Button.defaultProps = {
   clickHandler: null,
+  shouldPositionCenter: true,
 };
 
 Button.propTypes = {
   clickHandler: PropTypes.func,
   value: PropTypes.string.isRequired,
+  shouldPositionCenter: PropTypes.bool,
 };
 
 export default Button;

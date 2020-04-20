@@ -1,27 +1,23 @@
-const getAllDrafts = (ownedDrafts, teams) => {
-  const draftsToReturn = [...ownedDrafts];
-  teams.forEach((team) => {
-    const { Draft: draftFromTeam } = team;
-    if (!draftsToReturn.some(draft => draft.uuid !== draftFromTeam.uuid)) {
-      draftsToReturn.push(draftFromTeam);
-    }
-  });
-  return draftsToReturn;
-};
+const getAllDrafts = (ownedDrafts, teams) => (
+  teams.reduce((allDrafts, { Draft: draftFromTeam }) => (
+    allDrafts.some(draft => draft.uuid === draftFromTeam.uuid)
+      ? allDrafts
+      : [...allDrafts, draftFromTeam]
+  ), [...ownedDrafts])
+);
 
 const getTextWithInjections = (inputText, injections) => {
   try {
-    let outputText = inputText;
-    Object.keys(injections).forEach((key) => {
-      outputText = outputText.replace(`<%>${key}</%>`, injections[key]);
-    });
-    return outputText;
+    return Object.keys(injections).reduce((outputText, key) => (
+      outputText.replace(`<%>${key}</%>`, injections[key])
+    ), inputText);
   } catch (e) {
     // eslint-disable-next-line no-console
     console.error('[getTextWithInjections] ', e);
     return '';
   }
 };
+
 
 module.exports = {
   getAllDrafts,

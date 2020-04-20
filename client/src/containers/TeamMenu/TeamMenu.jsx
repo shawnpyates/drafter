@@ -8,7 +8,7 @@ import Players from '../Players/Players';
 
 import { team as teamProfileData } from '../../components/ProfileCard/profileCardConstants.json';
 
-import { fetchOneTeam, removeCurrentTeamFromState } from '../../actions';
+import { fetchOneTeam, resetTeamState } from '../../actions';
 
 import { errors as ERROR_TEXTS } from '../../texts.json';
 
@@ -22,9 +22,9 @@ const mapStateToProps = (state) => {
   return { currentTeam, isFetchingTeam, currentUser };
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  fetchOneTeam: (id) => dispatch(fetchOneTeam(id)),
-  removeCurrentTeamFromState: () => dispatch(removeCurrentTeamFromState()),
+const mapDispatchToProps = dispatch => ({
+  fetchOneTeam: id => dispatch(fetchOneTeam(id)),
+  resetTeamState: () => dispatch(resetTeamState()),
 });
 
 function TeamMenu({
@@ -33,9 +33,9 @@ function TeamMenu({
   fetchOneTeam: fetchOneTeamPropFn,
   isFetchingTeam,
   match,
-  removeCurrentTeamFromState: removeCurrentTeamFromStatePropFn,
+  resetTeamState: resetTeamStatePropFn,
 }) {
-  const { params: { id } = {} } = match; 
+  const { params: { id } = {} } = match;
   useEffect(() => {
     if (!currentTeam) {
       fetchOneTeamPropFn(id);
@@ -43,7 +43,7 @@ function TeamMenu({
   }, [currentTeam]);
   useEffect(() => (
     function cleanup() {
-      removeCurrentTeamFromStatePropFn();
+      resetTeamStatePropFn();
     }
   ), []);
 
@@ -96,10 +96,10 @@ TeamMenu.defaultProps = {
 TeamMenu.propTypes = {
   currentTeam: PropTypes.objectOf(PropTypes.any),
   currentUser: PropTypes.objectOf(PropTypes.any).isRequired,
-  fetchOneTeamPropFn: PropTypes.func.isRequired,
+  fetchOneTeam: PropTypes.func.isRequired,
   isFetchingTeam: PropTypes.bool.isRequired,
   match: PropTypes.objectOf(PropTypes.string).isRequired,
-  removeCurrentTeamFromState: PropTypes.func.isRequired,
+  resetTeamState: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TeamMenu);

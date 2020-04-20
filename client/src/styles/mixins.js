@@ -1,3 +1,4 @@
+/* eslint indent: 0 */
 import {
   DARK_BLUE,
   WHITE,

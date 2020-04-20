@@ -38,11 +38,13 @@ import {
   draftInfoTexts,
   draftButtonOpenText as DRAFT_BUTTON_OPEN_TEXT,
 } from '../../texts.json';
+import { setDraftInfoText } from '../../actions/draftActions';
 
 const {
   draftStarting: DRAFT_STARTING,
   draftSelection: DRAFT_SELECTION,
   draftRandomAssignment: DRAFT_RANDOM_ASSIGNMENT,
+  draftCannotStart: DRAFT_CANNOT_START,
 } = draftInfoTexts;
 
 const DRAFT_STATUSES = {
@@ -86,6 +88,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   const { id } = ownProps.match.params;
   return {
     fetchOneDraftPropFn: (message, isRefetch) => dispatch(fetchOneDraft(id, message, isRefetch)),
+    setDraftInfoTextPropFn: message => dispatch(setDraftInfoText({ message })),
     updateDraftPropFn: (body, socket) => dispatch(updateDraft({ id, body, socket })),
     updatePlayerPropFn: args => dispatch(updatePlayer(args)),
     removeCurrentDraftFromState: () => dispatch(removeCurrentDraftFromState()),
@@ -122,16 +125,13 @@ class DraftMenu extends Component {
     const { isSocketStarted } = this.state;
     if (currentDraft && !isFetchingDraft) {
       const now = new Date().toISOString();
-      const {
-        status,
-        timeScheduled,
-      } = currentDraft;
+      const { status, timeScheduled } = currentDraft;
       if (
         status === DRAFT_STATUSES.SCHEDULED
         && timeScheduled < now
         && !draftInfoText
       ) {
-        this.renderOpenButtonForOwner();
+        this.handleScheduledArrival(currentDraft);
       }
       if (!isSocketStarted) {
         this.listenForSocketEvents(socket);
@@ -143,6 +143,19 @@ class DraftMenu extends Component {
 
   componentWillUnmount() {
     this.props.removeCurrentDraftFromState();
+  }
+
+  handleScheduledArrival = ({ Teams: teams, Players: players }) => {
+    const { setDraftInfoTextPropFn } = this.props;
+    if (teams && !teams.length) {
+      setDraftInfoTextPropFn(getTextWithInjections(DRAFT_CANNOT_START, { resourceName: 'teams' }));
+    } else if (players && !players.length) {
+      setDraftInfoTextPropFn(
+        getTextWithInjections(DRAFT_CANNOT_START, { resourceName: 'players' }),
+      );
+    } else {
+      this.renderOpenButtonForOwner();
+    }
   }
 
 
@@ -339,7 +352,7 @@ class DraftMenu extends Component {
                   </InfoText>
                 )}
               </InfoContainer>
-              {parsedTimeChange
+              {(parsedTimeChange && players.find(player => !player.teamId))
               && (
                 <Timer
                   expiryTime={parsedTimeChange}
@@ -392,6 +405,7 @@ DraftMenu.propTypes = {
   isRefetchOfDraft: PropTypes.bool,
   match: PropTypes.objectOf(PropTypes.any).isRequired,
   removeCurrentDraftFromState: PropTypes.func.isRequired,
+  setDraftInfoTextPropFn: PropTypes.func.isRequired,
   shouldDraftViewBlur: PropTypes.bool.isRequired,
   socket: PropTypes.objectOf(PropTypes.any).isRequired,
   updateDraftPropFn: PropTypes.func.isRequired,

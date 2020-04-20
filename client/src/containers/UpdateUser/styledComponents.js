@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { styleVars } from '../../styles';
 
 const {
-  DARK_BLUE,
+  DARK_GRAY,
   SKY_BLUE,
   WHITE,
   LARGE_FONT_SIZE,
@@ -12,27 +12,29 @@ const {
 const TabList = styled.ul`
   list-style: none;
   padding: 0;
-  height: 5rem;
   margin-top: 3rem;
+  height: 10rem;
 `;
 
-const TabListItem = styled.div`
+const TabListItem = styled.button`
   position: absolute;
-  ${props => (props.isLeft ? 'left' : 'right')}: 25%;
+  ${props => (props.isLeft ? 'left' : 'right')}: 35%;
+  padding: 15px;
   text-decoration: none;
+  color: #1AB188;
   transition: 0.5s ease;
-  background: ${WHITE};
+  background: ${DARK_GRAY};
+  color: ${WHITE};
   font-size: ${LARGE_FONT_SIZE};
-  width: 25%;
+  width: 10%;
   text-align: center;
-  border: 1px solid ${DARK_BLUE};
-  text-transform: uppercase;
   cursor: pointer;
   &:hover {
     background: ${SKY_BLUE};
     color: ${WHITE};
   }
 `;
+
 
 module.exports = {
   TabList,

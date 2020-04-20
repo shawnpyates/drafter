@@ -333,7 +333,6 @@ CreateTeam.propTypes = {
   fetchOneTeam: PropTypes.func.isRequired,
   isFetchingTeam: PropTypes.bool.isRequired,
   match: PropTypes.objectOf(PropTypes.any),
-  removeCurrentTeamFromState: PropTypes.func.isRequired,
   updateTeam: PropTypes.func.isRequired,
 };
 

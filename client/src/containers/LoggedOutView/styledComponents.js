@@ -2,25 +2,22 @@ import styled from 'styled-components';
 
 import { mixins, styleVars } from '../../styles';
 
-const { MENU_TEXT_MIXIN, CENTER_ELEMENT_MIXIN } = mixins;
+const { MENU_TEXT_MIXIN } = mixins;
 const {
   DARK_BLUE,
   SKY_BLUE,
   WHITE,
   LARGE_FONT_SIZE,
+  DARK_GRAY,
 } = styleVars;
 
 const FormContainer = styled.div`
-  background: ${DARK_BLUE};
   padding: 4rem;
   margin: 4rem auto;
   border-radius: 4px;
-  box-shadow: 0 4px 10px 4px rgba(19, 35, 47, 0.3);
   height: 65rem;
-  width: 40%;
 
   ${MENU_TEXT_MIXIN({ color: DARK_BLUE })}
-  ${CENTER_ELEMENT_MIXIN}
 `;
 
 const TabList = styled.ul`
@@ -28,27 +25,24 @@ const TabList = styled.ul`
   padding: 0;
 `;
 
-const TabListItem = styled.div`
+const TabListItem = styled.button`
   position: absolute;
-  ${props => (props.isLeft ? 'left' : 'right')}: 25%;
+  ${props => (props.isLeft ? 'left' : 'right')}: 35%;
+  padding: 15px;
   text-decoration: none;
   color: #1AB188;
   transition: 0.5s ease;
-  background: ${WHITE};
-  color: #CCC;
+  background: ${DARK_GRAY};
+  color: ${WHITE};
   font-size: ${LARGE_FONT_SIZE};
-  width: 25%;
+  width: 10%;
   text-align: center;
-  border: 1px solid ${DARK_BLUE};
-  text-transform: uppercase;
   cursor: pointer;
   &:hover {
     background: ${SKY_BLUE};
     color: ${WHITE};
   }
 `;
-
-const TabListAnchor = styled.a``;
 
 const TabListContainer = styled.div`
   height: 15%;
@@ -57,7 +51,6 @@ const TabListContainer = styled.div`
 module.exports = {
   FormContainer,
   TabList,
-  TabListAnchor,
   TabListItem,
   TabListContainer,
 };

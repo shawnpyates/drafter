@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 
 import { mixins, styleVars } from '../../styles';
 
@@ -84,19 +83,9 @@ const ColumnHeader = styled.div`
   width: ${props => `${100 / props.columnHeadersLength}%`};
 `;
 
-const DataLink = styled(Link)`
-  display: contents;
-  text-decoration: none;
-  cursor: inherit;
-  color: ${DARK_BLUE};
-
-  &:visited {
-    color: ${DARK_BLUE};
-  }
-`;
-
 const DataCell = styled.div`
   display: table-cell;
+  position: relative;
 `;
 
 const Option = styled.button`
@@ -105,6 +94,10 @@ const Option = styled.button`
   margin: auto 1rem;
   font-size: 0.5rem;
   cursor: pointer;
+  position: absolute;
+  top: 50%;
+  left: ${props => `${((100 / (props.totalNum + 1)) * (props.index + 1))}%`};
+  transform: translate(-50%, -50%);
 `;
 
 module.exports = {
@@ -112,7 +105,6 @@ module.exports = {
   Container,
   DataCell,
   DataFrame,
-  DataLink,
   DataRow,
   EmptyDataMessage,
   HeaderRow,

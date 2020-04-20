@@ -97,13 +97,12 @@ function Register({
     createUserPropFn(body);
   };
 
-  const updateFormValue = (name, value) => {
-    setForm({ ...form, [name]: value });
+  const updateFormValue = ({ name, value }) => {
+    setForm(prev => ({ ...prev, [name]: value }));
   };
 
   return (
     <Form
-      isFormWide
       updateFieldValue={updateFormValue}
       handleSubmit={handleSubmit}
       title={registerForm.title}

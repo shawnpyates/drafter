@@ -12,7 +12,8 @@
     "draftStarting": "Draft is now starting!",
     "draftSelection": "<%>teamName</%> selected <%>playerName</%>.",
     "draftRandomAssignment": "<%>teamName</%> failed to select in time. Player randomly assigned: <%>playerName</%>",
-    "draftTeamOnClock": "Now on the clock: <%>teamName</%>"
+    "draftTeamOnClock": "Now on the clock: <%>teamName</%>",
+    "draftCannotStart": "Your scheduled draft time has arrived, but the draft cannot start since it currently has no <%>resourceName</%>."
   },
 
   "draftNotificationText": "<%>draftName</%> has been started by its owner. Click here to go there!",
@@ -138,6 +139,10 @@
       {
         "type": "ownerEmail",
         "value": "Owner Email"
+      },
+      {
+        "type": "options",
+        "value": ""
       }
     ],
     "options": ["Accept", "Reject"]

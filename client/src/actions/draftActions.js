@@ -17,20 +17,33 @@ const getTeamIsOnClockText = (draft) => {
   return getTextWithInjections(DRAFT_TEAM_ON_CLOCK, { teamName: teamOnClock.name });
 };
 
-const setDraftInfoText = ({
-  dispatch,
+const getSecondaryMessage = (draft) => {
+  switch (draft.status) {
+    case 'closed':
+      return DRAFT_CLOSED;
+    case 'open':
+      return getTeamIsOnClockText(draft);
+    default:
+      return null;
+  }
+};
+
+export const setDraftInfoText = ({
   draft,
   message,
-}) => {
-  const secondaryMessage = draft.status === 'closed' ? DRAFT_CLOSED : getTeamIsOnClockText(draft);
+  shouldDraftViewBlur,
+}) => (dispatch) => {
+  const secondaryMessage = draft && getSecondaryMessage(draft);
   if (message) {
-    dispatch({ type: 'SET_DRAFT_INFO_TEXT', payload: { message, shouldDraftViewBlur: true } });
-    setTimeout(() => {
-      dispatch({
-        type: 'SET_DRAFT_INFO_TEXT',
-        payload: { message: secondaryMessage, shouldDraftViewBlur: false },
-      });
-    }, DISPLAY_INITIAL_TEXT_DURATION);
+    dispatch({ type: 'SET_DRAFT_INFO_TEXT', payload: { message, shouldDraftViewBlur } });
+    if (secondaryMessage) {
+      setTimeout(() => {
+        dispatch({
+          type: 'SET_DRAFT_INFO_TEXT',
+          payload: { message: secondaryMessage, shouldDraftViewBlur: false },
+        });
+      }, DISPLAY_INITIAL_TEXT_DURATION);
+    }
   } else {
     dispatch({
       type: 'SET_DRAFT_INFO_TEXT',
@@ -96,12 +109,11 @@ export const fetchOneDraft = (id, message, isRefetch) => (dispatch) => {
       const { status } = draft;
       dispatch({ type: 'FETCH_ONE_DRAFT_FULFILLED', payload: draft });
       if (status === 'open' || status === 'closed') {
-        setDraftInfoText({
-          dispatch,
-          body: null,
+        dispatch(setDraftInfoText({
           draft,
           message,
-        });
+          shouldDraftViewBlur: true,
+        }));
       }
     })
     .catch((err) => {
@@ -114,8 +126,8 @@ export const updateDraft = ({ id, body, socket }) => (dispatch) => {
   return axios.put(`/api/drafts/${id}`, body)
     .then((response) => {
       const { draft } = response.data;
-      if (socket && body.status === 'open') {
-        const { status } = body;
+      const { status } = body;
+      if (socket && status === 'open') {
         if (status === 'open') {
           socket.emit('draftStarted', { draftId: draft.uuid, draftName: draft.name });
         } else if (status === 'closed') {

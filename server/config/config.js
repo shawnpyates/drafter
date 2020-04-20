@@ -11,10 +11,10 @@ module.exports = {
     dialect: 'postgres',
   },
   production: {
-    username: 'root',
-    password: null,
-    database: 'database_production',
-    host: '127.0.0.1',
+    username: 'shawnyates',
+    password: 'postgres',
+    database: 'drafter',
+    hostname: 'localhost',
     dialect: 'postgres',
   },
 };

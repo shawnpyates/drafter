@@ -17,7 +17,7 @@ const InfoWrapper = styled.div`
   background: ${WHITE};
   margin: 2rem auto;
   padding: 3.5rem;
-  border-radius: 2px;
+  border-radius: 10px;
   border: 1px solid ${DARK_BLUE};
   width: ${props => (props.shouldAdjustWidth ? '30%' : '50%')};
 `;

@@ -8,7 +8,6 @@ import { register as registerForm, login as loginForm } from '../../formContent.
 import {
   FormContainer,
   TabList,
-  TabListAnchor,
   TabListItem,
   TabListContainer,
 } from './styledComponents';
@@ -16,24 +15,27 @@ import {
 function LoggedOutView() {
   const [isLoginActiveComponent, toggleActiveComponent] = useState(true);
 
-  const getAnchor = (text, isLoginButton) => (
-    <TabListAnchor onClick={() => toggleActiveComponent(isLoginButton)}>
-      {text}
-    </TabListAnchor>
-  );
-
   return (
     <FormContainer>
       <TabListContainer>
         <TabList>
           <li>
-            <TabListItem isLeft>
-              {getAnchor(registerForm.title, false)}
+            <TabListItem
+              onClick={() => {
+                toggleActiveComponent(false);
+              }}
+              isLeft
+            >
+              {registerForm.title}
             </TabListItem>
           </li>
           <li>
-            <TabListItem isLeft={false}>
-              {getAnchor(loginForm.title, true)}
+            <TabListItem
+              onClick={() => {
+                toggleActiveComponent(true);
+              }}
+            >
+              {loginForm.title}
             </TabListItem>
           </li>
         </TabList>

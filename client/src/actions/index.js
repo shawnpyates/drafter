@@ -77,11 +77,11 @@ export {
   fetchPlayersByDraft,
   fetchPlayersByTeam,
   createPlayer,
-  
+
   updatePlayer,
   fetchOnePlayer,
   removeCurrentPlayerFromState,
-  
+
   fetchRequestsByDraft,
   fetchRequestsByRequester,
   fetchRequestsByDraftOwner,

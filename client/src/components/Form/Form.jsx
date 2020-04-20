@@ -66,7 +66,7 @@ function Form({
         document.removeEventListener('mousedown', handleClickOutside);
       };
     });
-  }
+  };
   const calendarRef = useRef(null);
   useOutsideClickHandler(calendarRef);
   const getInputs = inputs => (
@@ -176,18 +176,17 @@ function Form({
                         minDate={new Date()}
                       />
                     </div>
-                    )
-                    : (
-                      
-                      <TimePicker
-                        value={
-                          calendarDate
-                          ? dayjs(calendarDate).format('MMM D, YYYY')
-                          : 'Set Date'
-                        }
-                        onClick={() => toggleCalendarFocus(true)}
-                        readOnly
-                      />
+                  )
+                  : (
+                    <TimePicker
+                      value={
+                            calendarDate
+                              ? dayjs(calendarDate).format('MMM D, YYYY')
+                              : 'Set Date'
+                          }
+                      onClick={() => toggleCalendarFocus(true)}
+                      readOnly
+                    />
                   )
 
                 }

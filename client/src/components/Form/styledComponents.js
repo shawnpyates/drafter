@@ -13,21 +13,20 @@ const {
   LIGHT_GRAY,
   WHITE,
   EXTRA_SMALL_FONT_SIZE,
+  EXTRA_LARGE_FONT_SIZE,
 } = styleVars;
 
 const {
   P_TEXT_MIXIN,
-  MENU_TEXT_MIXIN,
   PICKER_WRAPPER_MIXIN,
   PICKER_INPUT_MIXIN,
   CENTER_ELEMENT_MIXIN,
 } = mixins;
 
 const FieldWrapper = styled.form`
-  height: ${props => (props.hasContainer ? '70%' : 'inherit')};
   background: ${WHITE};
   border-radius: 3px;
-  box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+
   padding: 3rem;
   width: ${props => (props.isWide ? WIDE_FORM : NARROW_FORM)};
   text-align: center;
@@ -35,11 +34,11 @@ const FieldWrapper = styled.form`
   ${CENTER_ELEMENT_MIXIN}
 `;
 
-const Title = styled.h2`
+const Title = styled.h1`
   text-transform: uppercase;
-  margin-bottom: 20px;
-
-  ${MENU_TEXT_MIXIN({ color: DARK_BLUE })}
+  font-size: ${EXTRA_LARGE_FONT_SIZE};
+  margin-bottom: 30px;
+  color: ${DARK_BLUE};
 `;
 
 const TextFieldContainer = styled.div`
@@ -54,7 +53,6 @@ const FieldTitle = styled.p`
 
 const TextField = styled.input`
   padding: 1.6rem;
-  border: 1px solid ${LIGHT_GRAY};
   border-radius: 3px;
   margin-bottom: 1rem;
   width: ${props => (props.isWide ? WIDE_TEXT_FIELD : NARROW_TEXT_FIELD)};
@@ -71,7 +69,6 @@ const SelectTitle = styled.p`
 
 const Select = styled.select`
   padding: 1.5rem;
-  border: 1px solid ${LIGHT_GRAY};
   border-radius: 3px;
   margin: 1rem auto;
   height: 3.5rem;
@@ -124,7 +121,6 @@ const TimePicker = styled.input`
   width: 100%;
   height: 2.6rem;
   border-radius: 3px;
-  border: 1px solid ${LIGHT_GRAY};
 
   ${PICKER_INPUT_MIXIN}
 `;
@@ -145,7 +141,6 @@ const QuickCreateInputContainer = styled.div`
 
 const QuickCreateTextField = styled.input`
   padding: 1.6rem;
-  border: 1px solid ${LIGHT_GRAY};
   border-radius: 3px;
   margin-bottom: 1rem;
   width: 80%;

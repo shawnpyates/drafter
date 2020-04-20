@@ -57,7 +57,6 @@ function Login({
 
   return (
     <Form
-      isFormWide
       updateFieldValue={updateCredentialValue}
       handleSubmit={handleSubmit}
       title={loginForm.title}
