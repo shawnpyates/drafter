@@ -23,7 +23,7 @@ const TimerRow = styled.div`
 
 const TimerContainer = styled.div`
   text-align: center;
-  width: 10%;
+  min-width: 10%;
   padding: 3rem;
   border-radius: 2px;
   box-shadow: 0px 3px 13px 0px rgba(0, 0, 0, 0.25);

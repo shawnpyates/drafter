@@ -20,6 +20,7 @@ const InfoWrapper = styled.div`
   border-radius: 10px;
   border: 1px solid ${DARK_BLUE};
   width: ${props => (props.shouldAdjustWidth ? '30%' : '50%')};
+  min-width: 50rem;
 `;
 
 const InfoTitle = styled.h4`

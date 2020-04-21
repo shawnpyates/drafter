@@ -59,9 +59,10 @@ module.exports = {
     margin: 2rem auto;
     text-align: center;
     font-size: 1.5rem;
-    padding: 1rem 0.5rem;
-    width: 60%;
+    padding: 1rem;
+    width: 65%;
     display: inline-block;
     position: relative;
+    word-break: break-word;
   `,
 };

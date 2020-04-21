@@ -6,6 +6,7 @@ import {
   Container,
   ListTitle,
   List,
+  ItemBlock,
   ListItem,
   SelectButton,
 } from './styledComponents';
@@ -63,25 +64,27 @@ function SelectionList({
           if (type === 'Players') {
             const isCurrentUserTurn = isCurrentUserSelecting(currentDraft, currentUser);
             return (
-              <div key={uuid}>
-                <ListItem
-                  isFocussed={isFocussed}
-                  type={type}
-                  value={uuid}
-                  shouldDraftViewBlur={shouldDraftViewBlur}
-                  isCurrentUserTurn={isCurrentUserTurn}
-                  onClick={() => setPlayerFocus(uuid)}
-                >
-                  {name}
-                  {position && ` (${positions[position]})`}
-                </ListItem>
-                {(isFocussed && isCurrentUserTurn)
-                && (
-                  <SelectButton onClick={() => handleSelection(uuid)}>
-                    Select
-                  </SelectButton>
-                )}
-              </div>
+              <ListItem key={uuid}>
+                <div>
+                  {(isFocussed && isCurrentUserTurn)
+                  && (
+                    <SelectButton onClick={() => handleSelection(uuid)}>
+                      Select
+                    </SelectButton>
+                  )}
+                  <ItemBlock
+                    isFocussed={isFocussed}
+                    type={type}
+                    value={uuid}
+                    shouldDraftViewBlur={shouldDraftViewBlur}
+                    isCurrentUserTurn={isCurrentUserTurn}
+                    onClick={() => setPlayerFocus(uuid)}
+                  >
+                    {name}
+                    {position && ` (${positions[position]})`}
+                  </ItemBlock>
+                </div>
+              </ListItem>
             );
           }
           return (

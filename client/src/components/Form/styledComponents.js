@@ -30,8 +30,10 @@ const FieldWrapper = styled.form`
   padding: 3rem;
   width: ${props => (props.isWide ? WIDE_FORM : NARROW_FORM)};
   text-align: center;
+  min-width: 30rem;
 
   ${CENTER_ELEMENT_MIXIN}
+
 `;
 
 const Title = styled.h1`
@@ -39,6 +41,7 @@ const Title = styled.h1`
   font-size: ${EXTRA_LARGE_FONT_SIZE};
   margin-bottom: 30px;
   color: ${DARK_BLUE};
+  font-weight: 500;
 `;
 
 const TextFieldContainer = styled.div`
@@ -97,7 +100,7 @@ const SubmitButton = styled.input`
   background-color: ${DARK_BLUE};
   border-radius: 3px;
   margin: 6rem auto 1rem;
-  width: 30%;
+  min-width: 30%;
   cursor: pointer;
 
   ${P_TEXT_MIXIN({ color: WHITE })}

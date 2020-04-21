@@ -13,7 +13,7 @@ const {
 
 const PlayerMenuContainer = styled.div`
   width: 60%;
-  min-width: 65rem;
+  min-width: 55rem;
 
   ${MENU_TEXT_MIXIN({ color: DARK_BLUE })}
   ${CENTER_ELEMENT_MIXIN}

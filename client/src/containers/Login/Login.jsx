@@ -62,6 +62,7 @@ function Login({
       title={loginForm.title}
       formInputs={loginForm.inputs}
       errorMessage={errorMessage}
+      isFormWide
       hasContainer
     />
   );

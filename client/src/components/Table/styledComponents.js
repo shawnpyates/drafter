@@ -22,6 +22,7 @@ const getRowColorOnHover = (props) => {
 const Container = styled.div`
   margin: 5rem auto;
   width: 100%;
+  min-width: 50rem;
 `;
 
 const TableButton = styled.div`

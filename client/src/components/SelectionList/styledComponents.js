@@ -12,9 +12,13 @@ const { DRAFT_SELECTION_LIST_ITEM_MIXIN } = mixins;
 
 const Container = styled.div`
   position: absolute;
-  ${props => (props.isLeft ? 'left' : 'right')}: 20%;
+  ${props => (props.isLeft ? 'left' : 'right')}: 35%;
+  transform: translateX(${props => (props.isLeft ? '-' : '')}50%);
   width: 20%;
+  min-width: 30rem;
   margin-top: 5rem;
+
+  text-align: ${props => (props.isLeft ? 'left' : 'right')};
 `;
 
 const ListTitle = styled.h1`
@@ -27,6 +31,9 @@ const List = styled.ul`
 `;
 
 const ListItem = styled.li`
+`;
+
+const ItemBlock = styled.div`
   cursor: ${props => (
     (props.type === 'Players' && !props.shouldDraftViewBlur && props.isCurrentUserTurn)
       ? 'pointer'
@@ -39,14 +46,14 @@ const ListItem = styled.li`
 const SelectButton = styled.button`
   background: ${DARK_BLUE};
   height: 2.5rem;
-  width: 8.5rem;
+  width: 6rem;
   border-radius: 2rem;
-  margin-left: 2rem;
+  margin-right: 0.5rem;
   text-align: center;
   font-weight: 500;
   color: ${WHITE};
   cursor: pointer;
-
+  
   &:hover {
     color: ${SKY_BLUE};
     text-decoration: none;
@@ -57,6 +64,7 @@ module.exports = {
   Container,
   ListTitle,
   List,
+  ItemBlock,
   ListItem,
   SelectButton,
 };

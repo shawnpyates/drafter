@@ -108,6 +108,7 @@ function Register({
       title={registerForm.title}
       formInputs={formInputs}
       errorMessage={errorMessage}
+      isFormWide
       hasContainer
     />
   );

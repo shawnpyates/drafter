@@ -24,7 +24,7 @@ const ButtonInput = styled.input`
     props.isCenter
       ? `
         margin: 6rem auto 1rem;
-        width: 10%; 
+        min-width: 10%; 
         ${CENTER_ELEMENT_MIXIN}
       `
       : 'margin: 6rem 3rem;'
