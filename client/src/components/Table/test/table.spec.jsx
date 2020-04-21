@@ -18,6 +18,7 @@ const draftsData = drafts.map(draft => ({
 /* eslint react/prop-types: [0] */
 jest.mock('react-router-dom', () => ({
   Link: props => <div>{props.children}</div>,
+  useHistory: () => {},
 }));
 
 const props = {

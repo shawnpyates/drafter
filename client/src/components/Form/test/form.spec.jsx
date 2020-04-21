@@ -19,11 +19,11 @@ describe('<Form />', () => {
     const expected = '<styled.form />';
     expect(received).toEqual(expected);
   });
-  test('Title rendered as h2', () => {
+  test('Title rendered as h1', () => {
     const titleElement = wrapper.childAt(0);
     const elementType = titleElement.text();
     const elementHtml = titleElement.html();
-    expect(elementType).toEqual('<styled.h2 />');
+    expect(elementType).toEqual('<styled.h1 />');
     expect(elementHtml).toContain(titleForCreateNew);
   });
   test('Text type renders text input', () => {
