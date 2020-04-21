@@ -10,9 +10,9 @@ import Register from '../../Register/Register';
 const wrapper = shallow(<LoggedOutView />);
 
 describe('<LoggedOutView />', () => {
-  test('should render a styled div component', () => {
+  test('should render a Welcome componnent with styled div component', () => {
     const received = wrapper.text();
-    const expected = '<styled.div />';
+    const expected = '<Welcome /><styled.div />';
     expect(received).toEqual(expected);
   });
   test('should render Login component as child by default', () => {
