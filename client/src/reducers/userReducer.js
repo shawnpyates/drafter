@@ -3,6 +3,8 @@ const initialState = {
   created: false,
   authenticating: false,
   authenticated: false,
+  loggingOut: false,
+  loggedOut: false,
   fetching: false,
   fetched: false,
   updating: false,
@@ -14,6 +16,7 @@ const initialState = {
   errorOnFetchCurrentUser: null,
   errorOnFetchUsersFromTeam: null,
   errorOnFetchUsersFromDraft: null,
+  errorOnLogoutUser: null,
   errorOnUpdateCurrentUser: null,
 };
 
@@ -40,6 +43,17 @@ const userReducer = (state = initialState, action) => {
         authenticating: false,
         authenticated: true,
         currentUser: action.payload,
+      };
+    case 'LOGOUT_USER_PENDING':
+      return { ...state, loggingOut: true };
+    case 'LOGOUT_USER_REJECTED':
+      return { ...state, loggingOut: false, errorOnLogoutUser: action.payload };
+    case 'LOGOUT_USER_FULFILLED':
+      return {
+        ...state,
+        loggingOut: false,
+        loggedOut: true,
+        currentUser: null,
       };
     case 'FETCH_CURRENT_USER_PENDING':
       return { ...state, fetching: true };

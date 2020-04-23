@@ -14,9 +14,11 @@ module.exports = (app) => {
   });
 
   // users
+  app.get('/api/users/current', users.fetchCurrent);
   app.get('/api/users/:id', users.fetchOne);
   app.post('/api/users', users.create);
   app.post('/api/users/auth', users.authenticate);
+  app.post('/api/users/logout', users.logout);
   app.put('/api/users/:id', users.update);
   app.delete('/api/users/:id', users.destroy);
 

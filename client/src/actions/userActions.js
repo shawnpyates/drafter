@@ -1,10 +1,7 @@
 import axios from 'axios';
-import jwt from 'jsonwebtoken';
 import ioClient from 'socket.io-client';
 
 import { getAllDrafts } from '../helpers';
-
-const { localStorage } = window;
 
 const { SERVER_URL } = process.env;
 
@@ -18,27 +15,18 @@ const createSocketConnection = (dispatch, user) => {
   dispatch({ type: 'WRITE_SOCKET_CONNECTION_TO_STATE', payload: socket });
 };
 
-export const fetchCurrentUser = () => {
-  const token = localStorage.getItem('drafterUserToken');
-  return (dispatch) => {
-    dispatch({ type: 'FETCH_CURRENT_USER_PENDING' });
-    jwt.verify(token, process.env.JWT_SECRET, (jwtVerifyingError, decoded) => {
-      if (jwtVerifyingError) {
-        dispatch({ type: 'FETCH_CURRENT_USER_REJECTED', payload: jwtVerifyingError });
-      } else {
-        const { userId } = decoded;
-        axios.get(`/api/users/${userId}`)
-          .then((response) => {
-            const { user } = response.data;
-            createSocketConnection(dispatch, user);
-            dispatch({ type: 'FETCH_CURRENT_USER_FULFILLED', payload: user });
-          })
-          .catch((dbFetchingError) => {
-            dispatch({ type: 'FETCH_CURRENT_USER_REJECTED', payload: dbFetchingError });
-          });
-      }
+export const fetchCurrentUser = () => (dispatch) => {
+  dispatch({ type: 'FETCH_CURRENT_USER_PENDING' });
+
+  axios.get('/api/users/current', { withCredentials: true })
+    .then((response) => {
+      const { user } = response.data;
+      createSocketConnection(dispatch, user);
+      dispatch({ type: 'FETCH_CURRENT_USER_FULFILLED', payload: user });
+    })
+    .catch((dbFetchingError) => {
+      dispatch({ type: 'FETCH_CURRENT_USER_REJECTED', payload: dbFetchingError });
     });
-  };
 };
 
 export const authenticateUser = body => (dispatch) => {
@@ -46,13 +34,23 @@ export const authenticateUser = body => (dispatch) => {
   const { email, password } = body;
   return axios.post('/api/users/auth', { email, password })
     .then((response) => {
-      const { token, user } = response.data;
-      localStorage.setItem('drafterUserToken', token.token);
+      const { user } = response.data;
       createSocketConnection(dispatch, user);
       dispatch({ type: 'AUTHENTICATE_USER_FULFILLED', payload: user });
     })
     .catch((err) => {
       dispatch({ type: 'AUTHENTICATE_USER_REJECTED', payload: err });
+    });
+};
+
+export const logoutUser = () => (dispatch) => {
+  dispatch({ type: 'LOGOUT_USER_PENDING' });
+  return axios.post('/api/users/logout')
+    .then(() => {
+      dispatch({ type: 'LOGOUT_USER_FULFILLED' });
+    })
+    .catch(() => {
+      dispatch({ type: 'LOGOUT_USER_REJECTED' });
     });
 };
 
@@ -95,8 +93,7 @@ export const createUser = body => (dispatch) => {
     password,
   })
     .then((response) => {
-      const { token, user } = response.data;
-      localStorage.setItem('drafterUserToken', token.token);
+      const { user } = response.data;
       createSocketConnection(dispatch, user);
       dispatch({ type: 'CREATE_USER_FULFILLED', payload: user });
     })

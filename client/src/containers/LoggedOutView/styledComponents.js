@@ -7,7 +7,7 @@ const {
   DARK_BLUE,
   SKY_BLUE,
   WHITE,
-  LARGE_FONT_SIZE,
+  SMALL_FONT_SIZE,
   DARK_GRAY,
 } = styleVars;
 
@@ -28,7 +28,7 @@ const TabList = styled.ul`
 `;
 
 const ButtonContainer = styled.div`
-  height: 5rem;
+  height: 2rem;
   width: 15rem;
   display: inline;
 
@@ -41,14 +41,14 @@ const TabListItem = styled.button`
   position: absolute;
   ${props => (props.isLeft ? 'left' : 'right')}: 30%;
   transform: translateX(${props => (props.isLeft ? '-' : '')}50%);
-  padding: 12px;
+  padding: 5px;
   min-width: 10rem;
   text-decoration: none;
   color: #1AB188;
   transition: 0.5s ease;
   background: ${DARK_GRAY};
   color: ${WHITE};
-  font-size: ${LARGE_FONT_SIZE};
+  font-size: ${SMALL_FONT_SIZE};
   text-align: center;
   cursor: pointer;
   &:hover {
@@ -60,6 +60,7 @@ const TabListItem = styled.button`
     display: block;
     left: 50%;
     transform: translateX(-50%);
+    ${props => (props.isLeft ? '' : 'bottom: 90%')};
   }
 `;
 

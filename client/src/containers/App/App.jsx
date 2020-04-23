@@ -36,8 +36,7 @@ function App({
   removeCurrentUserFromState: removeCurrentUserFromStatePropFn,
 }) {
   useEffect(() => {
-    const userToken = localStorage.getItem('drafterUserToken');
-    if (!currentUser && userToken) {
+    if (!currentUser) {
       fetchCurrentUserPropFn();
     }
   }, []);

@@ -15,17 +15,22 @@ const moveSelectionToNextTeam = async (draft, playerId) => {
     });
     return null;
   }
-  const indexOfSelectingTeam = (
-    teams.indexOf(teams.find(team => team.uuid === currentlySelectingTeamId))
+  const orderOfSelectingTeam = (
+    teams.find(team => team.uuid === currentlySelectingTeamId).selectionorder
   );
-  const indexOfNextTeam = (
-    indexOfSelectingTeam === teams.length - 1
-      ? 0
-      : indexOfSelectingTeam + 1
+
+  const nextTeam = (
+    teams.find(team =>
+      team.selectionorder === (
+        orderOfSelectingTeam === teams.length
+          ? 1
+          : orderOfSelectingTeam + 1
+      ))
   );
+
   const selectingTeamChangeTime = getSelectingTeamTimeChange();
   await draft.update({
-    currentlySelectingTeamId: teams[indexOfNextTeam].uuid,
+    currentlySelectingTeamId: nextTeam.uuid,
     selectingTeamChangeTime,
   });
   return null;
@@ -147,3 +152,19 @@ module.exports = {
     }
   },
 };
+
+/*
+Name	Draft	Owner	Selection Order
+Griffins	Vancouver Rec League Draft	Shawn Yates	1
+Penguins	Vancouver Rec League Draft	Shawn Yates	2
+Dragons	Vancouver Rec League Draft	Shawn Yates	3
+Owls	Vancouver Rec League Draft	Shawn Yates	4
+Dolphins	Vancouver Rec League Draft	Shawn Yates	5
+Ghosts	Vancouver Rec League Draft	Shawn Yates	6
+Sharks	Vancouver Rec League Draft	Shawn Yates	7
+Bears	Vancouver Rec League Draft	Shawn Yates	8
+Warlocks	Vancouver Rec League Draft	Shawn Yates	9
+Wolves	Vancouver Rec League Draft	Shawn Yates	10
+Ogres	Vancouver Rec League Draft	Shawn Yates	11
+Tigers	Vancouver Rec League Draft	Shawn Yates	12
+*/

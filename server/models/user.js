@@ -22,6 +22,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    token: {
+      type: DataTypes.UUID,
+    },
   });
   User.associate = (models) => {
     User.belongsToMany(models.Draft, {

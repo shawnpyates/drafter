@@ -32,7 +32,7 @@ const assignOrderToTeams = (teams, teamsInDraftLength) => {
   return teams.map((team) => {
     selectionorder += 1;
     return { ...team, selectionorder };
-  })
+  });
 };
 
 

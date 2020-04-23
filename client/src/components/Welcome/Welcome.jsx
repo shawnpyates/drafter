@@ -35,7 +35,7 @@ function Welcome() {
       </Subtitle>
       <Subtitle>Sign up to get started!</Subtitle>
       <StyledImage
-        src="https://res.cloudinary.com/dcupoxygs/image/upload/v1587492145/draft-machine/draftmachine-screenshort.png"
+        src="https://res.cloudinary.com/dcupoxygs/image/upload/v1587579413/draft-machine/draftmachine-screenshot.png"
         alt="sample card question"
       />
     </WelcomeContainer>

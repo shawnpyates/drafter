@@ -20,7 +20,8 @@ Create and host sports drafts (for recreational leagues or potentially fantasy l
 
       PORT=3001
       NODE_ENV=production
-      JWT_SECRET=YOUR_OWN_SECRET
+      SESSION_KEY=your_own_session_key
+      SESSION_SECRET=your_own_session_secret
       SERVER_URL=http://localhost:3001
       DATABASE_URL=postgres://YOUR_POSTGRES_URL
 

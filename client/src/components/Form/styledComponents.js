@@ -27,7 +27,7 @@ const FieldWrapper = styled.form`
   background: ${WHITE};
   border-radius: 3px;
 
-  padding: 3rem;
+  padding: 1rem;
   width: ${props => (props.isWide ? WIDE_FORM : NARROW_FORM)};
   text-align: center;
   min-width: 30rem;

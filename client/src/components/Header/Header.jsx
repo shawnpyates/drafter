@@ -1,7 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+
 import { header as headerTexts } from '../../texts.json';
+import { logoutUser } from '../../actions';
 
 import {
   Container,
@@ -15,15 +18,16 @@ import {
 const MAX_EMAIL_DISPLAY = 30;
 
 const { title, logOut, notLoggedIn } = headerTexts;
-const { localStorage } = window;
 
 function Header({
   currentUser,
   removeCurrentUserFromState,
   isFetchingUser,
 }) {
+  const dispatch = useDispatch();
+
   const handleLogOut = () => {
-    localStorage.removeItem('drafterUserToken');
+    dispatch(logoutUser());
     removeCurrentUserFromState();
   };
 
