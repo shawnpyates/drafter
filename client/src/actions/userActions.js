@@ -21,6 +21,10 @@ export const fetchCurrentUser = () => (dispatch) => {
   axios.get('/api/users/current', { withCredentials: true })
     .then((response) => {
       const { user } = response.data;
+      if (!user) {
+        dispatch({ type: 'FETCH_CURRENT_USER_NO_SESSION' });
+        return;
+      }
       createSocketConnection(dispatch, user);
       dispatch({ type: 'FETCH_CURRENT_USER_FULFILLED', payload: user });
     })

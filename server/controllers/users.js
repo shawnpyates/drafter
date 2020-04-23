@@ -63,9 +63,6 @@ module.exports = {
   async fetchCurrent(req, res) {
     try {
       const user = await fetchUserQuery({ token: req.session.id });
-      if (!user) {
-        throw Error('User not found.');
-      }
       return res.status(200).send({ user });
     } catch (e) {
       return res.status(400).send({ e: e.message });
