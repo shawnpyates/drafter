@@ -152,19 +152,3 @@ module.exports = {
     }
   },
 };
-
-/*
-Name	Draft	Owner	Selection Order
-Griffins	Vancouver Rec League Draft	Shawn Yates	1
-Penguins	Vancouver Rec League Draft	Shawn Yates	2
-Dragons	Vancouver Rec League Draft	Shawn Yates	3
-Owls	Vancouver Rec League Draft	Shawn Yates	4
-Dolphins	Vancouver Rec League Draft	Shawn Yates	5
-Ghosts	Vancouver Rec League Draft	Shawn Yates	6
-Sharks	Vancouver Rec League Draft	Shawn Yates	7
-Bears	Vancouver Rec League Draft	Shawn Yates	8
-Warlocks	Vancouver Rec League Draft	Shawn Yates	9
-Wolves	Vancouver Rec League Draft	Shawn Yates	10
-Ogres	Vancouver Rec League Draft	Shawn Yates	11
-Tigers	Vancouver Rec League Draft	Shawn Yates	12
-*/
