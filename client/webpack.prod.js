@@ -5,7 +5,9 @@ const common = require('./webpack.common.js');
 
 module.exports = merge(common, {
   mode: 'production',
-  devtool: 'source-map',
+  stats: {
+    warnings: false,
+  },
   plugins: [
     new CompressionPlugin({
       filename: '[path].br[query]',

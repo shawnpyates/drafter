@@ -1,7 +1,6 @@
 const webpack = require('webpack');
 const Dotenv = require('dotenv-webpack');
 const path = require('path');
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 module.exports = {
   entry: './src/index.jsx',
@@ -11,7 +10,6 @@ module.exports = {
   },
   plugins: [
     new Dotenv({ path: '../.env' }),
-    new BundleAnalyzerPlugin({ openAnalyzer: false }),
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
   ],
   module: {

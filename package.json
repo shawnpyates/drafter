@@ -5,10 +5,11 @@
   "scripts": {
     "lint": "./node_modules/.bin/eslint",
     "start": "node app.js",
+    "prod": "cd client && npm i && npm run build-prod && cd .. && npm start",
     "test": "jest"
   },
   "dependencies": {
-    "bcrypt": "^3.0.7",
+    "bcrypt": "^4.0.1",
     "body-parser": "^1.18.3",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",

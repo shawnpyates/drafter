@@ -11,8 +11,6 @@ import { fetchCurrentUser, removeCurrentUserFromState } from '../../actions';
 
 import { AppContainer } from './styledComponents';
 
-const { localStorage } = window;
-
 const mapStateToProps = (state) => {
   const { currentUser, fetching: isFetchingUser } = state.user;
   const { socket } = state.socket;
