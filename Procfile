@@ -1,1 +1,1 @@
-web: npm i && ./node_modules/.bin/sequelize db:migrate && npm run prod
+web: npm run prod
