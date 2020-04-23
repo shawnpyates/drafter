@@ -12,6 +12,10 @@ jest.mock('react-router-dom', () => ({
   Link: props => <div>{props.children}</div>,
 }));
 
+jest.mock('react-redux', () => ({
+  useDispatch: () => {},
+}));
+
 const props = {
   currentUser: { uuid: 'abc123', email: 'foo@bar.com' },
 };
