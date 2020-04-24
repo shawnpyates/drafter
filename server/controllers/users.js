@@ -64,7 +64,7 @@ module.exports = {
   async fetchCurrent(req, res) {
     try {
       const session = await Session.findOne({ where: { uuid: req.session.id } });
-      const user = await fetchUserQuery({ uuid: session.userId });
+      const user = (session && await fetchUserQuery({ uuid: session.userId })) || null;
       return res.status(200).send({ user });
     } catch (e) {
       return res.status(400).send({ e: e.message });
