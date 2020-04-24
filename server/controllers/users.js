@@ -3,6 +3,7 @@ const {
   Draft,
   Player,
   Request,
+  Session,
   Team,
   User,
 } = require('../models');
@@ -62,10 +63,8 @@ module.exports = {
 
   async fetchCurrent(req, res) {
     try {
-      const user = await fetchUserQuery({ token: req.session.id });
-      if (!user) {
-        throw Error('User not found.');
-      }
+      const session = await Session.findOne({ where: { uuid: req.session.id } });
+      const user = (session && await fetchUserQuery({ uuid: session.userId })) || null;
       return res.status(200).send({ user });
     } catch (e) {
       return res.status(400).send({ e: e.message });
@@ -84,16 +83,16 @@ module.exports = {
 
       const hash = await bcrypt.hash(password, SALT_ROUNDS);
 
-      const user = await User.create({
+      const { uuid: userId } = await User.create({
         firstName,
         lastName,
         email,
         password: hash,
         token: req.session.id,
       });
-      const { uuid } = user;
+      await Session.create({ uuid: req.session.id, userId });
       // 'include' param seems to not work on create method, use refetch for now
-      const userWithAssociations = await fetchUserQuery({ uuid });
+      const userWithAssociations = await fetchUserQuery({ uuid: userId });
       req.session.user = userWithAssociations;
       return res.status(201).send({ user: userWithAssociations });
     } catch (e) {
@@ -111,7 +110,7 @@ module.exports = {
       const isPasswordCorrect = await bcrypt.compare(password, user.password);
       if (!isPasswordCorrect) return res.status(401).send({ failure: 'incorrectPassword' });
 
-      await user.update({ token: req.session.id });
+      await Session.create({ uuid: req.session.id, userId: user.uuid });
       return res.status(201).send({ user });
     } catch (e) {
       return res.status(400).send({ failure: 'unexpected' });
@@ -121,6 +120,8 @@ module.exports = {
   async logout(req, res) {
     try {
       if (req.session) {
+        const session = await Session.findOne({ where: { uuid: req.session.id } });
+        await session.destroy();
         await req.session.destroy();
       }
       return res.status(204).send({});

@@ -3,12 +3,13 @@ import ioClient from 'socket.io-client';
 
 import { getAllDrafts } from '../helpers';
 
-const { SERVER_URL } = process.env;
+const { origin: url } = window.location;
 
 const createSocketConnection = (dispatch, user) => {
   const { Drafts: drafts, Teams: teams } = user;
   const allDrafts = getAllDrafts(drafts, teams);
-  const socket = ioClient(`${SERVER_URL}/drafts`);
+
+  const socket = ioClient(`${url}/drafts`);
   allDrafts.forEach((draft) => {
     socket.emit('joinDraft', draft.uuid);
   });
@@ -21,6 +22,10 @@ export const fetchCurrentUser = () => (dispatch) => {
   axios.get('/api/users/current', { withCredentials: true })
     .then((response) => {
       const { user } = response.data;
+      if (!user) {
+        dispatch({ type: 'FETCH_CURRENT_USER_NO_SESSION' });
+        return;
+      }
       createSocketConnection(dispatch, user);
       dispatch({ type: 'FETCH_CURRENT_USER_FULFILLED', payload: user });
     })

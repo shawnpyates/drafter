@@ -66,6 +66,8 @@ const userReducer = (state = initialState, action) => {
         fetched: true,
         currentUser: action.payload,
       };
+    case 'FETCH_CURRENT_USER_NO_SESSION':
+      return { ...state, fetching: false, fetched: true };
     case 'FETCH_USERS_FROM_TEAM_PENDING':
       return { ...state, fetching: true };
     case 'FETCH_USERS_FROM_TEAM_REJECTED':

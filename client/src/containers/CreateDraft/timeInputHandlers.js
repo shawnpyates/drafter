@@ -105,7 +105,7 @@ const createInputsFromExistingTimeVals = (timeScheduled) => {
       : ['0', ...timeCharsAsString.split('')]
   );
   return {
-    calendarDate: timeScheduled,
+    calendarDate: new Date(timeScheduled),
     timeCharsAsString,
     timeChars,
     isTimePickerEnabled: true,
