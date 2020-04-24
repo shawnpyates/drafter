@@ -3,12 +3,13 @@ import ioClient from 'socket.io-client';
 
 import { getAllDrafts } from '../helpers';
 
+const { origin: url } = window.location;
+
 const createSocketConnection = (dispatch, user) => {
   const { Drafts: drafts, Teams: teams } = user;
   const allDrafts = getAllDrafts(drafts, teams);
-  console.log('PROCESE ENV FROM SOCKET: ', process.env);
 
-  const socket = ioClient('https://draftmachine.herokuapp.com/drafts');
+  const socket = ioClient(`${url}/drafts`);
   allDrafts.forEach((draft) => {
     socket.emit('joinDraft', draft.uuid);
   });
@@ -17,8 +18,6 @@ const createSocketConnection = (dispatch, user) => {
 
 export const fetchCurrentUser = () => (dispatch) => {
   dispatch({ type: 'FETCH_CURRENT_USER_PENDING' });
-
-  console.log('NODE_ENV: ', process.env.NODE_ENV);
 
   axios.get('/api/users/current', { withCredentials: true })
     .then((response) => {
