@@ -29,6 +29,7 @@ const getDraftUrl = draftId => `${SERVER_URL}/drafts/${draftId}/show`;
 
 
 function LoggedInView({ socket }) {
+  console.log('SERVER URL FROM LOGGED IN: ', SERVER_URL);
   const [state, setState] = useState({
     shouldNotificationRender: false,
     notificationDraftId: null,

@@ -6,6 +6,8 @@ import { getAllDrafts } from '../helpers';
 const createSocketConnection = (dispatch, user) => {
   const { Drafts: drafts, Teams: teams } = user;
   const allDrafts = getAllDrafts(drafts, teams);
+  console.log('SERVER URL FROM SOCKET: ', process.env.SERVER_URL);
+
   const socket = ioClient('https://draftmachine.herokuapp.com/drafts');
   allDrafts.forEach((draft) => {
     socket.emit('joinDraft', draft.uuid);
