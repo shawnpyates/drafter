@@ -16,6 +16,8 @@ const createSocketConnection = (dispatch, user) => {
 export const fetchCurrentUser = () => (dispatch) => {
   dispatch({ type: 'FETCH_CURRENT_USER_PENDING' });
 
+  console.log('NODE_ENV: ', process.env.NODE_ENV);
+
   axios.get('/api/users/current', { withCredentials: true })
     .then((response) => {
       const { user } = response.data;

@@ -5,7 +5,7 @@
   "scripts": {
     "lint": "./node_modules/.bin/eslint",
     "start": "node app.js",
-    "migrate": "./node_modules/.bin/sequelize db:migrate:undo",
+    "migrate": "./node_modules/.bin/sequelize db:migrate",
     "create-js-bundle": "cd client && npm i && npm run build-prod && cd ..",
     "heroku-postbuild": "npm run migrate && npm run create-js-bundle",
     "test": "jest"
