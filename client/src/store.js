@@ -6,7 +6,7 @@ import reducers from './reducers/reducerIndex';
 
 const middlewares = [promiseMiddleware(), thunk];
 
-const middlewaresWithLogger = process.env.NODE_ENV === 'development' && [...middlewares, logger];
+const middlewaresWithLogger = process.env.NODE_ENV !== 'development' && [...middlewares, logger];
 
 const appliedMiddleware = applyMiddleware(...(middlewaresWithLogger || middlewares));
 

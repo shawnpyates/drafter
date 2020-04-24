@@ -1,5 +1,6 @@
 module.exports = (io) => {
   const draftSocketManager = io.of('/drafts').on('connection', (socket) => {
+    console.log('socket from backend: ', JSON.stringify(socket));
     socket.on('joinDraft', (draftId) => {
       socket.join(draftId);
     });
