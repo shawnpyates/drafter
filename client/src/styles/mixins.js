@@ -65,4 +65,13 @@ module.exports = {
     position: relative;
     word-break: break-word;
   `,
+  CONTAINER_MIXIN: `
+    width: 65%;
+    min-width: 55rem;
+    font-size: ${NORMAL_FONT_SIZE};
+    color: ${DARK_BLUE};
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  `,
 };

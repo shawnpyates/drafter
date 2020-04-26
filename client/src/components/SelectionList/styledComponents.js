@@ -45,12 +45,13 @@ const ItemBlock = styled.div`
 
 const SelectButton = styled.button`
   background: ${DARK_BLUE};
-  height: 2.5rem;
-  width: 6rem;
+  height: 2rem;
+  width: 4rem;
+  font-size: 0.5rem
   border-radius: 2rem;
   margin-right: 0.5rem;
   text-align: center;
-  font-weight: 500;
+  font-weight: 300;
   color: ${WHITE};
   cursor: pointer;
   

@@ -43,7 +43,7 @@ const TitleBox = styled.div`
 const Title = styled.h2`
   display: inline-block;
   font-family: ${PRETTY_FONT}, ${DEFAULT_FONT};
-  font-size: 3.5rem;
+  font-size: 5rem;
   color: #FFF;
 `;
 
