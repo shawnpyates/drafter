@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const fetchTeamsByUser = userId => (dispatch) => {
   dispatch({ type: 'FETCH_TEAMS_FROM_USER_PENDING' });
-  axios.get(`${process.env.SERVER_URL}/api/users/${userId}/teams`)
+  axios.get(`/api/users/${userId}/teams`)
     .then((response) => {
       const { teams } = response.data;
       dispatch({ type: 'FETCH_TEAMS_FROM_USER_FULFILLED', payload: teams });
@@ -14,7 +14,7 @@ export const fetchTeamsByUser = userId => (dispatch) => {
 
 export const fetchTeamsByDraft = draftId => (dispatch) => {
   dispatch({ type: 'FETCH_TEAMS_FROM_DRAFT_PENDING' });
-  axios.get(`${process.env.SERVER_URL}/api/drafts/${draftId}/teams`)
+  axios.get(`/api/drafts/${draftId}/teams`)
     .then((response) => {
       const { teams } = response.data;
       dispatch({ type: 'FETCH_TEAMS_FROM_DRAFT_FULFILLED', payload: teams });

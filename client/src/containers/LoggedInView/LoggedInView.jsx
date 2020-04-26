@@ -12,7 +12,7 @@ import { getTextWithInjections } from '../../helpers';
 
 import { draftNotificationText } from '../../texts.json';
 
-const { SERVER_URL } = process.env;
+const { origin: url } = window.location;
 
 const ALERT_DISPLAY_DURATION = 10000;
 
@@ -25,7 +25,7 @@ const checkForHashThenRender = () => {
   );
 };
 
-const getDraftUrl = draftId => `${SERVER_URL}/drafts/${draftId}/show`;
+const getDraftUrl = draftId => `${url}/drafts/${draftId}/show`;
 
 
 function LoggedInView({ socket }) {

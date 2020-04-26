@@ -4,8 +4,12 @@ import thunk from 'redux-thunk';
 import promiseMiddleware from 'redux-promise-middleware';
 import reducers from './reducers/reducerIndex';
 
-const middleware = applyMiddleware(promiseMiddleware(), thunk, logger);
+const middlewares = [promiseMiddleware(), thunk];
 
-const store = createStore(reducers, middleware);
+const middlewaresWithLogger = process.env.NODE_ENV === 'development' && [...middlewares, logger];
+
+const appliedMiddleware = applyMiddleware(...(middlewaresWithLogger || middlewares));
+
+const store = createStore(reducers, appliedMiddleware);
 
 export default store;
