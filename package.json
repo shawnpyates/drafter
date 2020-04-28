@@ -6,8 +6,9 @@
     "lint": "./node_modules/.bin/eslint",
     "start": "node app.js",
     "migrate": "./node_modules/.bin/sequelize db:migrate",
-    "create-js-bundle": "cd client && npm i && npm run build-prod && cd ..",
-    "heroku-postbuild": "npm run migrate && npm run create-js-bundle",
+    "create-js-bundle-dev": "cd client && npm i && npm run build-dev && cd ..",
+    "create-js-bundle-prod": "cd client && npm i && npm run build-prod && cd ..",
+    "heroku-postbuild": "npm run migrate && npm run create-js-bundle-prod",
     "test": "jest"
   },
   "dependencies": {
